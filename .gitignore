@@ -67,3 +67,14 @@ tmp/
 #              generator is the source of truth. Revisit this line if a
 #              generated battery ever grows past a few MB.
 # notes/     — reading notes are the R-phase deliverable.
+# --- Design specs (local only) ---
+# Brainstorming/design documents from the superpowers workflow. Deliberately
+# untracked: the *decision* belongs in docs/04-decisions.md at a few lines, and
+# a full design doc in the repo would bloat the one document that has to stay
+# short enough to reread. The spec is working material, not the record.
+.superpowers/
+
+# --- Local copies of papers ---
+# Source PDFs/HTML for the wiki. Not ours to redistribute, and the canonical
+# pointer is the URL recorded in the source card (wiki/sources/).
+papers/

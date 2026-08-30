@@ -87,6 +87,35 @@ habits, both of which are outputs of the core project. Starting there first
 means fuzzy metrics measured with unvalidated tooling. Documented now so the
 reasoning isn't lost; activation criteria are listed in the doc.
 
+### D-009 — Reading phases produce a concept-first wiki
+*2026-08-30*
+
+Papers are extracted into concept pages under `wiki/`, not summarised one page
+each. `wiki/concepts/` is what a thing is, `wiki/methods/` is what you do to it
+and carries a mandatory claim-licence block; `wiki/sources/` holds a thin
+bibliographic card per paper with no summary prose.
+
+Reasoning: the wiki is a **scaffold, not a substitute**. R-phase exit criteria
+are unchanged — the R0 note is still written cold and without looking, and the
+diff against the wiki page is the diagnostic. Concept-first makes that
+structural rather than a rule to remember: with no per-paper summary page in
+existence, nothing is shaped like the note that has to be written from memory.
+Pages are written from the actual source text, never recall — Claude's training
+data ends around May 2026, so `arXiv 2607.01940` is outside it entirely.
+
+Two consequences worth recording separately:
+
+- **Glossary stays single.** The `curious-student` output style appends new
+  vocabulary to `GLOSSARY.md` at the repo root. That file is deliberately never
+  created; terms go to `docs/05-glossary.md`. Two glossaries means two
+  definitions of one term.
+- **R phases get branches too.** `CLAUDE.md`'s one-branch-per-phase convention
+  now covers reading phases: `phase-R0-orientation`, tagged `v-R0` at exit.
+
+Operating manual in `wiki/README.md`. Full design record is local-only in
+`.superpowers/specs/2026-08-30-concept-wiki-design.md` (untracked, so this entry
+is the durable record).
+
 ---
 
 ## Open questions

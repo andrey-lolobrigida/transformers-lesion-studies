@@ -4,7 +4,7 @@
 
 **Status:** planning. No code written yet.
 **Current phase:** R0 (orientation reading). See `docs/02-roadmap.md`.
-**Last updated:** 2026-08-01
+**Last updated:** 2026-08-30
 
 ---
 
@@ -92,6 +92,11 @@ you to claim.
   artifact under `results/{phase}/` plus a short `README.md` interpreting it.
 - **One idea per note.** `notes/` holds granular reading notes and scratch
   reasoning, `NN-kebab-case.md`, not one growing file.
+- **`notes/` is yours, `wiki/` is the field's.** The wiki is organised by
+  concept, built by extracting papers, and is a scaffold — never a substitute
+  for an R-phase exit note written cold. Conventions in `wiki/README.md`,
+  decision in D-009. New vocabulary goes to `docs/05-glossary.md`; a root
+  `GLOSSARY.md` is deliberately never created.
 - **Errata policy:** fix forward on `main`, record the correction in
   `ERRATA.md` with the affected phase and commit link. Don't rewrite old
   phase branches.
@@ -104,7 +109,8 @@ lesion-studies/
 ├── README.md
 ├── ERRATA.md
 ├── docs/                  ← reference documents (see below)
-├── notes/                 ← reading notes, scratch reasoning
+├── notes/                 ← reading notes, scratch reasoning (yours)
+├── wiki/                  ← concept reference built from the papers (D-009)
 ├── src/                   ← the harness and experiment scripts
 ├── batteries/             ← task datasets (clean/corrupted pairs + metrics)
 ├── results/{phase}/       ← experiment artifacts + interpretation
@@ -123,6 +129,9 @@ lesion-studies/
 | `05-glossary.md` | Terms |
 | `06-environment.md` | Hardware, install order, known gotchas |
 | `07-alignment-extension.md` | **Parked.** A possible successor project. Not a plan — do not start before E4 ships |
+
+`wiki/` is documented by its own `README.md`, which is the operating manual
+for how papers get extracted into concept pages.
 
 ## What Claude should not do here
 
