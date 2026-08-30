@@ -181,16 +181,30 @@ Two overrides:
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
-| — | — | — | — |
+| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020 |
+| [feature](concepts/feature.md) | drafted | R0 | olah-2020 |
+| [polysemanticity](concepts/polysemanticity.md) | drafted | R0 | olah-2020 |
+| [superposition](concepts/superposition.md) | stub | R0 | olah-2020 |
+| [universality](concepts/universality.md) | drafted | E6 | olah-2020 |
+| [circuit-motif](concepts/circuit-motif.md) | drafted | E5 | olah-2020 |
+| [interpretability-as-natural-science](concepts/interpretability-as-natural-science.md) | drafted | R1 | olah-2020 |
 
 ### Methods
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
-| — | — | — | — |
+| [feature-claim-evidence](methods/feature-claim-evidence.md) | drafted | E3 | olah-2020 |
 
 ### Sources
 
 | Key | Phase | Extraction |
 |---|---|---|
-| — | — | — |
+| [olah-2020](sources/olah-2020-zoom-in.md) — Zoom In | R0 | complete |
+
+### Expected next
+
+R0 has two papers left, both being read in parallel: Elhage et al. 2021
+(Mathematical Framework) and Olsson et al. 2022 (Induction Heads). Between them
+they should open `attention-head`, `qk-ov-circuits`, `residual-stream`,
+`induction-head`, and `in-context-learning`, and will be the first real test of
+whether the `concepts/` vs `methods/` boundary holds.
