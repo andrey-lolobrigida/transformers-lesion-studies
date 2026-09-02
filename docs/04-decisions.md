@@ -157,6 +157,67 @@ small and noisy. This is a real risk to the spine. **Resolve in E4 itself**; a
 small residual is a publishable negative result but changes the writeup
 substantially.
 
+### O-007 — Are MLP layers a first-class component in the harness?
+*Raised 2026-09-02.*
+
+D-003 chose heads over SAE features. In the roadmap that has become
+"heads only": E3 ablates every head and nothing else. But the self-repair
+literature E4 depends on locates a large share of compensation in MLPs —
+Rushing & Nanda (arXiv 2402.15390) report sparse MLP neurons performing
+"anti-erasure" alongside the LayerNorm-scaling share. If the harness only hooks
+attention heads, E4's sub-question 3 ("which components step up?") is
+structurally unanswerable, whatever the data says.
+
+Making MLP layers (and ideally neurons) ablatable does not reopen D-003; the
+unit of analysis stays coarse and published-number-checkable. It does add a row
+type to the E3 heatmaps and a hook family to the E1 harness. **Resolve during
+R1, before E1's harness design is fixed.** Also decide whether E3 records each
+head's *direct effect* next to its total ablation effect — the gap is the
+self-repair number, it is nearly free in TransformerLens, and it gives E4 its
+baseline from E3's own run.
+
+### O-008 — How much of E4 is reproduction rather than extension?
+*Raised 2026-09-02.*
+
+E4 sub-question 1 (measure self-repair per ablated head, decompose into the
+LayerNorm-rescaling share and the residual) is, as written, the central result
+of Rushing & Nanda 2024: resample ablation of individual heads on Pythia,
+GPT-2 small/medium and LLaMA-7B, with LayerNorm scaling attributed around 30%
+of direct effect on average and explicitly described by the authors as a
+directional figure rather than a precise one. They also compare mean and zero
+ablation and note zero ablation distorts residual norms.
+
+That is fine for a reproduction-first project (D-001), but the roadmap text
+reads as if the decomposition itself is the contribution. The plausibly open
+pieces are sub-question 2 (how the mechanical/residual split moves across
+ablation methods) and sub-question 4 (compensators of compensators). **Resolve
+during R2**, after reading the paper properly: relabel sub-question 1 as the
+E4 reproduction with a published number to check against, and state which
+sub-questions are the extension. From the abstract alone, Conditional
+Co-Ablation (arXiv 2607.01940, verified to exist, submitted 2026-07-02) is a
+method for recovering the *identity* of backup components on the GPT-2 IOI
+circuit, not a decomposition of self-repair — so on current evidence it does
+not close E4, but O-001 still stands until it is read.
+
+### O-009 — Does factual recall pass a clean-accuracy gate on GPT-2 small?
+*Raised 2026-09-02.*
+
+D-005 dropped arithmetic because GPT-2 small does not do it well enough for
+lesion results to beat noise. Factual recall may have the same problem: ROME's
+causal tracing was run on GPT-2 XL and GPT-J, and GPT-2 small answers only a
+small fraction of ROME-style prompts correctly. A task the clean model gets
+wrong has no clean/corrupted gap to lesion.
+
+Two sub-decisions. First, whether the battery keeps factual recall with an
+explicit filter (only facts the clean model answers correctly, filter recorded
+in the battery artifact), or drops it. Second, more generally, whether every
+battery item needs a stated clean-accuracy threshold before it enters E3 — a
+cheap rule that would have caught arithmetic without a separate decision. A
+control task the model does trivially, where every ablation should read near
+zero, would give the heatmaps a noise floor for the same price. **Resolve
+during E1**, when the generators exist and the number can be measured rather
+than guessed.
+
 ---
 
 ## Null and negative results
