@@ -218,6 +218,47 @@ zero, would give the heatmaps a noise floor for the same price. **Resolve
 during E1**, when the generators exist and the number can be measured rather
 than guessed.
 
+### O-010 — What does E6 actually visualize over training?
+*Raised 2026-09-02, during the R0 reading of Olsson et al.*
+
+Olsson et al. show induction heads forming as a phase change over training,
+visible in a derived score (loss late in context minus loss early in context)
+and in a per-head prefix-matching score tracked across checkpoints. The
+question this raises for E6: what per-checkpoint quantity does this project
+track, and is a dimensionality-reduction "clusters evolving over time" picture
+the right way to show it? The framing that makes the question concrete is
+**"what is a point?"** — a head, a neuron, or a whole checkpoint.
+
+Candidate observables, closest to the lesion method first:
+
+1. **The E3 lesion map, recomputed per checkpoint.** Each head becomes a
+   trajectory in effect space (tasks × ablation methods). A cheap 1D
+   companion: distance between consecutive maps against the loss curve — a
+   jump there is a phase change in the *map*, not just in the loss. Needs
+   nothing the E1 harness won't already have.
+2. **Behavioural head scores without ablation.** Induction score and
+   previous-token score on repeated random sequences; copying score from the
+   OV circuit. This is Olsson's own figure and gives E6 a published result to
+   reproduce first.
+3. **Weights only.** The K-composition score between a previous-token head and
+   a candidate induction head, from the Elhage et al. framework. Data-free,
+   and it marks *circuit* formation rather than head formation.
+4. **Gradients / loss-surface geometry.** Weakest fit: checkpoints give
+   weights, not dynamics, and this is the developmental-interpretability
+   programme, a different project. See `notes/02-loss-surface-programme.md`.
+
+Caution to carry into the planning: with ~100–150 heads, UMAP/t-SNE will
+manufacture clusters from hyperparameters. A 2D scatter of two *named* scores,
+animated over checkpoints, shows the same thing and can't lie about it.
+Dimensionality reduction only earns its place if the per-head vector is long
+(candidate 1), and then rule 7 applies to any clean-looking cluster.
+
+Depends on O-004 (checkpoint density in the formation window). Prior work to
+read before planning: Tigges et al. 2024 (already on the R3 list) and the
+developmental-interpretability line noted above. **Resolve if and when E6 is
+planned** — this entry is a record, not a plan. Original wording of the idea in
+`notes/01-visualizing-circuit-formation.md`.
+
 ---
 
 ## Null and negative results
