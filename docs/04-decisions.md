@@ -176,6 +176,12 @@ head's *direct effect* next to its total ablation effect — the gap is the
 self-repair number, it is nearly free in TransformerLens, and it gives E4 its
 baseline from E3's own run.
 
+*Update 2026-09-08:* the direct-effect half is settled — **yes**, recorded per
+head in the same E3 run. It turned out to be the same design question as O-011,
+whose resolution treats total effect, pattern-preserving and direct effect as
+three values of one path-restriction setting. The MLP half of O-007 is
+unaffected and still resolves at R1.
+
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*
 
@@ -218,6 +224,14 @@ zero, would give the heatmaps a noise floor for the same price. **Resolve
 during E1**, when the generators exist and the number can be measured rather
 than guessed.
 
+*Addendum, 2026-09-08 (Olsson extraction).* A related and cheaper rule surfaced
+while reading Olsson et al.: state, per battery item, **which direction damage
+is expected to move the metric**. Their in-context learning score is a
+difference of two losses, so ablating most non-induction heads *raises* it —
+damage improves the number, for a comprehensible reason. A metric that can
+improve under ablation is not disqualifying, but it has to be declared, or the
+E3 heatmaps will contain sign flips that read as noise.
+
 ### O-010 — What does E6 actually visualize over training?
 *Raised 2026-09-02, during the R0 reading of Olsson et al.*
 
@@ -258,6 +272,112 @@ read before planning: Tigges et al. 2024 (already on the R3 list) and the
 developmental-interpretability line noted above. **Resolve if and when E6 is
 planned** — this entry is a record, not a plan. Original wording of the idea in
 `notes/01-visualizing-circuit-formation.md`.
+
+### O-011 — Is attention-pattern freezing a third axis of the ablation sweep?
+*Partially resolved 2026-09-08 — see the resolution below. The R1 trigger keeps
+it open.*
+*Raised 2026-09-08, during the R0 extraction of Olsson et al.*
+
+D-006 commits E3 to sweeping *what value is substituted* — zero, mean, resample.
+Olsson et al. use a second, independent axis: *what is allowed to propagate*.
+Their **pattern-preserving ablation** runs the model once to record every
+attention pattern, then re-runs it with the head's output zeroed and all
+patterns forced to the recorded values, so the ablation reaches later heads'
+value computations but not their attention patterns. Their **full ablation**
+lets everything propagate. Every number in the paper's model analysis table is
+pattern-preserving; full-ablation results are relegated to an appendix and the
+two are never compared numerically
+[`wiki/methods/pattern-preserving-ablation.md`].
+
+Why this is not a detail:
+
+- **E2 cannot reproduce the induction-head ablation result without it.** A
+  number computed with unfrozen patterns is a different measurement, and by
+  epistemic rule 3 that difference is a finding rather than something to smooth
+  over.
+- **The justification does not transfer to GPT-2 small.** With patterns frozen,
+  a head's action is linear, so in an *attention-only* model a pattern-preserving
+  ablation equals subtracting that head's terms from the logits. The authors
+  state plainly that this breaks once MLPs are present, and name two ways head
+  ablations can then mislead: shifting an MLP's activation statistics enough to
+  break neurons without the head mattering, and an MLP mechanism that needs two
+  heads but limps along on one.
+- **It is nearly free in TransformerLens and impossible to retrofit** into
+  results already computed — the same argument O-007 makes for MLP hooks and for
+  recording direct effect alongside total effect.
+
+The cost is real: crossing this axis with D-006 turns three E3 heatmaps into
+six. The middle option is to support freezing in the harness, run it on the E2
+reproduction and on a named subset of E3, and record the default explicitly
+wherever it isn't swept.
+
+**Resolve during R1, alongside O-007, before E1's harness design is fixed.**
+Miller et al. is the right place to check whether the faithfulness literature
+treats pattern freezing as an ablation-methodology choice in the sense D-006
+means, or as something separate.
+
+---
+
+#### Resolution — *2026-09-08*
+
+**The framing was wrong, and fixing it is most of the answer.** Zero, mean and
+resample vary *what you substitute*. Freezing varies *which downstream paths the
+perturbation is allowed to travel*. Those are different kinds of choice, and
+there is a third point on the same line that O-007 already raises. They nest:
+
+| Setting | What the ablation reaches |
+|---|---|
+| **Total effect** | Everything downstream (full ablation) |
+| **Pattern-preserving** | Later components' value computations, but not their attention patterns |
+| **Direct effect** | Only the head's own contribution to the logits |
+
+So O-011 and the second half of O-007 are one dimension seen from opposite ends.
+The harness gets **one path-restriction setting with three values**, not a
+boolean flag bolted onto the substitution sweep. Deciding them together also
+means E3 hands E4 its baseline from E3's own run, which was O-007's point.
+
+Decided now:
+
+1. **E1 builds it.** Two forward passes instead of one — cache the patterns,
+   replay them while zeroing the head. Trivial on GPT-2 small, and impossible to
+   retrofit into results already computed. Same argument as MLP hooks. Exact
+   hook mechanics get verified at E0, not designed here.
+2. **E3 records direct effect for every head in the same run**, alongside total
+   effect. This settles that sub-part of O-007 in the affirmative; the rest of
+   O-007 (MLPs as a first-class component) is untouched and still R1.
+3. **E2 runs pattern-preserving**, because that is what Olsson et al. do. With
+   the limit stated in the results doc: they publish no GPT-2 small ablation
+   numbers, so E2 reproduces their *method*, not a number of theirs.
+4. **E3 ships four maps, not six.** D-006's three stay the headline at total
+   effect. Add the frozen-pattern variant for **one** substitution value —
+   whichever R1 settles as the in-distribution default — and report the delta
+   against its unfrozen twin. A large delta escalates to the full cross with a
+   measured reason behind it; a small one is a one-paragraph negative result
+   (logged per epistemic rule 8) and three clean maps.
+
+**Reasoning for holding at four.** The cost that matters is not compute — GPT-2
+small has 144 heads and the sweep is cheap either way. It is that six maps × N
+battery items is a large number of pairs, some of which will disagree
+strikingly by chance. Epistemic rule 7 then obliges an adversarial check on each
+one, and rule 3 says the disagreement *is* the finding. Sizing the sweep is
+about protecting the claims, not the GPU. Decision 4 buys the same information
+with one comparison instead of fifteen.
+
+**What is still open, and the trigger.** If R1 shows the faithfulness literature
+treats path restriction as a first-class methodology choice on par with the
+substitution value, it belongs in D-006 proper and E3 runs the full cross. That
+is a decision to make with Miller et al. open. `auto-circuit` may also already
+implement it, in which case the right shape is theirs rather than one invented
+here. Until then, **wherever an axis is not swept, the setting used is recorded
+explicitly next to the number** — a default that goes unstated becomes a
+permanent choice nobody made.
+
+One more thing to carry into E4 rather than decide now: the paper already
+contains the self-repair caveat, in 2022, with both of its causes named — "to
+the extent two heads do something similar and the layer norm before the logits
+rescales things, the importance of individual heads may be masked"
+[olsson-2022 §Argument 3]. That is useful provenance for the E4 framing and for
+O-008's question about what in E4 is reproduction and what is extension.
 
 ---
 

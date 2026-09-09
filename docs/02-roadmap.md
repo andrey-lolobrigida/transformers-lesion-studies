@@ -125,9 +125,22 @@ The harness should support zero, mean, and resample ablation over any
 component, with the mean-ablation dataset size logged automatically, and should
 emit a per-run artifact with seed and model revision.
 
+It also carries a second, independent setting: **path restriction**, with three
+nesting values — *total effect* (the ablation propagates everywhere),
+*pattern-preserving* (all attention patterns pinned to their clean-run values,
+so the ablation reaches later components' value computations but not their
+attention patterns), and *direct effect* (the component's own contribution to
+the logits only). Direct effect is recorded per head alongside total effect in
+the same run; the gap between them is the self-repair number E4 starts from.
+Decided in the O-011 resolution, which also settles the direct-effect half of
+O-007; the reasoning and the R1 trigger that can reopen it are there.
+
 **Exit criterion:** every battery item has a clean/corrupted generator, a
 metric, and a documented corruption scheme. The harness ablates an arbitrary
-head under all three methods from one CLI call.
+head under all three substitution methods from one CLI call, at any of the three
+path restrictions, recording both the substitution method and the path
+restriction in the artifact — a default that goes unstated becomes a permanent
+choice nobody made.
 **Tag:** `v-E1`
 
 ---
@@ -153,6 +166,12 @@ strength and probably changes the roadmap.
 Zero-, mean-, and resample-ablate every head in GPT-2 small, one at a time,
 scored on the full E1 battery. Produce the heatmaps — one per ablation method,
 shown together, never one alone.
+
+*Four maps, not three, per the O-011 resolution:* the three above at total
+effect, plus the pattern-preserving variant of whichever substitution method R1
+settles as the in-distribution default, with the delta against its unfrozen twin
+reported. A large delta escalates to the full cross; a small one is a logged
+negative result. Detail lives in the decision log, not here.
 
 The comparison across ablation methods is the actual content here. If the three
 maps agree, that's a finding about robustness. If they disagree, the pattern of

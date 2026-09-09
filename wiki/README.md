@@ -188,23 +188,43 @@ Two overrides:
 | [universality](concepts/universality.md) | drafted | E6 | olah-2020 |
 | [circuit-motif](concepts/circuit-motif.md) | drafted | E5 | olah-2020 |
 | [interpretability-as-natural-science](concepts/interpretability-as-natural-science.md) | drafted | R1 | olah-2020 |
+| [induction-head](concepts/induction-head.md) | drafted | E2 | olsson-2022 |
+| [in-context-learning](concepts/in-context-learning.md) | drafted | E2 | olsson-2022 |
+| [phase-change](concepts/phase-change.md) | drafted | E6 | olsson-2022 |
+| [qk-ov-circuits](concepts/qk-ov-circuits.md) | stub | R0 | olsson-2022 |
 
 ### Methods
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
 | [feature-claim-evidence](methods/feature-claim-evidence.md) | drafted | E3 | olah-2020 |
+| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022 |
+| [head-activation-evaluators](methods/head-activation-evaluators.md) | drafted | E2 | olsson-2022 |
 
 ### Sources
 
 | Key | Phase | Extraction |
 |---|---|---|
 | [olah-2020](sources/olah-2020-zoom-in.md) — Zoom In | R0 | complete |
+| [olsson-2022](sources/olsson-2022-induction-heads.md) — Induction Heads | R0 | complete |
 
 ### Expected next
 
-R0 has two papers left, both being read in parallel: Elhage et al. 2021
-(Mathematical Framework) and Olsson et al. 2022 (Induction Heads). Between them
-they should open `attention-head`, `qk-ov-circuits`, `residual-stream`,
-`induction-head`, and `in-context-learning`, and will be the first real test of
-whether the `concepts/` vs `methods/` boundary holds.
+**R0 has one paper left: Elhage et al. 2021, "A Mathematical Framework for
+Transformer Circuits."** It is the only source that can fill
+[concepts/qk-ov-circuits.md](concepts/qk-ov-circuits.md), which is currently a
+deliberate stub built from Olsson's summary-by-pointer, and it should also open
+`residual-stream` and `attention-head`. Expect to **rewrite** the QK/OV stub
+rather than extend it.
+
+The Olsson pass was the first test of the `concepts/` vs `methods/` boundary and
+it held: the ablation variant and the head scores went to `methods/` with
+claim-licence blocks, the things they measure went to `concepts/`. The one case
+that needed a judgment call was the in-context learning *score*, which is a
+metric but lives inside [concepts/in-context-learning.md](concepts/in-context-learning.md) —
+splitting a one-line difference-of-losses onto its own method page would have
+been taxonomy for its own sake.
+
+Nothing so far has contradicted an existing page. The first real test of that
+comes at R1, when Miller et al. arrives with a paper about ablation methodology
+and meets [methods/pattern-preserving-ablation.md](methods/pattern-preserving-ablation.md).
