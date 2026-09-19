@@ -44,11 +44,15 @@ and the source of the backup-head phenomenon) · Miller, Chughtai & Saunders
 (skim, for causal tracing) · Chan et al. causal scrubbing (skim, for the shape
 of the rigour endgame).
 
-**Exit criterion:** write `docs/01-methods.md` in your own words — replace the
-draft version with your version. It should state, for this project
-specifically, what claim each ablation type licenses and what the default
-metrics are. This document is the thing that prevents sloppy claims in E3 and
-E4.
+**Exit criterion** *(revised 2026-09-19, D-010)*: Wang et al. and Miller et
+al. are extracted into the wiki; `docs/01-methods.md` has been reviewed against
+those pages and edited by the author wherever it is wrong or missing — it
+states, for this project specifically, what claim each ablation type licenses
+and what the default metrics are, and it is the thing that prevents sloppy
+claims in E3 and E4; and every item pinned to R1 in `docs/04-decisions.md`
+(O-003, O-007, O-011's trigger, the circuit-definition reconciliation, the
+Miller-vs-pattern-preserving-ablation check) is resolved or explicitly
+deferred. The other listed papers are skims and do not gate.
 
 ---
 

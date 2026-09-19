@@ -15,7 +15,8 @@ Two readers, one artifact.
 - **For Andrey**, it is a place to consolidate and to check against. It is
   *not* the R-phase deliverable. Exit criteria are unchanged: R0's note in
   `notes/` is still written cold, in your own words, without opening these
-  pages; R1 still means rewriting `docs/01-methods.md` yourself. Read the wiki
+  pages; R1 means reviewing `docs/01-methods.md` against the extracted pages
+  and editing it yourself (D-010, not a cold rewrite). Read the wiki
   page *after* writing the note, and treat the difference between them as the
   actual result of the exercise.
 - **For Claude**, it is the implementation reference at E1 and after. When the

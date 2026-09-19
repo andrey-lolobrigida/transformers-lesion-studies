@@ -77,4 +77,5 @@ tmp/
 # --- Local copies of papers ---
 # Source PDFs/HTML for the wiki. Not ours to redistribute, and the canonical
 # pointer is the URL recorded in the source card (wiki/sources/).
-papers/
+papers/*
+!papers/README.md

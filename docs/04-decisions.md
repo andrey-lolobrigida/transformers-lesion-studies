@@ -118,6 +118,42 @@ is the durable record).
 
 ---
 
+### D-010 — R1 exit criterion: review the methods doc, don't rewrite it
+*2026-09-19*
+
+The roadmap's R1 exit criterion was to rewrite `docs/01-methods.md` cold,
+replacing the draft. Replaced. R1 now exits when all three hold:
+
+1. Wang et al. 2022 (IOI) and Miller et al. 2024 (faithfulness metrics) are
+   extracted into the wiki. ROME, causal scrubbing and Makelov et al. stay
+   skims or conditional reads and do not gate.
+2. `docs/01-methods.md` has been reviewed by the author against those pages
+   and edited wherever it is wrong or missing, in a commit the author makes.
+   The draft was written in August before any paper was extracted and has not
+   yet been checked against a source.
+3. Every item pinned to R1 is resolved or explicitly deferred with a reason:
+   O-003 (sweep corruption schemes?), O-007 (MLPs first-class?), O-011's R1
+   trigger (pattern freezing as a third axis?), the reconciliation of the
+   wiki's structural circuit definition with the glossary's behavioural one,
+   and whether Miller et al. contradicts
+   `wiki/methods/pattern-preserving-ablation.md`.
+
+Reasoning: the author had already read both required papers and judged the
+draft better worded than a cold rewrite would be. Writing cold was R0's
+mechanism for testing recall; the methods doc is not a recall test but the
+reference that prevents sloppy claims in E3 and E4, so correctness matters
+more than authorship. What the gate actually protects is that E1's harness
+design is not fixed before the methods questions are settled, and that part
+is kept. D-007 stands: no code during R1.
+
+Consequence for the exit-note convention: `notes/exit_criteria/<PHASE>.md`
+is for phases whose criterion is a cold note. R1's deliverable is the edited
+methods doc itself, so there is no `R1.md`.
+
+Option considered and rejected: removing the gate entirely so E1 could start
+at will. The risk was that the harness would bake in an answer to O-007 or
+O-011 by default rather than by decision.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?

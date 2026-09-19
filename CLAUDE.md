@@ -92,9 +92,10 @@ you to claim.
   artifact under `results/{phase}/` plus a short `README.md` interpreting it.
 - **One idea per note.** `notes/` holds granular reading notes and scratch
   reasoning, `NN-kebab-case.md`, not one growing file.
-- **Exit notes are filed apart.** The written exit criterion for a reading
-  phase lives in `notes/exit_criteria/<PHASE>.md` — `R0.md`, `R1.md` — one file
-  per phase, covering all of that phase's criteria. Deliberately not mixed in
+- **Exit notes are filed apart.** Where a reading phase's exit criterion is
+  a cold note (R0; not R1, whose deliverable is the reviewed methods doc,
+  D-010), it lives in `notes/exit_criteria/<PHASE>.md` — one file per phase,
+  covering all of that phase's criteria. Deliberately not mixed in
   with the numbered reading notes: an exit note is the phase deliverable, is
   written cold and without looking (D-007, D-009), and gets revised until the
   gate passes, whereas a reading note is scratch and is never revised. Same
