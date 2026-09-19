@@ -181,25 +181,30 @@ Two overrides:
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
-| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020 |
+| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020, elhage-2021 |
 | [feature](concepts/feature.md) | drafted | R0 | olah-2020 |
 | [polysemanticity](concepts/polysemanticity.md) | drafted | R0 | olah-2020 |
 | [superposition](concepts/superposition.md) | stub | R0 | olah-2020 |
 | [universality](concepts/universality.md) | drafted | E6 | olah-2020 |
 | [circuit-motif](concepts/circuit-motif.md) | drafted | E5 | olah-2020 |
 | [interpretability-as-natural-science](concepts/interpretability-as-natural-science.md) | drafted | R1 | olah-2020 |
-| [induction-head](concepts/induction-head.md) | drafted | E2 | olsson-2022 |
+| [induction-head](concepts/induction-head.md) | drafted | E2 | olsson-2022, elhage-2021 |
 | [in-context-learning](concepts/in-context-learning.md) | drafted | E2 | olsson-2022 |
 | [phase-change](concepts/phase-change.md) | drafted | E6 | olsson-2022 |
-| [qk-ov-circuits](concepts/qk-ov-circuits.md) | stub | R0 | olsson-2022 |
+| [qk-ov-circuits](concepts/qk-ov-circuits.md) | drafted | R0 | elhage-2021, olsson-2022 |
+| [residual-stream](concepts/residual-stream.md) | drafted | E1 | elhage-2021 |
+| [attention-head](concepts/attention-head.md) | drafted | E1 | elhage-2021 |
+| [attention-head-composition](concepts/attention-head-composition.md) | drafted | E2 | elhage-2021, olsson-2022 |
 
 ### Methods
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
 | [feature-claim-evidence](methods/feature-claim-evidence.md) | drafted | E3 | olah-2020 |
-| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022 |
+| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022, elhage-2021 |
 | [head-activation-evaluators](methods/head-activation-evaluators.md) | drafted | E2 | olsson-2022 |
+| [path-expansion](methods/path-expansion.md) | drafted | E1 | elhage-2021 |
+| [weight-statistics](methods/weight-statistics.md) | drafted | E2 | elhage-2021 |
 
 ### Sources
 
@@ -207,24 +212,38 @@ Two overrides:
 |---|---|---|
 | [olah-2020](sources/olah-2020-zoom-in.md) — Zoom In | R0 | complete |
 | [olsson-2022](sources/olsson-2022-induction-heads.md) — Induction Heads | R0 | complete |
+| [elhage-2021](sources/elhage-2021-framework.md) — Mathematical Framework | R0 | complete |
 
 ### Expected next
 
-**R0 has one paper left: Elhage et al. 2021, "A Mathematical Framework for
-Transformer Circuits."** It is the only source that can fill
-[concepts/qk-ov-circuits.md](concepts/qk-ov-circuits.md), which is currently a
-deliberate stub built from Olsson's summary-by-pointer, and it should also open
-`residual-stream` and `attention-head`. Expect to **rewrite** the QK/OV stub
-rather than extend it.
+**R0's reading is complete.** Elhage et al. 2021 was extracted 2026-09-14: the
+[qk-ov-circuits](concepts/qk-ov-circuits.md) stub was rewritten rather than
+extended, as predicted, and `residual-stream`, `attention-head` and
+`attention-head-composition` opened. What remains for R0 is not a wiki task —
+it is the exit note in `notes/exit_criteria/R0.md`, written cold, and then the
+diff against these pages.
 
-The Olsson pass was the first test of the `concepts/` vs `methods/` boundary and
-it held: the ablation variant and the head scores went to `methods/` with
-claim-licence blocks, the things they measure went to `concepts/`. The one case
-that needed a judgment call was the in-context learning *score*, which is a
-metric but lives inside [concepts/in-context-learning.md](concepts/in-context-learning.md) —
-splitting a one-line difference-of-losses onto its own method page would have
-been taxonomy for its own sake.
+Two things the Elhage pass did to earlier pages, which is the kind of edit the
+loop exists to surface:
 
-Nothing so far has contradicted an existing page. The first real test of that
-comes at R1, when Miller et al. arrives with a paper about ablation methodology
-and meets [methods/pattern-preserving-ablation.md](methods/pattern-preserving-ablation.md).
+- **[induction-head](concepts/induction-head.md)** gained the mechanism from
+  its original source and the exact wording of the GPT-2 pointer-arithmetic
+  observation — "at least one case in GPT-2", no size. That did not resolve
+  the page's first open question; it sharpened it into O-012.
+- **[pattern-preserving-ablation](methods/pattern-preserving-ablation.md)** had
+  described Elhage et al.'s ablation at second hand; the description is now
+  from the source and the freezing trick has its 2021 provenance.
+
+No contradiction between sources yet. The composition page records a
+*self*-correction inside Elhage et al. (the Frobenius-norm bug) which is the
+nearest thing so far.
+
+The `concepts/` vs `methods/` boundary needed one judgment call: the eigenvalue
+copying statistic and the composition scores are computed from weights, not
+from a forward pass, but they are still *measurements with a licence*, so they
+went to `methods/` with a claim-licence block rather than being buried in a
+concept page.
+
+**R1 next:** Wang et al. (IOI) and Miller et al. are the first sources that
+will press on [pattern-preserving-ablation](methods/pattern-preserving-ablation.md),
+[path-expansion](methods/path-expansion.md) and the O-011 resolution.

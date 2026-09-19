@@ -2,9 +2,9 @@
 title: Circuit
 type: concept
 status: drafted
-sources: [olah-2020]
+sources: [olah-2020, elhage-2021]
 first-needed: R0
-updated: 2026-08-30
+updated: 2026-09-14
 ---
 
 # Circuit
@@ -71,7 +71,13 @@ fixed locations and dedicated wiring. Two problems for this project:
    stream* — a shared bus that every component reads from and writes to — so
    "the weight between two nodes" is not a single object you can look up. Every
    component is in some sense connected to every later one. The transformer
-   version of this concept comes from Elhage et al. 2021, not from here.
+   version of this concept comes from Elhage et al. 2021, not from here — and
+   it does supply the missing object: the **virtual weight** between two
+   components is the product of the earlier one's write matrix and the later
+   one's read matrix through the stream, `W_in² W_out¹` [elhage-2021 §Virtual
+   Weights]. An edge in a transformer circuit is a virtual weight; the
+   composition scores on [[weight-statistics]] are its normalised size. See
+   [[residual-stream]].
 2. **Structural versus behavioural circuits.** Zoom In's circuits are read off
    *weights*. This project will identify candidate circuits by *ablation* — by
    breaking things and watching behaviour. Those are not the same object and
@@ -154,6 +160,11 @@ See `docs/00-motivation.md` on phrenology risk.
 
 ## Sources
 
+- [elhage-2021] Elhage et al., "A Mathematical Framework for Transformer
+  Circuits", Transformer Circuits Thread, 22 December 2021.
+  https://transformer-circuits.pub/2021/framework/index.html
+  Sections cited: Virtual Weights.
+
 - [olah-2020] Olah, Cammarata, Schubert, Goh, Petrov & Carter, "Zoom In: An
   Introduction to Circuits", Distill, 10 March 2020.
   DOI 10.23915/distill.00024.001 ·
@@ -168,5 +179,11 @@ See `docs/00-motivation.md` on phrenology risk.
   behaviourally. Whether these converge — and what to call the object when they
   do not — should be settled in R1 when Wang et al. and Miller et al. are read.
   Candidate for promotion to an `O-00N` in `docs/04-decisions.md`.
-- Does the residual stream make "subgraph" the wrong shape entirely, or just a
-  harder one to compute? Deferred to the Elhage extraction.
+- ~~Does the residual stream make "subgraph" the wrong shape entirely, or just
+  a harder one to compute?~~ Resolved at the Elhage extraction (2026-09-14):
+  harder to compute, not the wrong shape. Nodes are heads (and MLPs), edges are
+  virtual weights, and the graph is dense by construction — every later
+  component has a virtual weight to every earlier one — so a "circuit" is the
+  sparse subgraph of edges that are large and used. Elhage et al. add a
+  complication Zoom In did not have: an edge can be of three kinds (Q, K or V
+  composition) with different meanings, see [[attention-head-composition]].

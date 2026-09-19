@@ -4,7 +4,7 @@
 
 **Status:** planning. No code written yet.
 **Current phase:** R0 (orientation reading). See `docs/02-roadmap.md`.
-**Last updated:** 2026-09-08
+**Last updated:** 2026-09-19
 
 ---
 

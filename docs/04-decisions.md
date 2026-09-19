@@ -379,6 +379,40 @@ rescales things, the importance of individual heads may be masked"
 [olsson-2022 §Argument 3]. That is useful provenance for the E4 framing and for
 O-008's question about what in E4 is reproduction and what is extension.
 
+### O-012 — Which induction mechanism does GPT-2 small use?
+*Raised 2026-09-14, during the R0 extraction of Elhage et al. 2021. Confirmed
+as an open question by the author 2026-09-19. Resolves at E2.*
+
+Two mechanisms produce an induction head, and they leave different fingerprints
+in the weights:
+
+1. **K-composition with a previous-token head** — the mechanism reverse
+   engineered in Elhage et al.'s two-layer models and restated by Olsson et al.
+   The induction head's *key* reads the subspace where a previous-token head
+   wrote the preceding token's identity
+   [`wiki/concepts/attention-head-composition.md`].
+2. **Positional pointer arithmetic** — available only when positional
+   embeddings are in the residual stream, which the paper's own models lack
+   and GPT-2 has. An earlier head fetches the positional embedding of a prior
+   copy of the current token; the induction head's *query*, via Q-composition,
+   shifts it one position forward. Elhage et al. report "at least one case in
+   GPT-2" with no model size, head index or figure; Olsson et al. repeat the
+   claim without adding detail.
+
+Why it is project-level rather than a page note: E2 reproduces the induction
+circuit on GPT-2 small, and a weight-based check built for mechanism 1 (large
+K-composition score with a previous-token head; same-matching `W`) will read
+*negative* on a head that uses mechanism 2, without that head being any less
+an induction head behaviourally. A failed reproduction under the wrong
+mechanism hypothesis would be a false negative logged as a null result.
+
+**Resolve at E2, by measurement, before any ablation:** compute Q- and
+K-composition scores for every (earlier, later) head pair
+[`wiki/methods/weight-statistics.md`], identify the heads that pass Olsson's
+behavioural evaluators, and record which composition route each one shows.
+Both routes may coexist. Whatever E2 finds, the mechanism assumed by each
+subsequent weight-based claim gets stated next to the claim.
+
 ---
 
 ## Null and negative results

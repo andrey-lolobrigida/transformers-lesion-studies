@@ -225,3 +225,117 @@ PCA over these is how Olsson et al. plot training trajectories.
 interpolates each key with the previous position's key,
 `k_j = σ(α)k_j + (1−σ(α))k_{j−1}`, making induction expressible in one layer.
 Used as an interventional test, not a proposal.
+
+---
+
+## Added 2026-09-14 — R0 extraction, Elhage et al. "A Mathematical Framework for Transformer Circuits" (`elhage-2021`)
+
+**Attention-only transformer** — a transformer with the MLP layers removed;
+the paper's object of study for zero, one and two layers. Its results are exact
+there and heuristic once MLPs are present.
+
+**Residual stream** — the per-token vector every layer reads from linearly and
+writes to by addition; the sum of the embedding and all layer outputs so far.
+Preferred over "embedding" because subspaces of it hold information about
+*other* tokens. Wiki: `concepts/residual-stream.md`.
+
+**Virtual weight** — the implicit connection between two components at any
+distance, `W_in^{later} W_out^{earlier}`, obtained by multiplying their weights
+through the residual stream. The transformer analogue of an edge in a circuit.
+
+**Privileged basis** — an activation has one when the architecture pushes
+features to align with basis directions (e.g. a ReLU). Tokens, attention
+patterns and MLP activations have one; the residual stream, keys, queries and
+values do not, so their individual dimensions are not meaningful.
+
+**Bottleneck activation** — a lower-dimensional intermediate between two
+higher-dimensional activations, e.g. the residual stream between MLP layers or
+a value vector between two token positions. Expected to be hard to interpret
+directly.
+
+**Memory management (head or neuron)** — speculated role of components that
+delete information from the stream: MLP neurons with strongly negative
+input/output cosine similarity, or heads with large negative `W_OV` eigenvalues
+attending to the present token. Stated as a hint, not a finding.
+
+**Half-linear** — the paper's description of an attention head: given the
+attention pattern, the head is linear; only the softmax producing the pattern
+is not.
+
+**`W_QK`** — `W_Q^T W_K`, a `d_model × d_model` bilinear form of rank ≤
+`d_head`; `x_dest^T W_QK x_src` is the attention score. The matrix form of the
+QK circuit. (TransformerLens writes the same object with transposed factors;
+check at E0.)
+
+**`W_OV`** — `W_O W_V`, a `d_model × d_model` linear map of rank ≤ `d_head`;
+what a head adds to the destination per unit of attention to a source. The
+matrix form of the OV circuit. Its right singular vectors are the subspace
+read, its left singular vectors the subspace written.
+
+**`A ⊗ W_OV`** — a head's action as a tensor product: `A` mixes across
+positions, `W_OV` acts on each token's vector; `h(x) = (A ⊗ W_OV) x`.
+
+**Freezing attention patterns (trick)** — run once to record every pattern,
+run again with patterns forced to the recorded values; the model is then a
+linear function of the tokens. Origin of pattern-preserving ablation.
+
+**Path expansion** — multiplying out the product of layers, with patterns
+frozen, into a sum of end-to-end paths from tokens to logits. Wiki:
+`methods/path-expansion.md`.
+
+**Direct path (refined)** — the `W_U W_E` term of the path expansion: the
+route from embedding to unembedding through no layer. Can only encode bigram
+statistics; in a zero-layer model it is the whole model. (Extends the
+2026-09-08 entry, which used "direct path" for a component's route straight to
+the unembedding; both senses are "no further processing between here and the
+logits".)
+
+**Skip-trigram** — a pattern `[source] … [destination] → [output]` that a
+one-layer head implements: the QK circuit attends from destination to source,
+the OV circuit moves the output logit. One-layer attention-only models are an
+ensemble of a bigram model and skip-trigram models.
+
+**Skip-trigram "bug"** — because a head stores the trigram in factored form
+(QK knows source–destination, OV knows source–output), it cannot avoid also
+boosting the cross-combinations, e.g. `keep … in → bay`.
+
+**Copying matrix** — an OV circuit that maps tokens toward themselves, so
+attending to a token raises that token's logit. Summarised by positive
+eigenvalues; not a settled formalisation.
+
+**Same-matching matrix** — the QK analogue: a matrix `W` in a composed QK term
+that scores highest when query-side and key-side tokens agree. Also
+summarised by positive eigenvalues.
+
+**Eigenvalue copying statistic** — positivity of the eigenvalues of
+`W_U W_OV W_E` (or of a QK `W`) as a data-free summary of copying / matching.
+Evidence, not proof. Wiki: `methods/weight-statistics.md`.
+
+**V-composition** — a head's value matrix reading a subspace written by an
+earlier head; unlike Q/K-composition it does not change any attention pattern
+and instead creates a virtual attention head. (Completes the Q- and
+K-composition entries of 2026-09-08.)
+
+**Virtual attention head** — the V-composition of two heads, behaving as one
+head with pattern `A² A¹` and OV matrix `W_OV² W_OV¹`. Their number grows
+quadratically with depth. Small effect in the paper's two-layer model.
+
+**Composition score** — normalised Frobenius norm of the virtual weight between
+two heads (`‖W_QK² W_OV¹‖_F / (‖W_QK²‖_F ‖W_OV¹‖_F)` for K), minus the
+random-matrix baseline. The paper's own figure of these was affected by a bug
+and later corrected.
+
+**Term-importance ablation** — with all patterns frozen, replace head outputs
+by zero, then by previously saved outputs, one path order at a time, and
+difference the losses to get the marginal contribution of nth-order paths.
+Targets V-composition only.
+
+**Value-weighted attention pattern** — the attention weight scaled by the norm
+of the value vector at the source, `A_{ij} ‖v_j‖`; corrects for heads that park
+on a default token with a near-zero value vector.
+
+**Pointer arithmetic (positional)** — an induction mechanism available only
+when positional embeddings live in the residual stream: one head fetches the
+positional embedding of an earlier copy of the current token; a second head's
+query, via Q-composition, shifts it forward one position. Reported in "at
+least one case in GPT-2", size unspecified.

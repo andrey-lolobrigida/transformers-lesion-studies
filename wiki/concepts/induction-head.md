@@ -2,9 +2,9 @@
 title: Induction head
 type: concept
 status: drafted
-sources: [olsson-2022]
+sources: [olsson-2022, elhage-2021]
 first-needed: E2
-updated: 2026-09-08
+updated: 2026-09-14
 ---
 
 # Induction head
@@ -103,9 +103,52 @@ The choice of *random* tokens is deliberate and worth copying: it rules out a
 head that heuristically attends to plausible continuations, since on random
 tokens nothing is plausible except by repetition [olsson-2022 §Induction Heads].
 
-**The mechanism, in circuit terms** [olsson-2022 §Summary of Reverse Engineering
-Induction Heads] — this section is a dense summary pointing back at Elhage et
-al. 2021, which has not been extracted yet; see [[qk-ov-circuits]]:
+**The mechanism, as Elhage et al. 2021 first stated it** — extracted
+2026-09-14; the composition machinery is on [[attention-head-composition]] and
+the circuits on [[qk-ov-circuits]]:
+
+- **Function.** "Induction heads search over the context for previous examples
+  of the present token. If they don't find it, they attend to the first token
+  (in our case, a special token placed at the start), and do nothing. But if
+  they do find it, they then look at the next token and copy it"
+  [elhage-2021 §Function of Induction Heads]. The comparison the paper draws:
+
+  | Model | Rule |
+  |---|---|
+  | One-layer copying head | `[b] … [a] → [b]` |
+  | One-layer, tokenisation quirk | `[ab] … [a] → [b]` |
+  | Two-layer induction head | `[a][b] … [a] → [b]` |
+
+  The two-layer rule "knows how the token was previously used", makes more
+  confident predictions, and "is less vulnerable to distributional shift,
+  since it doesn't depend on learned statistics about whether one token can
+  plausibly follow another". The random-repeated-sequence test, which Olsson
+  et al. turn into the definition, originates here as "likely the hardest test
+  one can give them" [elhage-2021 §Function of Induction Heads].
+- **Mechanism.** "The central trick to induction heads is that the key is
+  computed from tokens shifted one token back. The query searches for
+  'similar' key vectors, but because keys are shifted, finds the next token."
+  The minimal implementation is K-composition with a previous-token head,
+  giving a QK term `Id ⊗ A^{h₋₁} ⊗ W` in which `W` is same-matching
+  [elhage-2021 §How Induction Heads Work]. Induction heads "can be more
+  complicated than this": other two-layer models add a head attending further
+  back, presumably for an `A^{h₋₁} ⊗ A^{h₋₂} ⊗ W` term.
+- **Check.** The theory predicts a copying OV matrix and a same-matching QK
+  term; plotted on (QK positivity, OV positivity), "all the induction heads
+  turn out to be in an extreme right hand corner". The authors pre-empt the
+  circularity worry: heads were chosen for *large* K-composition, which does
+  not imply *positive* eigenvalues [elhage-2021 §Checking the Mechanistic
+  Theory]. Statistic on [[weight-statistics]].
+- **In the analysed model**, induction heads are the only thing composition
+  is used for, and the layer-0 head they compose with attends "primarily to
+  the previous token, and to a lesser extent the present token and the token
+  two back" [elhage-2021 §Analyzing a Two-Layer Model]. The post-publication
+  correction adds that two induction heads also rely on a head attending over
+  the last several tokens [elhage-2021 §Correction: Attention Head Composition
+  Diagram].
+
+**The same mechanism as Olsson et al. restate it** [olsson-2022 §Summary of
+Reverse Engineering Induction Heads]:
 
 - **Copying is done by the OV circuit**, characterised by *positive
   eigenvalues*. Induction heads are a subset of the copying heads a transformer
@@ -177,6 +220,16 @@ a stated small sample (10 examples).
   information into the residual stream. **This project's model is GPT-2 small.**
   Any weight-based induction test taken from this paper may be testing for the
   wrong mechanism.
+
+  *The original source of that claim*, now read: "We observed at least one
+  case in GPT-2 where an induction head was implemented using this approach,
+  instead of the one described above. First, an attention head attended to a
+  similar token, returning its positional embedding. Next, a query vector for
+  another attention head was constructed with q-composition, rotating the
+  positional embedding forward one token" [elhage-2021 §Pointer Arithmetic
+  with Positional Embeddings]. One case; no model size, head index or figure.
+  It establishes that the route exists in *some* GPT-2, nothing more. Proposed
+  as O-012.
 - **Prefix-matching heads that are not induction heads.** Above 16 layers, the
   full-scale models "start to show a small number of heads that score well on
   'prefix search', but get a negative score on copying, which means they are
@@ -249,17 +302,27 @@ GPT-2 small**, so this gives E2 no head index to expect.
   Summary of Reverse Engineering Induction Heads · Where induction heads form ·
   Additional Curiosities · Change Log · Replication (Scherlis) · Replication
   (Lieberum).
+- [elhage-2021] Elhage et al., "A Mathematical Framework for Transformer
+  Circuits", Transformer Circuits Thread, 22 December 2021.
+  https://transformer-circuits.pub/2021/framework/index.html
+  Sections cited: Function of Induction Heads · How Induction Heads Work ·
+  Checking the Mechanistic Theory · Analyzing a Two-Layer Model · Correction:
+  Attention Head Composition Diagram · Pointer Arithmetic with Positional
+  Embeddings.
 
 ## Open questions
 
 - **Which mechanism does GPT-2 small use?** K-composition with a previous-token
-  head, or the positional pointer-arithmetic route? The paper asserts the
-  latter exists in GPT-2 without saying which GPT-2 or citing a figure. This
-  bears directly on E2 and should be settled by reading Elhage et al. and then
-  by measurement, not by assumption.
+  head, or the positional pointer-arithmetic route? Elhage et al. report "at
+  least one case in GPT-2" of the latter, with no size, head or figure; Olsson
+  et al. repeat it. Reading did not settle it. **Proposed as O-012**, to be
+  settled at E2 by measurement: the K- and Q-composition scores on
+  [[weight-statistics]] make the two routes distinguishable from the weights
+  before any ablation.
 - **What threshold makes a head an induction head in this project?** The source
   gives a continuum and no cutoff. Whatever is chosen belongs in the E1 harness
   config and in every result doc that uses it.
-- Does a previous-token head deserve its own page, or is it adequately covered
-  here? Revisit after the Elhage extraction, when K-composition is understood
-  properly rather than by summary.
+- ~~Does a previous-token head deserve its own page?~~ Decided no at the
+  Elhage extraction (2026-09-14): it is one positional attention pattern plus a
+  `W_OV` that copies token identity into a subspace, fully stated on
+  [[attention-head-composition]].

@@ -2,9 +2,9 @@
 title: Pattern-preserving ablation
 type: method
 status: drafted
-sources: [olsson-2022]
+sources: [olsson-2022, elhage-2021]
 first-needed: E1
-updated: 2026-09-08
+updated: 2026-09-14
 ---
 
 # Pattern-preserving ablation
@@ -43,6 +43,15 @@ Pattern-preserving ablation cuts route 2 by fiat. The paper notes this is only
 possible because of a structural fact from Elhage et al. 2021: a head's
 attention pattern and its output are computed by separable circuits — different
 parameters, runnable in isolation [olsson-2022 §Data Collection (2)].
+
+*Provenance, added 2026-09-14.* The freezing move is Elhage et al.'s "freezing
+attention patterns trick": run once to collect every pattern, run again with
+the patterns forced to the collected values, and the logits become a linear
+function of the tokens [elhage-2021 §OV and QK Independence (The Freezing
+Attention Patterns Trick)]. In an attention-only model, ablating one head with
+patterns frozen is then exactly deleting that head's terms from the path
+expansion — see [[path-expansion]]. That identity is what Olsson et al. say
+"does not survive MLPs".
 
 This is a **second axis** of ablation design, orthogonal to the zero / mean /
 resample axis that D-006 already commits this project to sweeping. What gets
@@ -126,9 +135,15 @@ the spine attacks was visible as a caveat well before it was studied directly.
   [olsson-2022 §Argument 3]. See [[in-context-learning]]; the fault is in the
   metric's construction, not the ablation.
 - **The paper's own earlier work ablated differently.** Elhage et al.'s
-  ablations are *nth-order term* ablations, manipulating all heads at once and
-  iterating, not single-head ablations. The shared "freeze the patterns" choice
-  makes them look more alike than they are [olsson-2022 §Data Collection (2)].
+  ablation is a *term-importance* procedure: with all patterns frozen, replace
+  every head's output with zero (step 2), then with the outputs saved from the
+  previous step (step n), and difference the losses to get the marginal effect
+  of all paths of order n. It manipulates every head at once and iterates over
+  path order; it is not a single-head ablation, and the authors note it
+  "only target[s] V-composition" because patterns are frozen [elhage-2021 §Term
+  Importance Analysis]. The shared freezing choice makes the two procedures
+  look more alike than they are [olsson-2022 §Data Collection (2)]. Full
+  algorithm on [[path-expansion]].
 - **Zero as a substitution value is not defended here.** The known objection —
   that zeroing moves the model off-distribution and distorts residual-stream
   norms — is not discussed in this paper. It belongs to the R1 and R2 sources.
@@ -164,6 +179,11 @@ the spine attacks was visible as a caveat well before it was studied directly.
   https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html
   Sections cited: Argument 3 · Data Collection (2) Per-token losses (attention
   head ablations) · Ablation attribution to phase change.
+- [elhage-2021] Elhage et al., "A Mathematical Framework for Transformer
+  Circuits", Transformer Circuits Thread, 22 December 2021.
+  https://transformer-circuits.pub/2021/framework/index.html
+  Sections cited: OV and QK Independence (The Freezing Attention Patterns
+  Trick) · Term Importance Analysis.
 
 ## Open questions
 
