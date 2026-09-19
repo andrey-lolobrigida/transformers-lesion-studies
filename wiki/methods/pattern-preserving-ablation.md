@@ -2,9 +2,9 @@
 title: Pattern-preserving ablation
 type: method
 status: drafted
-sources: [olsson-2022, elhage-2021]
+sources: [olsson-2022, elhage-2021, wang-2022]
 first-needed: E1
-updated: 2026-09-14
+updated: 2026-09-19
 ---
 
 # Pattern-preserving ablation
@@ -146,7 +146,19 @@ the spine attacks was visible as a caveat well before it was studied directly.
   algorithm on [[path-expansion]].
 - **Zero as a substitution value is not defended here.** The known objection —
   that zeroing moves the model off-distribution and distorts residual-stream
-  norms — is not discussed in this paper. It belongs to the R1 and R2 sources.
+  norms — is not discussed in this paper. Wang et al. state it in one
+  sentence and switch to mean ablation without a comparison [wang-2022 §2.1;
+  [[mean-ablation]]]. R2 is where a comparison is expected.
+- **Wang et al. freeze a different thing** — added 2026-09-19. Their
+  [[path-patching]] holds every *non-sender head's output* at its clean
+  value while MLPs and LayerNorms recompute [wang-2022 App. B]; this page's
+  method holds every *attention pattern* and lets all outputs respond. A
+  pattern-preserving ablation of `h` reaches later heads' values; path
+  patching to the logits reaches nothing downstream except MLPs. So the
+  path-restriction axis has at least three distinct points — total,
+  pattern-frozen, other-heads-frozen — and the O-011 resolution's "direct
+  effect" needs to say which freezing it means. Proposed as an O-011
+  addendum.
 
 ## What this project does with it
 
@@ -184,6 +196,8 @@ the spine attacks was visible as a caveat well before it was studied directly.
   https://transformer-circuits.pub/2021/framework/index.html
   Sections cited: OV and QK Independence (The Freezing Attention Patterns
   Trick) · Term Importance Analysis.
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 2.1 · App. B.
 
 ## Open questions
 

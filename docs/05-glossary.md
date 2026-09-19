@@ -339,3 +339,155 @@ when positional embeddings live in the residual stream: one head fetches the
 positional embedding of an earlier copy of the current token; a second head's
 query, via Q-composition, shifts it forward one position. Reported in "at
 least one case in GPT-2", size unspecified.
+
+---
+
+## Added 2026-09-19 — R1 extraction, Wang et al. "Interpretability in the Wild" (`wang-2022`)
+
+**IOI (indirect object identification)** — the task: given "When Mary and
+John went to the store, John gave a drink to", predict "Mary". A dependent
+clause introduces the indirect object (IO) and the subject (S); the main
+clause repeats S. Wiki: `concepts/ioi-circuit.md`.
+
+**S1, S2, IO, END** — position labels in an IOI sentence: first and second
+occurrence of the subject, the indirect object, and the final token position
+where the prediction is made. **S1+1** is the token after S1.
+
+**`p_IOI`** — the distribution over IOI sentences generated from 15 templates,
+100 single-token names and 20 places / objects, in both ABBA and BABA orders.
+
+**`p_ABC`** — the same templates with three unrelated random names, so no
+name is duplicated and there is no single plausible IO. Wang et al.'s
+reference distribution for mean ablation and the corrupted input for path
+patching.
+
+**Knockout** — Wang et al.'s word for removing a set of nodes from the
+computational graph while keeping all other computation. Implemented by
+ablation; the paper's is mean ablation.
+
+**Reference distribution (mean ablation)** — the dataset over which the
+replacement mean is computed. It decides what information the ablation
+removes: only what *varies* across the reference. Wiki:
+`methods/mean-ablation.md`.
+
+**Template-matched mean** — a mean computed across samples of one template
+only, so that the grammatical role at each position is the same in every
+sample averaged.
+
+**Node, (head, position) pair** — the unit Wang et al. knock out: one head at
+one token position, not a head at all positions. GPT-2 small's IOI circuit is
+26 such nodes, "1.1% of the total number of (head, token position) pairs".
+
+**Behavioural circuit** — Wang et al.'s definition: a subgraph `C` of the
+model's computational graph whose function `C(x)` is the model's output with
+everything outside `C` knocked out. The knockout method is part of the
+definition. Contrast the structural definition of Olah et al. (2020 entry);
+reconciliation proposed on `wiki/concepts/circuit.md`.
+
+**Path patching** — run on a clean input, but along the paths from one
+*sender* head to a set of *receivers* (through residual connections and
+MLPs, not through other heads) use the sender's activation from a corrupted
+input. Other heads' outputs are frozen to clean values. Measures the
+necessity of that route. Wiki: `methods/path-patching.md`.
+
+**Sender / receiver** — in path patching, the head whose activation is
+replaced and the set of nodes (a head's Q, K or V input, or the final
+residual state) that receive the replaced signal.
+
+**Freezing (activations)** — Wang et al.'s sense: during a forward pass with
+some earlier edit, hold an activation at the value it had on the *unedited*
+run of the same input. Distinct from the 2026-09-14 entry *freezing
+attention patterns*: that pins patterns and lets outputs respond; this pins
+head outputs and lets MLPs respond.
+
+**Direct effect (Wang et al.'s operationalisation)** — path patching with the
+receiver set to the final residual state: every path from the head to the
+logits that avoids other heads, MLPs included. Differs from the "head's own
+term" sense in the O-011 resolution; see O-011 addendum.
+
+**Indirect effect** — a head's influence on the metric that is mediated by
+other heads; in Wang et al. recovered edge by edge by tracing backwards, or
+measured in total by a knockout.
+
+**Patching direction** — which run receives the patch. Corrupted activation
+into a clean run (Wang et al.) asks necessity; clean activation into a
+corrupted run asks sufficiency. The 2026-08 entry "activation patching …
+tests sufficiency" is true of the second direction only. (The words
+*noising* and *denoising* for the two directions are common usage, not this
+paper's.)
+
+**Activation patching (refined)** — Wang et al.'s use: replace the *outputs*
+of a set of heads with their outputs on a counterfactual input and recompute
+the whole forward pass, nothing frozen. Coarser than path patching about
+routes; able to see within-class interactions path patching holds fixed.
+
+**Counterfactual dataset (signal-specific)** — a transformed copy of `p_IOI`
+built so that patching from it moves exactly one signal: random-name flip
+(token signal uncorrelated), IO ↔ S1 flip (position inverted), IO ← S2
+replacement (both inverted), and their compositions.
+
+**Token signal / position signal** — the two components of the S-Inhibition
+heads' output: the identity of S, and the position of S1. Position weighs
+more (≈ 2.31 vs 0.99 in logit-difference units) and appears to be relative
+(S1 to S2), not absolute.
+
+**Pointer (communication by)** — heads "sharing the location of a piece of
+information instead of copying it": the position signal is a pointer to S1.
+
+**Faithfulness (Wang et al.'s definition)** — `|F(M) − F(C)|`, the gap
+between the model's and the circuit's mean logit difference, with `F`
+computed under the knockout that defines `C`. IOI circuit: 0.46 (13%), i.e.
+87% retained. Extends the 2026-08 entry with its source.
+
+**Completeness / incompleteness score** — for a subset `K ⊆ C`,
+`|F(C \ K) − F(M \ K)|`; a circuit is complete if this is small for every
+`K`. Only ever searched (random, class-wise, greedy), never proven. Greedy
+search found 3.09 (87% of baseline) on the IOI circuit.
+
+**Minimality / minimality score** — for a node `v`, the largest
+`|F(C \ (K ∪ {v})) − F(C \ K)|` over some `K ⊆ C \ {v}`; every node should
+have one that is non-trivial. A conditional necessity claim: `K` is part of
+the statement.
+
+**Naïve circuit** — Wang et al.'s baseline: the main head classes without
+Backup or Negative Name Movers. As faithful as the full circuit; more easily
+shown incomplete.
+
+**Greedy completeness search** — Algorithm 3: repeatedly sample `k` nodes
+from `C \ K`, add the one that moves the incompleteness score most.
+
+**Name Mover** — a head active at END that attends to a name and copies it
+to the logits (9.6, 9.9, 10.0). **Negative Name Mover** — same, writing
+against the attended name (10.7, 11.10). **Backup Name Mover** — one of
+eight heads with small effect in the intact model that become the main direct
+contributors when the Name Movers are knocked out. Cause "still unclear";
+dropout during training is the authors' conjecture. Refines the 2026-08
+*backup head* entry, whose "learned redundancy" is not established by this
+source.
+
+**S-Inhibition head** — active at END, attends to S2, writes the token and
+position signals into the Name Movers' queries so they avoid S1 and S2
+(7.3, 7.9, 8.6, 8.10).
+
+**Duplicate Token head** — active at S2, attends to S1, signals that the
+token is a duplicate by writing its position (0.1, 3.0; "fuzzy" 0.10).
+
+**Fuzzy head** — a head whose attention pattern fits a class only weakly or
+diffusely (fuzzy Duplicate Token 0.10; fuzzy Induction 5.8, 5.9).
+
+**Copy score** — proportion of samples in which a name is among the top five
+logits after pushing the residual stream at that name (after MLP0) through
+the head's `W_OV`, then `W_U` and the final LayerNorm. **Negative copy score**
+uses `−W_OV`. Name Movers > 95%; average head < 20%.
+
+**Induction score / duplicate score / previous token score (Wang et al.'s
+variants)** — attention-pattern averages on 100-token random sequences
+duplicated once: attention from `T_i` to `T_{i−99}`, to `T_{i−100}`, and to
+`i−1` respectively. Rankings published, not values.
+
+**IO probability** — the model's probability on the IO token; the paper's
+second headline metric (49% on `p_IOI`), alongside logit difference.
+
+**Adversarial example (circuit-derived)** — an IOI sentence with an extra
+occurrence of IO, built from the finding that the model relies on duplicate
+detection; drops logit difference to 1.23 and makes S win 23.4% of the time.

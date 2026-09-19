@@ -2,9 +2,9 @@
 title: Induction head
 type: concept
 status: drafted
-sources: [olsson-2022, elhage-2021]
+sources: [olsson-2022, elhage-2021, wang-2022]
 first-needed: E2
-updated: 2026-09-14
+updated: 2026-09-19
 ---
 
 # Induction head
@@ -230,6 +230,18 @@ a stated small sample (10 examples).
   with Positional Embeddings]. One case; no model size, head index or figure.
   It establishes that the route exists in *some* GPT-2, nothing more. Proposed
   as O-012.
+- **In the IOI circuit, GPT-2 small's induction heads do not do induction.**
+  Heads 5.5 and 6.9 pass Olsson et al.'s prefix-matching and copying tests
+  on repeated random tokens [wang-2022 App. H], but in the IOI task their
+  output "is used both as a pointer to S1 and as a signal that S is
+  duplicated" — a *position* signal consumed by the S-Inhibition heads'
+  values, not a copied token. "In the context we study, Induction Heads
+  perform a different function compared to what was described in their
+  original discovery … We did not investigate how this mechanism was
+  implemented" [wang-2022 §3, §3.3]. Two further heads, 5.8 and 5.9, attend
+  to S1+1 weakly or diffusely and are called "fuzzy Induction Heads"
+  [wang-2022 App. C]. The behavioural definition and the role in a given
+  circuit come apart; see [[ioi-circuit]].
 - **Prefix-matching heads that are not induction heads.** Above 16 layers, the
   full-scale models "start to show a small number of heads that score well on
   'prefix search', but get a negative score on copying, which means they are
@@ -271,8 +283,15 @@ heads form]:
 For GPT-2 specifically the datapoint comes from the invited replication, not
 from the authors: induction heads in GPT-2 and GPT-Neo "mostly starting in the
 mid-depth region", with GPT2-XL layer 21 head 20 and GPT-Neo-2.7B layer 12 head
-0 named as examples [olsson-2022 §Replication (Tom Lieberum)]. **Neither is
-GPT-2 small**, so this gives E2 no head index to expect.
+0 named as examples [olsson-2022 §Replication (Tom Lieberum)]. Neither is
+GPT-2 small. *Added 2026-09-19:* Wang et al. supply GPT-2 small indices —
+**5.5 and 6.9** are "among the 5 heads with the highest induction score" on
+100-token repeated random sequences and among the 20 largest contributors to
+next-token prediction there; **4.11 and 2.2** are the two highest
+previous-token heads [wang-2022 App. H]. Rankings, not scores, and on a
+stimulus that differs from Olsson et al.'s (100 tokens × 2 repeats, no BOS
+mentioned). E2 has head indices to expect, and a stimulus-format difference
+to match or declare.
 
 ## What this project does with it
 
@@ -309,6 +328,8 @@ GPT-2 small**, so this gives E2 no head index to expect.
   Checking the Mechanistic Theory · Analyzing a Two-Layer Model · Correction:
   Attention Head Composition Diagram · Pointer Arithmetic with Positional
   Embeddings.
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 3 · 3.3 · App. C · App. D · App. H.
 
 ## Open questions
 
@@ -318,7 +339,12 @@ GPT-2 small**, so this gives E2 no head index to expect.
   et al. repeat it. Reading did not settle it. **Proposed as O-012**, to be
   settled at E2 by measurement: the K- and Q-composition scores on
   [[weight-statistics]] make the two routes distinguishable from the weights
-  before any ablation.
+  before any ablation. *Evidence added 2026-09-19:* on IOI, path patching
+  finds the K-route — Previous Token heads 4.11 and 2.2 affect logit
+  difference through the Induction heads' keys at S1+1 — and, testing the
+  Q-route directly, "did not find any significant effect" on the Induction
+  heads' queries at S2 [wang-2022 App. D]. Behavioural, one task, four heads;
+  the weight-level check E2 plans is still the resolution.
 - **What threshold makes a head an induction head in this project?** The source
   gives a continuum and no cutoff. Whatever is chosen belongs in the E1 harness
   config and in every result doc that uses it.

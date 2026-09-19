@@ -121,6 +121,15 @@ a `64 × 64` one. SVD of a product: SVD each factor, SVD the small core
 
 ## Where it's contested
 
+- **A hybrid statistic exists between this page and the activation
+  evaluators** — added 2026-09-19. Wang et al.'s *copy score* pushes a real
+  residual-stream vector (at a name token, after MLP0) through `W_OV` and
+  `W_U`, applies the final LayerNorm, and checks whether the name is in the
+  top five logits [wang-2022 §3.1]. It is data-dependent, unlike the
+  eigenvalue statistic, and direct-path-only, like Olsson's evaluator. Which
+  of the three E2 uses to say "copying" is a recorded choice. Details on
+  [[head-activation-evaluators]].
+
 - **The formalisation is open**, by the authors' own account: "we don't yet
   feel like we have a clear right answer" on summarising OV/QK matrices; the
   eigenvalue statistic is "quite strong evidence" and "not perfect".
@@ -149,6 +158,9 @@ a `64 × 64` one. SVD of a product: SVD each factor, SVD the small core
   Sections cited: Summarizing OV/QK Matrices · Detecting Copying Behavior ·
   Analyzing a Two-Layer Model · Checking the Mechanistic Theory · Correction:
   Attention Head Composition Diagram · Working with Low-Rank Matrices.
+
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 3.1.
 
 ## Open questions
 

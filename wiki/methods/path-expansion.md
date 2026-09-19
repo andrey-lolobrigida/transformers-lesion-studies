@@ -2,9 +2,9 @@
 title: Path expansion
 type: method
 status: drafted
-sources: [elhage-2021]
+sources: [elhage-2021, wang-2022]
 first-needed: E1
-updated: 2026-09-14
+updated: 2026-09-19
 ---
 
 # Path expansion
@@ -166,7 +166,13 @@ order. Same freezing trick, different question. Recorded on
   head's write — every term through the head is cut, Q/K-composition routes are
   held fixed. Direct effect: keep only the head's own term `A^h ⊗ W_U W_OV^h
   (…)`. The E1 design note should define the three this way, with this page as
-  the reference.
+  the reference. *Caveat added 2026-09-19:* that is **not** what Wang et al.
+  measure as "direct effect". Their [[path-patching]] to the residual end
+  state keeps every path from the head that avoids other *heads*, and MLPs
+  and LayerNorms are recomputed along it [wang-2022 §3.1, App. B] — in a
+  model with MLPs, that includes MLP-mediated terms this page's expansion
+  cannot linearise. The two coincide only in attention-only models. E1 has
+  to pick one and name it; proposed as an O-011 addendum.
 - **E4's mechanical share** is the LayerNorm scalar this page folds out. The
   paper's remark that it "means that paths going through different sets of
   layers aren't easily comparable" is a warning for E4's decomposition, not
@@ -185,6 +191,8 @@ order. Same freezing trick, different question. Recorded on
   Understand" One-Layer Models? · Path Expansion of Logits · Term Importance
   Analysis · Related Work: Mathematical Framework · MLP Layers · Handling Layer
   Normalization.
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 3.1 · App. B.
 
 ## Open questions
 

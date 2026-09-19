@@ -2,9 +2,9 @@
 title: Head activation evaluators (copying, prefix matching, previous token)
 type: method
 status: drafted
-sources: [olsson-2022]
+sources: [olsson-2022, wang-2022]
 first-needed: E2
-updated: 2026-09-08
+updated: 2026-09-19
 ---
 
 # Head activation evaluators
@@ -89,6 +89,34 @@ activation evaluators]. The empirical scores are therefore checked against the
 mechanism *only where the mechanism could be computed* — which is not the
 regime this project works in.
 
+**Wang et al.'s variants, run on GPT-2 small** — added 2026-09-19. Stimulus:
+sequences of 100 tokens sampled uniformly from the vocabulary, each
+duplicated to form `AA` [wang-2022 App. H]. Scores from the attention
+patterns:
+
+- *Previous token score*: mean attention on the off-diagonal (position `i`
+  to `i−1`). Highest two heads: **4.11, 2.2**.
+- *Induction score*: mean attention from `T_i` to the token after the first
+  occurrence of `T_i` (i.e. `T_{i−99}`). **5.5 and 6.9** are among the top
+  five.
+- *Duplicate score*: for each `T_i` in the second half, mean attention to its
+  earlier occurrence `T_{i−100}`. **3.0 and 0.1** are among the top three;
+  the "fuzzy" duplicate head 0.10 does not appear and, on OpenWebText,
+  attends mostly to the current token [wang-2022 App. I].
+- *Copy check*: the dot product `⟨h_i(X), W_U[B]⟩` between the head's output
+  and the unembedding of the token to be predicted; 5.5 and 6.9 are among the
+  20 heads contributing most [wang-2022 App. H, Fig. 17].
+
+Differences from Olsson et al.: 100 tokens × 2 rather than 25 × 4; no BOS
+token mentioned; no token exclusions mentioned; copying checked by a raw
+dot product rather than the ReLU-and-ratio score. **Rankings are reported,
+not values.** A separate **copy score** in the main text (residual stream
+at a name after MLP0 × `W_OV` × `W_U` → final LayerNorm → is the name in the
+top five; N = 1000) characterises the Name Movers at > 95% against < 20% for
+an average head [wang-2022 §3.1]; it is an OV-circuit measurement on a real
+residual vector rather than on `W_E`, so it sits between this page and
+[[weight-statistics]].
+
 **Joint distribution.** Heads with a positive prefix-matching score are more
 likely to have a positive copying score, more strongly so at the highest prefix
 scores; the distribution is sharper in small models than full-scale ones
@@ -110,8 +138,9 @@ scores; the distribution is sharper in small models than full-scale ones
 - **The independent replication used the criterion, not the implementation.**
   Lieberum restates the definition in his own terms and finds candidate heads in
   GPT-2 and GPT-Neo, but reports no scores [olsson-2022 §Replication (Tom
-  Lieberum)]. There is no published per-head number for GPT-2 small here to
-  reproduce against.
+  Lieberum)]. There is no published per-head *score* for GPT-2 small in either
+  source. Wang et al. add head *identities* and rankings for GPT-2 small (above),
+  on a differently formatted stimulus.
 
 ## What this project does with it
 
@@ -119,8 +148,9 @@ scores; the distribution is sharper in small models than full-scale ones
   patching, and no battery — a forward pass on synthetic sequences. That makes
   them a good early smoke test on top of E0's published-number check, and a
   cheap way to locate GPT-2 small's induction heads before ablating anything.
-  Caveat: the paper publishes no GPT-2 small scores, so this reproduces a
-  *method*, not a *number*.
+  Caveat: neither Olsson et al. nor Wang et al. publish GPT-2 small *scores*;
+  Wang et al. publish which heads rank highest (5.5, 6.9; 4.11, 2.2; 3.0,
+  0.1). E2 reproduces a method and a ranking, not a number.
 - **O-010 candidate 2 is exactly this**, tracked across checkpoints. The E6
   sketch's "two named scores on a plain scatter, animated over checkpoints" is
   prefix matching against copying — the paper's own §Distribution of scores
@@ -141,6 +171,8 @@ scores; the distribution is sharper in small models than full-scale ones
   Collection (4) Trace of QK eigenvalues · Validating head activation
   evaluators · Distribution of scores · Additional Curiosities · Behavior 2 ·
   Replication (Lieberum).
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 3.1 · App. H (Figs. 17, 18) · App. I.
 
 ## Open questions
 

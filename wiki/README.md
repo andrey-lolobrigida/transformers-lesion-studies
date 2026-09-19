@@ -182,30 +182,38 @@ Two overrides:
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
-| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020, elhage-2021 |
+| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020, elhage-2021, wang-2022 |
 | [feature](concepts/feature.md) | drafted | R0 | olah-2020 |
 | [polysemanticity](concepts/polysemanticity.md) | drafted | R0 | olah-2020 |
 | [superposition](concepts/superposition.md) | stub | R0 | olah-2020 |
 | [universality](concepts/universality.md) | drafted | E6 | olah-2020 |
 | [circuit-motif](concepts/circuit-motif.md) | drafted | E5 | olah-2020 |
 | [interpretability-as-natural-science](concepts/interpretability-as-natural-science.md) | drafted | R1 | olah-2020 |
-| [induction-head](concepts/induction-head.md) | drafted | E2 | olsson-2022, elhage-2021 |
+| [induction-head](concepts/induction-head.md) | drafted | E2 | olsson-2022, elhage-2021, wang-2022 |
 | [in-context-learning](concepts/in-context-learning.md) | drafted | E2 | olsson-2022 |
 | [phase-change](concepts/phase-change.md) | drafted | E6 | olsson-2022 |
 | [qk-ov-circuits](concepts/qk-ov-circuits.md) | drafted | R0 | elhage-2021, olsson-2022 |
 | [residual-stream](concepts/residual-stream.md) | drafted | E1 | elhage-2021 |
 | [attention-head](concepts/attention-head.md) | drafted | E1 | elhage-2021 |
-| [attention-head-composition](concepts/attention-head-composition.md) | drafted | E2 | elhage-2021, olsson-2022 |
+| [attention-head-composition](concepts/attention-head-composition.md) | drafted | E2 | elhage-2021, olsson-2022, wang-2022 |
+| [ioi-circuit](concepts/ioi-circuit.md) | drafted | E1 | wang-2022 |
+| [self-repair](concepts/self-repair.md) | drafted (phenomenon) | E4 | wang-2022 |
 
 ### Methods
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
 | [feature-claim-evidence](methods/feature-claim-evidence.md) | drafted | E3 | olah-2020 |
-| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022, elhage-2021 |
-| [head-activation-evaluators](methods/head-activation-evaluators.md) | drafted | E2 | olsson-2022 |
-| [path-expansion](methods/path-expansion.md) | drafted | E1 | elhage-2021 |
-| [weight-statistics](methods/weight-statistics.md) | drafted | E2 | elhage-2021 |
+| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022, elhage-2021, wang-2022 |
+| [head-activation-evaluators](methods/head-activation-evaluators.md) | drafted | E2 | olsson-2022, wang-2022 |
+| [path-expansion](methods/path-expansion.md) | drafted | E1 | elhage-2021, wang-2022 |
+| [weight-statistics](methods/weight-statistics.md) | drafted | E2 | elhage-2021, wang-2022 |
+| [path-patching](methods/path-patching.md) | drafted | E1 | wang-2022 |
+| [activation-patching](methods/activation-patching.md) | drafted | E2 | wang-2022 |
+| [mean-ablation](methods/mean-ablation.md) | drafted | E1 | wang-2022 |
+| [zero-ablation](methods/zero-ablation.md) | stub | E1 | wang-2022 |
+| [circuit-validation-criteria](methods/circuit-validation-criteria.md) | drafted | E2 | wang-2022 |
+| [logit-difference](methods/logit-difference.md) | drafted | E1 | wang-2022 |
 
 ### Sources
 
@@ -214,37 +222,43 @@ Two overrides:
 | [olah-2020](sources/olah-2020-zoom-in.md) — Zoom In | R0 | complete |
 | [olsson-2022](sources/olsson-2022-induction-heads.md) — Induction Heads | R0 | complete |
 | [elhage-2021](sources/elhage-2021-framework.md) — Mathematical Framework | R0 | complete |
+| [wang-2022](sources/wang-2022-ioi.md) — IOI circuit | R1 | complete |
 
 ### Expected next
 
-**R0's reading is complete.** Elhage et al. 2021 was extracted 2026-09-14: the
-[qk-ov-circuits](concepts/qk-ov-circuits.md) stub was rewritten rather than
-extended, as predicted, and `residual-stream`, `attention-head` and
-`attention-head-composition` opened. What remains for R0 is not a wiki task —
-it is the exit note in `notes/exit_criteria/R0.md`, written cold, and then the
-diff against these pages.
+**R1's first required source is extracted.** Wang et al. 2022 was extracted
+2026-09-19: six method pages opened (the whole knockout/patching vocabulary
+now has source-backed pages), two concept pages (the IOI circuit as E2's
+target; self-repair as a phenomenon, from its originating observation), and
+six existing pages edited.
 
-Two things the Elhage pass did to earlier pages, which is the kind of edit the
-loop exists to surface:
+Four things this pass did to earlier pages, which is what the loop exists to
+surface:
 
-- **[induction-head](concepts/induction-head.md)** gained the mechanism from
-  its original source and the exact wording of the GPT-2 pointer-arithmetic
-  observation — "at least one case in GPT-2", no size. That did not resolve
-  the page's first open question; it sharpened it into O-012.
-- **[pattern-preserving-ablation](methods/pattern-preserving-ablation.md)** had
-  described Elhage et al.'s ablation at second hand; the description is now
-  from the source and the freezing trick has its 2021 provenance.
+- **"Direct effect" now has two definitions on the wiki.** The O-011
+  resolution and [[path-expansion]] define it as the head's own term to the
+  logits; Wang et al.'s [[path-patching]] lets MLPs and LayerNorms recompute
+  along the way. They coincide only without MLPs. Proposed as an O-011
+  addendum; E1 must pick one.
+- **"Freezing" means two different things across sources.** Olsson et al.
+  freeze attention patterns ([[pattern-preserving-ablation]]); Wang et al.
+  freeze other heads' outputs. The path-restriction axis has at least three
+  points, not two.
+- **[[circuit]] has its behavioural definition sourced.** The glossary's
+  "depends on the ablation methodology" caveat is a consequence of Wang et
+  al.'s `C(x)`-via-knockout definition, before Miller et al. A reconciliation
+  is proposed on the page for D-010 item 3; the author decides.
+- **[[induction-head]] gains GPT-2 small head indices** (5.5, 6.9; previous
+  token 4.11, 2.2) and a finding that those heads do not do induction in the
+  IOI circuit. On O-012, the Q-composition route was looked for on IOI and
+  not found — evidence, not resolution.
 
-No contradiction between sources yet. The composition page records a
-*self*-correction inside Elhage et al. (the Frobenius-norm bug) which is the
-nearest thing so far.
+One direction problem to carry into the methods review: the first paper on
+the list to *perform* activation patching performs it corrupted-into-clean,
+which is a necessity test. `docs/01-methods.md` and the glossary say
+"activation patching tests sufficiency" without the direction qualifier.
+Recorded on [[activation-patching]].
 
-The `concepts/` vs `methods/` boundary needed one judgment call: the eigenvalue
-copying statistic and the composition scores are computed from weights, not
-from a forward pass, but they are still *measurements with a licence*, so they
-went to `methods/` with a claim-licence block rather than being buried in a
-concept page.
-
-**R1 next:** Wang et al. (IOI) and Miller et al. are the first sources that
-will press on [pattern-preserving-ablation](methods/pattern-preserving-ablation.md),
-[path-expansion](methods/path-expansion.md) and the O-011 resolution.
+**Miller et al. next.** It presses directly on [[circuit-validation-criteria]],
+[[mean-ablation]], [[zero-ablation]] and the O-011 trigger, and is the source
+`docs/01-methods.md` already paraphrases.

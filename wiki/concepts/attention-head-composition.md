@@ -2,9 +2,9 @@
 title: Attention head composition
 type: concept
 status: drafted
-sources: [elhage-2021, olsson-2022]
+sources: [elhage-2021, olsson-2022, wang-2022]
 first-needed: E2
-updated: 2026-09-14
+updated: 2026-09-19
 ---
 
 # Attention head composition
@@ -113,6 +113,26 @@ the induction heads also rely on a head attending to the last several tokens
 [elhage-2021 §Analyzing a Two-Layer Model, §Correction: Attention Head
 Composition Diagram].
 
+**All three kinds, observed behaviourally in GPT-2 small** — added
+2026-09-19 from Wang et al., who find each by [[path-patching]] into a
+specific input of the receiving heads, not from composition scores:
+
+| Kind | Sender → receiver input | Heads | Where |
+|---|---|---|---|
+| Q-composition | S-Inhibition → Name Movers' **queries** at END | 7.3, 7.9, 8.6, 8.10 → 9.6, 9.9, 10.0 | §3.2 |
+| K-composition | Previous Token → Induction heads' **keys** at S1+1 | 4.11, 2.2 → 5.5, 6.9 | App. D |
+| V-composition | Duplicate Token, Induction → S-Inhibition **values** at S2 | 0.1, 3.0, 5.5, 6.9 → S-Inhibition | §3.3 |
+
+The paper names the V case explicitly — S-Inhibition heads "output
+information about the position of S1 but don't attend to it directly. They
+thus must rely on the output of other heads through value composition"
+[wang-2022 §3.2] — and the K case as "key composition with Previous Token
+Heads" [wang-2022 App. D]. The weight-level counterpart (composition scores,
+eigenvalues) is listed among the validations the authors did not perform
+[wang-2022 §3.3]. So for these heads the behavioural half of the licence
+below exists and the parameter half does not — the mirror image of the
+Elhage et al. situation.
+
 ## What it licenses
 
 A non-zero composition score licenses: *at the weight level, head h₂'s
@@ -140,7 +160,9 @@ result (sufficiency), never the score alone.
 - **GPT-2 has an alternative route to induction that uses Q-composition** on
   positional embeddings, unavailable to the paper's models [elhage-2021
   §Pointer Arithmetic with Positional Embeddings]. See [[induction-head]] and
-  O-012.
+  O-012. Wang et al. looked for that route on IOI — path patching into the
+  Induction heads' queries at S2 — and "did not find any significant effect"
+  [wang-2022 App. D]. One task, behavioural; recorded on O-012.
 
 ## What this project does with it
 
@@ -173,6 +195,8 @@ result (sufficiency), never the score alone.
   Composition Diagram · Pointer Arithmetic with Positional Embeddings.
 - [olsson-2022] Olsson et al., 2022, §Summary of Reverse Engineering Induction
   Heads — the same mechanism restated, plus the GPT-2 Q-composition remark.
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 3.2 · 3.3 · App. D.
 
 ## Open questions
 

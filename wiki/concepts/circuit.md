@@ -2,9 +2,9 @@
 title: Circuit
 type: concept
 status: drafted
-sources: [olah-2020, elhage-2021]
+sources: [olah-2020, elhage-2021, wang-2022]
 first-needed: R0
-updated: 2026-09-14
+updated: 2026-09-19
 ---
 
 # Circuit
@@ -98,6 +98,28 @@ From the paper's own glossary [olah-2020 §Glossary]:
 Note what this definition does *not* contain: any reference to a task, a
 behaviour, or a dataset. It is purely structural.
 
+**The behavioural definition, from Wang et al. 2022** — added 2026-09-19.
+Think of the model as a computational graph `M` "where nodes are terms in
+its forward pass (neurons, attention heads, embeddings, etc.) and edges are
+the interactions between those terms"; then "a circuit `C` is a subgraph of
+`M` responsible for some behavior (such as completing the IOI task)". The
+authors say directly that this "is more coarse-grained than the one
+presented in Olah et al. (2020), where nodes are features … instead of model
+components" [wang-2022 §2.1]. Two things follow that Zoom In's definition
+does not have:
+
+- **A circuit has a function.** `C(x)` is defined as the logits of `M` on
+  `x` with every node outside `C` *knocked out* — so the knockout method
+  (in the paper, [[mean-ablation]] on `p_ABC`) is part of what the circuit
+  *is*, not a way of testing it afterwards [wang-2022 §2.1].
+- **Nodes are (component, position) pairs.** The 26-head circuit is "1.1%
+  of the total number of (head, token position) pairs" [wang-2022 §1].
+
+The two definitions coexist in the paper's own practice: the circuit is
+*found* by [[path-patching]] (causal, behavioural), *characterised* by
+attention patterns and OV-matrix copy scores (structural), and *validated*
+by knockouts ([[circuit-validation-criteria]]).
+
 Related vocabulary the paper defines alongside it:
 
 - **Direction** — a linear combination of neurons in a layer; equivalently a
@@ -140,12 +162,18 @@ See `docs/00-motivation.md` on phrenology risk.
   five meanings connects to another carrying five, that is effectively 25
   connections that cannot be considered individually [olah-2020 §Polysemantic
   Neurons]. See [[polysemanticity]].
-- **This project's own working definition differs.** `docs/05-glossary.md`
-  defines a circuit behaviourally — "a subgraph of components that together
-  implement a behaviour" — and adds that which subgraph counts depends partly on
-  the ablation methodology used to isolate it. That caveat is not in Zoom In and
-  comes from a paper not yet read (Miller et al., R1). The two definitions need
-  reconciling at R1.
+- **This project's own working definition now has a source.**
+  `docs/05-glossary.md` defines a circuit behaviourally — "a subgraph of
+  components that together implement a behaviour" — and adds that which
+  subgraph counts depends partly on the ablation methodology. That is Wang
+  et al.'s definition, and the caveat is a direct consequence of it: `C(x)`
+  is *defined* through a knockout, so a different knockout defines a
+  different `C(x)` [wang-2022 §2.1]. Miller et al. (R1) make the
+  consequence empirical. **Proposed reconciliation for D-010 item 3:** keep
+  both senses, named — a *structural* circuit (Zoom In; Elhage et al.'s
+  virtual weights) is read off parameters; a *behavioural* circuit (Wang et
+  al.) is a component subgraph plus the knockout that defines its function.
+  Results docs say which one a claim is about. The author decides.
 
 ## What this project does with it
 
@@ -165,6 +193,9 @@ See `docs/00-motivation.md` on phrenology risk.
   https://transformer-circuits.pub/2021/framework/index.html
   Sections cited: Virtual Weights.
 
+- [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
+  Sections cited: 1 · 2.1 · 3.3.
+
 - [olah-2020] Olah, Cammarata, Schubert, Goh, Petrov & Carter, "Zoom In: An
   Introduction to Circuits", Distill, 10 March 2020.
   DOI 10.23915/distill.00024.001 ·
@@ -176,9 +207,15 @@ See `docs/00-motivation.md` on phrenology risk.
 
 - **How does a weight-read circuit relate to an ablation-identified one?**
   Zoom In defines circuits structurally; this project finds candidates
-  behaviourally. Whether these converge — and what to call the object when they
-  do not — should be settled in R1 when Wang et al. and Miller et al. are read.
-  Candidate for promotion to an `O-00N` in `docs/04-decisions.md`.
+  behaviourally. *Partly answered at the Wang extraction (2026-09-19):* Wang
+  et al. use both on the same object — path patching to find nodes, OV copy
+  scores and attention patterns to say what they do — and list the purely
+  structural checks (QK collision detection, OV copying of positional
+  embeddings, Elhage-style parameter analysis) as validations they *omitted*
+  [wang-2022 §3.3]. So the two did not converge in the source; one was done
+  and the other deferred. What to call the object is the reconciliation
+  proposed above. Remains a candidate `O-00N` only if the author wants it
+  tracked beyond D-010.
 - ~~Does the residual stream make "subgraph" the wrong shape entirely, or just
   a harder one to compute?~~ Resolved at the Elhage extraction (2026-09-14):
   harder to compute, not the wrong shape. Nodes are heads (and MLPs), edges are

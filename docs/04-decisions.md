@@ -174,6 +174,23 @@ The ablation method defines the task; the corruption scheme in patching
 plausibly does the same. Should E2/E3 sweep corruption schemes the way they
 sweep ablation methods, or is that scope creep? **Resolve during R1.**
 
+*Addendum, 2026-09-19 (Wang extraction).* Evidence that the answer is "it is
+part of the measurement, whatever E3 decides to sweep". Wang et al. chose
+`p_ABC` as both the mean-ablation reference and the path-patching corruption
+*because* `p_IOI` "would not remove enough information helpful for the task"
+— duplication is constant across `p_IOI`, so a mean over it keeps the
+signal a Duplicate Token head carries [wang-2022 §2.1]. Their Appendix A
+then builds six counterfactual datasets each removing or inverting one
+named signal, and the logit difference decomposes additively across them.
+So a corruption scheme is a statement of *which information is removed*,
+and two schemes that remove different information measure different
+things. Proposed shape for the R1 resolution: E1 records, per battery item
+and per corruption scheme, what the scheme removes (in the style of Wang's
+random-name / position-flip / role-swap triple); E3 sweeps the scheme only
+where a battery item has more than one natural corruption, and records the
+one used everywhere else. Wiki: `methods/activation-patching.md`,
+`methods/mean-ablation.md`.
+
 ### O-004 — Pythia viability for E6
 Do Pythia 70M/160M form clean induction heads at all? Are the early checkpoints
 dense enough in the formation window? Deduped or non-deduped? **Resolve if and
@@ -217,6 +234,17 @@ head in the same E3 run. It turned out to be the same design question as O-011,
 whose resolution treats total effect, pattern-preserving and direct effect as
 three values of one path-restriction setting. The MLP half of O-007 is
 unaffected and still resolves at R1.
+
+*Addendum, 2026-09-19 (Wang extraction).* One measured datapoint for the MLP
+half, on GPT-2 small, IOI, mean ablation on `p_ABC`: knocking out MLP0
+alone *reverses the sign* of the logit difference; knocking out any other
+MLP layer alone does little; knocking out every MLP except MLP0 gives −1.1
+[wang-2022 App. J]. Wang et al. did not intervene on MLPs anywhere else and
+list them as not understood. Two things follow for E1: MLPs matter
+*collectively* on this task while looking unimportant *individually*, which
+is exactly the pattern a per-component heatmap cannot show; and MLP0 is a
+special case that any MLP-level sweep should expect to dominate. Neither
+resolves O-007; both argue for the hook family being cheap to add now.
 
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*
@@ -415,6 +443,26 @@ rescales things, the importance of individual heads may be masked"
 [olsson-2022 §Argument 3]. That is useful provenance for the E4 framing and for
 O-008's question about what in E4 is reproduction and what is extension.
 
+*Addendum, 2026-09-19 (Wang extraction) — "direct effect" is ambiguous and
+"freezing" is overloaded.* The resolution table defines *direct effect* as
+"only the head's own contribution to the logits", and
+`wiki/methods/path-expansion.md` restates it as keeping only the head's own
+term. Wang et al.'s direct effect is their path patching with the receiver
+set to the final residual state: every path from the head to the logits that
+does not pass through another *head* — MLPs and LayerNorms are recomputed
+and so mediate it [wang-2022 §3.1, App. B]. The two coincide in an
+attention-only model and differ in GPT-2 small by exactly the MLP-mediated
+terms. Separately, Wang et al.'s "freezing" pins other heads' *outputs*;
+Olsson et al.'s pins attention *patterns*; so the path-restriction axis has
+at least three distinct points (total · patterns frozen · other heads
+frozen) before "direct effect" is defined. **Proposed for the E1 design
+note, not decided here:** name the direct-effect setting by its source
+(`direct-effect/wang`: other heads frozen, MLPs recompute; or
+`direct-effect/term`: MLPs held as well), implement at least the Wang
+version because E2's IOI reproduction needs it verbatim, and record the
+choice next to every E3 direct-effect number. Wiki:
+`methods/path-patching.md`, `methods/pattern-preserving-ablation.md`.
+
 ### O-012 — Which induction mechanism does GPT-2 small use?
 *Raised 2026-09-14, during the R0 extraction of Elhage et al. 2021. Confirmed
 as an open question by the author 2026-09-19. Resolves at E2.*
@@ -448,6 +496,57 @@ K-composition scores for every (earlier, later) head pair
 behavioural evaluators, and record which composition route each one shows.
 Both routes may coexist. Whatever E2 finds, the mechanism assumed by each
 subsequent weight-based claim gets stated next to the claim.
+
+*Addendum, 2026-09-19 (Wang extraction).* Behavioural evidence for
+mechanism 1 on one task. Path patching on IOI finds Previous Token heads
+4.11 and 2.2 affecting logit difference through the Induction heads' (5.5,
+6.9) *keys* at S1+1 — the K-composition route — and, testing the Q-route
+directly, "did not find any significant effect" on the Induction heads'
+queries at S2 [wang-2022 App. D]. Wang et al. also note that in IOI these
+heads emit a *position* signal rather than copying a token, and that the
+mechanism for that is not investigated [wang-2022 §3.3]. This does not
+resolve O-012: it is one task, four heads, and path patching rather than
+the weight-level check E2 plans; and the position-signal role means the
+heads do something on IOI that neither mechanism description covers. It
+does give E2 head indices to start from and a prior that the K-route will
+show. Wiki: `concepts/induction-head.md`.
+
+### O-013 — Does the harness ablate whole heads or (head, position) nodes?
+*Proposed 2026-09-19, during the R1 extraction of Wang et al. Awaiting the
+author's confirmation. Resolve during R1, before E1's harness design is
+fixed.*
+
+Wang et al.'s unit of knockout is a **(head, token position) pair** — a
+node in the computational graph — and their mean is computed per template
+so that positions align. The 26-node IOI circuit is "1.1% of the total
+number of (head, token position) pairs" [wang-2022 §1, §2.1]. Every
+published number this project would check against at E2 — the 87%
+faithfulness, the ≈ 5% drop after knocking out the Name Movers, the
+minimality scores, the greedy incompleteness of 3.09 — is a per-position
+figure.
+
+The roadmap's E3 ablates "every head in GPT-2 small, one at a time", which
+reads as whole heads at all positions. That is a different, coarser
+intervention: it removes the head's contribution at positions where the
+circuit never uses it, and on a battery item without a fixed template (the
+induction item, say) there is no natural position to name.
+
+Options, with what each costs:
+
+1. **Whole heads everywhere.** Simplest harness; E3's heatmaps are
+   per-head. E2 then cannot reproduce Wang et al.'s numbers as published,
+   only a whole-head analogue, and the results doc has to say so.
+2. **(head, position) nodes where the battery item has aligned positions,
+   whole heads elsewhere.** E2 reproduces the published unit; E3 gains a
+   position axis for templated items and loses comparability across items.
+3. **Both, with the unit logged.** The harness takes a position mask per
+   ablation; "all positions" is one value of it. Cheap in TransformerLens;
+   the cost is in the results-doc discipline, not the code.
+
+Lean toward 3 with E3 defaulting to whole heads and E2 using the published
+unit — but this is a harness-design decision and belongs to the author.
+Related: O-007 (the same question for MLP layers), O-011 (path
+restriction is a third axis; position is a fourth).
 
 ---
 
