@@ -2,7 +2,7 @@
 title: IOI circuit (indirect object identification in GPT-2 small)
 type: concept
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E1
 updated: 2026-09-19
 ---
@@ -172,6 +172,17 @@ Induction heads produce a position signal, nor of the MLPs' role.
 - **The adversarial set exposes behaviour outside the analysis**: S-Inhibition
   heads attend to the second IO, a pattern absent from both `p_IOI` and
   `p_ABC` [wang-2022 §4.4].
+- **The 87% is one point in a six-tuple space** — Miller et al., added
+  2026-09-19. The circuit is specified as edges and positions but was
+  evaluated node-wise; evaluated as specified (edge level, specific
+  positions) its median logit difference recovered is "well over 100%".
+  Resample instead of mean lowers it; all positions instead of the
+  circuit's lowers it; BABA scores above ABBA; the score rises with the
+  size of the ABC mean set, which Wang et al. put at about seven per
+  template; per-prompt scores have an interquartile range up to 50 points
+  [miller-2024 §4, §4.1, §4.2]. Every entry in the numbers table above is
+  under Wang et al.'s six-tuple only. Detail on
+  [[circuit-validation-criteria]] and [[ablation-methodology]].
 - **GPT-2 medium** has "a sparse set of heads directly influencing the
   logits. However, not all of these heads attend to IO and S" — a preliminary
   observation that the structure does not transfer as-is [wang-2022 §5].
@@ -210,6 +221,8 @@ Induction heads produce a position signal, nor of the MLPs' role.
   Sections cited: 1 · 2 · 3 · 3.1 · 3.2 · 3.3 · 3.4 (fn. 2) · 4 · 4.1 · 4.2 ·
   4.3 · 4.4 · 5 · App. A · App. B · App. C · App. D · App. E · App. F ·
   App. H · App. I · App. J · App. K · App. L.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 4 · 4.1 · 4.2.
 
 ## Open questions
 

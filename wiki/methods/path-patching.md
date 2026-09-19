@@ -2,7 +2,7 @@
 title: Path patching
 type: method
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E1
 updated: 2026-09-19
 ---
@@ -158,6 +158,19 @@ Three things it does not license, all of which the paper itself respects:
   [wang-2022 §3.1, §App. B]. In an attention-only model the two coincide; in
   GPT-2 small they do not. Which one E1 implements is an unmade decision;
   proposed as an addendum to O-011.
+- **In Miller et al.'s taxonomy this is edge resample ablation** — added
+  2026-09-19. "Wang et al. (2023) perform a further simplified version of
+  path patching … This is equivalent to Edge Resample Ablation in our
+  terminology … Importantly, Wang et al. reason that the IOI task should be
+  an attention-only task … As such, they take nodes to only be attention
+  heads, with MLPs considered to be part of the direct path between nodes"
+  [miller-2024 App. F]. That is the direct-effect discrepancy above, named
+  from outside: Wang's direct effect is an *edge* in a graph whose nodes are
+  heads only. Miller et al. also record that the IOI circuit "is specified
+  as an edge-level circuit, but Wang et al. evaluate its faithfulness via a
+  node-wise ablation methodology", and that evaluating it at the edge level
+  gives a median faithfulness "well over 100%" [miller-2024 §4, §4.1]. See
+  [[ablation-methodology]].
 - **The paper uses two different "freezings", and neither is Olsson's.**
   Path patching freezes *head outputs* (pass C). [[pattern-preserving-ablation]]
   freezes *attention patterns* and lets outputs respond. A pattern-preserving
@@ -207,6 +220,8 @@ Three things it does not license, all of which the paper itself respects:
   Sections cited: 1 · 2.1 · 3 · 3.1 (incl. fn. 1) · 3.2 · 3.3 · 3.4 ·
   App. A · App. B (incl. fn. 3, fn. 4, Algorithm 1) · App. C · App. D ·
   App. F · App. J.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 4 · 4.1 · App. F.
 
 ## Open questions
 

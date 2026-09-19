@@ -491,3 +491,85 @@ second headline metric (49% on `p_IOI`), alongside logit difference.
 **Adversarial example (circuit-derived)** — an IOI sentence with an extra
 occurrence of IO, built from the finding that the model relies on duplicate
 detection; drops logit difference to 1.23 and makes S win 23.4% of the time.
+
+---
+
+## Added 2026-09-19 — R1 extraction, Miller, Chughtai & Saunders "Transformer Circuit Faithfulness Metrics Are Not Robust" (`miller-2024`)
+
+**Ablation six-tuple** — the six choices that specify a circuit ablation
+experiment: granularity, component type, ablation value, token positions,
+direction, and set. A faithfulness number without all six is not a
+measurement of the circuit. Wiki: `methods/ablation-methodology.md`.
+
+**Granularity** — the level at which the computational graph is drawn:
+heads and MLPs (most common; Q, K, V inputs separately), layers, neurons,
+subspaces, sparse features.
+
+**Component type (node / edge / branch)** — what is ablated. *Node*: a
+component's output, seen by everything downstream. *Edge*: what one
+destination receives from one source, in the factorised view. *Branch*: a
+whole input-to-output path, in the treeified view; the primitive of causal
+scrubbing; exponential in depth.
+
+**Residual / factorised / treeified view** — three equivalent drawings of a
+transformer: every component reads the stream; every component has an edge
+from every earlier component; every input-to-output path is separated.
+
+**Node patching / edge patching** — node or edge ablation with a cached
+activation from another input. Node patching is "vanilla activation
+patching".
+
+**Ablation value** — what is written in: zero, Gaussian noise (on the
+embeddings; ROME), resample (another input's activation), mean (over a
+reference set, with a set-size sub-choice).
+
+**Resample ablation** — replace an activation with its value on a paired
+corrupt input. Miller et al. use it interchangeably with *activation
+patching*. Keeps the model near-distribution; adds the corrupt prompt's
+signal as well as removing the clean one. Wiki: `methods/resample-ablation.md`.
+
+**Token positions (axis)** — ablate at all positions, or only at positions
+outside the circuit's specified set. A circuit specified with positions is
+tested with positions.
+
+**Ablation direction** — *ablate clean*: clean input, corrupt values
+written in (destroys signal; necessity). *Restore clean*: corrupt input,
+clean values written in (restores signal; sufficiency). Supersedes the
+2026-09-19 Wang-pass entry *patching direction* with the source's names.
+
+**Set (circuit / complement)** — whether the circuit's components or
+everything outside them is ablated. Crossed with direction gives four
+targets: destroy performance, restore performance, maintain performance,
+maintain inefficacy.
+
+**Faithfulness target** — which of those four an experiment measures.
+Restore-into-circuit and ablate-complement both compare to the full model
+but differ: the first lets clean signal flow outside the circuit.
+
+**Logit difference recovered** — Wang et al.'s faithfulness ratio as Miller
+et al. name it: the ablated model's logit difference over the full
+model's, ×100. Over 100% is possible. The ratio of means and the mean of
+ratios differ substantially.
+
+**Averaging order** — `E[F]/E[M]` (Wang et al.) versus `E[F/M]`; the second
+is higher on IOI and has heavy per-prompt outliers.
+
+**Worst-case faithfulness** — Miller et al.'s recommendation to report the
+per-prompt distribution (interquartile range) alongside the mean; the IOI
+circuit is faithful on average and not for many prompts.
+
+**Ground-truth circuit (Tracr)** — the edges a compiled model's known
+program uses; Miller et al. show it depends on the ablation value, because
+input-invariant information (positional encoding) is removed by zero
+ablation and kept by resample.
+
+**"The ablation partly determines the task"** — the paper's thesis and the
+source of epistemic rule 3. Zero ablation asks for the circuit that
+includes deciding *what kind* of output to make; mean asks for the circuit
+that completes the task *given* that context.
+
+**Interchange intervention / causal tracing** — other names for activation
+patching (App. F).
+
+**AutoCircuit** — the authors' library: edge patching with mean, zero and
+resample on TransformerLens models.

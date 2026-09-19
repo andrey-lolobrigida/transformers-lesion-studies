@@ -2,7 +2,7 @@
 title: Logit difference
 type: method
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E1
 updated: 2026-09-19
 ---
@@ -69,6 +69,21 @@ in similar correlation and scatter plots" [wang-2022 §3.1, fn. 1].
 on the knocked-out model — is what [[circuit-validation-criteria]] are
 computed from [wang-2022 §4].
 
+**Logit difference recovered** — Miller et al.'s name for Wang et al.'s
+faithfulness ratio, added 2026-09-19:
+
+    (F(x)_correct − F(x)_incorrect) / (M(x)_correct − M(x)_incorrect) × 100
+
+100% means the ablated model matches the full model; negative means the
+incorrect token wins; over 100% means the ablated model prefers the correct
+token *more* than the full model does [miller-2024 §4]. **Averaging order
+matters:** Wang et al. take the ratio of the two *mean* logit differences,
+`E[F] / E[M]`; the mean of per-prompt ratios, `E[F / M]`, "return[s]
+substantially higher percentages" [miller-2024 §4.1, Fig. 4]. Per-prompt
+ratios have an interquartile range up to 50 points on IOI and extreme
+outliers (a prompt whose full-model logit difference is near zero makes the
+ratio explode) [miller-2024 §4.2].
+
 ## What it licenses
 
 A change in mean logit difference under an intervention licenses a claim
@@ -93,6 +108,10 @@ caveat to carry.
   third candidate.
 - **Loss is never reported** for any intervention in the paper, so there is
   no within-source comparison of the two metrics.
+- **The ratio form is unstable per prompt.** Miller et al.'s spread and
+  outliers are a property of dividing by a per-prompt denominator that can
+  be near zero, not only of the circuit. A results doc that reports
+  `E[F/M]` without the distribution is reporting the outliers.
 
 ## What this project does with it
 
@@ -107,9 +126,11 @@ caveat to carry.
 
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: 2 · 3.1 (incl. fn. 1, Fig. 3c) · 4 · 4.4 (Fig. 8) · App. A.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 4 · 4.1 (Fig. 4) · 4.2.
 
 ## Open questions
 
-- Should E1 report the per-sample *distribution* of the difference and not
-  only its mean? The paper's scatter plots suggest heads vary a lot per
-  sample; a mean can hide a bimodal effect.
+- ~~Should E1 report the per-sample *distribution* of the difference and not
+  only its mean?~~ Yes — Miller et al. show why (2026-09-19). E1 reports
+  `E[F]/E[M]`, `E[F/M]`, and the per-prompt interquartile range.

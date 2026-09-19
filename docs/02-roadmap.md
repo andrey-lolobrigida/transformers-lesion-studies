@@ -129,22 +129,26 @@ The harness should support zero, mean, and resample ablation over any
 component, with the mean-ablation dataset size logged automatically, and should
 emit a per-run artifact with seed and model revision.
 
-It also carries a second, independent setting: **path restriction**, with three
-nesting values — *total effect* (the ablation propagates everywhere),
-*pattern-preserving* (all attention patterns pinned to their clean-run values,
-so the ablation reaches later components' value computations but not their
-attention patterns), and *direct effect* (the component's own contribution to
-the logits only). Direct effect is recorded per head alongside total effect in
-the same run; the gap between them is the self-repair number E4 starts from.
-Decided in the O-011 resolution, which also settles the direct-effect half of
-O-007; the reasoning and the R1 trigger that can reopen it are there.
+It also carries, per Miller et al.'s six-tuple, a **component type**
+setting — *node* ablation (the change propagates everywhere downstream) or
+*edge* ablation (only a named destination receives it; edge-to-logits is
+Wang et al.'s path patching and is this project's *direct effect*, with the
+MLP convention recorded as a flag) — and a **position mask** per ablation,
+"all positions" being one value of it (O-013). Separately, the harness
+implements **pattern freezing** (all attention patterns pinned to their
+clean-run values, per Olsson et al.), which E2's induction reproduction
+requires and which is this project's own axis, not a literature-standard
+one. Direct effect is recorded per head alongside the node-level total effect
+in the same run; the gap between them is the self-repair number E4 starts
+from. Decided in the O-011 resolutions (2026-09-08 and 2026-09-19); the
+reasoning is there.
 
 **Exit criterion:** every battery item has a clean/corrupted generator, a
 metric, and a documented corruption scheme. The harness ablates an arbitrary
-head under all three substitution methods from one CLI call, at any of the three
-path restrictions, recording both the substitution method and the path
-restriction in the artifact — a default that goes unstated becomes a permanent
-choice nobody made.
+head under all three substitution methods from one CLI call, at node or edge
+level, with any position mask, with or without pattern freezing, recording
+every one of those settings in the artifact — a default that goes unstated
+becomes a permanent choice nobody made.
 **Tag:** `v-E1`
 
 ---

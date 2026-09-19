@@ -2,7 +2,7 @@
 title: Circuit
 type: concept
 status: drafted
-sources: [olah-2020, elhage-2021, wang-2022]
+sources: [olah-2020, elhage-2021, wang-2022, miller-2024]
 first-needed: R0
 updated: 2026-09-19
 ---
@@ -174,6 +174,15 @@ See `docs/00-motivation.md` on phrenology risk.
   virtual weights) is read off parameters; a *behavioural* circuit (Wang et
   al.) is a component subgraph plus the knockout that defines its function.
   Results docs say which one a claim is about. The author decides.
+  *Strengthened by Miller et al. (2026-09-19):* even the behavioural sense
+  is underdetermined by the task alone. In a compiled Tracr model with a
+  known program, the ground-truth circuit *differs* between zero and
+  resample ablation — an edge that carries only input-invariant positional
+  information is required under one and not the other — so "the optimal
+  circuit with respect to only a set of prompts is undefined. The ablation
+  partly determines the task" [miller-2024 §5]. A behavioural circuit is a
+  component subgraph *plus* the full ablation six-tuple on
+  [[ablation-methodology]], not plus "the knockout" in the abstract.
 
 ## What this project does with it
 
@@ -195,6 +204,8 @@ See `docs/00-motivation.md` on phrenology risk.
 
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: 1 · 2.1 · 3.3.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 1 · 5 · 6.
 
 - [olah-2020] Olah, Cammarata, Schubert, Goh, Petrov & Carter, "Zoom In: An
   Introduction to Circuits", Distill, 10 March 2020.

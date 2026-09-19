@@ -2,7 +2,7 @@
 title: Mean ablation
 type: method
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E1
 updated: 2026-09-19
 ---
@@ -95,7 +95,13 @@ Numbers from the paper that are mean-ablation results:
 | MLP0 knocked out | sign of logit difference reverses | App. J |
 | All MLPs except MLP0 knocked out | −1.1 | App. J |
 
-The reference-set size behind the means is not given anywhere in the text.
+The reference-set size behind the means is not given anywhere in Wang et
+al.'s text. *Added 2026-09-19:* Miller et al., reproducing the setup,
+state it as "around seven examples per template" [miller-2024 §4] — a
+second-hand figure, recorded as such. Miller et al.'s own means are over
+100 ABC prompts, and they find the IOI faithfulness score "monotonically
+increases with the size of the ABC dataset" [miller-2024 §4.1, Fig. 4]. No
+mechanism is proposed in the paper.
 
 ## What it licenses
 
@@ -121,9 +127,18 @@ Two things the paper shows it does *not* license:
 - **Zero ablation is dismissed in one sentence, without a comparison.** "Noisy
   in practice" is the entire evidence [wang-2022 §2.1]. D-006 treats the two
   as asking different questions; this paper treats one as a worse version of
-  the other. Miller et al. is where the disagreement gets adjudicated.
-- **The reference set size is unstated**, which is the exact omission rule 4
-  exists to prevent. Any E2 reproduction has to choose one and say so.
+  the other. Miller et al. side with D-006: mean and zero define different
+  tasks — "given the context of outputting a name" versus including "the
+  mechanism that decides it needs to output a name" [miller-2024 §6].
+- **The reference set size is unstated in the source**, which is the exact
+  omission rule 4 exists to prevent; Miller et al. put it at about seven
+  per template and show the score moves with it. Any E2 reproduction has to
+  choose one and say so.
+- **Mean versus resample disagree, and neither is the refined one.** On
+  IOI, resample gives systematically lower faithfulness at the node level;
+  on Sports Players a mean-ablated model sits at chance while a
+  resample-ablated one sits at 0% because the corrupt prompt carries a
+  competing answer [miller-2024 §4.1, App. D.2]. See [[resample-ablation]].
 - **Per-position ablation is not whole-head ablation.** E3's design (every
   head, one at a time, on a battery) ablates heads at every position. A
   faithfulness number computed that way is not comparable to Wang et al.'s.
@@ -146,6 +161,8 @@ Two things the paper shows it does *not* license:
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: 2 · 2.1 · 3.4 · 4 · 4.1 · 4.2 · App. E · App. F · App. J ·
   App. K.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 3.1.3 · 4 · 4.1 (Fig. 4) · 6 · App. D.2.
 
 ## Open questions
 

@@ -2,7 +2,7 @@
 title: Circuit validation criteria (faithfulness, completeness, minimality)
 type: method
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E2
 updated: 2026-09-19
 ---
@@ -106,6 +106,34 @@ is load-bearing somewhere — and all three are numbers under one knockout.
 
 ## Where it's contested
 
+- **The faithfulness score is not robust to the ablation methodology** —
+  Miller et al., added 2026-09-19. Re-evaluating this exact circuit with
+  one axis of the [[ablation-methodology]] six-tuple changed at a time:
+  edge instead of node ablation gives "substantially higher percentages",
+  with a median "well over 100%" at specific positions; resample instead
+  of mean is systematically lower (p = 1e−5, node level); ablating all
+  positions instead of the circuit's is consistently lower; BABA prompts
+  score higher than ABBA; the score rises monotonically with the size of
+  the ABC set used for the mean (Wang et al. used about seven examples per
+  template); and taking the mean of per-prompt ratios instead of the ratio
+  of means gives substantially higher numbers [miller-2024 §4, §4.1, Figs.
+  3, 4]. Their conclusion is not that the circuit is wrong but that
+  "existing circuit faithfulness scores reflect both the methodological
+  choices of researchers as well as the actual components of the circuit"
+  [miller-2024 Abstract].
+- **Faithful on average, not per prompt.** Under Wang et al.'s own
+  methodology the per-prompt logit difference recovered has an
+  interquartile range up to 50 points and outliers "in the tens of
+  thousands of percent"; "while the circuit matches the behavior on
+  average, it does not match it for many examples". Miller et al. ask for
+  average *and* worst case, and note a circuit with high variance "is at
+  least partially optimized to balance out" very high and very low prompts
+  [miller-2024 §4.2, Fig. 4].
+- **The criteria presuppose a fixed methodology, and the ground truth does
+  not.** In a compiled Tracr model the correct circuit differs between
+  zero and resample ablation, because one edge carries only information
+  constant across inputs [miller-2024 §5]. Faithfulness, completeness and
+  minimality are all `F`-based, so all three inherit this.
 - **Two of the three searches said "complete"; the third said "87%
   incomplete".** The disagreement is inside the paper, not between sources.
   Which search strategy a completeness claim used has to be stated with it.
@@ -141,12 +169,15 @@ is load-bearing somewhere — and all three are numbers under one knockout.
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: Abstract · 3.4 · 4 · 4.1 · 4.2 · 4.3 · App. K (Fig. 20) ·
   App. M (Algorithm 3, Fig. 22).
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: Abstract · 4 · 4.1 (Figs. 3, 4) · 4.2 · 5.
 
 ## Open questions
 
 - Does the greedy incompleteness result survive a change of knockout
-  (zero, resample) or of reference distribution? Unknown from this source;
-  Miller et al. next.
+  (zero, resample) or of reference distribution? Miller et al. vary the
+  *faithfulness* arm only; completeness and minimality under other
+  six-tuples remain unmeasured.
 - What is the right *reporting* unit for completeness in a results doc —
   the max score found, the search budget, or the full set of `K`s? The paper
   gives all three in an appendix; a reproduction should too.

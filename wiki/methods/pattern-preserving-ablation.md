@@ -2,7 +2,7 @@
 title: Pattern-preserving ablation
 type: method
 status: drafted
-sources: [olsson-2022, elhage-2021, wang-2022]
+sources: [olsson-2022, elhage-2021, wang-2022, miller-2024]
 first-needed: E1
 updated: 2026-09-19
 ---
@@ -149,6 +149,22 @@ the spine attacks was visible as a caveat well before it was studied directly.
   norms — is not discussed in this paper. Wang et al. state it in one
   sentence and switch to mean ablation without a comparison [wang-2022 §2.1;
   [[mean-ablation]]]. R2 is where a comparison is expected.
+- **Absent from the faithfulness literature's taxonomy** — added
+  2026-09-19, and this is the O-011 R1 trigger. Miller et al.'s six-tuple
+  (granularity · component type · value · positions · direction · set) has
+  no axis for attention-pattern freezing, and the paper never mentions the
+  intervention [miller-2024 §3.1, Table 1; [[ablation-methodology]]]. The
+  nearest thing is *component type*: node, edge or branch ablation restricts
+  which downstream destinations receive the change in the factorised or
+  treeified view — a path restriction, and one they show is first-class
+  (node vs edge moves IOI faithfulness from 87% to a median over 100%
+  [miller-2024 §4.1]). But an edge ablation still lets the destination's
+  attention pattern respond to its other inputs; nothing pins patterns.
+  So the trigger fires *half*: path restriction as edge-vs-node is on par
+  with the substitution value and belongs in D-006's frame; pattern
+  freezing specifically is this project's own axis, inherited from Olsson
+  et al., with no faithfulness-literature backing. Proposed as an O-011
+  addendum.
 - **Wang et al. freeze a different thing** — added 2026-09-19. Their
   [[path-patching]] holds every *non-sender head's output* at its clean
   value while MLPs and LayerNorms recompute [wang-2022 App. B]; this page's
@@ -198,6 +214,8 @@ the spine attacks was visible as a caveat well before it was studied directly.
   Trick) · Term Importance Analysis.
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: 2.1 · App. B.
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 3.1 (Table 1) · 3.1.2 · 4.1.
 
 ## Open questions
 
@@ -205,7 +223,8 @@ the spine attacks was visible as a caveat well before it was studied directly.
   once E1 exists; the answer determines whether this is a reported axis or a
   recorded default.
 - **Is the frozen-pattern run itself off-distribution enough to matter?** It
-  forces a state the model never produces. Nothing in this source addresses the
-  cost of that, and Miller et al. (R1) is the place to look.
+  forces a state the model never produces. Nothing in Olsson et al. addresses
+  the cost, and Miller et al. do not discuss the intervention at all. Open,
+  and measurable at E3 via the O-011 delta.
 - How does this interact with mean and resample substitution? The four
   combinations are all constructible and none are characterised here.

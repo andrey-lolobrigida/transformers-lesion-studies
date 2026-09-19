@@ -154,6 +154,14 @@ Option considered and rejected: removing the gate entirely so E1 could start
 at will. The risk was that the harness would bake in an answer to O-007 or
 O-011 by default rather than by decision.
 
+*Status 2026-09-19.* Item 1 done (both extractions committed or pending
+commit). Item 3: O-003 resolved, O-011's R1 trigger resolved, O-013
+resolved (all below); O-007 leaning yes, final call deferred until ROME is
+extracted; the circuit-definition reconciliation and the
+Miller-vs-pattern-preserving question are answered on
+`wiki/concepts/circuit.md` and `wiki/methods/pattern-preserving-ablation.md`
+and await the author's sign-off as part of item 2.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -170,6 +178,8 @@ decision changes what E4 needs to report, so defer until E4's shape is known.
 Deliberately not chasing MIB comparability unless it falls out for free.
 
 ### O-003 — Does the corruption scheme need to vary too?
+*Resolved 2026-09-19 — see below.*
+
 The ablation method defines the task; the corruption scheme in patching
 plausibly does the same. Should E2/E3 sweep corruption schemes the way they
 sweep ablation methods, or is that scope creep? **Resolve during R1.**
@@ -191,6 +201,33 @@ where a battery item has more than one natural corruption, and records the
 one used everywhere else. Wiki: `methods/activation-patching.md`,
 `methods/mean-ablation.md`.
 
+*Addendum, 2026-09-19 (Miller extraction).* The corruption scheme is two
+of Miller et al.'s six axes — the *value* (resample from which corrupt
+distribution; mean over which reference) and the *direction*. Their Sports
+Players case makes the cost concrete: because every corrupt prompt names a
+different sport, resample ablation "adds signal" and the ablated model
+scores 0% where chance is 33% [miller-2024 App. D.2]. So a corruption
+scheme can inject a competing answer, not only delete the correct one, and
+two schemes differ in what they inject. Supports the proposed shape above;
+adds that E1 records, per scheme, what it *inserts* as well as what it
+removes. Wiki: `methods/resample-ablation.md`.
+
+#### Resolution — *2026-09-19*
+
+**Adopted as proposed**, confirmed by the author after both addenda. The
+corruption scheme is part of the measurement (Miller et al.'s value and
+direction axes), not a nuisance parameter. Decided:
+
+1. E1 records, per battery item and per corruption scheme, **what the
+   scheme removes and what it inserts** — in the style of Wang et al.'s
+   random-name / position-flip / role-swap triple and with the Sports
+   Players "adds a competing answer" case as the warning.
+2. E3 sweeps the corruption scheme **only where a battery item has more
+   than one natural corruption**, and records the scheme used everywhere
+   else next to the number.
+3. IOI inherits `p_ABC` as its default scheme so E2 matches the published
+   setup; the Appendix A transformations are available as named extras.
+
 ### O-004 — Pythia viability for E6
 Do Pythia 70M/160M form clean induction heads at all? Are the early checkpoints
 dense enough in the formation window? Deduped or non-deduped? **Resolve if and
@@ -211,7 +248,8 @@ small residual is a publishable negative result but changes the writeup
 substantially.
 
 ### O-007 — Are MLP layers a first-class component in the harness?
-*Raised 2026-09-02.*
+*Raised 2026-09-02. Author leaning **yes** as of 2026-09-19; final call after
+the ROME extraction — see the status note below.*
 
 D-003 chose heads over SAE features. In the roadmap that has become
 "heads only": E3 ablates every head and nothing else. But the self-repair
@@ -245,6 +283,24 @@ list them as not understood. Two things follow for E1: MLPs matter
 is exactly the pattern a per-component heatmap cannot show; and MLP0 is a
 special case that any MLP-level sweep should expect to dominate. Neither
 resolves O-007; both argue for the hook family being cheap to add now.
+
+*Addendum, 2026-09-19 (Miller extraction).* MLPs are *granularity* (axis 1)
+in Miller et al.'s six-tuple, and "heads and MLPs" is the most common
+setting in the circuit literature they survey (ACDC, Greater-than, Sports
+Players); Wang et al. are the exception, treating MLPs "as part of the
+direct path between nodes" [miller-2024 §3.1.1, App. F]. Nothing in the
+paper measures MLP ablations on their own. For O-007 the point is that
+"heads only" is a *choice on a named axis*, and the harness should record
+it as one whether or not E3 sweeps it. Wiki: `methods/ablation-methodology.md`.
+
+*Status, 2026-09-19.* The author leans **yes** — MLP layers become
+ablatable in the E1 harness — on the Wang evidence (MLPs matter
+collectively on IOI, MLP0 dominates) and the Miller framing (granularity is
+a named axis; "heads and MLPs" is the literature default). The final
+decision is deferred until Meng et al. (ROME) is extracted, since causal
+tracing localises factual recall to MLP layers and is the third R1 source
+bearing on this. The direct-effect half was settled 2026-09-08; the MLP
+half stays open pending that one read.
 
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*
@@ -338,8 +394,8 @@ planned** — this entry is a record, not a plan. Original wording of the idea i
 `notes/01-visualizing-circuit-formation.md`.
 
 ### O-011 — Is attention-pattern freezing a third axis of the ablation sweep?
-*Partially resolved 2026-09-08 — see the resolution below. The R1 trigger keeps
-it open.*
+*Partially resolved 2026-09-08 — see the resolution below. R1 trigger
+resolved 2026-09-19 — see the second resolution.*
 *Raised 2026-09-08, during the R0 extraction of Olsson et al.*
 
 D-006 commits E3 to sweeping *what value is substituted* — zero, mean, resample.
@@ -463,6 +519,65 @@ version because E2's IOI reproduction needs it verbatim, and record the
 choice next to every E3 direct-effect number. Wiki:
 `methods/path-patching.md`, `methods/pattern-preserving-ablation.md`.
 
+*Addendum, 2026-09-19 (Miller extraction) — the R1 trigger, answered in
+two halves.* The trigger asked whether the faithfulness literature treats
+path restriction as a first-class methodology choice on par with the
+substitution value. Miller et al.'s six-tuple has **component type** —
+node, edge, branch — which restricts which downstream destinations receive
+the change, and they show it is consequential: evaluating the IOI circuit
+at the edge level instead of the node level moves faithfulness from 87% to
+a median "well over 100%" [miller-2024 §4.1]. That half of the trigger
+fires: edge-vs-node belongs in D-006's frame alongside the value axis.
+**Attention-pattern freezing is absent** from the taxonomy and from the
+paper; the nearest axis (edge ablation) still lets a destination's pattern
+respond to its other inputs. That half does not fire. Miller et al. also
+name Wang's direct effect as "Edge Resample Ablation" with MLPs "part of
+the direct path between nodes" [miller-2024 App. F], which is the
+definition question in the previous addendum, restated in their terms.
+`auto-circuit` implements edge patching but not pattern freezing
+[miller-2024 App. A].
+
+**Proposed resolution shape (author decides):**
+
+1. Reframe E1's path-restriction setting in Miller's vocabulary: the
+   harness supports **node** and **edge** ablation (edge = Wang's path
+   patching = the direct-effect setting, with the MLP convention named).
+   This replaces "three nesting values" with two literature-standard ones
+   plus a convention flag.
+2. Keep **pattern freezing** as this project's own, separately named
+   intervention, inherited from Olsson et al. and required for E2's
+   induction reproduction — not folded into D-006, not claimed to be
+   standard, and reported with the O-011 delta as planned.
+3. E3's "four maps" stand: three values at node level, plus one
+   pattern-frozen twin. Whether an *edge-level* map is also worth a run is
+   an E3 question with a measured reason behind it.
+
+Wiki: `methods/ablation-methodology.md`, `methods/pattern-preserving-ablation.md`.
+
+#### Resolution of the R1 trigger — *2026-09-19*
+
+**Adopted as proposed**, confirmed by the author. Decided:
+
+1. E1's path-restriction setting is restated in Miller et al.'s
+   vocabulary: the harness supports **node** ablation and **edge**
+   ablation. Edge ablation to the logits is Wang et al.'s path patching
+   and is the project's *direct effect*; the harness names the MLP
+   convention (`wang`: MLPs recompute on the direct path; `term`: MLPs
+   held) as a flag and defaults to `wang`, because E2 needs it verbatim.
+   "Three nesting values" is superseded by this.
+2. **Pattern freezing** stays as this project's own, separately named
+   intervention, inherited from Olsson et al. and required for E2's
+   induction reproduction. It is not folded into D-006, not described as
+   literature-standard, and is reported with the O-011 delta as planned.
+3. E3's **four maps stand**: three substitution values at node level, plus
+   one pattern-frozen twin. An edge-level map is an E3 question to be
+   raised with a measured reason.
+4. The 2026-09-08 decisions (E1 builds it; E3 records direct effect per
+   head; E2 runs frozen; record the default wherever an axis is not swept)
+   are unchanged.
+
+`docs/02-roadmap.md` E1 updated to match in the same session.
+
 ### O-012 — Which induction mechanism does GPT-2 small use?
 *Raised 2026-09-14, during the R0 extraction of Elhage et al. 2021. Confirmed
 as an open question by the author 2026-09-19. Resolves at E2.*
@@ -512,9 +627,8 @@ does give E2 head indices to start from and a prior that the K-route will
 show. Wiki: `concepts/induction-head.md`.
 
 ### O-013 — Does the harness ablate whole heads or (head, position) nodes?
-*Proposed 2026-09-19, during the R1 extraction of Wang et al. Awaiting the
-author's confirmation. Resolve during R1, before E1's harness design is
-fixed.*
+*Proposed 2026-09-19, during the R1 extraction of Wang et al. Confirmed and
+resolved by the author the same day — see below.*
 
 Wang et al.'s unit of knockout is a **(head, token position) pair** — a
 node in the computational graph — and their mean is computed per template
@@ -547,6 +661,30 @@ Lean toward 3 with E3 defaulting to whole heads and E2 using the published
 unit — but this is a harness-design decision and belongs to the author.
 Related: O-007 (the same question for MLP layers), O-011 (path
 restriction is a third axis; position is a fourth).
+
+*Addendum, 2026-09-19 (Miller extraction).* Token positions are axis 4 of
+Miller et al.'s six-tuple, and their rule is direct: "if [a circuit] is
+specified with token positions then it should be tested with
+token-specific ablation" [miller-2024 §5, §6]. Measured on IOI: ablating
+at every position instead of the circuit's "consistently results in lower
+faithfulness scores" [miller-2024 §4.1]; on Docstring the drop was large
+enough to suggest the circuit "is in fact performing significant
+computation on token positions outside the circuit" [miller-2024 App.
+D.1]. Two consequences for the options above: option 1 (whole heads
+everywhere) cannot reproduce any published IOI faithfulness figure without
+a stated mismatch; and a position-masked harness (option 3) is the
+literature-standard shape, not an extra. Strengthens the lean toward 3.
+
+#### Resolution — *2026-09-19*
+
+**Option 3, confirmed by the author: both units, with the unit logged.**
+The harness takes a **position mask** per ablation; "all positions" is one
+value of it. E3 defaults to whole heads (all positions), which is what a
+per-head heatmap means. E2 uses the published (head, position) unit with
+template-matched means so Wang et al.'s numbers are reproduced as stated.
+Every result artifact records the mask. Position is thereby axis 4 of the
+six-tuple in the harness config, alongside substitution value and node/edge
+component type (O-011).
 
 ---
 

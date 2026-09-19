@@ -182,7 +182,7 @@ Two overrides:
 
 | Page | Status | First needed | Sources |
 |---|---|---|---|
-| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020, elhage-2021, wang-2022 |
+| [circuit](concepts/circuit.md) | drafted | R0 | olah-2020, elhage-2021, wang-2022, miller-2024 |
 | [feature](concepts/feature.md) | drafted | R0 | olah-2020 |
 | [polysemanticity](concepts/polysemanticity.md) | drafted | R0 | olah-2020 |
 | [superposition](concepts/superposition.md) | stub | R0 | olah-2020 |
@@ -196,7 +196,7 @@ Two overrides:
 | [residual-stream](concepts/residual-stream.md) | drafted | E1 | elhage-2021 |
 | [attention-head](concepts/attention-head.md) | drafted | E1 | elhage-2021 |
 | [attention-head-composition](concepts/attention-head-composition.md) | drafted | E2 | elhage-2021, olsson-2022, wang-2022 |
-| [ioi-circuit](concepts/ioi-circuit.md) | drafted | E1 | wang-2022 |
+| [ioi-circuit](concepts/ioi-circuit.md) | drafted | E1 | wang-2022, miller-2024 |
 | [self-repair](concepts/self-repair.md) | drafted (phenomenon) | E4 | wang-2022 |
 
 ### Methods
@@ -204,16 +204,18 @@ Two overrides:
 | Page | Status | First needed | Sources |
 |---|---|---|---|
 | [feature-claim-evidence](methods/feature-claim-evidence.md) | drafted | E3 | olah-2020 |
-| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022, elhage-2021, wang-2022 |
+| [pattern-preserving-ablation](methods/pattern-preserving-ablation.md) | drafted | E1 | olsson-2022, elhage-2021, wang-2022, miller-2024 |
 | [head-activation-evaluators](methods/head-activation-evaluators.md) | drafted | E2 | olsson-2022, wang-2022 |
 | [path-expansion](methods/path-expansion.md) | drafted | E1 | elhage-2021, wang-2022 |
 | [weight-statistics](methods/weight-statistics.md) | drafted | E2 | elhage-2021, wang-2022 |
-| [path-patching](methods/path-patching.md) | drafted | E1 | wang-2022 |
-| [activation-patching](methods/activation-patching.md) | drafted | E2 | wang-2022 |
-| [mean-ablation](methods/mean-ablation.md) | drafted | E1 | wang-2022 |
-| [zero-ablation](methods/zero-ablation.md) | stub | E1 | wang-2022 |
-| [circuit-validation-criteria](methods/circuit-validation-criteria.md) | drafted | E2 | wang-2022 |
-| [logit-difference](methods/logit-difference.md) | drafted | E1 | wang-2022 |
+| [ablation-methodology](methods/ablation-methodology.md) | drafted | E1 | miller-2024, wang-2022 |
+| [path-patching](methods/path-patching.md) | drafted | E1 | wang-2022, miller-2024 |
+| [activation-patching](methods/activation-patching.md) | drafted | E2 | wang-2022, miller-2024 |
+| [mean-ablation](methods/mean-ablation.md) | drafted | E1 | wang-2022, miller-2024 |
+| [zero-ablation](methods/zero-ablation.md) | drafted | E1 | wang-2022, miller-2024 |
+| [resample-ablation](methods/resample-ablation.md) | drafted | E1 | miller-2024 |
+| [circuit-validation-criteria](methods/circuit-validation-criteria.md) | drafted | E2 | wang-2022, miller-2024 |
+| [logit-difference](methods/logit-difference.md) | drafted | E1 | wang-2022, miller-2024 |
 
 ### Sources
 
@@ -223,42 +225,45 @@ Two overrides:
 | [olsson-2022](sources/olsson-2022-induction-heads.md) — Induction Heads | R0 | complete |
 | [elhage-2021](sources/elhage-2021-framework.md) — Mathematical Framework | R0 | complete |
 | [wang-2022](sources/wang-2022-ioi.md) — IOI circuit | R1 | complete |
+| [miller-2024](sources/miller-2024-faithfulness.md) — Faithfulness metrics not robust | R1 | complete |
 
 ### Expected next
 
-**R1's first required source is extracted.** Wang et al. 2022 was extracted
-2026-09-19: six method pages opened (the whole knockout/patching vocabulary
-now has source-backed pages), two concept pages (the IOI circuit as E2's
-target; self-repair as a phenomenon, from its originating observation), and
-six existing pages edited.
+**Both required R1 sources are extracted** (Wang et al. and Miller et al.,
+2026-09-19). What remains for R1 is not a wiki task: the author's review of
+`docs/01-methods.md` against these pages (D-010 item 2) and the R1
+resolutions (D-010 item 3). ROME, causal scrubbing and Makelov et al. are
+skims and do not gate.
 
-Four things this pass did to earlier pages, which is what the loop exists to
-surface:
+What the Miller pass did to earlier pages:
 
-- **"Direct effect" now has two definitions on the wiki.** The O-011
-  resolution and [[path-expansion]] define it as the head's own term to the
-  logits; Wang et al.'s [[path-patching]] lets MLPs and LayerNorms recompute
-  along the way. They coincide only without MLPs. Proposed as an O-011
-  addendum; E1 must pick one.
-- **"Freezing" means two different things across sources.** Olsson et al.
-  freeze attention patterns ([[pattern-preserving-ablation]]); Wang et al.
-  freeze other heads' outputs. The path-restriction axis has at least three
-  points, not two.
-- **[[circuit]] has its behavioural definition sourced.** The glossary's
-  "depends on the ablation methodology" caveat is a consequence of Wang et
-  al.'s `C(x)`-via-knockout definition, before Miller et al. A reconciliation
-  is proposed on the page for D-010 item 3; the author decides.
-- **[[induction-head]] gains GPT-2 small head indices** (5.5, 6.9; previous
-  token 4.11, 2.2) and a finding that those heads do not do induction in the
-  IOI circuit. On O-012, the Q-composition route was looked for on IOI and
-  not found — evidence, not resolution.
+- **[[ablation-methodology]] is now the frame.** Miller et al.'s six-tuple
+  (granularity · component type · value · positions · direction · set)
+  places every ablation page here: zero / mean / resample are one axis,
+  path patching is edge resample ablation, positions are O-013, direction
+  is the necessity/sufficiency split. Every earlier page now cites it.
+- **The O-011 trigger fires half.** Path restriction as *edge vs node* is
+  first-class in the faithfulness literature and moves IOI faithfulness
+  from 87% to a median over 100%. Attention-*pattern* freezing is absent
+  from the taxonomy. Recorded on [[pattern-preserving-ablation]]; addendum
+  proposed on O-011.
+- **[[circuit-validation-criteria]]** carries the robustness result the
+  methods doc paraphrases, now from the source: edge vs node, mean vs
+  resample, positions, ABBA/BABA, mean set size, averaging order,
+  per-prompt spread. Also the Tracr argument that the ground truth itself
+  depends on the ablation value, which lands on [[circuit]].
+- **[[mean-ablation]]** records Wang et al.'s reference size as "around
+  seven examples per template", second-hand from Miller. The methods doc's
+  mechanism for the set-size effect is *not* in Miller's text; flagged.
+- **[[zero-ablation]]** is drafted, no longer a stub: it has a stated
+  question ("include the mechanism that decides it needs to output a
+  name").
+- **[[activation-patching]]** has the direction × set table (Table 3),
+  which is the source for the sufficiency/necessity direction distinction.
 
-One direction problem to carry into the methods review: the first paper on
-the list to *perform* activation patching performs it corrupted-into-clean,
-which is a necessity test. `docs/01-methods.md` and the glossary say
-"activation patching tests sufficiency" without the direction qualifier.
-Recorded on [[activation-patching]].
-
-**Miller et al. next.** It presses directly on [[circuit-validation-criteria]],
-[[mean-ablation]], [[zero-ablation]] and the O-011 trigger, and is the source
-`docs/01-methods.md` already paraphrases.
+**Contradiction log, R1:** none between Wang and Miller as such — Miller
+re-measures Wang and both are right about their own six-tuple. The
+conflicts are between the wiki's *earlier* framing and the sources:
+"direct effect" (O-011 resolution vs Wang), "pattern freezing as a third
+axis" (O-011 vs Miller's taxonomy), and "activation patching tests
+sufficiency" (glossary vs both).

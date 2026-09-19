@@ -2,17 +2,17 @@
 title: Activation patching
 type: method
 status: drafted
-sources: [wang-2022]
+sources: [wang-2022, miller-2024]
 first-needed: E2
 updated: 2026-09-19
 ---
 
 # Activation patching
 
-*Drafted from Wang et al. only, where it is a secondary technique. Meng et al.
-(ROME, causal tracing) and Miller et al. are the R1 sources that will fill in
-the denoising direction and the robustness caveats; Makelov et al. the
-subspace illusion. Expect this page to change.*
+*Drafted from Wang et al., where it is a secondary technique, and Miller et
+al., who supply the direction taxonomy. Meng et al. (ROME, causal tracing)
+is the R1 skim that would add a worked restore-direction example; Makelov
+et al. the subspace illusion.*
 
 ## In one sentence
 
@@ -98,6 +98,29 @@ altered-position sentences reproduces at least 88% of the drop obtained by
 patching the S-Inhibition heads, while patching from same-position,
 different-name sentences gives less than 8% of it [wang-2022 §3.3].
 
+**The direction taxonomy, from Miller et al.** — added 2026-09-19. In their
+frame activation patching *is* [[resample-ablation]] ("we consider
+activation patching to be a specific type of ablation, and use the term
+Resample Ablation interchangeably"), also called causal tracing or
+interchange intervention [miller-2024 §3.1, App. F]. Node patching with a
+cached activation is "vanilla activation patching" [miller-2024 §3.1.2].
+What this page calls the direction problem is axis 5 of the
+[[ablation-methodology]] six-tuple, crossed with axis 6:
+
+| Input | Direction | Set | Faithfulness target |
+|---|---|---|---|
+| Clean | ablate clean | circuit | destroy performance |
+| Corrupt | restore clean | circuit | restore performance |
+| Clean | ablate clean | complement | maintain performance |
+| Corrupt | restore clean | complement | maintain inefficacy |
+
+[miller-2024 §3.1.5, Table 3]. Wang et al.'s Appendix A experiments are row
+1 with "circuit" = the S-Inhibition heads. `docs/01-methods.md`'s
+"activation patching tests sufficiency" is row 2. The two "maintain" rows
+are not equivalent: restoring clean values into the circuit on a corrupt
+input lets clean signal "flow through edges not included in the circuit"
+[miller-2024 §3.1.5, Fig. 2].
+
 ## What it licenses
 
 - Wang et al.'s use (corrupted → clean) licenses: "under activation patching
@@ -109,17 +132,20 @@ different-name sentences gives less than 8% of it [wang-2022 §3.3].
   separable signals — because the datasets were designed so each transformation
   moves exactly one of them. That is a design property, not a property of the
   method.
-- The denoising direction (clean → corrupted) is the one `docs/01-methods.md`
-  describes and the one epistemic rule 2 calls a sufficiency test. **Not yet
-  sourced on this wiki.**
+- The restore direction (clean → corrupted) is the one `docs/01-methods.md`
+  describes and the one epistemic rule 2 calls a sufficiency test. Its
+  definition is now sourced (Table 3, row 2); a worked example is not, and
+  ROME is the skim that would supply one.
 
 ## Where it's contested
 
 - **The direction problem, stated once.** "Activation patching tests
   sufficiency" (glossary, methods doc) is true of one direction and false of
   the other. The first paper on this project's list to perform it performs
-  the necessity direction. A result doc must state which run received the
-  patch.
+  the necessity direction. Miller et al. make direction an explicit axis and
+  list both in the prior literature (Vig, ROME, Docstring restore; Wang,
+  ACDC, Greater-than, Sports Players ablate) [miller-2024 Table 2]. A result
+  doc must state which run received the patch.
 - **Interpretability illusions** for patching into subspaces (Makelov et al.,
   R1 conditional read) — not yet extracted; recorded so the page has a slot
   for it.
@@ -143,12 +169,13 @@ different-name sentences gives less than 8% of it [wang-2022 §3.3].
 
 - [wang-2022] Wang et al., "Interpretability in the Wild", arXiv 2211.00593v1.
   Sections cited: 3.3 · App. A (Figs. 9, 10).
+- [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
+  Sections cited: 3.1 · 3.1.2 · 3.1.5 (Table 3, Fig. 2) · Table 2 · App. F.
 
 ## Open questions
 
-- **What is the sufficiency-direction reference?** ROME's causal tracing is
-  the R1 skim source; Miller et al. may treat it. Until read, the glossary's
-  "tests sufficiency" is unsourced on this wiki.
+- ~~What is the sufficiency-direction reference?~~ Defined by Miller et
+  al.'s Table 3 (2026-09-19); a worked example still wants ROME.
 - Should the E1 battery record, per corruption scheme, *which signals it
   removes* in the style of Wang et al.'s six-dataset design? It would make
   O-003's answer measurable rather than argued.
