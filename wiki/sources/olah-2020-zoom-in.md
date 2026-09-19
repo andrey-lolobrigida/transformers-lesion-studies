@@ -7,7 +7,7 @@ venue: Distill (Circuits thread)
 doi: 10.23915/distill.00024.001
 arxiv: —                     # Distill-native; arXiv not searched, absence unverified
 url: https://distill.pub/2020/circuits/zoom-in/
-local: —
+local: papers/olah-2020-zoom-in/circuits/zoom-in/index.html
 phase: R0
 extraction: complete
 feeds:

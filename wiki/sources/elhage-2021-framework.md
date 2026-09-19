@@ -6,7 +6,7 @@ year: 2021
 venue: Anthropic / Transformer Circuits Thread
 arxiv: <not yet verified>   # no arXiv ID appears on the article page
 url: https://transformer-circuits.pub/2021/framework/index.html
-local: —
+local: papers/elhage-2021-framework/framework/index.html
 phase: R0
 extraction: complete
 feeds:

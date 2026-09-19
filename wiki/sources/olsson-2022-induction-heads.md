@@ -6,7 +6,7 @@ year: 2022
 venue: Anthropic / Transformer Circuits Thread
 arxiv: <not yet verified>   # no arXiv ID appears on the article page or in its own citation block
 url: https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html
-local: —
+local: papers/olsson-2022-induction-heads/in-context-learning-and-induction-heads/index.html
 phase: R0
 extraction: complete
 feeds:

@@ -11,8 +11,10 @@ plus its page requisites (images, CSS) with links rewritten to local paths.
 Prefer arXiv's own HTML rendering (`arxiv.org/html/<id>`); fall back to
 `ar5iv.labs.arxiv.org/html/<id>` if arXiv has none, then to the PDF.
 
-The three R0 papers predate this layout and sit as browser-saved single HTML
-files in the directory root; their images are not all local.
+The two Transformer Circuits Thread pages embed every figure as a base64 data
+URI, so they arrive as a single self-contained HTML file. Distill's Zoom In
+references seven images that `wget -p` does not pick up; they are fetched
+explicitly below.
 
 ## Re-downloading
 
@@ -20,6 +22,15 @@ files in the directory root; their images are not all local.
 dl() { dir="$1"; url="$2"; shift 2; mkdir -p "papers/$dir"
   wget -e robots=off --timeout=30 --tries=2 -U 'Mozilla/5.0' \
        -p -k -E -nH --cut-dirs=1 -P "papers/$dir" "$@" "$url"; }
+
+# R0
+dl olah-2020-zoom-in            https://distill.pub/2020/circuits/zoom-in/ -H -D distill.pub
+( cd papers/olah-2020-zoom-in/circuits/zoom-in && for i in curve-orientations-a \
+    curve-orientations-b dog-circuit-2 oriented-dog-heads dog-merge car-circuit \
+    superposition; do wget -q -U 'Mozilla/5.0' -O "images/$i.png" \
+    "https://distill.pub/2020/circuits/zoom-in/images/$i.png"; done )
+dl elhage-2021-framework        https://transformer-circuits.pub/2021/framework/index.html -H -D transformer-circuits.pub
+dl olsson-2022-induction-heads  https://transformer-circuits.pub/2022/in-context-learning-and-induction-heads/index.html -H -D transformer-circuits.pub
 
 # R1 — required
 dl wang-2022-ioi                  https://arxiv.org/html/2211.00593
@@ -32,5 +43,6 @@ dl chan-2022-causal-scrubbing \
    -H -D alignmentforum.org,res.cloudinary.com,lesswrong.com
 ```
 
-Downloaded 2026-09-19. Titles were checked against the reading list after
-download; every `<img>` in the four arXiv pages resolves to a local file.
+All eight downloaded 2026-09-19. Titles were checked against the reading list
+after download; every `<img>` in every page resolves to a local file or is an
+embedded data URI.
