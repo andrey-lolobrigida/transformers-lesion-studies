@@ -3,7 +3,7 @@
 *Living document. Update it in the same session a decision is made, not later.*
 
 **Status:** planning. No code written yet.
-**Current phase:** R0 (orientation reading). See `docs/02-roadmap.md`.
+**Current phase:** R1 (methods and epistemics). R0 tagged `v-R0` on 2026-09-19. See `docs/02-roadmap.md`.
 **Last updated:** 2026-09-19
 
 ---
