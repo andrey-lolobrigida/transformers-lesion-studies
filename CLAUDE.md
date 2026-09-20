@@ -3,7 +3,7 @@
 *Living document. Update it in the same session a decision is made, not later.*
 
 **Status:** R0, R1 and E0 done (R2 gates E4, R3 later). E0 tagged `v-E0` on 2026-09-20: environment verified, smoke test in `src/lesion/e0_smoke.py`, artifact in `results/E0/`; the published IOI baseline is bracketed, not matched (D-011, O-014).
-**Current phase:** E1 (task battery and harness), not yet started. Plan it at the start of its own branch. See `docs/02-roadmap.md`.
+**Current phase:** E1a (harness), branch `phase-E1a-harness`, kicked off 2026-09-20. E1 was split into E1a harness and E1b battery (D-012); E1b follows on its own branch. See `docs/02-roadmap.md`.
 **Last updated:** 2026-09-20
 
 ---

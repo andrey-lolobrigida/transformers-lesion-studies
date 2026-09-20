@@ -225,6 +225,48 @@ Recorded in the same session: `prepend_bos` is a first-class knob of every
 future IOI measurement, reported both ways until one is chosen with a
 written reason (O-014).
 
+### D-012 — E1 is split into E1a (harness) and E1b (battery)
+*2026-09-20. Proposed by the author at the E1 kickoff; the sub-phase shape
+and exit criteria proposed by Claude and confirmed the same session.*
+
+The roadmap's E1 bundled two subsystems that share only a prompt-pair
+interface: the intervention harness, and the four battery items. They are
+split into two sub-phases, each with its own branch and tag, run in order.
+
+**E1a — harness.** Branch `phase-E1a-harness`, tag `v-E1a`. Exit
+criterion: the harness half of the former E1 criterion, verbatim — one CLI
+call ablates an arbitrary head or MLP layer under all three substitution
+values, at node or edge level, with any position mask, with or without
+pattern freezing, every setting recorded in the artifact. Validated on IOI
+only, which is the one battery item that already exists, with two checks:
+an identity intervention reproduces the E0 clean baseline bitwise, and
+mean-ablating MLP0 on `p_ABC` reverses the sign of the mean logit
+difference, as Wang et al. report [wang-2022 App. J]. That second check is
+a published intervention number and would ordinarily be E2's job; it stays
+in E1a because a harness that cannot bracket one known effect on the one
+dataset already held is exercised, not validated. E1a states the bracket,
+not a match, for the reasons in D-011.
+
+**E1b — battery.** Branch `phase-E1b-battery`, tag `v-E1b`. Exit
+criterion: the battery half of the former criterion — every item has a
+clean/corrupted generator, a metric with its expected direction under damage
+(O-009 addendum), and a documented corruption scheme stating what it removes
+and what it inserts (O-003). O-009 resolves here, including whether a
+control item enters for a noise floor. E2 is gated on `v-E1b`.
+
+Reasoning: a single spec covering both halves is long enough that the
+battery half gets the least review, and the battery questions (agreement
+dataset, factual-recall corruption and filter, induction metric, control
+item) are the ones most likely to change once the harness produces its first
+numbers. Sequencing harness first means every later item is measured with a
+validated instrument, so a strange reading on a new item cannot be blamed on
+the harness. Cost: one extra tag, this entry, and the roadmap edit made in
+the same session.
+
+Option considered and rejected: one phase with the harness built first and
+the items following on the same branch. Same order, but the IOI validation
+would have had no gate of its own.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?

@@ -113,6 +113,9 @@ Environment gotchas recorded in `docs/06-environment.md`.
 
 ### E1 — Task battery and harness
 *Gated on R1. The phase most likely to be underestimated — budget real time.*
+**Split 2026-09-20 into E1a (harness) and E1b (battery), run in that order
+(D-012).** The description below is unchanged; the exit criteria and tags
+are per sub-phase at the end.
 
 This is not free infrastructure, it's the experimental design. Build, for each
 capability, a dataset of clean/corrupted prompt pairs plus a metric:
@@ -146,13 +149,22 @@ in the same run; the gap between them is the self-repair number E4 starts
 from. Decided in the O-011 resolutions (2026-09-08 and 2026-09-19); the
 reasoning is there.
 
-**Exit criterion:** every battery item has a clean/corrupted generator, a
-metric, and a documented corruption scheme. The harness ablates an arbitrary
-head under all three substitution methods from one CLI call, at node or edge
-level, with any position mask, with or without pattern freezing, recording
-every one of those settings in the artifact — a default that goes unstated
-becomes a permanent choice nobody made.
-**Tag:** `v-E1`
+**E1a — harness. Exit criterion:** the harness ablates an arbitrary head
+or MLP layer under all three substitution methods from one CLI call, at node
+or edge level, with any position mask, with or without pattern freezing,
+recording every one of those settings in the artifact — a default that goes
+unstated becomes a permanent choice nobody made. Validated on IOI, the one
+item that already exists: an identity intervention reproduces the E0 clean
+baseline bitwise, and mean-ablating MLP0 on `p_ABC` reverses the sign of the
+mean logit difference [wang-2022 App. J] — a bracket, not a match (D-011).
+**Tag:** `v-E1a`
+
+**E1b — battery. Exit criterion:** every battery item has a clean/corrupted
+generator, a metric with its expected direction under damage, and a
+documented corruption scheme stating what it removes and what it inserts.
+O-009 (factual-recall filter, per-item clean-accuracy gate, control item)
+resolves here.
+**Tag:** `v-E1b` — this is what E2 is gated on.
 
 ---
 
@@ -249,8 +261,8 @@ across training and scale — so there is something to build on and to stress-te
 ## Phase dependency summary
 
 ```
-R0 ──> R1 ──┬──> E1 ──> E2 ──> E3 ──> E4 ──> [ship]
-            │                    │      ↑
-      E0 ───┘                    │   R2 ┘
-                                 └──> E5, E6 (optional)
+R0 ──> R1 ──┬──> E1a ──> E1b ──> E2 ──> E3 ──> E4 ──> [ship]
+            │                             │      ↑
+      E0 ───┘                             │   R2 ┘
+                                          └──> E5, E6 (optional)
 ```
