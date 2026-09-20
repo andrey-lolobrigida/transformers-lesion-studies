@@ -25,7 +25,13 @@ Primary subject: GPT-2 small.
 
 ## Status
 
-Planning. No code yet. Current phase: R0 (orientation reading).
+Reading phases R0–R1 closed. E0 (environment and smoke test) has run; see
+`results/E0/README.md`. Reproduce it with:
+
+```
+uv sync
+uv run python -m src.lesion.e0_smoke --n 100000 --seed 0
+```
 
 ## Documents
 

@@ -2,8 +2,8 @@
 
 *Living document. Update it in the same session a decision is made, not later.*
 
-**Status:** R0 and R1 done (R2 gates E4, R3 later). No code written yet.
-**Current phase:** E0 (environment and smoke test). R1 tagged `v-R1` on 2026-09-20; E1 is gated on E0. See `docs/02-roadmap.md`.
+**Status:** R0, R1 and E0 done (R2 gates E4, R3 later). E0 tagged `v-E0` on 2026-09-20: environment verified, smoke test in `src/lesion/e0_smoke.py`, artifact in `results/E0/`; the published IOI baseline is bracketed, not matched (D-011, O-014).
+**Current phase:** E1 (task battery and harness), not yet started. Plan it at the start of its own branch. See `docs/02-roadmap.md`.
 **Last updated:** 2026-09-20
 
 ---

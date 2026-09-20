@@ -2,4 +2,16 @@
 name = "transformers-lesion-studies"
 version = "0.1.0"
 requires-python = ">=3.12"
-dependencies = []
+dependencies = [
+    "transformer-lens>=3.9.0",
+]
+
+[dependency-groups]
+dev = [
+    "pytest>=9.1.1",
+]
+
+[tool.pytest.ini_options]
+pythonpath = ["."]
+testpaths = ["tests"]
+markers = ["slow: needs the model tokenizer (network on first run)"]

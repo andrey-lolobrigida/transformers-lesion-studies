@@ -1,0 +1,349 @@
+{
+  "phase": "E0",
+  "command": "uv run python -m src.lesion.e0_smoke --n 100000 --seed 1",
+  "seed": 1,
+  "repo_commit": "22c78e01099c14c1c1a4e66d96cc7b4758f2bb5c",
+  "model": {
+    "name": "gpt2",
+    "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+  },
+  "versions": {
+    "python": "3.12.12",
+    "torch": "2.14.0+cu130",
+    "cuda": "13.0",
+    "transformer_lens": "3.9.0",
+    "transformers": "5.17.0"
+  },
+  "published": {
+    "mean_logit_diff": 3.56,
+    "io_over_s": 0.993,
+    "io_prob": 0.49,
+    "n": 100000,
+    "source": "wang-2022 \u00a72"
+  },
+  "cuda": {
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "capability": [
+      12,
+      0
+    ],
+    "torch_arch_list": [
+      "sm_75",
+      "sm_80",
+      "sm_86",
+      "sm_90",
+      "sm_100",
+      "sm_120"
+    ],
+    "matmul_max_abs_err": 4.57763671875e-05
+  },
+  "hook": {
+    "hook_point": "blocks.0.attn.hook_z",
+    "z_shape": [
+      1,
+      15,
+      12,
+      64
+    ]
+  },
+  "determinism": {
+    "bitwise_identical": true,
+    "n_checked": 96,
+    "use_deterministic_algorithms": true,
+    "cudnn_deterministic": false,
+    "cudnn_benchmark": false,
+    "cublas_workspace_config": ":4096:8"
+  },
+  "ioi": {
+    "no_bos": {
+      "prepend_bos": false,
+      "n": 100000,
+      "mean_logit_diff": 3.650151491165161,
+      "std_logit_diff": 1.5801314115524292,
+      "sem_logit_diff": 0.004996814299374819,
+      "io_over_s_fraction": 0.9940900206565857,
+      "mean_io_prob": 0.5280264616012573,
+      "by_order": {
+        "BABA": {
+          "n": 49926,
+          "mean_logit_diff": 3.467216730117798
+        },
+        "ABBA": {
+          "n": 50074,
+          "mean_logit_diff": 3.8325459957122803
+        }
+      },
+      "seconds": 67.62969040870667,
+      "by_template": {
+        "BABA/0": {
+          "n": 3345,
+          "mean_logit_diff": 3.2703158855438232
+        },
+        "BABA/1": {
+          "n": 3333,
+          "mean_logit_diff": 3.7328684329986572
+        },
+        "BABA/2": {
+          "n": 3295,
+          "mean_logit_diff": 3.4203264713287354
+        },
+        "BABA/3": {
+          "n": 3247,
+          "mean_logit_diff": 3.0922067165374756
+        },
+        "BABA/4": {
+          "n": 3395,
+          "mean_logit_diff": 2.7847740650177
+        },
+        "BABA/5": {
+          "n": 3327,
+          "mean_logit_diff": 2.6473188400268555
+        },
+        "BABA/6": {
+          "n": 3342,
+          "mean_logit_diff": 4.328466415405273
+        },
+        "BABA/7": {
+          "n": 3373,
+          "mean_logit_diff": 4.189637660980225
+        },
+        "BABA/8": {
+          "n": 3378,
+          "mean_logit_diff": 3.127192497253418
+        },
+        "BABA/9": {
+          "n": 3345,
+          "mean_logit_diff": 3.225909948348999
+        },
+        "BABA/10": {
+          "n": 3270,
+          "mean_logit_diff": 3.455761432647705
+        },
+        "BABA/11": {
+          "n": 3305,
+          "mean_logit_diff": 2.6669085025787354
+        },
+        "BABA/12": {
+          "n": 3304,
+          "mean_logit_diff": 2.5310378074645996
+        },
+        "BABA/13": {
+          "n": 3286,
+          "mean_logit_diff": 4.902159690856934
+        },
+        "BABA/14": {
+          "n": 3381,
+          "mean_logit_diff": 4.6181182861328125
+        },
+        "ABBA/0": {
+          "n": 3425,
+          "mean_logit_diff": 4.164662837982178
+        },
+        "ABBA/1": {
+          "n": 3292,
+          "mean_logit_diff": 3.7008771896362305
+        },
+        "ABBA/2": {
+          "n": 3315,
+          "mean_logit_diff": 3.588893413543701
+        },
+        "ABBA/3": {
+          "n": 3346,
+          "mean_logit_diff": 3.2440884113311768
+        },
+        "ABBA/4": {
+          "n": 3243,
+          "mean_logit_diff": 4.018218994140625
+        },
+        "ABBA/5": {
+          "n": 3376,
+          "mean_logit_diff": 3.46917724609375
+        },
+        "ABBA/6": {
+          "n": 3319,
+          "mean_logit_diff": 3.3910815715789795
+        },
+        "ABBA/7": {
+          "n": 3352,
+          "mean_logit_diff": 3.1084158420562744
+        },
+        "ABBA/8": {
+          "n": 3368,
+          "mean_logit_diff": 3.1693902015686035
+        },
+        "ABBA/9": {
+          "n": 3328,
+          "mean_logit_diff": 3.1525421142578125
+        },
+        "ABBA/10": {
+          "n": 3333,
+          "mean_logit_diff": 4.054734230041504
+        },
+        "ABBA/11": {
+          "n": 3438,
+          "mean_logit_diff": 4.385041236877441
+        },
+        "ABBA/12": {
+          "n": 3338,
+          "mean_logit_diff": 4.388882637023926
+        },
+        "ABBA/13": {
+          "n": 3281,
+          "mean_logit_diff": 4.922950267791748
+        },
+        "ABBA/14": {
+          "n": 3320,
+          "mean_logit_diff": 4.739654064178467
+        }
+      },
+      "derived_mean_first_7_templates_each_order": 3.4895197493689403
+    },
+    "bos": {
+      "prepend_bos": true,
+      "n": 100000,
+      "mean_logit_diff": 3.923680543899536,
+      "std_logit_diff": 1.8073184490203857,
+      "sem_logit_diff": 0.005715243052691221,
+      "io_over_s_fraction": 0.9894300103187561,
+      "mean_io_prob": 0.520560622215271,
+      "by_order": {
+        "BABA": {
+          "n": 49926,
+          "mean_logit_diff": 3.7985005378723145
+        },
+        "ABBA": {
+          "n": 50074,
+          "mean_logit_diff": 4.04849100112915
+        }
+      },
+      "seconds": 73.11114573478699,
+      "by_template": {
+        "BABA/0": {
+          "n": 3345,
+          "mean_logit_diff": 3.2078282833099365
+        },
+        "BABA/1": {
+          "n": 3333,
+          "mean_logit_diff": 3.953012466430664
+        },
+        "BABA/2": {
+          "n": 3295,
+          "mean_logit_diff": 3.5251405239105225
+        },
+        "BABA/3": {
+          "n": 3247,
+          "mean_logit_diff": 3.1659152507781982
+        },
+        "BABA/4": {
+          "n": 3395,
+          "mean_logit_diff": 2.3505563735961914
+        },
+        "BABA/5": {
+          "n": 3327,
+          "mean_logit_diff": 3.2031304836273193
+        },
+        "BABA/6": {
+          "n": 3342,
+          "mean_logit_diff": 5.803252220153809
+        },
+        "BABA/7": {
+          "n": 3373,
+          "mean_logit_diff": 5.610385894775391
+        },
+        "BABA/8": {
+          "n": 3378,
+          "mean_logit_diff": 3.7481417655944824
+        },
+        "BABA/9": {
+          "n": 3345,
+          "mean_logit_diff": 3.946133852005005
+        },
+        "BABA/10": {
+          "n": 3270,
+          "mean_logit_diff": 3.017754077911377
+        },
+        "BABA/11": {
+          "n": 3305,
+          "mean_logit_diff": 2.8310024738311768
+        },
+        "BABA/12": {
+          "n": 3304,
+          "mean_logit_diff": 2.409754753112793
+        },
+        "BABA/13": {
+          "n": 3286,
+          "mean_logit_diff": 5.159160614013672
+        },
+        "BABA/14": {
+          "n": 3381,
+          "mean_logit_diff": 4.994863986968994
+        },
+        "ABBA/0": {
+          "n": 3425,
+          "mean_logit_diff": 4.375021934509277
+        },
+        "ABBA/1": {
+          "n": 3292,
+          "mean_logit_diff": 4.209595203399658
+        },
+        "ABBA/2": {
+          "n": 3315,
+          "mean_logit_diff": 3.7080230712890625
+        },
+        "ABBA/3": {
+          "n": 3346,
+          "mean_logit_diff": 3.337549924850464
+        },
+        "ABBA/4": {
+          "n": 3243,
+          "mean_logit_diff": 4.483259677886963
+        },
+        "ABBA/5": {
+          "n": 3376,
+          "mean_logit_diff": 3.412322759628296
+        },
+        "ABBA/6": {
+          "n": 3319,
+          "mean_logit_diff": 4.027105808258057
+        },
+        "ABBA/7": {
+          "n": 3352,
+          "mean_logit_diff": 3.6749441623687744
+        },
+        "ABBA/8": {
+          "n": 3368,
+          "mean_logit_diff": 2.923448324203491
+        },
+        "ABBA/9": {
+          "n": 3328,
+          "mean_logit_diff": 3.0347514152526855
+        },
+        "ABBA/10": {
+          "n": 3333,
+          "mean_logit_diff": 4.377330780029297
+        },
+        "ABBA/11": {
+          "n": 3438,
+          "mean_logit_diff": 4.404901504516602
+        },
+        "ABBA/12": {
+          "n": 3338,
+          "mean_logit_diff": 4.945155620574951
+        },
+        "ABBA/13": {
+          "n": 3281,
+          "mean_logit_diff": 5.316111087799072
+        },
+        "ABBA/14": {
+          "n": 3320,
+          "mean_logit_diff": 4.5331220626831055
+        }
+      },
+      "derived_mean_first_7_templates_each_order": 3.7686938558306013
+    }
+  },
+  "reproduces_published": {
+    "no_bos_mean_logit_diff_rounded_2dp": 3.65,
+    "matches_3_56_at_2dp": false
+  }
+}

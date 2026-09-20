@@ -179,6 +179,52 @@ this project's own axis with no faithfulness-literature backing, recorded
 as such. R1 tagged `v-R1`. Per the dependency diagram E1 is gated on R1
 *and* E0; E0 (environment and smoke test) is the next phase.
 
+### D-011 — E0 outcome: the published IOI baseline is bracketed, not matched
+*2026-09-20. Proposed by Claude from the E0 run; confirmed by the author the
+same day, with the reported-vs-released dataset discrepancy named as the
+deciding consideration. E0 tagged `v-E0`.*
+
+E0's exit criterion is "one command in the repo reproduces one published
+number". The number chosen was Wang et al.'s clean mean logit difference on
+`p_IOI`, **3.56 over 100,000 samples** [wang-2022 §2]. The command is
+`uv run python -m src.lesion.e0_smoke --n 100000 --seed 0`; the artifact is
+`results/E0/e0_smoke_seed0_n100000.json` (interpretation in
+`results/E0/README.md`).
+
+What the run gives, GPT-2 small at HF revision `607a30d7`, 100,000 prompts
+drawn from the released templates and word lists, seed 0:
+
+| Tokenisation | Templates | Mean logit diff | IO over S | IO prob |
+|---|---|---|---|---|
+| no BOS (released code's default) | all 15 × 2 orders | 3.648 ± 0.005 | 99.4% | 52.7% |
+| no BOS | first 7 × 2 orders (the released code's `mixed` mode with its default count) | 3.485 (derived from per-template means) | — | — |
+| BOS prepended (TransformerLens default) | all 15 × 2 orders | 3.922 ± 0.006 | 98.9% | 52.0% |
+| *published* | *"15 templates", "mixed"* | *3.56* | *99.3%* | *49%* |
+
+So the published number is **not matched at two decimals** by any procedure
+this repo can justify, and it **is bracketed** by the two readings of the
+template mix that the paper text and its code leave open, both without BOS.
+The BOS tokenisation is excluded: it overshoots by 0.36, seventy standard
+errors. Two facts block an exact match and cannot be resolved from the
+sources: the released word lists (99 names, 8 places, 8 objects) differ from
+the paper's stated 100/20/20, and the repository history begins after the
+paper's v1 (see the gotcha log in `docs/06-environment.md`).
+
+**Decision:** treat E0's gate as passed on the strength of (a) the
+environment working end to end with determinism verified, and (b) the
+published baseline reproduced to within the spread of the paper's own
+under-specified design choices, with the gap logged as a null result below
+rather than explained away. The alternative — chasing 3.56 by tuning the
+template mix until it lands — would be fitting to the answer and is
+declined. **Consequence for E1/E2:** every IOI number this project checks
+against Wang et al. carries the same ±0.1 design-choice uncertainty; E2
+should compare *changes* under intervention, not absolute levels, and should
+say so.
+
+Recorded in the same session: `prepend_bos` is a first-class knob of every
+future IOI measurement, reported both ways until one is chosen with a
+written reason (O-014).
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -781,6 +827,26 @@ component type (O-011).
 
 ---
 
+### O-014 — Which tokenisation and template mix did Wang et al. actually use?
+*Proposed 2026-09-20, from the E0 run. Not resolvable from the paper or its
+released code; see D-011.*
+
+The paper says 15 templates, ABBA and BABA orders, 100 names, 20 places, 20
+objects, and reports 3.56 [wang-2022 §2, App. E]. The released code has 99
+names, 8 places, 8 objects, defaults to no BOS, and its `mixed` mode with the
+default template count silently uses 7 templates per order. E0 measured 3.65
+(15 per order, no BOS), 3.49 (7 per order, no BOS) and 3.92 (15 per order,
+BOS). The BOS variant is ruled out by the size of its miss; the other two
+bracket the paper.
+
+**Why it matters:** the per-template means span 2.5 to 5.0, so the template
+mix moves the baseline by more than most single-head interventions in the
+paper. Any E2 comparison of an absolute level against the paper inherits
+this. **Resolution path:** an author-side answer (the released experiment
+notebooks, or asking), or accept the bracket and compare only deltas. The
+harness (E1) should carry `prepend_bos` and the template set as logged
+parameters of every IOI artifact.
+
 ## Null and negative results
 
 *Nothing yet. Anything that fails to reproduce, fails to replicate, or comes
@@ -789,4 +855,4 @@ Deleting these destroys the most useful information the project produces.*
 
 | Date | Phase | What was expected | What happened | Artifact |
 |---|---|---|---|---|
-| — | — | — | — | — |
+| 2026-09-20 | E0 | Wang et al.'s clean mean logit difference on `p_IOI`, 3.56 over 100,000 samples, reproduced exactly from the released templates and word lists. | 3.648 ± 0.005 (no BOS, 15 templates per order), 3.485 (no BOS, 7 per order), 3.922 ± 0.006 (BOS). Not matched at 2 dp; bracketed by the two no-BOS readings. Released word lists differ from the paper's text; paper-era lists unrecoverable. IO-over-S 99.4% vs 99.3% and IO probability 52.7% vs 49% are close. See D-011, O-014. | `results/E0/e0_smoke_seed0_n100000.json` |
