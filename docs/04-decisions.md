@@ -156,8 +156,7 @@ O-011 by default rather than by decision.
 
 *Status 2026-09-19.* Item 1 done (both extractions committed or pending
 commit). Item 3: O-003 resolved, O-011's R1 trigger resolved, O-013
-resolved (all below); O-007 leaning yes, final call deferred until ROME is
-extracted (ROME skim extracted 2026-09-20 — the call is now the author's); the circuit-definition reconciliation and the
+resolved (all below); O-007 resolved 2026-09-20 after the ROME skim; the circuit-definition reconciliation and the
 Miller-vs-pattern-preserving question are answered on
 `wiki/concepts/circuit.md` and `wiki/methods/pattern-preserving-ablation.md`
 and await the author's sign-off as part of item 2.
@@ -248,8 +247,8 @@ small residual is a publishable negative result but changes the writeup
 substantially.
 
 ### O-007 — Are MLP layers a first-class component in the harness?
-*Raised 2026-09-02. Author leaning **yes** as of 2026-09-19; final call after
-the ROME extraction — see the status note below.*
+*Raised 2026-09-02. Direct-effect half resolved 2026-09-08. MLP half
+**resolved 2026-09-20** — see the resolution below.*
 
 D-003 chose heads over SAE features. In the roadmap that has become
 "heads only": E3 ablates every head and nothing else. But the self-repair
@@ -325,6 +324,34 @@ item as the case that would need it. Neurons stay out (D-003 granularity).
 The only alternative with a real argument is "heads only, MLPs at E4",
 which leaves the factual-recall item without its own reference experiment
 and forces E4 to retrofit a hook family into E3's artifacts.
+
+#### Resolution — *2026-09-20*
+
+**Adopted as proposed**, confirmed by the author after the ROME skim. The
+evidence is three sources pointing the same way on two tasks and two
+directions: Wang (IOI, mean ablation, MLPs matter collectively and MLP0
+dominates), Miller ("heads and MLPs" is the literature's default
+granularity), Meng (factual recall, restore direction, the early site is
+an MLP result at the level of ten-layer windows). Decided:
+
+1. **MLP layers are an E1 hook family alongside heads.** Twelve rows next
+   to 144 on GPT-2 small; same substitution values (D-006) and the same
+   path-restriction setting (O-011) as heads. Neurons stay out — D-003's
+   granularity is unchanged.
+2. **E3's per-layer MLP row is recorded as the single-layer measurement it
+   is.** The E3 README states, before any number, that both Wang [wang-2022
+   App. J] and Meng [meng-2022 App. B.2] found single-layer MLP effects
+   small where multi-layer ones were large, so a blank MLP row is the
+   expected reading, not a null result. MLP0 is flagged as the expected
+   exception on IOI.
+3. **Whether E3 also sweeps windows of MLP layers is deferred to E3's
+   design**, with the factual-recall battery item as the case that would
+   need it. Not decided now.
+4. The direct-effect half (2026-09-08) stands unchanged.
+
+Consequence for the roadmap: E1's harness sentence "over any component"
+now means heads and MLP layers explicitly. Recorded in `docs/02-roadmap.md`
+in this commit. O-007 is closed; nothing about it remains pinned to R1.
 
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*

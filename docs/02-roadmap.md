@@ -126,8 +126,10 @@ for lesion results to be anything but noise. If arithmetic is wanted later, it
 needs a model that can actually do it.
 
 The harness should support zero, mean, and resample ablation over any
-component, with the mean-ablation dataset size logged automatically, and should
-emit a per-run artifact with seed and model revision.
+component — **attention heads and MLP layers both, as first-class hook
+families** (O-007, resolved 2026-09-20; neurons stay out per D-003) — with
+the mean-ablation dataset size logged automatically, and should emit a
+per-run artifact with seed and model revision.
 
 It also carries, per Miller et al.'s six-tuple, a **component type**
 setting — *node* ablation (the change propagates everywhere downstream) or
