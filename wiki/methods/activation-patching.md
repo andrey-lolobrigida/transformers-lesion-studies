@@ -2,17 +2,18 @@
 title: Activation patching
 type: method
 status: drafted
-sources: [wang-2022, miller-2024]
+sources: [wang-2022, miller-2024, meng-2022]
 first-needed: E2
-updated: 2026-09-19
+updated: 2026-09-20
 ---
 
 # Activation patching
 
 *Drafted from Wang et al., where it is a secondary technique, and Miller et
-al., who supply the direction taxonomy. Meng et al. (ROME, causal tracing)
-is the R1 skim that would add a worked restore-direction example; Makelov
-et al. the subspace illusion.*
+al., who supply the direction taxonomy. The restore-direction worked
+example is Meng et al.'s causal tracing, on its own page
+([[causal-tracing]], skim 2026-09-20); Makelov et al. (subspace illusion)
+remains unread.*
 
 ## In one sentence
 
@@ -134,8 +135,10 @@ input lets clean signal "flow through edges not included in the circuit"
   method.
 - The restore direction (clean → corrupted) is the one `docs/01-methods.md`
   describes and the one epistemic rule 2 calls a sufficiency test. Its
-  definition is now sourced (Table 3, row 2); a worked example is not, and
-  ROME is the skim that would supply one.
+  definition is sourced (Table 3, row 2) and its worked example is
+  [[causal-tracing]]: restoring one clean state into a noise-corrupted run
+  and reading the correct-object probability [meng-2022 §2.1]. What that
+  licenses is sufficiency *given the corruption*, and not storage.
 
 ## Where it's contested
 
@@ -151,6 +154,16 @@ input lets clean signal "flow through edges not included in the circuit"
   for it.
 - **Nothing in this source varies the metric or the counterfactual family**
   beyond the six datasets built for one question.
+- **Single-component restoration can read as blank.** In the restore
+  direction on GPT-2 XL, restoring one MLP or attention output "had
+  generally negligible effects"; the sites appear only when ten
+  consecutive layers are restored together [meng-2022 App. B.2]. A
+  per-component sufficiency map is not the mirror image of a
+  per-component necessity map, and E3 should not expect it to be.
+- **"Direct effect" in Meng et al.** (fn. 3, "noisy and uninformative") is
+  the mediation-analysis quantity — the corruption's effect that bypasses
+  the restored state — not this project's direct-effect-on-logits. Recorded
+  on [[causal-tracing]] and O-011 so the two are never conflated.
 
 ## What this project does with it
 
@@ -171,11 +184,14 @@ input lets clean signal "flow through edges not included in the circuit"
   Sections cited: 3.3 · App. A (Figs. 9, 10).
 - [miller-2024] Miller, Chughtai & Saunders, arXiv 2407.08734v1.
   Sections cited: 3.1 · 3.1.2 · 3.1.5 (Table 3, Fig. 2) · Table 2 · App. F.
+- [meng-2022] Meng, Bau, Andonian & Belinkov, arXiv 2202.05262v5.
+  Sections cited: 2.1 (fn. 3) · App. B.2.
 
 ## Open questions
 
 - ~~What is the sufficiency-direction reference?~~ Defined by Miller et
-  al.'s Table 3 (2026-09-19); a worked example still wants ROME.
+  al.'s Table 3 (2026-09-19); worked example on [[causal-tracing]]
+  (2026-09-20).
 - Should the E1 battery record, per corruption scheme, *which signals it
   removes* in the style of Wang et al.'s six-dataset design? It would make
   O-003's answer measurable rather than argued.

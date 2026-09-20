@@ -157,7 +157,7 @@ O-011 by default rather than by decision.
 *Status 2026-09-19.* Item 1 done (both extractions committed or pending
 commit). Item 3: O-003 resolved, O-011's R1 trigger resolved, O-013
 resolved (all below); O-007 leaning yes, final call deferred until ROME is
-extracted; the circuit-definition reconciliation and the
+extracted (ROME skim extracted 2026-09-20 — the call is now the author's); the circuit-definition reconciliation and the
 Miller-vs-pattern-preserving question are answered on
 `wiki/concepts/circuit.md` and `wiki/methods/pattern-preserving-ablation.md`
 and await the author's sign-off as part of item 2.
@@ -302,6 +302,30 @@ tracing localises factual recall to MLP layers and is the third R1 source
 bearing on this. The direct-effect half was settled 2026-09-08; the MLP
 half stays open pending that one read.
 
+*Addendum, 2026-09-20 (ROME skim).* The third datapoint is in. Meng et
+al.'s causal tracing on GPT-2 XL finds its "early site" in MLP outputs at
+the last subject token (peak AIE 6.6 points, versus 1.6 for attention at
+that token), and severing the later MLPs at that token removes the effect
+of restoring the hidden states below them [meng-2022 §2.2, Fig. 3]. Two
+qualifications that bear on *how* MLPs go into the harness, not on
+whether: (a) the MLP effect appears only when **ten consecutive layers are
+restored together** — single-layer MLP restorations were "generally
+negligible" [meng-2022 App. B.2], which is Wang's "collectively, not
+individually" again, under the opposite direction and on a different
+task; (b) nothing is measured on GPT-2 small, and the peak layer moves
+between model sizes [meng-2022 App. B.3]. Wiki: `methods/causal-tracing.md`.
+
+**Proposed resolution, for the author's call:** MLP layers become
+ablatable in E1 as a hook family alongside heads (12 rows next to 144);
+E3's per-layer MLP row is recorded as the single-layer measurement it is,
+with the Wang and Meng window findings noted in the E3 README so a blank
+row is read as expected rather than as a null; whether E3 also sweeps
+*windows* of MLP layers is deferred to E3's design with the factual-recall
+item as the case that would need it. Neurons stay out (D-003 granularity).
+The only alternative with a real argument is "heads only, MLPs at E4",
+which leaves the factual-recall item without its own reference experiment
+and forces E4 to retrofit a hook family into E3's artifacts.
+
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*
 
@@ -351,6 +375,20 @@ difference of two losses, so ablating most non-induction heads *raises* it —
 damage improves the number, for a comprehensible reason. A metric that can
 improve under ablation is not disqualifying, but it has to be declared, or the
 E3 heatmaps will contain sign flips that read as noise.
+
+*Addendum, 2026-09-20 (ROME skim).* The filter O-009's first sub-decision
+proposes is what Meng et al. did: keep a prompt only if the clean model's
+greedy generation names the correct object before any other capitalised
+word, use the text up to the object as the prompt, and record the survivor
+count (1000 sampled; mean correct-object probability 27.0% on GPT-2 XL)
+[meng-2022 App. B.1]. So "keep with an explicit filter" has a published
+form to copy, and the number to measure at E1 is the survivor count on
+GPT-2 small. Two things the source does not settle: the smallest model
+traced is GPT-2 Medium, so whether small shows an early site at all is
+open; and the paper's metric is the correct-object probability, so the
+battery item's logit-difference version (rule 5) is a translation and
+should be reported next to the probability version until the two are
+shown to agree. Wiki: `methods/causal-tracing.md`.
 
 ### O-010 — What does E6 actually visualize over training?
 *Raised 2026-09-02, during the R0 reading of Olsson et al.*
@@ -553,6 +591,16 @@ definition question in the previous addendum, restated in their terms.
    an E3 question with a measured reason behind it.
 
 Wiki: `methods/ablation-methodology.md`, `methods/pattern-preserving-ablation.md`.
+
+*Addendum, 2026-09-20 (ROME skim) — a third "direct effect".* Meng et
+al. compute and discard a "direct effect" as "noisy and uninformative, in
+line with results by Vig et al." [meng-2022 §2.1 fn. 3]. That is Pearl's
+mediation-analysis direct effect: the part of the *corruption's* effect on
+the output that does not pass through the restored state. It is neither
+Wang's edge-to-logits path patching nor the resolution table's "only the
+head's own contribution to the logits". Recorded so that fn. 3 is never
+cited for or against E3's direct-effect maps; the E1 design note that
+defines the project's term should say which of the three it is not.
 
 #### Resolution of the R1 trigger — *2026-09-19*
 

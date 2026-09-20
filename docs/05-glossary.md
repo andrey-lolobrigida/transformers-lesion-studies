@@ -573,3 +573,55 @@ patching (App. F).
 
 **AutoCircuit** — the authors' library: edge patching with mean, zero and
 resample on TransformerLens models.
+
+## Added 2026-09-20 — R1 skim, Meng et al. "Locating and Editing Factual Associations in GPT" (`meng-2022`)
+
+**Causal tracing** (refined) — activation patching in the *restore*
+direction over a (token × layer) grid: corrupt the input, restore one clean
+internal state, measure how much of the correct answer's probability
+returns. Tests sufficiency given the corruption. Wiki:
+`methods/causal-tracing.md`.
+
+**Total effect (TE) / indirect effect (IE)** — TE is the correct-object
+probability lost to the corruption; IE of a state is the probability
+regained when that one state is restored while the input stays corrupted.
+**ATE / AIE** are their averages over the prompt sample (§2.1).
+
+**Direct effect (mediation sense)** — in Meng et al. (fn. 3), the part of
+the corruption's effect that bypasses the chosen mediator. Found "noisy and
+uninformative". *Not* this project's direct effect, which is a component's
+own contribution to the logits (O-011); the two share a name and nothing
+else.
+
+**Corruption rule** — Meng et al.'s term for the scheme that makes the
+baseline run fail: Gaussian noise on the subject-token embeddings at three
+times the embedding standard deviation, ten samples per prompt (App. B.1).
+Too little noise gives no total effect to mediate (App. B.4).
+
+**Early site / late site** — the two regions of high AIE on GPT-2 XL:
+mid-layer MLP windows at the last subject token, and late-layer attention at
+the last token of the prompt (§2.2, Fig. 2).
+
+**Restoration window** — for MLP and attention maps, a run of ten
+consecutive layers restored together, plotted at the centre layer, because
+single-module restoration was "generally negligible" (App. B.2).
+
+**Known-facts filter** — prompts kept only if the clean model's greedy
+generation names the correct object before any other capitalised word; the
+text before the object becomes the prompt (App. B.1). The mechanism O-009
+proposes for the factual-recall battery item.
+
+**Localized factual association hypothesis** — the paper's claim that a
+fact is recalled by mid-layer MLPs at the subject's last token and copied
+to the last token by later attention (§2.3). Licensed in the paper by the
+weight-editing results of §3, not by the trace alone.
+
+**ROME (Rank-One Model Editing)** — a rank-one update to one mid-layer
+MLP's second matrix that writes a new key–value association, treating the
+MLP as a linear associative memory (§3.1). A weight intervention; not
+extracted beyond the name.
+
+**CounterFact** — the paper's dataset of 21,919 counterfactual edit records
+with paraphrase and neighbourhood prompts, used to score generalisation and
+specificity of edits (§3.3). Its *known-facts* subset is the tracing prompt
+source.

@@ -2,9 +2,9 @@
 title: Ablation methodology (the six-tuple)
 type: method
 status: drafted
-sources: [miller-2024, wang-2022]
+sources: [miller-2024, wang-2022, meng-2022]
 first-needed: E1
-updated: 2026-09-19
+updated: 2026-09-20
 ---
 
 # Ablation methodology — the six-tuple
@@ -113,6 +113,18 @@ this wiki has read and the two it will:
 | Meng et al. (ROME) | layers | node | resample (clean) | specific | resample clean | circuit |
 | Vig et al. | heads, neurons | node | resample (clean) | all | resample clean | circuit |
 | Conmy et al. (ACDC) | heads, MLPs | edge | resample (corrupt) | all | ablate clean | complement |
+
+*ROME row, checked against the source (skim, 2026-09-20).* The
+"layers" granularity is two things: single hidden states `h_i^(l)` for the
+main map, and **windows of ten consecutive layers** of MLP or attention
+outputs for the module maps, because single-module restoration was
+"generally negligible" [meng-2022 App. B.2]. The Gaussian noise that Table
+1 lists as an ablation *value* is, in ROME, the corruption applied to the
+subject-token embeddings (at three times the embedding std); the
+intervention on the mediator is resample-clean [meng-2022 §2.1, App. B.1].
+Both readings fit eq. 1 — the noise ablates the embedding nodes, the
+restore patches the mediator — but E1 records them as *corrupt
+distribution* and *value* respectively. Page: [[causal-tracing]].
 
 **What Miller et al. measured on the IOI circuit**, varying one axis at a
 time from Wang et al.'s setting (node · mean · specific positions ·

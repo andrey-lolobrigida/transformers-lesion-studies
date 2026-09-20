@@ -216,6 +216,7 @@ Two overrides:
 | [resample-ablation](methods/resample-ablation.md) | drafted | E1 | miller-2024 |
 | [circuit-validation-criteria](methods/circuit-validation-criteria.md) | drafted | E2 | wang-2022, miller-2024 |
 | [logit-difference](methods/logit-difference.md) | drafted | E1 | wang-2022, miller-2024 |
+| [causal-tracing](methods/causal-tracing.md) | drafted | E1 | meng-2022, miller-2024 |
 
 ### Sources
 
@@ -226,14 +227,32 @@ Two overrides:
 | [elhage-2021](sources/elhage-2021-framework.md) — Mathematical Framework | R0 | complete |
 | [wang-2022](sources/wang-2022-ioi.md) — IOI circuit | R1 | complete |
 | [miller-2024](sources/miller-2024-faithfulness.md) — Faithfulness metrics not robust | R1 | complete |
+| [meng-2022](sources/meng-2022-rome.md) — ROME / causal tracing | R1 | partial (skim, by design) |
 
 ### Expected next
 
 **Both required R1 sources are extracted** (Wang et al. and Miller et al.,
-2026-09-19). What remains for R1 is not a wiki task: the author's review of
-`docs/01-methods.md` against these pages (D-010 item 2) and the R1
-resolutions (D-010 item 3). ROME, causal scrubbing and Makelov et al. are
-skims and do not gate.
+2026-09-19), and **the ROME skim is done** (causal tracing only,
+2026-09-20). What remains for R1 is not a wiki task: the author's review of
+`docs/01-methods.md` against these pages (D-010 item 2), the O-007 final
+call, and the rest of the R1 resolutions (D-010 item 3). Causal scrubbing
+and Makelov et al. remain unread skims and do not gate.
+
+What the ROME skim did:
+
+- **[[causal-tracing]] opened** — the restore-direction worked example
+  [[activation-patching]] had a slot for, and the reference setup for the
+  E1 factual-recall item: known-facts filter, `3σ` Gaussian noise on
+  subject embeddings, ten-layer restoration windows, `P[o]` as the metric.
+  Nothing in it is on GPT-2 small or in logit difference.
+- **[[activation-patching]]** gains two caveats: single-component
+  restoration reads as blank where ten-layer windows do not, and Meng et
+  al.'s "direct effect" is a different quantity from this project's.
+- **[[ablation-methodology]]** annotates Table 2's ROME row: the noise is
+  the corrupt distribution, resample-clean is the value, and "layers"
+  means windows.
+- **O-007** gets its third datapoint; **O-009** gets ROME's filter rule;
+  **O-011** gets the terminology note.
 
 What the Miller pass did to earlier pages:
 
@@ -266,4 +285,9 @@ re-measures Wang and both are right about their own six-tuple. The
 conflicts are between the wiki's *earlier* framing and the sources:
 "direct effect" (O-011 resolution vs Wang), "pattern freezing as a third
 axis" (O-011 vs Miller's taxonomy), and "activation patching tests
-sufficiency" (glossary vs both).
+sufficiency" (glossary vs both). ROME adds no contradiction with Wang or
+Miller; it adds a **third meaning of "direct effect"** (Pearl's, in fn. 3)
+and one **cross-task agreement**: Wang's "MLPs matter collectively, not
+individually" on IOI and Meng's "single MLP restorations negligible,
+ten-layer windows decisive" on factual recall are the same shape of
+finding under opposite directions.
