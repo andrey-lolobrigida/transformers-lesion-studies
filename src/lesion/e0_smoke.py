@@ -37,17 +37,19 @@ import time
 from collections import defaultdict
 from pathlib import Path
 
-# Must be set before CUDA initialises for torch.use_deterministic_algorithms.
-os.environ.setdefault("CUBLAS_WORKSPACE_CONFIG", ":4096:8")
+from src.lesion.model import (  # noqa: E402  (sets CUBLAS_WORKSPACE_CONFIG before torch)
+    MODEL_NAME,
+    MODEL_REVISION,
+    determinism_flags,
+    load_model,
+    plain_tokenizer,
+    set_determinism,
+)
 
 import torch  # noqa: E402
 
 from src.lesion.ioi import IOIPrompt, generate_prompts  # noqa: E402
 
-MODEL_NAME = "gpt2"
-# HuggingFace hub commit for openai-community/gpt2, resolved on 2026-09-20 and
-# pinned. Change deliberately, never implicitly.
-MODEL_REVISION = "607a30d783dfa663caf39e06633721c8d4cfcd7e"
 PUBLISHED_MEAN_LOGIT_DIFF = 3.56  # [wang-2022 §2], 100,000 samples
 PUBLISHED_IO_OVER_S = 0.993  # [wang-2022 §2]
 PUBLISHED_IO_PROB = 0.49  # [wang-2022 §2]
@@ -79,13 +81,7 @@ def step_cuda() -> dict:
 
 
 def step_load_model(device: str):
-    from transformers import AutoTokenizer, GPT2LMHeadModel
-    from transformer_lens import HookedTransformer
-
-    hf_model = GPT2LMHeadModel.from_pretrained(MODEL_NAME, revision=MODEL_REVISION)
-    tokenizer = AutoTokenizer.from_pretrained(MODEL_NAME, revision=MODEL_REVISION)
-    model = HookedTransformer.from_pretrained(MODEL_NAME, hf_model=hf_model, tokenizer=tokenizer, device=device)
-    model.eval()
+    model = load_model(device)
     print(f"[2/5] loaded {MODEL_NAME}@{MODEL_REVISION[:8]} into TransformerLens on {device}: "
           f"{model.cfg.n_layers} layers x {model.cfg.n_heads} heads, d_model {model.cfg.d_model}")
     return model
@@ -124,9 +120,7 @@ def encode(model, prompts: list[IOIPrompt], prepend_bos: bool) -> list[tuple[lis
     on every call; a fresh plain tokenizer is used here with special tokens
     off so that BOS is added only when asked. Names being single tokens with a
     leading space is checked rather than assumed."""
-    from transformers import AutoTokenizer
-
-    tok = AutoTokenizer.from_pretrained(MODEL_NAME, revision=MODEL_REVISION)
+    tok = plain_tokenizer()
     bos = model.tokenizer.bos_token_id
     out = []
     for p in prompts:
@@ -170,11 +164,7 @@ def step_determinism(model, encoded, device: str) -> dict:
     if not torch.equal(first, second):
         fail(f"forward pass not bitwise deterministic; max diff {(first - second).abs().max().item()}")
     print(f"[4/5] determinism ok: two passes over {len(chunk)} prompts bitwise identical")
-    return {"bitwise_identical": True, "n_checked": len(chunk),
-            "use_deterministic_algorithms": torch.are_deterministic_algorithms_enabled(),
-            "cudnn_deterministic": torch.backends.cudnn.deterministic,
-            "cudnn_benchmark": torch.backends.cudnn.benchmark,
-            "cublas_workspace_config": os.environ.get("CUBLAS_WORKSPACE_CONFIG")}
+    return {"bitwise_identical": True, "n_checked": len(chunk), **determinism_flags()}
 
 
 @torch.no_grad()
@@ -243,9 +233,7 @@ def main() -> None:
     ap.add_argument("--out-dir", default="results/E0")
     args = ap.parse_args()
 
-    torch.manual_seed(args.seed)
-    torch.use_deterministic_algorithms(True)
-    torch.backends.cudnn.benchmark = False
+    set_determinism(args.seed)
 
     from importlib.metadata import version as pkg_version
 
