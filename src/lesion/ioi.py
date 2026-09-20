@@ -23,6 +23,8 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
+from src.lesion.battery import AlignmentError, Corruption, PromptPair, encode, with_bos
+
 NAMES = [
     "Michael", "Christopher", "Jessica", "Matthew", "Ashley", "Jennifer",
     "Joshua", "Amanda", "Daniel", "David", "James", "Robert", "John", "Joseph",
@@ -86,6 +88,8 @@ class IOIPrompt:
     s: str  # the repeated (subject) name
     template_idx: int
     order: str  # "BABA" or "ABBA"
+    place: str  # drawn even when the template has no [PLACE]; keeps the stream identical
+    obj: str  # likewise for [OBJECT]
 
     @property
     def prompt(self) -> str:
@@ -113,5 +117,97 @@ def generate_prompts(n: int, seed: int, orders: tuple[str, ...] = ("BABA", "ABBA
         obj = rng.choice(OBJECTS)
         text = template.replace("[PLACE]", place).replace("[OBJECT]", obj)
         text = text.replace("[A]", name_1).replace("[B]", name_2)
-        out.append(IOIPrompt(text=text, io=name_1, s=name_2, template_idx=idx, order=order))
+        out.append(IOIPrompt(text=text, io=name_1, s=name_2, template_idx=idx, order=order, place=place, obj=obj))
     return out
+
+
+# Position labels, Wang et al.'s names: IO and S1 are the two names of the
+# first clause, S1+1 the token after S1, S2 the repeated name in the second
+# clause, END the last prompt token (whose logits are read).
+LABELS = ("IO", "S1", "S1+1", "S2", "END")
+
+P_ABC = Corruption(
+    name="p_ABC",
+    removes="the repetition of the subject name: no name occurs twice, so nothing in the prompt "
+            "singles out an indirect object",
+    inserts="three distinct fresh names in the three name slots, none equal to the clean IO or S; "
+            "same template, place and object",
+    source="wang-2022 §2.1",
+)
+
+
+def abc_counterpart(p: IOIPrompt, rng: random.Random) -> str:
+    """The p_ABC prompt paired with ``p``: same template, place and object;
+    the three name slots filled with three distinct names drawn from NAMES
+    minus {p.io, p.s}; the answer slot removed [wang-2022 §2.1]. Uses its own
+    RNG so the clean stream of ``generate_prompts`` is untouched."""
+    template = ORDERS[p.order][p.template_idx]
+    assert template.endswith(" [A]"), template
+    body = template[: -len(" [A]")]
+    assert body.count("[A]") == 1 and body.count("[B]") == 2, body
+    a, b1, b2 = rng.sample([nm for nm in NAMES if nm not in (p.io, p.s)], 3)
+    body = body.replace("[PLACE]", p.place).replace("[OBJECT]", p.obj)
+    return body.replace("[A]", a).replace("[B]", b1, 1).replace("[B]", b2, 1)
+
+
+def name_positions(ids: list[int], io_id: int, s_id: int) -> dict[str, int]:
+    """Label indices from the clean token ids. S must occur exactly twice and
+    IO exactly once; anything else is a misalignment."""
+    s_idx = [i for i, t in enumerate(ids) if t == s_id]
+    io_idx = [i for i, t in enumerate(ids) if t == io_id]
+    if len(s_idx) != 2 or len(io_idx) != 1:
+        raise AlignmentError(f"expected S twice and IO once, got S at {s_idx}, IO at {io_idx}")
+    return {"IO": io_idx[0], "S1": s_idx[0], "S1+1": s_idx[0] + 1, "S2": s_idx[1], "END": len(ids) - 1}
+
+
+class IOIBattery:
+    """Clean p_IOI / corrupt p_ABC pairs. Implements ``battery.Battery``."""
+
+    name = "ioi"
+    labels = LABELS
+    corruption = P_ABC
+    template_set = "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)"
+
+    def __init__(self, tokenizer) -> None:
+        self.tok = tokenizer
+
+    def encode_clean(self, p: IOIPrompt, prepend_bos: bool) -> tuple[list[int], int, int, dict[str, int]]:
+        """E0's encoder: (ids, IO id, S id, positions), every alignment the
+        paper relies on asserted."""
+        ids = encode(self.tok, p.prompt)
+        io = encode(self.tok, " " + p.io)
+        s = encode(self.tok, " " + p.s)
+        if len(io) != 1 or len(s) != 1:
+            raise AlignmentError(f"name is not a single token: {p.io!r} -> {io}, {p.s!r} -> {s}")
+        if ids + io != encode(self.tok, p.text):
+            raise AlignmentError(f"tokenisation of prompt + answer differs from the full sentence: {p.text!r}")
+        positions = name_positions(ids, io[0], s[0])
+        if prepend_bos:
+            ids, positions = with_bos(ids, positions, self.tok.bos_token_id)
+        return ids, io[0], s[0], positions
+
+    def encode_pair(self, p: IOIPrompt, corrupt_text: str, prepend_bos: bool) -> PromptPair:
+        ids, io, s, pos = self.encode_clean(p, prepend_bos)
+        cids = encode(self.tok, corrupt_text)
+        if prepend_bos:
+            cids = [self.tok.bos_token_id, *cids]
+        if len(cids) != len(ids):
+            raise AlignmentError(f"p_ABC length {len(cids)} != p_IOI length {len(ids)}: {corrupt_text!r}")
+        slots = {pos["IO"], pos["S1"], pos["S2"]}
+        new = {cids[i] for i in slots}
+        if len(new) != 3 or new & {io, s}:
+            raise AlignmentError(f"p_ABC names not three fresh distinct tokens: {corrupt_text!r}")
+        for i, (c, k) in enumerate(zip(ids, cids)):
+            if (c != k) != (i in slots):
+                raise AlignmentError(f"p_ABC differs from p_IOI outside the name slots at {i}: {corrupt_text!r}")
+        return PromptPair(
+            clean_ids=tuple(ids), corrupt_ids=tuple(cids), answer_id=io, competitor_id=s,
+            positions=pos, corrupt_positions=dict(pos), template=f"{p.order}/{p.template_idx}",
+            meta={"order": p.order, "template_idx": str(p.template_idx), "io": p.io, "s": p.s,
+                  "clean_text": p.prompt, "corrupt_text": corrupt_text},
+        )
+
+    def pairs(self, n: int, seed: int, prepend_bos: bool) -> list[PromptPair]:
+        prompts = generate_prompts(n, seed)
+        rng = random.Random(f"p_ABC/{seed}")
+        return [self.encode_pair(p, abc_counterpart(p, rng), prepend_bos) for p in prompts]

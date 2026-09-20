@@ -47,7 +47,7 @@ from src.lesion.model import (  # noqa: E402  (sets CUBLAS_WORKSPACE_CONFIG befo
 
 import torch  # noqa: E402
 
-from src.lesion.ioi import IOIPrompt, generate_prompts  # noqa: E402
+from src.lesion.ioi import IOIBattery, IOIPrompt, generate_prompts  # noqa: E402
 
 PUBLISHED_MEAN_LOGIT_DIFF = 3.56  # [wang-2022 §2], 100,000 samples
 PUBLISHED_IO_OVER_S = 0.993  # [wang-2022 §2]
@@ -113,31 +113,10 @@ def step_hook(model) -> dict:
 
 
 def encode(model, prompts: list[IOIPrompt], prepend_bos: bool) -> list[tuple[list[int], int, int]]:
-    """Return (token ids, IO id, S id) per prompt.
-
-    TransformerLens mutates the tokenizer it is given so that it prepends BOS
-    on every call; a fresh plain tokenizer is used here with special tokens
-    off so that BOS is added only when asked. Names being single tokens with a
-    leading space is checked rather than assumed."""
-    tok = plain_tokenizer()
-    bos = model.tokenizer.bos_token_id
-    out = []
-    for p in prompts:
-        ids = tok(p.prompt, add_special_tokens=False).input_ids
-        if ids[0] == bos:
-            fail("plain tokenizer prepended BOS unexpectedly")
-        io = tok(" " + p.io, add_special_tokens=False).input_ids
-        s = tok(" " + p.s, add_special_tokens=False).input_ids
-        if len(io) != 1 or len(s) != 1:
-            fail(f"name is not a single token: {p.io!r} -> {io}, {p.s!r} -> {s}")
-        # Alignment guarantee the paper relies on: prompt tokens + answer token
-        # is exactly the tokenisation of the full sentence.
-        if ids + io != tok(p.text, add_special_tokens=False).input_ids:
-            fail(f"tokenisation of prompt + answer differs from the full sentence: {p.text!r}")
-        if prepend_bos:
-            ids = [bos] + ids
-        out.append((ids, io[0], s[0]))
-    return out
+    """Return (token ids, IO id, S id) per prompt via the IOI battery's encoder
+    (moved there in E1a; same checks, same ids)."""
+    battery = IOIBattery(plain_tokenizer())
+    return [(ids, io, s) for ids, io, s, _ in (battery.encode_clean(p, prepend_bos) for p in prompts)]
 
 
 @torch.no_grad()

@@ -53,3 +53,98 @@ def test_every_word_is_a_single_gpt2_token():
     tok = AutoTokenizer.from_pretrained("gpt2")
     for w in NAMES + PLACES + OBJECTS:
         assert len(tok(" " + w).input_ids) == 1, w
+
+
+# --- E1a additions: p_ABC counterpart, position labels, IOIBattery ---
+
+import random  # noqa: E402
+
+from src.lesion.battery import AlignmentError  # noqa: E402
+from src.lesion.ioi import LABELS, P_ABC, IOIBattery, abc_counterpart, name_positions  # noqa: E402
+
+
+def test_prompt_carries_place_and_object():
+    p = generate_prompts(5, seed=0)[0]
+    assert p.place in PLACES and p.obj in OBJECTS
+
+
+def test_generation_stream_unchanged_by_new_fields():
+    # The first prompt at seed 0, as generated before the place/obj fields
+    # existed (recorded 2026-09-20). If this moves, the E0 stream has drifted.
+    p = generate_prompts(1, seed=0)[0]
+    assert (p.text, p.io, p.s, p.template_idx, p.order) == (
+        "Then, Crystal and Bradley had a long argument. Afterwards Bradley said to Crystal",
+        "Crystal", "Bradley", 12, "ABBA")
+
+
+def test_abc_counterpart_keeps_template_and_swaps_three_names():
+    rng = random.Random("p_ABC/0")
+    for p in generate_prompts(200, seed=0):
+        abc = abc_counterpart(p, rng)
+        clean_words, abc_words = p.prompt.split(), abc.split()
+        assert len(clean_words) == len(abc_words)
+        diffs = [(c, a) for c, a in zip(clean_words, abc_words) if c != a]
+        assert len(diffs) == 3, (p.prompt, abc)
+        assert {c for c, _ in diffs} == {p.io, p.s}
+        new = [a for _, a in diffs]
+        assert len(set(new)) == 3 and not ({p.io, p.s} & set(new))
+        assert all(n in NAMES for n in new)
+
+
+def test_abc_counterpart_is_seeded():
+    ps = generate_prompts(20, seed=0)
+    a = [abc_counterpart(p, random.Random("p_ABC/0")) for p in ps]
+    b = [abc_counterpart(p, random.Random("p_ABC/0")) for p in ps]
+    assert a == b
+
+
+def test_name_positions_labels():
+    #        0  1  2  3  4  5  6
+    ids = [10, 7, 11, 8, 12, 7, 13]  # S=7 at 1 and 5, IO=8 at 3
+    assert name_positions(ids, io_id=8, s_id=7) == {"IO": 3, "S1": 1, "S1+1": 2, "S2": 5, "END": 6}
+
+
+def test_name_positions_refuses_wrong_counts():
+    with pytest.raises(AlignmentError):
+        name_positions([7, 7, 7, 8], io_id=8, s_id=7)
+    with pytest.raises(AlignmentError):
+        name_positions([7, 8, 8, 7], io_id=8, s_id=7)
+
+
+def test_ioi_battery_pairs_align(word_tokenizer):
+    battery = IOIBattery(word_tokenizer)
+    assert battery.name == "ioi" and battery.labels == LABELS and battery.corruption is P_ABC
+    pairs = battery.pairs(200, seed=0, prepend_bos=False)
+    assert len(pairs) == 200
+    for pr in pairs:
+        assert len(pr.clean_ids) == len(pr.corrupt_ids)
+        assert set(pr.positions) == set(LABELS) and pr.positions == pr.corrupt_positions
+        assert pr.positions["END"] == len(pr.clean_ids) - 1
+        assert pr.clean_ids[pr.positions["IO"]] == pr.answer_id
+        assert pr.clean_ids[pr.positions["S1"]] == pr.clean_ids[pr.positions["S2"]] == pr.competitor_id
+        assert pr.positions["S1+1"] == pr.positions["S1"] + 1
+        slots = {pr.positions[k] for k in ("IO", "S1", "S2")}
+        new = {pr.corrupt_ids[i] for i in slots}
+        assert len(new) == 3 and not (new & {pr.answer_id, pr.competitor_id})
+        for i, (c, k) in enumerate(zip(pr.clean_ids, pr.corrupt_ids)):
+            assert (c == k) == (i not in slots)
+        assert pr.template.split("/")[0] == pr.meta["order"]
+
+
+def test_ioi_battery_bos_shifts_every_label(word_tokenizer):
+    battery = IOIBattery(word_tokenizer)
+    no_bos = battery.pairs(50, seed=1, prepend_bos=False)
+    bos = battery.pairs(50, seed=1, prepend_bos=True)
+    for a, b in zip(no_bos, bos):
+        assert b.clean_ids == (word_tokenizer.bos_token_id, *a.clean_ids)
+        assert b.corrupt_ids == (word_tokenizer.bos_token_id, *a.corrupt_ids)
+        assert b.positions == {k: v + 1 for k, v in a.positions.items()}
+        assert b.corrupt_positions == {k: v + 1 for k, v in a.corrupt_positions.items()}
+
+
+@pytest.mark.slow
+def test_ioi_battery_aligns_under_the_real_tokenizer():
+    from src.lesion.model import plain_tokenizer
+
+    pairs = IOIBattery(plain_tokenizer()).pairs(500, seed=0, prepend_bos=False)
+    assert len(pairs) == 500  # every alignment check inside pairs() passed
