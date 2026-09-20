@@ -2,9 +2,9 @@
 
 *Living document. Update it in the same session a decision is made, not later.*
 
-**Status:** planning. No code written yet.
-**Current phase:** R1 (methods and epistemics). R0 tagged `v-R0` on 2026-09-19. See `docs/02-roadmap.md`.
-**Last updated:** 2026-09-19
+**Status:** R0 and R1 done (R2 gates E4, R3 later). No code written yet.
+**Current phase:** E0 (environment and smoke test). R1 tagged `v-R1` on 2026-09-20; E1 is gated on E0. See `docs/02-roadmap.md`.
+**Last updated:** 2026-09-20
 
 ---
 

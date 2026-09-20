@@ -161,6 +161,24 @@ Miller-vs-pattern-preserving question are answered on
 `wiki/concepts/circuit.md` and `wiki/methods/pattern-preserving-ablation.md`
 and await the author's sign-off as part of item 2.
 
+#### Closed — *2026-09-20*
+
+All three items hold. **Item 2:** the author reviewed `docs/01-methods.md`
+against the wiki and edited it in commit `b307396` (metric definitions
+added; direction qualifier on activation patching; the unsourced
+mean-set-size mechanism withdrawn; causal-tracing paragraph corrected for
+windows and metric). **Item 3, last two:** the circuit-definition
+reconciliation is **accepted as written** — two named senses, a
+*structural* circuit read off parameters (Olah et al., Elhage et al.) and
+a *behavioural* circuit that is a component subgraph plus the ablation
+six-tuple defining its function (Wang et al., Miller et al.), with every
+results doc stating which sense a claim is about; glossary updated. The
+Miller-vs-pattern-preserving question was answered by the O-011 R1
+trigger resolution (2026-09-19): no contradiction, pattern freezing is
+this project's own axis with no faithfulness-literature backing, recorded
+as such. R1 tagged `v-R1`. Per the dependency diagram E1 is gated on R1
+*and* E0; E0 (environment and smoke test) is the next phase.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?

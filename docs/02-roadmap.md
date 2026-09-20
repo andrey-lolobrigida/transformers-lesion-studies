@@ -35,6 +35,7 @@ learning. If any of those can't be written cold, R0 isn't finished.
 
 ### R1 — Methods and epistemics
 *No code. Gates E1 onward. Estimated 1–2 weeks.*
+**Closed 2026-09-20, tag `v-R1`** (D-010 closure in `docs/04-decisions.md`).
 
 **Goal:** know what each measurement licenses before generating any numbers.
 

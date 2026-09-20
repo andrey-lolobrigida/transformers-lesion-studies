@@ -625,3 +625,17 @@ extracted beyond the name.
 with paraphrase and neighbourhood prompts, used to score generalisation and
 specificity of edits (§3.3). Its *known-facts* subset is the tracing prompt
 source.
+
+## Added 2026-09-20 — R1 closure, circuit-definition reconciliation (D-010 item 3)
+
+**Circuit, structural** — a subgraph read off the parameters: nodes are
+neurons, directions or heads, edges are the weights (or virtual weights)
+between them. Olah et al. 2020; Elhage et al. 2021. No task or dataset in
+the definition. Wiki: `wiki/concepts/circuit.md`.
+
+**Circuit, behavioural** — a subgraph of components *plus the ablation
+six-tuple* under which it is claimed to implement a behaviour. Wang et al.
+2022 define it through a knockout; Miller et al. 2024 show the ground
+truth itself changes with the ablation value. Every results doc states
+which of the two senses a claim is about. The unqualified "circuit" at
+the top of this glossary is the behavioural sense.

@@ -173,7 +173,8 @@ See `docs/00-motivation.md` on phrenology risk.
   both senses, named — a *structural* circuit (Zoom In; Elhage et al.'s
   virtual weights) is read off parameters; a *behavioural* circuit (Wang et
   al.) is a component subgraph plus the knockout that defines its function.
-  Results docs say which one a claim is about. The author decides.
+  Results docs say which one a claim is about. **Accepted by the author
+  2026-09-20 (D-010 closure).**
   *Strengthened by Miller et al. (2026-09-19):* even the behavioural sense
   is underdetermined by the task alone. In a compiled Tracr model with a
   known program, the ground-truth circuit *differs* between zero and
