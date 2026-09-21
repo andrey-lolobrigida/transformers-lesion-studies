@@ -7,12 +7,14 @@ from pathlib import Path
 import pyarrow.parquet as pq
 import pytest
 
+from src.lesion.e1a_validate import artifact_path
+
 pytestmark = pytest.mark.slow
 
 E0 = Path("results/E0/e0_smoke_seed0_n100000.json")
 E1A = Path("results/E1a")
-IDENTITY = E1A / "ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0.json"
-MLP0_MEAN = "ioi_L0mlp_mean-corrupt-n1000-s0-template_node_all_ablate-clean_n2000_seed0"
+IDENTITY = artifact_path("identity")
+MLP0_MEAN = artifact_path("mlp", "mean", 0, False)
 
 
 def load(path: Path) -> dict:
@@ -41,14 +43,15 @@ def test_identity_against_e0():
 
 
 @pytest.mark.parametrize("layer", range(12))
-@pytest.mark.parametrize("value", ["zero", "mean-corrupt-n1000-s0-template", "resample"])
-def test_mlp_table_artifacts(layer, value):
+@pytest.mark.parametrize("value", ["zero", "mean", "resample"])
+@pytest.mark.parametrize("frozen", [False, True])
+def test_mlp_table_artifacts(layer, value, frozen):
     """Check 2's inputs exist, with the reference size logged next to every mean number."""
-    d = load(E1A / f"ioi_L{layer}mlp_{value}_node_all_ablate-clean_n2000_seed0.json")
+    d = load(artifact_path("mlp", value, layer, frozen))
     assert d["spec"]["component"] == {"kind": "mlp", "layer": layer}
-    assert d["spec"]["freeze_patterns"] is False and d["direct_effect_definition"] is None
+    assert d["spec"]["freeze_patterns"] is frozen and d["direct_effect_definition"] is None
     assert d["battery"]["n"] == 2000 and d["battery"]["corruption"]["name"] == "p_ABC"
-    if value.startswith("mean"):
+    if value == "mean":
         assert d["spec"]["reference"] == {"battery_side": "corrupt", "n": 1000, "seed": 0, "match": "template"}
         assert d["reference"]["n"] == 1000 and len(d["reference"]["per_template_counts"]) == 30
         assert min(d["reference"]["per_template_counts"].values()) >= 1
@@ -61,18 +64,20 @@ def test_mlp0_sign_is_recorded_not_asserted():
     """The bracket claim (Wang App. J: mean-ablating MLP0 on p_ABC flips the sign) is
     stated in the README whichever way it falls (D-011). This test only pins that the
     number the README cites is the one in the artifact."""
-    d = load(E1A / f"{MLP0_MEAN}.json")
+    d = load(MLP0_MEAN)
     readme = (E1A / "README.md").read_text()
     assert f"{d['results']['ablated']['mean_ld']:+.3f}" in readme
 
 
 def test_determinism_rerun_identical():
     """Check 3: two invocations differ only in environment.seconds."""
-    a = load(E1A / f"{MLP0_MEAN}.json")
-    b = load(E1A / "rerun" / f"{MLP0_MEAN}.json")
+    rerun_path = artifact_path("rerun", "mean")
+    a = load(MLP0_MEAN)
+    b = load(rerun_path)
     for d in (a, b):
         d["environment"].pop("seconds")
         d["cli"].pop("out_dir")
-        d["command"] = d["command"].replace("results/E1a/rerun", "results/E1a")
+        d["command"] = d["command"].replace(str(rerun_path.parent), str(MLP0_MEAN.parent))
     assert a == b
-    assert pq.read_table(E1A / f"{MLP0_MEAN}.parquet").equals(pq.read_table(E1A / "rerun" / f"{MLP0_MEAN}.parquet"))
+    assert pq.read_table(MLP0_MEAN.with_suffix(".parquet")).equals(
+        pq.read_table(rerun_path.with_suffix(".parquet")))

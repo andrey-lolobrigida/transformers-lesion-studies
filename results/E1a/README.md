@@ -86,11 +86,11 @@ disagreement is the finding, not a reason to prefer one.
 
 ### 3. Determinism
 
-Two invocations of the MLP0 command (`results/E1a/` and `results/E1a/rerun/`) produce
-artifacts identical apart from `environment.seconds` and the output path, and identical
-parquet tables (`test_determinism_rerun_identical`). The twin is the same command, not
-merely a command with the same effect: both are the `--value all` call on `L0.mlp`, so the
-recorded `cli` block and command string match too.
+Two invocations of the MLP0 mean command (`results/E1a/mlp/mean/` and `results/E1a/rerun/`)
+produce artifacts identical apart from `environment.seconds` and the output path, and
+identical parquet tables (`test_determinism_rerun_identical`). The twin is the same
+command, not merely a command with the same effect: both are the `--value mean` call on
+`L0.mlp`, so the recorded `cli` block and command string match too.
 
 ### Exploratory, not an exit check: the same table with pattern freezing
 
@@ -135,9 +135,9 @@ question and is not settled here.
 
 ## Files
 
-| Stem pattern | What |
+| Path pattern | What |
 |---|---|
-| `ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0` | check 1 |
-| `ioi_L{0..11}mlp_{zero,mean-corrupt-n1000-s0-template,resample}_node_all_ablate-clean_n2000_seed0` | check 2 |
-| `..._frozen_n2000_seed0` | exploratory frozen twin |
-| `rerun/ioi_L0mlp_{zero,mean-...,resample}_n2000_seed0` | check 3 (the layer-0 call repeated; the mean artifact is the one compared) |
+| `identity/ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0` | check 1 |
+| `mlp/{zero,mean,resample}/ioi_L{0..11}mlp_{zero,mean-corrupt-n1000-s0-template,resample}_node_all_ablate-clean_n2000_seed0` | check 2 |
+| `mlp_frozen/{zero,mean,resample}/..._frozen_n2000_seed0` | exploratory frozen twin |
+| `rerun/ioi_L0mlp_mean-corrupt-n1000-s0-template_node_all_ablate-clean_n2000_seed0` | check 3 (the mlp/mean/ layer-0 call repeated) |
