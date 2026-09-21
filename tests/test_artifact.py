@@ -90,6 +90,18 @@ def test_write_and_read_back(tiny_model, tiny_battery, tmp_path):
     assert table.column("ld_clean").to_pylist() == result.columns["ld_clean"].tolist()
 
 
+@torch.no_grad()
+def test_write_refuses_meta_key_collision(tiny_model, tiny_battery, tmp_path):
+    s = spec(component=Head(0, 0), value="mean", reference=MeanReference("corrupt", 8, 1, "template"))
+    result = run(tiny_model, s, tiny_battery, n=6, seed=0, prepend_bos=False, batch_size=4)
+    env = artifact.environment_record(tiny_model, batch_size=4, seconds=result.seconds)
+    record = artifact.build_record(result, s, tiny_battery, command="uv run python -m src.lesion.ablate --x",
+                                   environment=env, cli_args={"x": 1, "freeze": False})
+    result.meta = {"template": ["x"] * result.n}
+    with pytest.raises(ValueError):
+        artifact.write(record, result, tmp_path)
+
+
 def test_direct_effect_definition_written():
     s = spec(component_type="edge", receiver=Logits(), mlp_convention="term")
     assert artifact.direct_effect_definition(s) == "term"

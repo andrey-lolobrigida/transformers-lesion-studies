@@ -111,6 +111,10 @@ def write(record: dict, result: RunResult, out_dir: Path) -> tuple[Path, Path]:
     columns = {"idx": list(range(result.n)), "template": result.templates}
     for name in COLUMNS:
         columns[name] = result.columns[name].tolist()
+    fixed = {"idx", "template", *COLUMNS}
+    collisions = fixed & result.meta.keys()
+    if collisions:
+        raise ValueError(f"battery meta key(s) collide with fixed parquet columns: {sorted(collisions)}")
     for key, values in result.meta.items():
         columns[key] = values
     pq.write_table(pa.table(columns), parquet_path)
