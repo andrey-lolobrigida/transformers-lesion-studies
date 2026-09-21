@@ -22,7 +22,7 @@ from typing import Callable, Mapping
 import torch
 from torch import Tensor
 
-from src.lesion.spec import MLP, AblationSpec, All, Component, Head, Indices, Inputs, Labels, Logits, Positions, SpecError
+from src.lesion.spec import MLP, AblationSpec, All, Component, Head, Labels, Logits, Positions, SpecError
 
 Hook = tuple[str, Callable]
 

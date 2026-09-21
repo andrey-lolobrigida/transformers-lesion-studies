@@ -2140,7 +2140,7 @@ dev = [
 [package.metadata]
 requires-dist = [
     { name = "pyarrow", specifier = ">=25.0.1" },
-    { name = "transformer-lens", specifier = ">=3.9.0" },
+    { name = "transformer-lens", specifier = ">=3.9.0,<4" },
 ]
 
 [package.metadata.requires-dev]

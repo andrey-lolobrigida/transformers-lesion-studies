@@ -129,6 +129,11 @@ def _check_bounds(spec: AblationSpec, cfg, labels: tuple[str, ...]) -> None:
 
 @torch.no_grad()
 def run(model, spec: AblationSpec, battery, n: int, seed: int, prepend_bos: bool, batch_size: int) -> RunResult:
+    """Every ``*_clean`` column is the destination prompt, unintervened — the
+    clean prompt under ``ablate-clean``, the corrupt prompt under
+    ``restore-clean`` — and ``*_ablated`` is that same destination prompt
+    intervened; the artifact records which reading applies in ``effect_sign``
+    (I-1), since "positive" means the opposite thing under the two directions."""
     from src.lesion.reference import compute_mean_reference
 
     t0 = time.time()

@@ -1,7 +1,6 @@
 """Artifact: one stem per distinct spec, a key per axis, JSON + parquet written and readable."""
 
 import json
-from pathlib import Path
 
 import pyarrow.parquet as pq
 import pytest
@@ -106,3 +105,23 @@ def test_direct_effect_definition_written():
     s = spec(component_type="edge", receiver=Logits(), mlp_convention="term")
     assert artifact.direct_effect_definition(s) == "term"
     assert artifact.direct_effect_definition(spec()) is None
+
+
+@torch.no_grad()
+def test_effect_sign_recorded_for_both_directions(tiny_model, tiny_battery, tmp_path):
+    s = spec(component=Head(0, 0))  # ablate-clean
+    result = run(tiny_model, s, tiny_battery, n=6, seed=0, prepend_bos=False, batch_size=4)
+    env = artifact.environment_record(tiny_model, batch_size=4, seconds=result.seconds)
+    record = artifact.build_record(result, s, tiny_battery, command="uv run python -m src.lesion.ablate --x",
+                                   environment=env, cli_args={"x": 1, "freeze": False})
+    assert record["effect_sign"] == (
+        "positive = ablating the component hurt (clean minus intervened, on the clean prompt)")
+
+    s = spec(component=Head(0, 0), direction="restore-clean")
+    result = run(tiny_model, s, tiny_battery, n=6, seed=0, prepend_bos=False, batch_size=4)
+    env = artifact.environment_record(tiny_model, batch_size=4, seconds=result.seconds)
+    record = artifact.build_record(result, s, tiny_battery, command="uv run python -m src.lesion.ablate --x",
+                                   environment=env, cli_args={"x": 1, "freeze": False})
+    assert record["effect_sign"] == (
+        "positive = restoring the clean value hurt; negative = restoration helped "
+        "(unintervened minus intervened, on the corrupt prompt)")

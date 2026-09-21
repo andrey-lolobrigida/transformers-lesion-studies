@@ -1,14 +1,11 @@
 # tests/test_runner.py
 """The runner: direction, batch invariance, aggregate arithmetic, bounds."""
 
-import math
-
 import pytest
 import torch
 
 from src.lesion.runner import COLUMNS, aggregate, group_by_length, metrics, run
 from src.lesion.spec import MLP, AblationSpec, All, Head, Inputs, Labels, Logits, MeanReference, SpecError
-from tests.conftest import TinyBattery
 
 
 def spec(component=Head(0, 0), value="resample", reference=None, ctype="node", receiver=None, conv=None,

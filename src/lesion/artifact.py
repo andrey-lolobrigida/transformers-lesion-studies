@@ -17,7 +17,7 @@ import torch
 
 from src.lesion.model import MODEL_NAME, MODEL_REVISION, determinism_flags
 from src.lesion.runner import COLUMNS, RunResult
-from src.lesion.spec import AblationSpec, All, Head, Inputs, Labels, Logits
+from src.lesion.spec import AblationSpec, All, Head, Labels, Logits
 
 
 def stem(spec: AblationSpec, battery_name: str, n: int, seed: int, prepend_bos: bool) -> str:
@@ -82,6 +82,17 @@ def direct_effect_definition(spec: AblationSpec) -> str | None:
     return spec.direct_effect_definition
 
 
+def effect_sign(spec: AblationSpec) -> str:
+    """The direction-dependent reading of ``effect_mean`` (I-1): under
+    ablate-clean the columns are the clean prompt, unintervened vs. intervened;
+    under restore-clean they are the corrupt prompt, unintervened vs. intervened,
+    so the same "positive = the ablation hurt" arithmetic reads oppositely."""
+    if spec.direction == "restore-clean":
+        return ("positive = restoring the clean value hurt; negative = restoration helped "
+                "(unintervened minus intervened, on the corrupt prompt)")
+    return "positive = ablating the component hurt (clean minus intervened, on the clean prompt)"
+
+
 def build_record(result: RunResult, spec: AblationSpec, battery, command: str, environment: dict, cli_args: dict) -> dict:
     return {
         "phase": "E1a",
@@ -95,6 +106,7 @@ def build_record(result: RunResult, spec: AblationSpec, battery, command: str, e
             "corruption": asdict(battery.corruption),
         },
         "destination_prompt": result.destination,
+        "effect_sign": effect_sign(spec),
         "reference": result.reference_summary,
         "results": result.aggregates,
         "direct_effect_definition": direct_effect_definition(spec),

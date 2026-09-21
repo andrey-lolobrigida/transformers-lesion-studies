@@ -5,7 +5,7 @@ import pytest
 import torch
 
 from src.lesion.interventions import (
-    freeze_hooks, hook_name, node_hooks, position_mask, resolve_label, run_intervened, run_node,
+    freeze_hooks, hook_name, position_mask, resolve_label, run_intervened, run_node,
     run_with_pattern_cache, sender_cache, substitute, zero_value,
 )
 from src.lesion.spec import MLP, AblationSpec, All, Head, Indices, Labels, SpecError
