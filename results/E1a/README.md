@@ -1,6 +1,6 @@
 # E1a — Ablation harness: validation on IOI
 
-*Run 2026-09-20 on branch `phase-E1a-harness`, repo commit `729f5c2`, GPT-2 small at HF
+*Run 2026-09-20 on branch `phase-E1a-harness`, repo commit `db979a0`, GPT-2 small at HF
 revision `607a30d7`. Interpretation of the artifacts in this directory. Decisions: D-006,
 D-011, D-012; the O-011 and O-013 resolutions. Rerun: `uv run python -m src.lesion.e1a_validate`.*
 

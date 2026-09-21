@@ -1,10 +1,10 @@
 {
   "phase": "E1a",
-  "command": "uv run python -m src.lesion.ablate --battery ioi --type node --positions all --direction ablate-clean --seed 0 --prepend-bos false --component L0.mlp --value all --ref-side corrupt --ref-n 1000 --ref-seed 0 --ref-match template --no-freeze --n 2000 --batch-size 256 --out-dir results/E1a/rerun",
+  "command": "uv run python -m src.lesion.ablate --battery ioi --type node --positions all --direction ablate-clean --seed 0 --prepend-bos false --component L0.mlp --value mean --ref-side corrupt --ref-n 1000 --ref-seed 0 --ref-match template --no-freeze --n 2000 --batch-size 256 --out-dir results/E1a/rerun",
   "cli": {
     "battery": "ioi",
     "component": "L0.mlp",
-    "value": "all",
+    "value": "mean",
     "ref_side": "corrupt",
     "ref_n": 1000,
     "ref_seed": 0,
@@ -47,7 +47,7 @@
     "freeze_patterns": false
   },
   "environment": {
-    "repo_commit": "729f5c2330049ccad516dc99b0c2f6a16aea1814",
+    "repo_commit": "db979a09a5eaf7b04fd6f58584bd355236500ade",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -68,7 +68,7 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 256,
-    "seconds": 3.5722172260284424
+    "seconds": 4.176387548446655
   },
   "battery": {
     "name": "ioi",
