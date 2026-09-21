@@ -3,6 +3,7 @@ name = "transformers-lesion-studies"
 version = "0.1.0"
 requires-python = ">=3.12"
 dependencies = [
+    "pyarrow>=25.0.1",
     "transformer-lens>=3.9.0",
 ]
 
@@ -14,4 +15,4 @@ dev = [
 [tool.pytest.ini_options]
 pythonpath = ["."]
 testpaths = ["tests"]
-markers = ["slow: needs the model tokenizer (network on first run)"]
+markers = ["slow: needs the GPU and the real model (network on first run)"]
