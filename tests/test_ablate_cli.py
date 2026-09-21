@@ -86,6 +86,8 @@ def test_specs_from_args_edge():
                 "--type", "edge", "--receiver", "inputs", "--target", "L9H9.q@NOPE", "--mlp-convention", "wang"],
     BASE + ["--value", "zero", "--component", "L0.attn"],                       # bad component
     BASE + ["--value", "zero", "--prepend-bos", "maybe"],                       # bad bool
+    BASE + ["--value", "zero", "--receiver", "logits"],                        # receiver under node
+    BASE + ["--value", "zero", "--target", "L9H9.q@END"],                      # target under node
 ])
 def test_refusals_exit_2_before_model_loads(argv):
     with pytest.raises(SystemExit) as e:

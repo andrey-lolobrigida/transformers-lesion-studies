@@ -113,6 +113,8 @@ def specs_from_args(args: argparse.Namespace) -> list[AblationSpec]:
             receiver = Logits()
         elif args.receiver == "inputs":
             receiver = Inputs(tuple(parse_target(t) for t in args.target))
+    elif args.receiver is not None or args.target:
+        raise SpecError("--receiver and --target are edge-only flags")
     labels = BATTERY_LABELS[args.battery]
     if isinstance(positions, Labels):
         for label in positions.labels:
