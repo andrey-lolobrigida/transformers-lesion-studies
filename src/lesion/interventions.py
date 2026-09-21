@@ -146,7 +146,76 @@ def run_node(model, spec: AblationSpec, dst_toks: Tensor, mask: Tensor, v: Tenso
 @torch.no_grad()
 def run_edge(model, spec: AblationSpec, dst_toks: Tensor, mask: Tensor, v: Tensor,
              dst_labels: list[Mapping[str, int]]) -> Tensor:
-    raise NotImplementedError("Task 6")
+    """Wang et al. Algorithm 1 as passes B, C, D on the destination prompt.
+    Pass A (the source activation) is the caller's ``v`` for resample; for zero
+    and mean ``v`` is the substitution value directly (Miller et al. App. F:
+    the same routine is edge zero / edge mean ablation)."""
+    L = n_layers(model)
+    last = L - 1
+    sender = hook_name(spec.component)
+    sender_head = spec.component.head if isinstance(spec.component, Head) else None
+    z_names = [f"blocks.{l}.attn.hook_z" for l in range(L)]
+    mlp_names = [f"blocks.{l}.hook_mlp_out" for l in range(L)]
+    if isinstance(spec.receiver, Logits):
+        receiver_names = [f"blocks.{last}.hook_resid_post"]
+        targets_by_hook: dict[str, list[tuple[int, str]]] = {}
+    else:
+        targets_by_hook = {}
+        for layer, head, inp, label in spec.receiver.targets:
+            if layer >= L:
+                raise SpecError(f"receiver target layer {layer} beyond the model's {L} layers")
+            targets_by_hook.setdefault(f"blocks.{layer}.attn.hook_{inp}", []).append((head, label))
+        receiver_names = sorted(targets_by_hook)
+
+    # B: the unintervened destination run, everything we will pin or compare.
+    wanted = set(z_names) | set(mlp_names) | set(receiver_names)
+    _, B = model.run_with_cache(dst_toks, names_filter=lambda n: n in wanted)
+
+    # C: pin every head (and, under term, every MLP) to B; the sender gets v.
+    def pin(x, hook):
+        return B[hook.name]
+
+    def sender_fn(x, hook):
+        return substitute(B[hook.name], mask, v, sender_head)
+
+    hooks: list[Hook] = []
+    for name in z_names:
+        hooks.append((name, sender_fn if name == sender else pin))
+    for name in mlp_names:
+        if name == sender:
+            hooks.append((name, sender_fn))
+        elif spec.mlp_convention == "term":
+            hooks.append((name, pin))
+    captured: dict[str, Tensor] = {}
+
+    def capture(x, hook):
+        captured[hook.name] = x.clone()
+        return x
+
+    hooks += [(name, capture) for name in receiver_names]
+    model.run_with_hooks(dst_toks, fwd_hooks=hooks)
+
+    # D: only the receivers take their C values; everything else recomputes.
+    if isinstance(spec.receiver, Logits):
+        def take_c(x, hook):
+            return captured[hook.name]
+
+        d_hooks: list[Hook] = [(receiver_names[0], take_c)]
+    else:
+        def make(targets: list[tuple[int, str]]):
+            def fn(x, hook):
+                x = x.clone()
+                c = captured[hook.name]
+                for head, label in targets:
+                    for b, labels in enumerate(dst_labels):
+                        p = resolve_label(labels, label)
+                        x[b, p, head, :] = c[b, p, head, :]
+                return x
+
+            return fn
+
+        d_hooks = [(name, make(targets)) for name, targets in targets_by_hook.items()]
+    return model.run_with_hooks(dst_toks, fwd_hooks=d_hooks)
 
 
 @torch.no_grad()

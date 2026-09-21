@@ -123,3 +123,101 @@ def test_run_intervened_dispatches_node(tiny_model, toks):
     a = run_node(tiny_model, node(Head(0, 0)), toks, mask, v)
     b = run_intervened(tiny_model, node(Head(0, 0)), toks, mask, v, [{"END": 6}])
     assert torch.equal(a, b)
+
+
+# --- edge (Task 6) ---
+
+from src.lesion.interventions import run_edge  # noqa: E402
+from src.lesion.spec import Inputs, Logits  # noqa: E402
+
+
+def edge(component=Head(0, 0), value="zero", receiver=Logits(), convention="wang", positions=All()):
+    return AblationSpec(component=component, value=value, reference=None, component_type="edge",
+                        receiver=receiver, mlp_convention=convention, positions=positions,
+                        direction="ablate-clean", freeze_patterns=False)
+
+
+LABELS7 = [{"END": 6, "MID": 3}]
+
+
+@torch.no_grad()
+def test_edge_identity_both_conventions(tiny_model, toks):
+    """Sender set to its own B value == plain forward, under wang and term."""
+    base = tiny_model(toks)
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    for comp in (Head(0, 1), Head(1, 0), MLP(0), MLP(1)):
+        v = sender_cache(tiny_model, toks, comp)
+        for conv in ("wang", "term"):
+            out = run_edge(tiny_model, edge(comp, "resample", Logits(), conv), toks, mask, v, LABELS7)
+            assert torch.equal(out, base), (comp, conv)
+    v = sender_cache(tiny_model, toks, Head(0, 1))
+    for conv in ("wang", "term"):
+        rec = Inputs(((1, 0, "q", "END"), (1, 1, "v", "MID")))
+        out = run_edge(tiny_model, edge(Head(0, 1), "resample", rec, conv), toks, mask, v, LABELS7)
+        assert torch.equal(out, base), conv
+
+
+@torch.no_grad()
+def test_convention_split(tiny_model, toks):
+    """wang != term for a head sender to Logits (the same block's MLP sits between);
+    equal when the sender is the last layer's MLP (no MLP follows it)."""
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    v = zero_value(Head(1, 0), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    wang = run_edge(tiny_model, edge(Head(1, 0), "zero", Logits(), "wang"), toks, mask, v, LABELS7)
+    term = run_edge(tiny_model, edge(Head(1, 0), "zero", Logits(), "term"), toks, mask, v, LABELS7)
+    assert not torch.equal(wang, term)
+    v = zero_value(MLP(1), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    wang = run_edge(tiny_model, edge(MLP(1), "zero", Logits(), "wang"), toks, mask, v, LABELS7)
+    term = run_edge(tiny_model, edge(MLP(1), "zero", Logits(), "term"), toks, mask, v, LABELS7)
+    assert torch.equal(wang, term)
+
+
+@torch.no_grad()
+def test_edge_to_logits_differs_from_node(tiny_model, toks):
+    """Node zeroing lets layer-1 heads respond; edge-to-logits pins them. The two
+    are different measurements and must not coincide on a random model."""
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    v = zero_value(Head(0, 0), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    total = run_node(tiny_model, node(Head(0, 0)), toks, mask, v)
+    direct = run_edge(tiny_model, edge(Head(0, 0), "zero", Logits(), "wang"), toks, mask, v, LABELS7)
+    assert not torch.equal(total, direct)
+
+
+@torch.no_grad()
+def test_edge_to_logits_equals_hand_rolled_pass_c(tiny_model, toks):
+    """Pass D with receiver Logits reduces to unembed(ln_final(resid_C))."""
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    v = zero_value(Head(0, 0), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    out = run_edge(tiny_model, edge(Head(0, 0), "zero", Logits(), "term"), toks, mask, v, LABELS7)
+    _, B = tiny_model.run_with_cache(toks)
+    hooks = []
+    for layer in range(2):
+        def pin(x, hook):
+            return B[hook.name]
+        hooks.append((f"blocks.{layer}.hook_mlp_out", pin))
+        if layer == 0:
+            def sender(x, hook):
+                return substitute(B[hook.name], mask, v, head=0)
+            hooks.append((f"blocks.{layer}.attn.hook_z", sender))
+        else:
+            hooks.append((f"blocks.{layer}.attn.hook_z", pin))
+    grabbed = {}
+    def grab(x, hook):
+        grabbed["resid"] = x.clone()
+        return x
+    tiny_model.run_with_hooks(toks, fwd_hooks=hooks + [("blocks.1.hook_resid_post", grab)])
+    expected = tiny_model.unembed(tiny_model.ln_final(grabbed["resid"]))
+    assert torch.equal(out, expected)
+
+
+@torch.no_grad()
+def test_edge_inputs_receiver_writes_only_the_target(tiny_model, toks):
+    """With receiver Inputs, pass D overwrites one head's q at one position;
+    logits at earlier positions are bitwise unchanged."""
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    v = zero_value(Head(0, 0), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    base = tiny_model(toks)
+    out = run_edge(tiny_model, edge(Head(0, 0), "zero", Inputs(((1, 1, "q", "MID"),)), "wang"), toks, mask, v, LABELS7)
+    assert torch.equal(out[:, :3], base[:, :3])
+    assert not torch.equal(out[:, 3], base[:, 3])
+    assert torch.equal(out[:, 4:], base[:, 4:])  # q at MID only affects position MID
