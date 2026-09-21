@@ -267,6 +267,17 @@ Option considered and rejected: one phase with the harness built first and
 the items following on the same branch. Same order, but the IOI validation
 would have had no gate of its own.
 
+*2026-09-20, E1a validation.* Harness built as specified in the E1a design
+(hand-rolled on TransformerLens hooks; both directions; per-run mean
+references; freeze plus edge refused; parquet per prompt, zstd-compressed —
+`pyarrow` reads it without ceremony). Check 1 (identity with E0) passed
+bitwise on the 100,000-prompt run at batch size 512; that run fits the 8 GB
+card because the runner frees the clean and ablated per-batch logit tensors
+at the end of each batch rather than holding three alive across the loop
+boundary (`src/lesion/runner.py`, commit `db460d0`). Check 3 (determinism)
+passed. Check 2 (MLP0 bracket) outcome per value is in
+`results/E1a/README.md` and the row below.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -898,3 +909,4 @@ Deleting these destroys the most useful information the project produces.*
 | Date | Phase | What was expected | What happened | Artifact |
 |---|---|---|---|---|
 | 2026-09-20 | E0 | Wang et al.'s clean mean logit difference on `p_IOI`, 3.56 over 100,000 samples, reproduced exactly from the released templates and word lists. | 3.648 ± 0.005 (no BOS, 15 templates per order), 3.485 (no BOS, 7 per order), 3.922 ± 0.006 (BOS). Not matched at 2 dp; bracketed by the two no-BOS readings. Released word lists differ from the paper's text; paper-era lists unrecoverable. IO-over-S 99.4% vs 99.3% and IO probability 52.7% vs 49% are close. See D-011, O-014. | `results/E0/e0_smoke_seed0_n100000.json` |
+| 2026-09-20 | E1a | Wang et al. App. J: mean-ablating MLP0 alone on `p_ABC` reverses the sign of the mean logit difference; no other single MLP layer does much. | Under node mean ablation (reference `p_ABC`, n=1,000, template-matched), n=2,000, seed 0, no BOS: MLP0 -0.401 (sign reversed); largest other layer L5 +0.406. Zero: MLP0 -1.405 (sign reversed); four other layers past 0.5 (L4 +0.730, L10 +0.711, L5 +0.652, L6 +0.512). Resample: MLP0 -0.816 (sign reversed); one other layer past 0.5 (L5 +0.531). Bracket, not match: reference and sample sizes are ours. | `results/E1a/README.md` |

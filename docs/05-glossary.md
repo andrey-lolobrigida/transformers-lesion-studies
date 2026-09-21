@@ -62,8 +62,15 @@ this project keeps separate:
 **Hydra effect** — self-repair at the layer level: ablate one attention layer, a
 later layer takes over part of its function.
 
-**Direct effect** — a component's contribution to the output logits via the
-residual stream, without going through later components.
+**Direct effect** — in this project, a component's contribution to the logits
+measured by *edge ablation with the receiver set to the logits*
+(`component_type="edge"`, `receiver=Logits()` in the E1a harness). The MLP
+convention is part of the definition and every such number carries
+`direct_effect_definition: "wang"` (MLPs on the path recompute; Wang et al.'s
+path patching) or `"term"` (MLPs held at their unintervened values; the
+component's own additive term). Neither is Meng et al.'s mediation-sense
+direct effect, which shares the name and nothing else (O-011, 2026-09-20
+addendum; see the two entries below).
 
 **Diaschisis** — borrowed from neuroscience: disruption of a component caused by
 damage elsewhere that fed into it, rather than by damage to the component
