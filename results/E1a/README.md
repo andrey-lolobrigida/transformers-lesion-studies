@@ -1,6 +1,6 @@
 # E1a — Ablation harness: validation on IOI
 
-*Run 2026-09-20 on branch `phase-E1a-harness`, repo commit `db460d0`, GPT-2 small at HF
+*Run 2026-09-20 on branch `phase-E1a-harness`, repo commit `729f5c2`, GPT-2 small at HF
 revision `607a30d7`. Interpretation of the artifacts in this directory. Decisions: D-006,
 D-011, D-012; the O-011 and O-013 resolutions. Rerun: `uv run python -m src.lesion.e1a_validate`.*
 
@@ -10,7 +10,9 @@ Three checks, each a CLI run whose exact command, seed, model revision, batch si
 determinism flags are in its JSON; per-prompt values are in the parquet beside it
 (zstd-compressed, which `pyarrow` reads without ceremony). The
 `effect_mean` the runner reports is the mean of the per-prompt differences (clean minus
-ablated), and its `sem` is the standard error of those same differences.
+ablated), and its `sem` is the standard error of those same differences. Every artifact
+carries a top-level `effect_sign` string recording which way that arithmetic reads for its
+`direction`; all E1a runs are `ablate-clean`.
 
 ### 1. Identity against E0
 
@@ -25,9 +27,9 @@ that artifact (zero-ablating L0H0 at all positions) is incidental and not interp
 Batch size 512 is E0's and is what the bitwise comparison requires, so it is fixed rather
 than tuned. At that size each forward's logits are a `[512, 20, 50257]` float32 tensor,
 1.9 GB, and the first version of the runner kept three of them alive across the loop
-boundary — 5.8 GB, more than this 8 GB card places. The runner now frees the clean and
+boundary — 5.8 GB, more than this 8 GB card has. The runner now frees the clean and
 ablated tensors at the end of each batch (`src/lesion/runner.py`, commit `db460d0`),
-which holds the peak at two and leaves about 2 GB spare. That change frees memory only:
+which holds the peak at two. That change frees memory only:
 the numbers above were measured before it and are unchanged after it, artifact for
 artifact.
 
@@ -77,8 +79,9 @@ MLP0's effect is the largest under all three values, by a factor of at
 least 6.9 over the next largest layer (zero: +5.056 against layer 4's +0.730; mean: +4.052
 against layer 5's +0.406; resample: +4.468 against layer 5's +0.531).
 
-This is a bracket, not a match (D-011): the reference size, the sample size and the word
-lists are this project's, not Wang et al.'s. Where zero, mean and resample disagree, the
+This is a bracket, not a match (D-011): the reference size, the sample size, the word
+lists, the 15-template-per-order mix and the no-BOS procedure are this project's, not Wang
+et al.'s (D-011, O-014). Where zero, mean and resample disagree, the
 disagreement is the finding, not a reason to prefer one.
 
 ### 3. Determinism

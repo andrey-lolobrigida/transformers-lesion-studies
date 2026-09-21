@@ -47,7 +47,7 @@
     "freeze_patterns": false
   },
   "environment": {
-    "repo_commit": "db460d0ff307541b00711fd371b99d2b40393dca",
+    "repo_commit": "729f5c2330049ccad516dc99b0c2f6a16aea1814",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -68,7 +68,7 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 256,
-    "seconds": 3.5774598121643066
+    "seconds": 3.639028787612915
   },
   "battery": {
     "name": "ioi",
@@ -91,6 +91,7 @@
     }
   },
   "destination_prompt": "clean",
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
   "reference": {
     "battery_side": "corrupt",
     "n": 1000,
