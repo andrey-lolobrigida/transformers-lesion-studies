@@ -221,3 +221,15 @@ def test_edge_inputs_receiver_writes_only_the_target(tiny_model, toks):
     assert torch.equal(out[:, :3], base[:, :3])
     assert not torch.equal(out[:, 3], base[:, 3])
     assert torch.equal(out[:, 4:], base[:, 4:])  # q at MID only affects position MID
+
+
+@torch.no_grad()
+def test_edge_receiver_layer_beyond_model_is_spec_error(tiny_model, toks):
+    """AblationSpec only checks the target layer against the sender's layer, not
+    against the model; a receiver target beyond the model's layer count must
+    still be refused, by run_edge, as a SpecError."""
+    mask = position_mask(All(), LABELS7, 7, "cpu")
+    v = zero_value(Head(0, 0), 1, 7, tiny_model.cfg, "cpu", torch.float32)
+    rec = Inputs(((5, 0, "q", "END"),))
+    with pytest.raises(SpecError):
+        run_edge(tiny_model, edge(Head(0, 0), "zero", rec, "wang"), toks, mask, v, LABELS7)
