@@ -117,5 +117,5 @@ def write(record: dict, result: RunResult, out_dir: Path) -> tuple[Path, Path]:
         raise ValueError(f"battery meta key(s) collide with fixed parquet columns: {sorted(collisions)}")
     for key, values in result.meta.items():
         columns[key] = values
-    pq.write_table(pa.table(columns), parquet_path)
+    pq.write_table(pa.table(columns), parquet_path, compression="zstd", compression_level=9)
     return json_path, parquet_path

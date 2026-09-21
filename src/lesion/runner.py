@@ -178,6 +178,13 @@ def run(model, spec: AblationSpec, battery, n: int, seed: int, prepend_bos: bool
             columns[f"ld_{name}"][idx] = ld
             columns[f"p_c_{name}"][idx] = p_c
             columns[f"c_over_s_{name}"][idx] = cs
+        # Both logit tensors are [batch, seq, d_vocab] float32: 1.9 GB each at
+        # batch 512 on IOI. Without this, they stay bound while the next
+        # iteration's clean pass allocates a third, which does not fit in 8 GB.
+        # ``logits`` is the loop variable above and still points at ``out``, so
+        # dropping only ``base`` and ``out`` frees half of what it looks like it
+        # frees. Frees memory only; every number is already in ``columns``.
+        del base, out, logits
 
     templates = [p.template for p in pairs]
     meta_keys = sorted({k for p in pairs for k in p.meta})
