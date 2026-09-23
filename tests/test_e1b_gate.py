@@ -37,6 +37,17 @@ def test_pairwise_accuracy_is_an_exact_ratio():
     assert g.statistics(cols, ["A"] * 2000)["pairwise_accuracy"] == 0.9  # not 0.8999999761581421
 
 
+@pytest.mark.parametrize("n, seed, n_admitted, expected", [
+    (2000, 0, None, True),
+    (50, 0, None, False),
+    (2000, 3, None, False),
+    (640, 0, 640, True),
+    (2000, 0, 640, False),
+])
+def test_is_pre_registered(n, seed, n_admitted, expected):
+    assert g.is_pre_registered(n, seed, n_admitted) == expected
+
+
 def test_verdict_thresholds_are_inclusive():
     v = g.verdict({"pairwise_accuracy": 0.90, "gap": 1.0}, survivors=None)
     assert v["pass"] and set(v["conditions"]) == {"pairwise_accuracy", "gap"}

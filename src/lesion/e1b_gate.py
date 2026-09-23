@@ -9,8 +9,9 @@ Gate (D-014 item 1; thresholds fixed before any generator ran, never relaxed):
 pairwise accuracy mean 1[ld_clean > 0] >= 0.90; gap mean ld_clean - mean
 ld_corrupt >= 1.0 logit; factual recall additionally >= 300 admitted
 survivors. n = 2,000 for IOI and induction, every admitted survivor for
-factual recall; seed 0. Also reported, ungated: top-1 rate of c, mean P[c]
-clean and corrupt, fraction removed, the per-prompt spread, and per-template
+factual recall; seed 0. A run at any other n or seed records statistics but
+no verdict. Also reported, ungated: top-1 rate of c, mean P[c] clean and
+corrupt, fraction removed, the per-prompt spread, and per-template
 reference counts at the reference n E3 will use, against the floor of 30.
 
 One JSON (+ per-prompt parquet) per (item, scheme) under results/E1b/gate/{item}/."""
@@ -96,6 +97,12 @@ def statistics(cols: dict[str, Tensor], templates: list[str]) -> dict:
     }
 
 
+def is_pre_registered(n: int, seed: int, n_admitted: int | None) -> bool:
+    """The gate is defined only at the spec's n and seed: 2,000 (IOI,
+    induction) or every admitted survivor (factual), always at seed 0."""
+    return seed == 0 and n == (DEFAULT_N if n_admitted is None else n_admitted)
+
+
 def verdict(stats: dict | None, survivors: int | None) -> dict:
     def cond(value, threshold):
         return {"value": value, "threshold": threshold, "pass": value is not None and value >= threshold}
@@ -178,6 +185,7 @@ def main(argv: list[str] | None = None) -> int:
             battery = make_battery(item, tok, scheme)
             n_admitted = getattr(battery, "n_admitted", None)
             n = args.n if args.n is not None else (n_admitted if n_admitted is not None else DEFAULT_N)
+            pre_registered = is_pre_registered(n, args.seed, n_admitted)
             ref_n = REF_N if n_admitted is None else min(REF_N, n_admitted)
             t0 = time.time()
             cols, templates = measure(model, battery, n, args.seed, prepend_bos, args.batch_size) if n > 0 else (None, [])
@@ -185,8 +193,9 @@ def main(argv: list[str] | None = None) -> int:
             gated = scheme == cls.schemes[0]
             record = {
                 "phase": "E1b", "command": command, "item": item, "scheme": scheme, "gated": gated,
+                "pre_registered": pre_registered,
                 "thresholds": THRESHOLDS,
-                "verdict": verdict(stats, n_admitted) if gated else None,
+                "verdict": verdict(stats, n_admitted) if gated and pre_registered else None,
                 "statistics": stats,
                 "reference_floor": reference_floor(battery, ref_n, prepend_bos) if ref_n > 0 else None,
                 "battery": battery_record(battery, n, args.seed, prepend_bos),
@@ -198,7 +207,12 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 line = (f"acc {stats['pairwise_accuracy']:.3f}  gap {stats['gap']:+.3f} ± {stats['gap_sem']:.3f}  "
                         f"removed {stats['fraction_removed']:.2f}  top1 {stats['top1_rate']:.3f}")
-            tag = ("PASS" if record["verdict"]["pass"] else "FAIL") if gated else "extra"
+            if not gated:
+                tag = "extra"
+            elif not pre_registered:
+                tag = "unreg"
+            else:
+                tag = "PASS" if record["verdict"]["pass"] else "FAIL"
             print(f"{item:9} {scheme:16} {tag:5} n={n:<5} {line}  -> {path}", flush=True)
     return 0
 
