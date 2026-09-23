@@ -86,6 +86,7 @@ def test_specs_from_args_edge():
                 "--type", "edge", "--receiver", "inputs", "--target", "L9H9.q@NOPE", "--mlp-convention", "wang"],
     BASE + ["--value", "zero", "--component", "L0.attn"],                       # bad component
     BASE + ["--value", "zero", "--prepend-bos", "maybe"],                       # bad bool
+    BASE + ["--value", "zero", "--corruption", "nope"],                         # unknown scheme
     BASE + ["--value", "zero", "--receiver", "logits"],                        # receiver under node
     BASE + ["--value", "zero", "--target", "L9H9.q@END"],                      # target under node
 ])
@@ -97,4 +98,24 @@ def test_refusals_exit_2_before_model_loads(argv):
 
 def test_defaults_are_visible_in_parsed_args():
     a = parse(BASE + ["--value", "zero"])
-    assert (a.n, a.seed, a.prepend_bos, a.batch_size, a.out_dir, a.device) == (1000, 0, "false", 256, "results/E1a", "cuda")
+    assert (a.n, a.seed, a.prepend_bos, a.corruption, a.batch_size, a.out_dir, a.device) == \
+        (1000, 0, None, None, 256, "results/E1a", "cuda")
+    ablate.resolve_battery_defaults(a)
+    assert (a.prepend_bos, a.corruption) == ("false", "p_ABC")  # what the artifact's cli block records
+
+
+def test_corruption_flag_accepts_a_known_scheme():
+    a = parse(BASE + ["--value", "zero", "--corruption", "flip"])
+    ablate.resolve_battery_defaults(a)
+    assert a.corruption == "flip"
+
+
+def test_explicit_prepend_bos_is_kept():
+    a = parse(BASE + ["--value", "zero", "--prepend-bos", "true"])
+    ablate.resolve_battery_defaults(a)
+    assert a.prepend_bos == "true"
+
+
+def test_make_battery_builds_the_named_scheme(word_tokenizer):
+    b = ablate.make_battery("ioi", word_tokenizer, "repl")
+    assert b.name == "ioi" and b.corruption.name == "repl"

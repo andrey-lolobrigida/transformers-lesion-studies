@@ -14,6 +14,10 @@ Example (the MLP0 check, mean value):
 artifacts. ``--type edge`` needs ``--receiver logits|inputs`` and
 ``--mlp-convention wang|term``; ``--receiver inputs`` takes ``--target
 L9H9.q@END`` repeated. Ill-formed requests exit 2 before the model loads.
+
+``--corruption`` picks the battery's corruption scheme (default: its first,
+the gated one); ``--prepend-bos`` defaults per battery. Both are written to
+the artifact as resolved.
 """
 
 from __future__ import annotations
@@ -24,12 +28,32 @@ import shlex
 import sys
 from pathlib import Path
 
-from src.lesion.ioi import LABELS as IOI_LABELS
+from src.lesion.battery import resolve_scheme
+from src.lesion.ioi import IOIBattery
 from src.lesion.spec import (
     MLP, AblationSpec, All, Component, Head, Indices, Inputs, Labels, Logits, MeanReference, Positions, SpecError,
 )
 
-BATTERY_LABELS = {"ioi": IOI_LABELS}
+# name -> battery class. Class attributes (labels, schemes, default_prepend_bos)
+# are read before the model loads; instances are built after, by make_battery.
+BATTERIES = {"ioi": IOIBattery}
+
+
+def make_battery(name: str, tokenizer, scheme: str | None):
+    return BATTERIES[name](tokenizer, scheme)
+
+
+def resolve_battery_defaults(args: argparse.Namespace) -> None:
+    """Fill the per-battery defaults in place, so the artifact's ``cli`` block
+    records the value used whether it was typed or not. Raises ValueError on an
+    unknown scheme or a battery whose data is missing, before any model loads."""
+    cls = BATTERIES[args.battery]
+    preflight = getattr(cls, "preflight", None)
+    if preflight is not None:
+        preflight()
+    args.corruption = resolve_scheme(cls.schemes, args.corruption)
+    if args.prepend_bos is None:
+        args.prepend_bos = "true" if cls.default_prepend_bos else "false"
 
 
 def parse_component(s: str) -> Component:
@@ -71,7 +95,9 @@ def parse_bool(s: str) -> bool:
 def build_parser() -> argparse.ArgumentParser:
     ap = argparse.ArgumentParser(prog="python -m src.lesion.ablate", description=__doc__,
                                  formatter_class=argparse.RawDescriptionHelpFormatter)
-    ap.add_argument("--battery", required=True, choices=sorted(BATTERY_LABELS))
+    ap.add_argument("--battery", required=True, choices=sorted(BATTERIES))
+    ap.add_argument("--corruption", default=None,
+                    help="corruption scheme (default: the battery's first, e.g. p_ABC for ioi)")
     ap.add_argument("--component", required=True, help="L{layer}H{head} or L{layer}.mlp")
     ap.add_argument("--value", required=True, choices=["zero", "mean", "resample", "all"])
     ap.add_argument("--ref-side", choices=["clean", "corrupt"], help="mean: which side the mean is over")
@@ -89,7 +115,8 @@ def build_parser() -> argparse.ArgumentParser:
     # Convenience defaults. Each is written to the artifact whether typed or not.
     ap.add_argument("--n", type=int, default=1000)
     ap.add_argument("--seed", type=int, default=0)
-    ap.add_argument("--prepend-bos", default="false", help="true|false (default false: the paper's procedure)")
+    ap.add_argument("--prepend-bos", default=None,
+                    help="true|false (default: the battery's own; false for ioi and factual, true for induction)")
     ap.add_argument("--batch-size", type=int, default=256)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--out-dir", default="results/E1a")
@@ -115,7 +142,7 @@ def specs_from_args(args: argparse.Namespace) -> list[AblationSpec]:
             receiver = Inputs(tuple(parse_target(t) for t in args.target))
     elif args.receiver is not None or args.target:
         raise SpecError("--receiver and --target are edge-only flags")
-    labels = BATTERY_LABELS[args.battery]
+    labels = BATTERIES[args.battery].labels
     if isinstance(positions, Labels):
         for label in positions.labels:
             if label not in labels:
@@ -124,7 +151,8 @@ def specs_from_args(args: argparse.Namespace) -> list[AblationSpec]:
         for _, _, _, label in receiver.targets:
             if label not in labels:
                 raise SpecError(f"unknown position label {label!r}; {args.battery} has {labels}")
-    parse_bool(args.prepend_bos)
+    if args.prepend_bos is not None:
+        parse_bool(args.prepend_bos)
     return [
         AblationSpec(component=component, value=v, reference=reference if v == "mean" else None,
                      component_type=args.component_type, receiver=receiver, mlp_convention=args.mlp_convention,
@@ -138,20 +166,20 @@ def main(argv: list[str] | None = None) -> int:
     ap = build_parser()
     args = ap.parse_args(argv)
     try:
+        resolve_battery_defaults(args)
         specs = specs_from_args(args)
     except (SpecError, ValueError) as e:
         ap.error(str(e))  # exits 2
 
     # Nothing above touched the model. Heavy imports from here on.
     from src.lesion import artifact
-    from src.lesion.ioi import IOIBattery
     from src.lesion.model import load_model, plain_tokenizer, set_determinism
     from src.lesion.runner import run
 
     prepend_bos = parse_bool(args.prepend_bos)
     set_determinism(args.seed)
     model = load_model(args.device)
-    battery = IOIBattery(plain_tokenizer())
+    battery = make_battery(args.battery, plain_tokenizer(), args.corruption)
     command = "uv run python -m src.lesion.ablate " + " ".join(shlex.quote(a) for a in argv)
     for spec in specs:
         result = run(model, spec, battery, args.n, args.seed, prepend_bos, args.batch_size)
