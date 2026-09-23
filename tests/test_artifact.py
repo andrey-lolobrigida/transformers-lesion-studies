@@ -125,3 +125,42 @@ def test_effect_sign_recorded_for_both_directions(tiny_model, tiny_battery, tmp_
     assert record["effect_sign"] == (
         "positive = restoring the clean value hurt; negative = restoration helped "
         "(unintervened minus intervened, on the corrupt prompt)")
+
+
+from src.lesion.battery import Corruption  # noqa: E402
+from tests.conftest import TinyBattery  # noqa: E402
+
+
+def test_stem_scheme_suffix():
+    assert artifact.stem(spec(), "ioi", 100, 0, False) == artifact.stem(spec(), "ioi", 100, 0, False, None)
+    assert artifact.stem(spec(), "ioi", 100, 0, True, "flip") == \
+        "ioi_L9H9_zero_node_all_ablate-clean_n100_seed0_bos_scheme-flip"
+
+
+class OffDefaultTiny(TinyBattery):
+    schemes = ("swap-2", "swap-2b")
+    corruption = Corruption(name="swap-2b", removes="x", inserts="y", source="tests")
+
+
+def _record(model, battery, tmp_path):
+    s = spec(component=Head(0, 0))
+    result = run(model, s, battery, n=6, seed=0, prepend_bos=False, batch_size=4)
+    env = artifact.environment_record(model, batch_size=4, seconds=result.seconds)
+    record = artifact.build_record(result, s, battery, command="c", environment=env, cli_args={})
+    return record, result
+
+
+@torch.no_grad()
+def test_record_carries_expected_direction_and_schemes(tiny_model, tiny_battery, tmp_path):
+    record, _ = _record(tiny_model, tiny_battery, tmp_path)
+    assert record["expected_direction"] == "positive"
+    assert record["battery"]["schemes"] == ["swap-2"]
+
+
+@torch.no_grad()
+def test_write_puts_off_default_scheme_in_the_stem(tiny_model, tiny_battery, tmp_path):
+    rec_a, res_a = _record(tiny_model, tiny_battery, tmp_path)
+    rec_b, res_b = _record(tiny_model, OffDefaultTiny(), tmp_path)
+    ja, _ = artifact.write(rec_a, res_a, tmp_path)
+    jb, _ = artifact.write(rec_b, res_b, tmp_path)
+    assert ja != jb and jb.name.endswith("_scheme-swap-2b.json") and not ja.name.count("scheme-")

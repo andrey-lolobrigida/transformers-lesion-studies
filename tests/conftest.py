@@ -61,6 +61,9 @@ class TinyBattery:
 
     name = "tiny"
     labels = ("X", "END")
+    schemes = ("swap-2",)
+    expected_direction = "positive"
+    default_prepend_bos = False
     template_set = "tests/conftest.py TinyBattery"
     corruption = Corruption(
         name="swap-2", removes="the token at position 2", inserts="a different token at position 2",

@@ -69,3 +69,17 @@ def test_encode_refuses_a_tokenizer_that_prepends_bos():
 
 def test_encode_returns_a_plain_list():
     assert encode(PlainTokenizer(), "hello") == [1, 2]
+
+
+from src.lesion.battery import TEMPLATE_FLOOR, resolve_scheme  # noqa: E402
+
+
+def test_template_floor_is_thirty():
+    assert TEMPLATE_FLOOR == 30  # D-014 item 5
+
+
+def test_resolve_scheme_defaults_to_first_and_refuses_unknown():
+    assert resolve_scheme(("a", "b"), None) == "a"
+    assert resolve_scheme(("a", "b"), "b") == "b"
+    with pytest.raises(ValueError, match="unknown corruption scheme 'c'"):
+        resolve_scheme(("a", "b"), "c")

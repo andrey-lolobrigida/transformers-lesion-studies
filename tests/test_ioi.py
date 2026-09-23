@@ -148,3 +148,19 @@ def test_ioi_battery_aligns_under_the_real_tokenizer():
 
     pairs = IOIBattery(plain_tokenizer()).pairs(500, seed=0, prepend_bos=False)
     assert len(pairs) == 500  # every alignment check inside pairs() passed
+
+
+def test_ioi_battery_protocol_fields(word_tokenizer):
+    b = IOIBattery(word_tokenizer)
+    assert b.scheme == "p_ABC" and b.schemes[0] == "p_ABC" and b.corruption is P_ABC
+    assert b.expected_direction == "positive" and b.default_prepend_bos is False
+    with pytest.raises(ValueError):
+        IOIBattery(word_tokenizer, "nope")
+
+
+def test_default_scheme_stream_unchanged(word_tokenizer):
+    a = IOIBattery(word_tokenizer).pairs(50, seed=0, prepend_bos=False)
+    b = IOIBattery(word_tokenizer, "p_ABC").pairs(50, seed=0, prepend_bos=False)
+    assert a == b
+    # First p_ABC counterpart at seed 0, recorded 2026-09-23 before any E1b change.
+    assert a[0].meta["corrupt_text"] == "Then, William and Jessica had a long argument. Afterwards Timothy said to"

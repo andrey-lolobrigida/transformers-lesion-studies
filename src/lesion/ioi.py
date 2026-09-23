@@ -23,7 +23,7 @@ from __future__ import annotations
 import random
 from dataclasses import dataclass
 
-from src.lesion.battery import AlignmentError, Corruption, PromptPair, encode, with_bos
+from src.lesion.battery import AlignmentError, Corruption, PromptPair, encode, resolve_scheme, with_bos
 
 NAMES = [
     "Michael", "Christopher", "Jessica", "Matthew", "Ashley", "Jennifer",
@@ -135,6 +135,8 @@ P_ABC = Corruption(
     source="wang-2022 §2.1",
 )
 
+SCHEMES = {"p_ABC": P_ABC}
+
 
 def abc_counterpart(p: IOIPrompt, rng: random.Random) -> str:
     """The p_ABC prompt paired with ``p``: same template, place and object;
@@ -165,11 +167,15 @@ class IOIBattery:
 
     name = "ioi"
     labels = LABELS
-    corruption = P_ABC
+    schemes = ("p_ABC",)
+    expected_direction = "positive"
+    default_prepend_bos = False  # E0 and E1a ran without BOS: the paper's procedure
     template_set = "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)"
 
-    def __init__(self, tokenizer) -> None:
+    def __init__(self, tokenizer, scheme: str | None = None) -> None:
         self.tok = tokenizer
+        self.scheme = resolve_scheme(self.schemes, scheme)
+        self.corruption = SCHEMES[self.scheme]
 
     def encode_clean(self, p: IOIPrompt, prepend_bos: bool) -> tuple[list[int], int, int, dict[str, int]]:
         """E0's encoder: (ids, IO id, S id, positions), every alignment the

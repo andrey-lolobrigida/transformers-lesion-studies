@@ -20,7 +20,8 @@ from src.lesion.runner import COLUMNS, RunResult
 from src.lesion.spec import AblationSpec, All, Head, Labels, Logits
 
 
-def stem(spec: AblationSpec, battery_name: str, n: int, seed: int, prepend_bos: bool) -> str:
+def stem(spec: AblationSpec, battery_name: str, n: int, seed: int, prepend_bos: bool,
+         scheme: str | None = None) -> str:
     c = spec.component
     comp = f"L{c.layer}H{c.head}" if isinstance(c, Head) else f"L{c.layer}mlp"
     if spec.value == "mean":
@@ -48,6 +49,8 @@ def stem(spec: AblationSpec, battery_name: str, n: int, seed: int, prepend_bos: 
     parts += [f"n{n}", f"seed{seed}"]
     if prepend_bos:
         parts.append("bos")
+    if scheme is not None:  # only off-default schemes, so every E1a stem is unchanged
+        parts.append(f"scheme-{scheme}")
     return "_".join(parts)
 
 
@@ -103,10 +106,12 @@ def build_record(result: RunResult, spec: AblationSpec, battery, command: str, e
         "battery": {
             "name": battery.name, "n": result.n, "seed": result.seed, "prepend_bos": result.prepend_bos,
             "template_set": battery.template_set, "labels": list(battery.labels),
+            "schemes": list(battery.schemes),
             "corruption": asdict(battery.corruption),
         },
         "destination_prompt": result.destination,
         "effect_sign": effect_sign(spec),
+        "expected_direction": battery.expected_direction,
         "reference": result.reference_summary,
         "results": result.aggregates,
         "direct_effect_definition": direct_effect_definition(spec),
@@ -116,7 +121,9 @@ def build_record(result: RunResult, spec: AblationSpec, battery, command: str, e
 def write(record: dict, result: RunResult, out_dir: Path) -> tuple[Path, Path]:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    base = stem(result.spec, record["battery"]["name"], result.n, result.seed, result.prepend_bos)
+    b = record["battery"]
+    scheme = None if b["corruption"]["name"] == b["schemes"][0] else b["corruption"]["name"]
+    base = stem(result.spec, b["name"], result.n, result.seed, result.prepend_bos, scheme)
     json_path = out_dir / f"{base}.json"
     parquet_path = out_dir / f"{base}.parquet"
     json_path.write_text(json.dumps(record, indent=2))

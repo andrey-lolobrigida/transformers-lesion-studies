@@ -2,18 +2,34 @@
 pairs whose token sequences align position by position, plus a structured
 description of the corruption (O-003 resolution, item 1).
 
-E1a ships one battery (IOI, ``ioi.py``). E1b adds the others behind the same
-protocol; the metric stays fixed at logit difference at ``positions["END"]``
-until E1b has a written reason to change it."""
+E1a ships one battery (IOI, ``ioi.py``). E1b adds induction and factual
+recall behind this same protocol; the metric stays fixed at logit difference
+at ``positions["END"]`` until E1b has a written reason to change it."""
 
 from __future__ import annotations
 
 from dataclasses import dataclass
-from typing import Mapping, Protocol
+from typing import Literal, Mapping, Protocol
 
 
 class AlignmentError(ValueError):
     """Tokenisation misalignment. A hard stop, never a warning."""
+
+
+# D-014 item 5: a template enters a mean-ablation run only with this many
+# reference prompts, and factual recall admits a template only with this many
+# survivors. Reported by the E1b gate; the harness itself still stops only at zero.
+TEMPLATE_FLOOR = 30
+
+
+def resolve_scheme(schemes: tuple[str, ...], scheme: str | None) -> str:
+    """The corruption scheme to build with: the battery's default (its first)
+    when none is named. An unknown name is refused, never mapped to a default."""
+    if scheme is None:
+        return schemes[0]
+    if scheme not in schemes:
+        raise ValueError(f"unknown corruption scheme {scheme!r}; this battery has {schemes}")
+    return scheme
 
 
 @dataclass(frozen=True)
@@ -53,7 +69,10 @@ class PromptPair:
 
 class Battery(Protocol):
     name: str
-    corruption: Corruption
+    corruption: Corruption  # the scheme this instance was built with
+    schemes: tuple[str, ...]  # every corruption scheme the item offers; the default (gated) one first
+    expected_direction: Literal["positive", "negative"]  # sign effect_mean takes under damage, ablate-clean
+    default_prepend_bos: bool  # the CLI default for --prepend-bos on this battery
     labels: tuple[str, ...]  # every position label a PromptPair from this battery carries
     template_set: str  # human-readable description, written to the artifact
 
