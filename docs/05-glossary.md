@@ -76,9 +76,13 @@ addendum; see the two entries below).
 damage elsewhere that fed into it, rather than by damage to the component
 itself. The confound that makes lesion mapping hard.
 
-**Logit difference** — the difference in logits between a correct and an
-incorrect candidate token. The default metric here, preferred over loss for
-targeted tasks.
+**Logit difference** (`ld` in artifacts and code) — the difference in logits
+between a correct and an incorrect candidate token. The default metric here,
+preferred over loss for targeted tasks. Result artifacts and `src/lesion/`
+abbreviate it `ld` throughout — `results.clean.mean_ld`,
+`results.ablated.mean_ld`, `sem_ld`, `results.effect.ld` — so a results table
+reading `ablated mean ld` means the mean logit difference left after the
+ablation. On IOI that is `logit(IO) − logit(S)` at the END position.
 
 **Superposition** — networks representing more features than they have neurons,
 making individual neurons polysemantic. Named in Olah et al. 2020 from a car
