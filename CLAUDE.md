@@ -2,9 +2,9 @@
 
 *Living document. Update it in the same session a decision is made, not later.*
 
-**Status:** R0, R1 and E0 done (R2 gates E4, R3 later). E0 tagged `v-E0` on 2026-09-20: environment verified, smoke test in `src/lesion/e0_smoke.py`, artifact in `results/E0/`; the published IOI baseline is bracketed, not matched (D-011, O-014). E1a harness built and validated on IOI: identity against E0 passed bitwise, determinism passed, and the MLP0 bracket against Wang et al. App. J held under all three substitution values — sign reversal on MLP0, with no other layer moving the mean logit difference by more than 0.5 under mean, one under resample, four under zero. Branch `phase-E1a-harness` awaits review and the `v-E1a` tag.
-**Current phase:** E1a (harness) built and validated on branch `phase-E1a-harness`; awaiting the author's review of `results/E1a/README.md` and the `v-E1a` tag. E1b battery follows on its own branch (D-012). See `docs/02-roadmap.md`.
-**Last updated:** 2026-09-20
+**Status:** R0, R1, E0 and E1a done (R2 gates E4, R3 later). E0 tagged `v-E0` on 2026-09-20: environment verified, smoke test in `src/lesion/e0_smoke.py`, artifact in `results/E0/`; the published IOI baseline is bracketed, not matched (D-011, O-014). E1a tagged `v-E1a` on 2026-09-23: harness validated on IOI — identity against E0 passed bitwise, determinism passed, and the MLP0 bracket against Wang et al. App. J held under all three substitution values (sign reversal on MLP0; other layers moving the mean logit difference by more than 0.5: none under mean, one under resample, four under zero). Results in `results/E1a/`.
+**Current phase:** E1b (battery), in design. One spec, cross-cutting rules first, then items in order IOI extras → induction → factual recall; subject–verb agreement is a fallback that enters only if factual recall fails its gate (D-013). Branch `phase-E1b-battery`, tag `v-E1b` gates E2 (D-012). See `docs/02-roadmap.md`.
+**Last updated:** 2026-09-23
 
 ---
 

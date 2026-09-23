@@ -121,7 +121,9 @@ This is not free infrastructure, it's the experimental design. Build, for each
 capability, a dataset of clean/corrupted prompt pairs plus a metric:
 
 - **Indirect object identification (IOI)** — has published numbers to check against
-- **Subject–verb agreement** — grammatical, structurally simple
+- **Subject–verb agreement** — grammatical, structurally simple. *Moved to a
+  fallback 2026-09-23 (D-013): enters only if factual recall fails its
+  clean-accuracy gate, and then as an explicitly unsourced item.*
 - **Factual recall** — the ROME-style setup
 - **Induction / in-context copying** — synthetic, easy to generate cleanly
 

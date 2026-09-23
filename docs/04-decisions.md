@@ -278,6 +278,79 @@ boundary (`src/lesion/runner.py`, commit `db460d0`). Check 3 (determinism)
 passed. Check 2 (MLP0 bracket) outcome per value is in
 `results/E1a/README.md` and the row below.
 
+### D-013 — E1b shape; subject–verb agreement becomes a fallback item
+*2026-09-23, at the E1b kickoff. Shape and fallback proposed by Claude;
+confirmed by the author the same session.*
+
+**Shape.** E1b is one spec. It settles the cross-cutting rules first (the
+clean-accuracy gate, the control item, the expected-direction field, any
+generalisation of `PromptPair`), then gives each item a short section of its
+own. Items are built in order of how much they strain the E1a battery
+interface, least first, so a protocol change shows up on an easy item: IOI
+App. A extras → induction → factual recall. One branch
+(`phase-E1b-battery`), one tag (`v-E1b`), as in D-012.
+
+**Subject–verb agreement leaves the default battery.** The roadmap listed
+it as a fourth item. It is the only item with no source on the reading list,
+so every choice would be ours: noun list (plural forms often tokenise to a
+different length than the singular, which breaks pair alignment), tense,
+subject–verb distance, attractor nouns. Each of those changes what the item
+measures, and there is no published number to check against. Its marginal
+contrast on the E3 map is also the lowest of the four: IOI, induction and
+factual recall already cover name routing, token copying and retrieval. Adding
+references to source it was considered and declined (the reading list stays as
+it is for now).
+
+**Fallback rule.** Agreement comes back only if factual recall fails its
+clean-accuracy gate or passes it with too few surviving prompts (the
+threshold is set with the gate rule, in the E1b spec). The reason is
+contrast: without factual recall the battery is IOI plus induction, and those
+overlap mechanistically (the IOI circuit contains induction heads 5.5 and
+6.9 [wang-2022 §3.3]), so the E3 map would have little to compare. If it
+comes back, it enters as an explicitly **unsourced** item. The spec and
+results README say it departs from reproduction-first and that no published
+number exists for it. If factual recall passes, agreement stays out and this
+entry records it as dropped.
+
+Options considered and rejected: a short reading pass to source agreement
+(declined, so the reading list doesn't grow), and building it unsourced
+unconditionally (not worth the unanchored design choices unless the battery
+needs the contrast).
+
+### D-014 — E1b battery rules: the gate, the noise floor, the interface
+*2026-09-23, E1b design. Proposed by Claude, each point confirmed by the
+author the same session. Item-level detail lives in the E1b spec; this
+entry records what outlives the phase.*
+
+1. **Every item passes a clean-accuracy gate before E3**, on its default
+   corruption scheme, with thresholds fixed before any generator runs:
+   pairwise accuracy `1[logit[c] > logit[s]]` ≥ 0.90; clean-minus-corrupt
+   mean logit difference ≥ 1.0 logit; for factual recall, ≥ 300 surviving
+   prompts in admitted templates. None is a published value. A failure is a
+   null result at full strength, and thresholds are not relaxed after seeing
+   numbers. Named extras are not gated.
+2. **The gap condition is absolute, not a ratio.** A 50% share-of-signal
+   floor was proposed and dropped by the author: partial removal is
+   sometimes what a scheme is for (Wang's App. A), and what a small gap
+   harms depends on its absolute size against its standard error. Instead,
+   **every later mean- or resample-ablation number carries the fraction of
+   the clean logit difference its reference scheme removes**, beside the
+   reference size rule 4 already requires.
+3. **Only factual recall filters prompts** (ROME's known-facts rule, re-run
+   on GPT-2 small); IOI and induction keep their sources' unfiltered
+   populations.
+4. **Every item names a competitor token and declares an expected
+   direction** (`positive` for all three: damage lowers `ld`). The direction
+   is for the item, not a prediction per component.
+5. **A template enters a mean-ablation run only with ≥ 30 reference
+   prompts** (anchor: E1a's IOI numbers rest on ≈ 33). Reported by the E1b
+   gate, not enforced by the harness, so E1a stays reproducible.
+6. **Items fit the E1a interface; it is generalised only when forced**, and
+   each forced change is logged. None was forced in design. Consequences:
+   induction reads one position per prompt; factual recall uses a subject
+   swap (competitor: CounterFact's `target_new`) rather than ROME's embedding
+   noise, which is deferred because it would change `interventions.py`.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -494,7 +567,8 @@ circuit, not a decomposition of self-repair — so on current evidence it does
 not close E4, but O-001 still stands until it is read.
 
 ### O-009 — Does factual recall pass a clean-accuracy gate on GPT-2 small?
-*Raised 2026-09-02.*
+*Raised 2026-09-02.* *Resolved in design 2026-09-23 — see below; the measured outcome
+lands at E1b execution.*
 
 D-005 dropped arithmetic because GPT-2 small does not do it well enough for
 lesion results to beat noise. Factual recall may have the same problem: ROME's
@@ -533,6 +607,25 @@ open; and the paper's metric is the correct-object probability, so the
 battery item's logit-difference version (rule 5) is a translation and
 should be reported next to the probability version until the two are
 shown to agree. Wiki: `methods/causal-tracing.md`.
+
+#### Resolution — *2026-09-23*
+
+Confirmed by the author during E1b design (D-013, D-014).
+
+1. **Factual recall stays, filtered.** ROME's known-facts rule is copied and
+   re-run on GPT-2 small; the survivor count is logged and gated at ≥ 300.
+   Whether GPT-2 small clears it is measured at execution, not assumed. If
+   it fails, subject–verb agreement enters as an unsourced fallback (D-013).
+2. **Every item has a stated clean-accuracy threshold** (D-014 item 1).
+3. **No control item.** The premise that a trivial task reads near zero
+   under every ablation does not hold (a trivial task still depends on
+   components, e.g. MLP0), and it would be one more unsourced item. The
+   noise floor is statistical instead: per-cell standard error plus the
+   spread across mean-reference seeds, measured on a fixed sample of
+   components per item. Generic-versus-specific damage is read off the map
+   across the three items.
+4. **Expected direction** is declared per item (the Olsson addendum), and
+   factual recall reports `P[o]` beside `ld` (the ROME addendum).
 
 ### O-010 — What does E6 actually visualize over training?
 *Raised 2026-09-02, during the R0 reading of Olsson et al.*
