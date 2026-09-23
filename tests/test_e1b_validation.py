@@ -82,3 +82,12 @@ def test_noise_floor(item):
     assert d["max_floor"] == max(r["floor"] for r in d["rows"])
     if item != "factual":
         assert (d["n"], d["ref_n"]) == (2000, 1000)
+
+
+@pytest.mark.parametrize("item", ["ioi", "induction", "factual"])
+def test_readme_cites_the_gate_numbers(item):
+    d = gate(item, BATTERIES[item].schemes[0])
+    readme = (E1B / "README.md").read_text()
+    if d["statistics"] is not None:
+        assert f"{d['statistics']['pairwise_accuracy']:.3f}" in readme
+        assert f"{d['statistics']['gap']:+.3f}" in readme

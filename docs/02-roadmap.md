@@ -167,6 +167,10 @@ documented corruption scheme stating what it removes and what it inserts.
 O-009 (factual-recall filter, per-item clean-accuracy gate, control item)
 resolves here.
 **Tag:** `v-E1b` — this is what E2 is gated on.
+*Built 2026-09-23 on `phase-E1b-battery`; see `results/E1b/README.md`.
+Gate: IOI pass, induction pass, factual recall fail (64 admitted survivors
+against 300), so D-013's fallback is triggered and the agreement addendum is
+pending the author. Awaiting the author's review and `v-E1b`.*
 
 ---
 

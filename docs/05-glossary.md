@@ -650,3 +650,34 @@ six-tuple* under which it is claimed to implement a behaviour. Wang et al.
 truth itself changes with the ablation value. Every results doc states
 which of the two senses a claim is about. The unqualified "circuit" at
 the top of this glossary is the behavioural sense.
+
+## Added 2026-09-23 — E1b battery
+
+**Gate (E1b)** — the pre-registered clean-model check every battery item
+passes on its default corruption scheme before E3: pairwise accuracy ≥ 0.90,
+gap ≥ 1.0 logit, and for factual recall ≥ 300 admitted survivors. Thresholds
+are ours and never relaxed after seeing numbers; named extras are not gated.
+D-014 item 1; `results/E1b/README.md` §3.
+
+**Pairwise accuracy** — the mean over clean prompts of `1[logit[c] > logit[s]]`
+at `END`, i.e. the fraction with positive `ld`. Near-automatic for factual
+recall, whose prompts already passed a generation filter. D-014 item 1.
+
+**Gap** — mean clean `ld` minus mean corrupt `ld` under an item's corruption
+scheme, reported with its standard error; gated as an absolute value
+(≥ 1.0 logit), not a ratio. D-014 items 1–2.
+
+**Fraction removed** — the gap divided by the mean clean `ld`: the share of
+the clean logit difference a corruption scheme removes. Reported, not gated;
+cited beside every later mean- or resample-ablation number drawn from that
+scheme. D-014 item 2; `results/E1b/README.md` §8.
+
+**Noise floor (E1b)** — per component, the larger of the per-prompt standard
+error and the standard deviation of the ablation effect across five
+mean-reference seeds, measured on a fixed sample of 24 components per item. A
+heatmap cell has to clear its component's floor. O-009 resolution;
+`results/E1b/README.md` §7.
+
+**Survivor** — a factual-recall prompt that passed the single-token, segmentation,
+known-facts and partner filters; it counts toward the gate only in a template
+with ≥ 30 survivors ("admitted"). `results/E1b/README.md` §4; D-014 item 3.

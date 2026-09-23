@@ -317,6 +317,16 @@ Options considered and rejected: a short reading pass to source agreement
 unconditionally (not worth the unanchored design choices unless the battery
 needs the contrast).
 
+*Outcome, 2026-09-23:* factual recall **failed** its pre-registered gate
+(`subject_swap`, n=64 = every admitted survivor, seed 0, no BOS;
+`uv run python -m src.lesion.e1b_gate --item all`): pairwise accuracy 1.000
+against 0.90 (pass), gap +4.104 ± 0.374 logits against 1.0 (pass), admitted
+survivors 64 against 300 (fail). The ROME known-facts filter re-run on
+GPT-2 small left 1,965 survivors spread over 672 templates, of which 2 reach
+the per-template floor of 30. **The fallback is triggered; the agreement
+addendum is pending the author.** Numbers and the survivor funnel:
+`results/E1b/README.md` §3–4; null-results row below.
+
 ### D-014 — E1b battery rules: the gate, the noise floor, the interface
 *2026-09-23, E1b design. Proposed by Claude, each point confirmed by the
 author the same session. Item-level detail lives in the E1b spec; this
@@ -992,6 +1002,27 @@ this. **Resolution path:** an author-side answer (the released experiment
 notebooks, or asking), or accept the bracket and compare only deltas. The
 harness (E1) should carry `prepend_bos` and the template set as logged
 parameters of every IOI artifact.
+
+### O-015 — E3's reference n for IOI
+*Raised 2026-09-23, from the E1b gate. Needs the author's decision; not
+resolved here.*
+
+D-014 item 5 admits a template into a mean-ablation run only with ≥ 30
+reference prompts, anchored on E1a's IOI reference averaging ≈ 33 per
+template. The E1b gate measured the per-template counts of one `p_ABC`
+reference draw at ref n = 1,000, ref seed 0
+(`uv run python -m src.lesion.e1b_gate --item all`,
+`results/E1b/gate/ioi/p_ABC.json`, `reference_floor`): minimum 22, and five
+of the 30 templates below 30 — ABBA/7 (22), ABBA/8 (28), ABBA/9 (28),
+BABA/1 (28), BABA/3 (25). The E1a MLP mean-ablation artifacts use the same
+draw and record the same counts. Induction at ref n = 1,000 has minimum 37
+(none below 30).
+
+**Why it matters:** E3's IOI heatmaps at ref n = 1,000 would include
+templates that do not meet the project's own floor. The noise floor
+(`results/E1b/noise/ioi/floor.json`) was measured at ref n = 1,000.
+**Resolution path:** the author's call on the reference n (or on how the
+floor is applied) before E3 runs IOI; E1b does not choose.
 
 ## Null and negative results
 
