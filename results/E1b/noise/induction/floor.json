@@ -1,0 +1,425 @@
+{
+  "phase": "E1b",
+  "command": "uv run python -m src.lesion.e1b_noise --item induction",
+  "item": "induction",
+  "scheme": "fresh_prefix",
+  "n": 2000,
+  "seed": 0,
+  "ref_n": 1000,
+  "ref_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+  ],
+  "spec_template": {
+    "granularity": "mlp-layer",
+    "component": {
+      "kind": "mlp",
+      "layer": 0
+    },
+    "component_type": "node",
+    "value": "mean",
+    "reference": {
+      "battery_side": "corrupt",
+      "n": 1000,
+      "seed": 0,
+      "match": "template"
+    },
+    "receiver": null,
+    "mlp_convention": null,
+    "positions": {
+      "kind": "all"
+    },
+    "direction": "ablate-clean",
+    "set": "single-component",
+    "freeze_patterns": false
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "rows": [
+    {
+      "component": "L0.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 14.085533142089844,
+        "1": 14.056550025939941,
+        "2": 14.214900970458984,
+        "3": 14.07594108581543,
+        "4": 14.048884391784668
+      },
+      "ref_seed_sd": 0.06786914243164152,
+      "sem_seed0": 0.14192332327365875,
+      "floor": 0.14192332327365875,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L1.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": -0.9145755767822266,
+        "1": -0.9023642539978027,
+        "2": -0.8874672055244446,
+        "3": -0.8819098472595215,
+        "4": -0.8996756076812744
+      },
+      "ref_seed_sd": 0.012876576302677882,
+      "sem_seed0": 0.04196610674262047,
+      "floor": 0.04196610674262047,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L2.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": -0.22806790471076965,
+        "1": -0.2427656203508377,
+        "2": -0.19739751517772675,
+        "3": -0.2120007574558258,
+        "4": -0.2152332067489624
+      },
+      "ref_seed_sd": 0.017152505930343866,
+      "sem_seed0": 0.03980116546154022,
+      "floor": 0.03980116546154022,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L3.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": -0.6600530743598938,
+        "1": -0.6938064694404602,
+        "2": -0.6784519553184509,
+        "3": -0.7076935768127441,
+        "4": -0.6567831039428711
+      },
+      "ref_seed_sd": 0.021764593866791037,
+      "sem_seed0": 0.042655691504478455,
+      "floor": 0.042655691504478455,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L4.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 2.2035162448883057,
+        "1": 2.187687397003174,
+        "2": 2.294110059738159,
+        "3": 2.2715957164764404,
+        "4": 2.2147719860076904
+      },
+      "ref_seed_sd": 0.0460160971815381,
+      "sem_seed0": 0.06387719511985779,
+      "floor": 0.06387719511985779,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L5.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": -0.0954606831073761,
+        "1": -0.12017378956079483,
+        "2": -0.06590205430984497,
+        "3": -0.10374417155981064,
+        "4": -0.11322133243083954
+      },
+      "ref_seed_sd": 0.02108690798253714,
+      "sem_seed0": 0.034843649715185165,
+      "floor": 0.034843649715185165,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L6.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 0.10529852658510208,
+        "1": 0.10597093403339386,
+        "2": 0.11854775249958038,
+        "3": 0.0990590751171112,
+        "4": 0.11121144145727158
+      },
+      "ref_seed_sd": 0.00729592531478699,
+      "sem_seed0": 0.042888667434453964,
+      "floor": 0.042888667434453964,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L7.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 1.9916948080062866,
+        "1": 2.0030741691589355,
+        "2": 2.0005135536193848,
+        "3": 2.0021023750305176,
+        "4": 2.0001728534698486
+      },
+      "ref_seed_sd": 0.004526240673537202,
+      "sem_seed0": 0.053195543587207794,
+      "floor": 0.053195543587207794,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L8.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 1.529954433441162,
+        "1": 1.5136804580688477,
+        "2": 1.525572657585144,
+        "3": 1.517014741897583,
+        "4": 1.52059805393219
+      },
+      "ref_seed_sd": 0.006520120424122586,
+      "sem_seed0": 0.03750480338931084,
+      "floor": 0.03750480338931084,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L9.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 2.0861704349517822,
+        "1": 2.105008363723755,
+        "2": 2.107041358947754,
+        "3": 2.111172676086426,
+        "4": 2.084174156188965
+      },
+      "ref_seed_sd": 0.012579056124309984,
+      "sem_seed0": 0.04262595996260643,
+      "floor": 0.04262595996260643,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L10.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 2.083660840988159,
+        "1": 2.0933005809783936,
+        "2": 2.096482992172241,
+        "3": 2.095641613006592,
+        "4": 2.0827229022979736
+      },
+      "ref_seed_sd": 0.006656528044191835,
+      "sem_seed0": 0.04129282012581825,
+      "floor": 0.04129282012581825,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L11.mlp",
+      "effect_mean_by_ref_seed": {
+        "0": 0.9733881950378418,
+        "1": 1.035735845565796,
+        "2": 0.9989283680915833,
+        "3": 1.0086853504180908,
+        "4": 0.9368588328361511
+      },
+      "ref_seed_sd": 0.03747657356119522,
+      "sem_seed0": 0.0454622358083725,
+      "floor": 0.0454622358083725,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L0H0",
+      "effect_mean_by_ref_seed": {
+        "0": -0.01975141651928425,
+        "1": -0.024041641503572464,
+        "2": -0.021476684138178825,
+        "3": -0.02103830687701702,
+        "4": -0.02127128280699253
+      },
+      "ref_seed_sd": 0.001563828853886025,
+      "sem_seed0": 0.008608686737716198,
+      "floor": 0.008608686737716198,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L1H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.10152573883533478,
+        "1": 0.10048484802246094,
+        "2": 0.10034950077533722,
+        "3": 0.09639417380094528,
+        "4": 0.1068505346775055
+      },
+      "ref_seed_sd": 0.003752804532796247,
+      "sem_seed0": 0.013132954947650433,
+      "floor": 0.013132954947650433,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L2H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.06708419322967529,
+        "1": 0.06886069476604462,
+        "2": 0.0740380510687828,
+        "3": 0.07754313945770264,
+        "4": 0.07241030782461166
+      },
+      "ref_seed_sd": 0.004155357503668602,
+      "sem_seed0": 0.007952909916639328,
+      "floor": 0.007952909916639328,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L3H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.06339967250823975,
+        "1": 0.04998983070254326,
+        "2": 0.060163192451000214,
+        "3": 0.054235074669122696,
+        "4": 0.05535111576318741
+      },
+      "ref_seed_sd": 0.005238677089480073,
+      "sem_seed0": 0.019291890785098076,
+      "floor": 0.019291890785098076,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L4H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.009161020629107952,
+        "1": 0.008459164761006832,
+        "2": 0.010285577736794949,
+        "3": 0.007889477536082268,
+        "4": 0.0074317194521427155
+      },
+      "ref_seed_sd": 0.0011219592738895177,
+      "sem_seed0": 0.00444707041606307,
+      "floor": 0.00444707041606307,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L5H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.17323671281337738,
+        "1": 0.17017383873462677,
+        "2": 0.17792069911956787,
+        "3": 0.18975812196731567,
+        "4": 0.17533111572265625
+      },
+      "ref_seed_sd": 0.007529239476333869,
+      "sem_seed0": 0.01979215443134308,
+      "floor": 0.01979215443134308,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L6H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.05254165828227997,
+        "1": 0.05420330539345741,
+        "2": 0.04885108396410942,
+        "3": 0.05085327476263046,
+        "4": 0.049310632050037384
+      },
+      "ref_seed_sd": 0.002236945576229232,
+      "sem_seed0": 0.00949796661734581,
+      "floor": 0.00949796661734581,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L7H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.6603376269340515,
+        "1": 0.662344217300415,
+        "2": 0.6464267373085022,
+        "3": 0.6502645015716553,
+        "4": 0.6505714654922485
+      },
+      "ref_seed_sd": 0.006943593588945891,
+      "sem_seed0": 0.014826992526650429,
+      "floor": 0.014826992526650429,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L8H0",
+      "effect_mean_by_ref_seed": {
+        "0": -0.5628286600112915,
+        "1": -0.5584961175918579,
+        "2": -0.5583699941635132,
+        "3": -0.566620409488678,
+        "4": -0.5636391639709473
+      },
+      "ref_seed_sd": 0.0035417311167130604,
+      "sem_seed0": 0.015335921198129654,
+      "floor": 0.015335921198129654,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L9H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.09198593348264694,
+        "1": 0.09399853646755219,
+        "2": 0.09459599107503891,
+        "3": 0.09398222714662552,
+        "4": 0.0931868627667427
+      },
+      "ref_seed_sd": 0.0010075062380224679,
+      "sem_seed0": 0.005099365953356028,
+      "floor": 0.005099365953356028,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L10H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.3621635138988495,
+        "1": 0.366545170545578,
+        "2": 0.363680899143219,
+        "3": 0.3629682660102844,
+        "4": 0.363862007856369
+      },
+      "ref_seed_sd": 0.0016518317136977989,
+      "sem_seed0": 0.012422334402799606,
+      "floor": 0.012422334402799606,
+      "floor_source": "sem"
+    },
+    {
+      "component": "L11H0",
+      "effect_mean_by_ref_seed": {
+        "0": 0.22268632054328918,
+        "1": 0.23100674152374268,
+        "2": 0.22829335927963257,
+        "3": 0.22142393887043,
+        "4": 0.2297750562429428
+      },
+      "ref_seed_sd": 0.004314783844732,
+      "sem_seed0": 0.008146729320287704,
+      "floor": 0.008146729320287704,
+      "floor_source": "sem"
+    }
+  ],
+  "max_floor": 0.14192332327365875,
+  "environment": {
+    "repo_commit": "74a659a33ff23614c2ae4f49330756ed4863a453",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 893.2580862045288
+  }
+}

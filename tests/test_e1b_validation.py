@@ -67,3 +67,18 @@ def test_factual_gate_reads_the_survivor_file():
     survivors = json.loads(Path("batteries/factual/survivors.json").read_text())["counts"]["admitted"]
     d = gate("factual", "subject_swap")
     assert d["verdict"]["conditions"]["survivors"]["value"] == survivors == d["battery"]["n"]
+
+
+@pytest.mark.parametrize("item", ["ioi", "induction", "factual"])
+def test_noise_floor(item):
+    default = BATTERIES[item].schemes[0]
+    if not gate(item, default)["verdict"]["pass"]:
+        assert not (E1B / "noise" / item / "floor.json").exists(), "a floor was measured for an item that failed"
+        return
+    d = load(E1B / "noise" / item / "floor.json")
+    assert d["scheme"] == default and d["ref_seeds"] == [0, 1, 2, 3, 4] and d["seed"] == 0
+    assert len(d["rows"]) == 24 and all(len(r["effect_mean_by_ref_seed"]) == 5 for r in d["rows"])
+    assert d["spec_template"]["reference"]["n"] == d["ref_n"] and d["spec_template"]["reference"]["match"] == "template"
+    assert d["max_floor"] == max(r["floor"] for r in d["rows"])
+    if item != "factual":
+        assert (d["n"], d["ref_n"]) == (2000, 1000)
