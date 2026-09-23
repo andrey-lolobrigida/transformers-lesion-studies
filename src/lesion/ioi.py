@@ -135,7 +135,74 @@ P_ABC = Corruption(
     source="wang-2022 §2.1",
 )
 
-SCHEMES = {"p_ABC": P_ABC}
+# Wang et al. App. A: three transformations of p_IOI, composed into five
+# counterparts that separate the position signal (where the repeated name
+# sits) from the token signal (which name is repeated). Each entry fills the
+# three name slots (S1 slot, IO slot, S2 slot) with a symbol: IO and S are the
+# clean names, IO' and S' two random names distinct from each other and from
+# IO and S. The symbol at the S2 slot is always the repeated one.
+APP_A = {
+    "rand_names": ("S'", "IO'", "S'"),  # random name flip
+    "flip": ("IO", "S", "S"),  # IO <-> S1 flip
+    "flip_rand": ("IO'", "S'", "S'"),  # random name flip, then IO <-> S1 flip
+    "repl_flip": ("IO", "S", "IO"),  # IO <- S2 replacement, then IO <-> S1 flip
+    "repl": ("S", "IO", "IO"),  # IO <- S2 replacement
+}
+
+_APP_A_SOURCE = "wang-2022 App. A"
+SCHEMES = {
+    "p_ABC": P_ABC,
+    "rand_names": Corruption(
+        name="rand_names",
+        removes="the token signal: IO and S no longer occur, so neither answer token is in the prompt "
+                "(token signal uncorrelated); the position signal is kept",
+        inserts="two fresh distinct names, each substituted consistently for IO and for S at every "
+                "occurrence; the repeated name stays at the S1 and S2 positions; template, place and object kept",
+        source=_APP_A_SOURCE),
+    "flip": Corruption(
+        name="flip",
+        removes="the position signal: IO and S1 exchange positions, so the repeated name now occupies the "
+                "IO and S2 positions (position signal inverted); the token signal is kept (S repeated, IO once)",
+        inserts="the same two clean names with IO and S1 swapped; template, place and object kept",
+        source=_APP_A_SOURCE),
+    "flip_rand": Corruption(
+        name="flip_rand",
+        removes="both signals: fresh names replace IO and S (token signal uncorrelated) and the repeated name "
+                "occupies the IO and S2 positions (position signal inverted)",
+        inserts="two fresh distinct names, then IO and S1 exchanged; template, place and object kept",
+        source=_APP_A_SOURCE),
+    "repl_flip": Corruption(
+        name="repl_flip",
+        removes="the token signal, inverted: IO is now the repeated name and S occurs once; the repeated name "
+                "stays at the S1 and S2 positions (position signal original)",
+        inserts="IO at the S1 and S2 positions, S at the IO position (S2 replaced by IO, then IO and S1 "
+                "exchanged); template, place and object kept",
+        source=_APP_A_SOURCE),
+    "repl": Corruption(
+        name="repl",
+        removes="both signals, inverted: S2 is replaced by IO, so IO is repeated (token signal inverted) at the "
+                "IO and S2 positions (position signal inverted), and S occurs once, at S1",
+        inserts="the IO name at the S2 position; template, place and object kept",
+        source=_APP_A_SOURCE),
+}
+
+
+def app_a_counterpart(p: IOIPrompt, scheme: str, rng: random.Random) -> tuple[str, str, str]:
+    """The App. A counterpart of ``p`` [wang-2022 App. A], built from the
+    template like ``abc_counterpart``. Returns (prompt text without the answer,
+    the name that occurs once, the name that occurs twice). Two random names
+    are drawn for every scheme so the stream does not depend on which scheme
+    uses them."""
+    template = ORDERS[p.order][p.template_idx]
+    assert template.endswith(" [A]"), template
+    body = template[: -len(" [A]")]
+    io_r, s_r = rng.sample([nm for nm in NAMES if nm not in (p.io, p.s)], 2)
+    names = {"IO": p.io, "S": p.s, "IO'": io_r, "S'": s_r}
+    s1_sym, io_sym, s2_sym = APP_A[scheme]
+    body = body.replace("[PLACE]", p.place).replace("[OBJECT]", p.obj)
+    text = body.replace("[A]", names[io_sym]).replace("[B]", names[s1_sym], 1).replace("[B]", names[s2_sym], 1)
+    once_sym = io_sym if s1_sym == s2_sym else s1_sym
+    return text, names[once_sym], names[s2_sym]
 
 
 def abc_counterpart(p: IOIPrompt, rng: random.Random) -> str:
@@ -163,11 +230,11 @@ def name_positions(ids: list[int], io_id: int, s_id: int) -> dict[str, int]:
 
 
 class IOIBattery:
-    """Clean p_IOI / corrupt p_ABC pairs. Implements ``battery.Battery``."""
+    """Clean p_IOI paired with p_ABC (default) or one of Wang's App. A counterparts. Implements ``battery.Battery``."""
 
     name = "ioi"
     labels = LABELS
-    schemes = ("p_ABC",)
+    schemes = ("p_ABC", "rand_names", "flip", "flip_rand", "repl_flip", "repl")
     expected_direction = "positive"
     default_prepend_bos = False  # E0 and E1a ran without BOS: the paper's procedure
     template_set = "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)"
@@ -213,7 +280,38 @@ class IOIBattery:
                   "clean_text": p.prompt, "corrupt_text": corrupt_text},
         )
 
+    def encode_app_a_pair(self, p: IOIPrompt, corrupt_text: str, once: str, repeated: str,
+                          prepend_bos: bool) -> PromptPair:
+        """An App. A pair. Outside the three name slots the corrupt prompt must
+        equal the clean one. Corrupt labels are the roles in the corrupt
+        sentence (IO = the name occurring once, S1/S2 = the repeated name), so
+        they move when the scheme moves names."""
+        ids, io, s, pos = self.encode_clean(p, prepend_bos=False)
+        cids = encode(self.tok, corrupt_text)
+        if len(cids) != len(ids):
+            raise AlignmentError(f"{self.scheme} length {len(cids)} != p_IOI length {len(ids)}: {corrupt_text!r}")
+        slots = {pos["IO"], pos["S1"], pos["S2"]}
+        for i, (c, k) in enumerate(zip(ids, cids)):
+            if i not in slots and c != k:
+                raise AlignmentError(f"{self.scheme} differs from p_IOI outside the name slots at {i}: {corrupt_text!r}")
+        once_ids, rep_ids = encode(self.tok, " " + once), encode(self.tok, " " + repeated)
+        if len(once_ids) != 1 or len(rep_ids) != 1:
+            raise AlignmentError(f"name is not a single token: {once!r} -> {once_ids}, {repeated!r} -> {rep_ids}")
+        cpos = name_positions(cids, once_ids[0], rep_ids[0])
+        if prepend_bos:
+            ids, pos = with_bos(ids, pos, self.tok.bos_token_id)
+            cids, cpos = with_bos(cids, cpos, self.tok.bos_token_id)
+        return PromptPair(
+            clean_ids=tuple(ids), corrupt_ids=tuple(cids), answer_id=io, competitor_id=s,
+            positions=pos, corrupt_positions=cpos, template=f"{p.order}/{p.template_idx}",
+            meta={"order": p.order, "template_idx": str(p.template_idx), "io": p.io, "s": p.s,
+                  "clean_text": p.prompt, "corrupt_text": corrupt_text},
+        )
+
     def pairs(self, n: int, seed: int, prepend_bos: bool) -> list[PromptPair]:
         prompts = generate_prompts(n, seed)
-        rng = random.Random(f"p_ABC/{seed}")
-        return [self.encode_pair(p, abc_counterpart(p, rng), prepend_bos) for p in prompts]
+        if self.scheme == "p_ABC":  # E1a's path, byte for byte
+            rng = random.Random(f"p_ABC/{seed}")
+            return [self.encode_pair(p, abc_counterpart(p, rng), prepend_bos) for p in prompts]
+        rng = random.Random(f"{self.scheme}/{seed}")
+        return [self.encode_app_a_pair(p, *app_a_counterpart(p, self.scheme, rng), prepend_bos) for p in prompts]

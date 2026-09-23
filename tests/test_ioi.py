@@ -164,3 +164,69 @@ def test_default_scheme_stream_unchanged(word_tokenizer):
     assert a == b
     # First p_ABC counterpart at seed 0, recorded 2026-09-23 before any E1b change.
     assert a[0].meta["corrupt_text"] == "Then, William and Jessica had a long argument. Afterwards Timothy said to"
+
+
+# --- E1b additions: Wang's five App. A counterparts ---
+
+from src.lesion.ioi import APP_A, SCHEMES, app_a_counterpart  # noqa: E402
+
+SIGNALS = {  # the spec's table: (position signal, token signal)
+    "rand_names": ("original", "uncorrelated"),
+    "flip": ("inverted", "original"),
+    "flip_rand": ("inverted", "uncorrelated"),
+    "repl_flip": ("original", "inverted"),
+    "repl": ("inverted", "inverted"),
+}
+
+
+def test_scheme_list_and_sources(word_tokenizer):
+    assert IOIBattery.schemes == ("p_ABC", "rand_names", "flip", "flip_rand", "repl_flip", "repl")
+    assert set(APP_A) == set(SIGNALS) and set(SCHEMES) == set(IOIBattery.schemes)
+    for name in SIGNALS:
+        c = SCHEMES[name]
+        assert c.name == name and c.source == "wang-2022 App. A" and c.removes and c.inserts
+
+
+@pytest.mark.parametrize("scheme", list(SIGNALS))
+def test_app_a_signals_match_the_table(word_tokenizer, scheme):
+    for pr in IOIBattery(word_tokenizer, scheme).pairs(200, seed=0, prepend_bos=False):
+        slots = {k: pr.positions[k] for k in ("S1", "IO", "S2")}
+        toks = {k: pr.corrupt_ids[i] for k, i in slots.items()}
+        repeated = toks["S2"]
+        rep_slots = {k for k, t in toks.items() if t == repeated}
+        (once,) = {t for t in toks.values() if t != repeated}
+        position = {frozenset({"S1", "S2"}): "original", frozenset({"IO", "S2"}): "inverted"}[frozenset(rep_slots)]
+        c, s = pr.answer_id, pr.competitor_id
+        if (repeated, once) == (s, c):
+            token = "original"
+        elif (repeated, once) == (c, s):
+            token = "inverted"
+        else:
+            assert not ({repeated, once} & {c, s}), "a random name equals the clean IO or S"
+            token = "uncorrelated"
+        assert (position, token) == SIGNALS[scheme]
+        assert len(pr.clean_ids) == len(pr.corrupt_ids)
+        for i, (a, b) in enumerate(zip(pr.clean_ids, pr.corrupt_ids)):
+            if i not in slots.values():
+                assert a == b, (scheme, i)
+
+
+@pytest.mark.parametrize("scheme", list(SIGNALS))
+def test_app_a_corrupt_labels_follow_roles(word_tokenizer, scheme):
+    for pr in IOIBattery(word_tokenizer, scheme).pairs(100, seed=1, prepend_bos=True):
+        cp, ids = pr.corrupt_positions, pr.corrupt_ids
+        assert ids[cp["S1"]] == ids[cp["S2"]] != ids[cp["IO"]]
+        assert ids.count(ids[cp["IO"]]) == 1 and ids.count(ids[cp["S1"]]) == 2
+        assert cp["S1"] < cp["S2"] and cp["S1+1"] == cp["S1"] + 1
+        assert cp["END"] == pr.positions["END"] == len(ids) - 1
+        if scheme == "flip":  # the names moved, so the labels moved with them
+            assert (cp["IO"], cp["S1"]) == (pr.positions["S1"], pr.positions["IO"])
+
+
+def test_app_a_is_seeded_and_names_are_fresh():
+    p = generate_prompts(1, seed=0)[0]
+    a = app_a_counterpart(p, "rand_names", random.Random("rand_names/0"))
+    assert a == app_a_counterpart(p, "rand_names", random.Random("rand_names/0"))
+    text, once, repeated = a
+    assert once != repeated and not ({once, repeated} & {p.io, p.s}) and {once, repeated} <= set(NAMES)
+    assert text.split().count(repeated) == 2 and text.split().count(once) == 1
