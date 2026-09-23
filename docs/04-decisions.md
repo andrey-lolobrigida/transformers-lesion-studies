@@ -1026,9 +1026,9 @@ floor is applied) before E3 runs IOI; E1b does not choose.
 
 ## Null and negative results
 
-*Nothing yet. Anything that fails to reproduce, fails to replicate, or comes
-out null goes here at full strength with a link to the results artifact.
-Deleting these destroys the most useful information the project produces.*
+*Anything that fails to reproduce, fails to replicate, or comes out null goes
+here at full strength with a link to the results artifact. Deleting these
+destroys the most useful information the project produces.*
 
 | Date | Phase | What was expected | What happened | Artifact |
 |---|---|---|---|---|

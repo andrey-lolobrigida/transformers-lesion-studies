@@ -181,7 +181,7 @@ What each scheme changes, and what was measured:
 
 Across the five rows the fraction removed sorts by the token-signal column (original ≈ 0,
 uncorrelated ≈ 1, inverted ≈ 2); rows that share a token signal and differ in position
-signal (`rand_names`/`flip_rand`, `repl_flip`/`repl`) differ by at most 0.01. This is a
+signal differ by 0.008 (`rand_names` vs `flip_rand`) and 0.012 (`repl_flip` vs `repl`). This is a
 description of the clean model's output on these prompts, not a decomposition: Wang et
 al.'s `2.31 S_pos + 0.99 S_tok` fit is obtained by patching the S-Inhibition heads, which
 E1b does not do (E2), and no reproduction of it is claimed.
@@ -219,9 +219,10 @@ components). Per component the floor is the larger of the standard deviation of
 - **Factual recall:** no floor was measured, because its gate failed; `e1b_noise` refuses an
   item whose gate did not pass.
 
-The rule for E3: **a heatmap cell under this item has to clear its component's floor.** The
-floor is measured under mean ablation at one reference size; it is not measured for zero or
-resample ablation.
+The rule for E3: **a heatmap cell under this item has to clear its component's floor, where
+one was measured (the 24 components here); for other components E3 has to extend the
+sample (spec, Risks).** The floor is measured under mean ablation at one reference size; it
+is not measured for zero or resample ablation.
 
 ## 8. Obligation for later results docs
 

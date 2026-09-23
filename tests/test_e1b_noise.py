@@ -51,6 +51,9 @@ def test_require_gate_pass(tmp_path):
         nz.require_gate_pass(p)
     p.write_text(json.dumps({"verdict": {"pass": True}}))
     nz.require_gate_pass(p)
+    p.write_text(json.dumps({"verdict": {"pass": True}, "battery": {"prepend_bos": True}}))
+    with pytest.raises(ValueError, match="prepend_bos"):
+        nz.require_gate_pass(p, prepend_bos=False)
 
 
 @torch.no_grad()

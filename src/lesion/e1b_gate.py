@@ -97,10 +97,11 @@ def statistics(cols: dict[str, Tensor], templates: list[str]) -> dict:
     }
 
 
-def is_pre_registered(n: int, seed: int, n_admitted: int | None) -> bool:
-    """The gate is defined only at the spec's n and seed: 2,000 (IOI,
-    induction) or every admitted survivor (factual), always at seed 0."""
-    return seed == 0 and n == (DEFAULT_N if n_admitted is None else n_admitted)
+def is_pre_registered(n: int, seed: int, n_admitted: int | None, prepend_bos: bool, default_prepend_bos: bool) -> bool:
+    """The gate is defined only at the spec's n and seed -- 2,000 (IOI,
+    induction) or every admitted survivor (factual), always at seed 0 -- and
+    at the battery's default BOS setting."""
+    return seed == 0 and n == (DEFAULT_N if n_admitted is None else n_admitted) and prepend_bos == default_prepend_bos
 
 
 def verdict(stats: dict | None, survivors: int | None) -> dict:
@@ -185,7 +186,7 @@ def main(argv: list[str] | None = None) -> int:
             battery = make_battery(item, tok, scheme)
             n_admitted = getattr(battery, "n_admitted", None)
             n = args.n if args.n is not None else (n_admitted if n_admitted is not None else DEFAULT_N)
-            pre_registered = is_pre_registered(n, args.seed, n_admitted)
+            pre_registered = is_pre_registered(n, args.seed, n_admitted, prepend_bos, cls.default_prepend_bos)
             ref_n = REF_N if n_admitted is None else min(REF_N, n_admitted)
             t0 = time.time()
             cols, templates = measure(model, battery, n, args.seed, prepend_bos, args.batch_size) if n > 0 else (None, [])

@@ -68,14 +68,19 @@ def measure_floor(model, battery, components, ref_seeds, n: int, seed: int, ref_
     return rows
 
 
-def require_gate_pass(path: Path) -> None:
+def require_gate_pass(path: Path, prepend_bos: bool | None = None) -> None:
     """Refuse unless the gate artifact at ``path`` recorded a passing verdict.
 
     The gate CLI (Task 7) only writes a verdict for a run at the
     pre-registered n and seed; otherwise ``verdict`` is null and the artifact
     carries ``"pre_registered": false``. That case is not a failed gate, it is
     an absent one, so it gets its own message rather than a TypeError from
-    indexing into None."""
+    indexing into None.
+
+    If ``prepend_bos`` is given, it must also match the BOS setting the gate
+    artifact was measured under (``battery.prepend_bos``); otherwise the
+    noise floor would be measured at a different BOS setting than the gate
+    that licensed it."""
     path = Path(path)
     if not path.exists():
         raise ValueError(f"{path} missing: run `uv run python -m src.lesion.e1b_gate` first")
@@ -86,6 +91,11 @@ def require_gate_pass(path: Path) -> None:
                           "`uv run python -m src.lesion.e1b_gate` at the pre-registered n and seed first")
     if not verdict["pass"]:
         raise ValueError(f"{path}: the item did not pass its gate; no noise floor is measured for it")
+    if prepend_bos is not None:
+        gate_prepend_bos = record["battery"]["prepend_bos"]
+        if prepend_bos != gate_prepend_bos:
+            raise ValueError(f"{path}: prepend_bos mismatch: gate was measured at prepend_bos={gate_prepend_bos}, "
+                              f"noise floor requested at prepend_bos={prepend_bos}")
 
 
 def sizes(n_admitted: int | None, n: int | None, ref_n: int) -> tuple[int, int]:
@@ -112,8 +122,8 @@ def main(argv: list[str] | None = None) -> int:
     args = ap.parse_args(argv)
     cls = BATTERIES[args.item]
     try:
-        require_gate_pass(Path(args.gate_dir) / args.item / f"{cls.schemes[0]}.json")
         prepend_bos = cls.default_prepend_bos if args.prepend_bos is None else parse_bool(args.prepend_bos)
+        require_gate_pass(Path(args.gate_dir) / args.item / f"{cls.schemes[0]}.json", prepend_bos)
     except ValueError as e:
         ap.error(str(e))  # exits 2
 
