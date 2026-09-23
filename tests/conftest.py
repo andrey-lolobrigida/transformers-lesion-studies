@@ -31,10 +31,57 @@ class WordTokenizer:
         ids = [self.vocab.setdefault(p, len(self.vocab) + 1) for p in pieces]
         return SimpleNamespace(input_ids=ids)
 
+    def decode(self, ids) -> str:
+        inv = {v: k for k, v in self.vocab.items()}
+        return "".join(inv[i] for i in ids)
+
 
 @pytest.fixture
 def word_tokenizer() -> WordTokenizer:
     return WordTokenizer()
+
+
+def make_counterfact(tok):
+    """Hand-built CounterFact records plus a fake greedy generator, for the
+    counterfact and factual tests. Expected build() counts, by construction:
+    records 38; multi_token_target 1 (a two-token object); pool 37;
+    not_known 1; no_partner 2 (T3: each record's only partner has the other's
+    target_new as its true object); 34 known with a partner; templates
+    T1/empty-suffix 30 (admitted, exactly the floor), T1/suffix " the" 1,
+    T2/empty-suffix 3 (not admitted)."""
+    t1, t2, t3 = "The capital of {} is", "{} works in", "{} was born in"
+    objects = ["Paris", "Rome", "Oslo"]
+
+    def rec(case_id, template, subject, true, new):
+        return {"case_id": case_id, "requested_rewrite": {
+            "prompt": template, "relation_id": "P0", "subject": subject,
+            "target_true": {"str": true, "id": "Q0"}, "target_new": {"str": new, "id": "Q0"}}}
+
+    records = [rec(k, t1, f"Subj{k}", objects[k % 3], "Berlin") for k in range(32)]
+    records.append(rec(32, t1, "Subj32", "New York", "Berlin"))  # two-token object
+    records += [rec(40 + k, t2, f"Worker{k}", objects[k], "Berlin") for k in range(3)]
+    records += [rec(50, t3, "Born0", "Paris", "Rome"), rec(51, t3, "Born1", "Rome", "Paris")]
+
+    def ids(text):
+        return tok(text).input_ids
+
+    the = ids(" the")[0]
+    plan = {}
+    for r in records:
+        rr = r["requested_rewrite"]
+        o = ids(" " + rr["target_true"]["str"])
+        prompt = tuple(ids(rr["prompt"].replace("{}", rr["subject"])))
+        if r["case_id"] == 0:
+            plan[prompt] = [the] * 10  # never names o: not known
+        elif r["case_id"] == 1:
+            plan[prompt] = [the, o[0]] + [the] * 8  # known, with suffix " the"
+        else:
+            plan[prompt] = [o[0]] + [the] * 9
+
+    def generate(prompts):
+        return [plan[tuple(p)] for p in prompts]
+
+    return records, generate
 
 
 @pytest.fixture
