@@ -1,0 +1,106 @@
+{
+  "phase": "E1b",
+  "command": "uv run python -m src.lesion.e1b_gate --item all",
+  "item": "factual",
+  "scheme": "subject_swap_sym",
+  "gated": false,
+  "pre_registered": true,
+  "thresholds": {
+    "pairwise_accuracy_min": 0.9,
+    "gap_min": 1.0,
+    "survivors_min": 300,
+    "template_floor": 30
+  },
+  "verdict": null,
+  "statistics": {
+    "n": 64,
+    "pairwise_accuracy": 1.0,
+    "pairwise_accuracy_corrupt": 0.171875,
+    "top1_rate": 1.0,
+    "clean": {
+      "mean_ld": 4.808074474334717,
+      "std_ld": 2.3453009128570557,
+      "sem_ld": 0.29316261410713196,
+      "mean_p_c": 0.2084437757730484
+    },
+    "corrupt": {
+      "mean_ld": -2.6761531829833984,
+      "std_ld": 2.7392239570617676,
+      "sem_ld": 0.34240299463272095,
+      "mean_p_c": 0.009224893525242805
+    },
+    "gap": 7.484227180480957,
+    "gap_sem": 0.5417354702949524,
+    "fraction_removed": 1.5565955187323786,
+    "by_template": {
+      "The mother tongue of {} is|s4|g": {
+        "n": 31,
+        "mean_ld_clean": 3.8210668563842773,
+        "mean_ld_corrupt": -1.5533467531204224
+      },
+      "{} is produced by|s4|g": {
+        "n": 33,
+        "mean_ld_clean": 5.735263347625732,
+        "mean_ld_corrupt": -3.7309107780456543
+      }
+    }
+  },
+  "reference_floor": {
+    "ref_n": 64,
+    "ref_seed": 0,
+    "floor": 30,
+    "per_template_counts": {
+      "The mother tongue of {} is|s4|g": 31,
+      "{} is produced by|s4|g": 33
+    },
+    "min": 31,
+    "templates_below_floor": []
+  },
+  "battery": {
+    "name": "factual",
+    "n": 64,
+    "seed": 0,
+    "prepend_bos": false,
+    "template_set": "CounterFact main rewrite prompts, single-token targets, ROME known-facts filter re-run on GPT-2 small; 64 survivors in 2 admitted templates (>= 30 each); batteries/factual/survivors.json sha256 4fa10a10c8de139c17c90022c2b7b236fe4dcf56b5684ea520386956801a7eea",
+    "labels": [
+      "SUBJ_FIRST",
+      "SUBJ_LAST",
+      "END"
+    ],
+    "schemes": [
+      "subject_swap",
+      "subject_swap_sym"
+    ],
+    "corruption": {
+      "name": "subject_swap_sym",
+      "removes": "the subject, hence the fact: the clean subject is replaced by another CounterFact subject with the same prompt template and the same subject token length",
+      "inserts": "the same partner subject as subject_swap, with the competitor s set to the partner's own true object o': the corrupt prompt favours s, so the corrupt ld goes negative (the Sports Players case, miller-2024 App. D.2)",
+      "source": "meng-2022 (CounterFact; known-facts filter App. B.1); subject swap ours (D-014 item 6); symmetric competitor after miller-2024 App. D.2"
+    },
+    "expected_direction": "positive"
+  },
+  "environment": {
+    "repo_commit": "ad9dcd3ad33b2ed9828bd5af80723681563f18fc",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 0.06723523139953613
+  }
+}

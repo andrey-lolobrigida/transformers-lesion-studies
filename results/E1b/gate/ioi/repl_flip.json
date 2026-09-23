@@ -1,0 +1,286 @@
+{
+  "phase": "E1b",
+  "command": "uv run python -m src.lesion.e1b_gate --item all",
+  "item": "ioi",
+  "scheme": "repl_flip",
+  "gated": false,
+  "pre_registered": true,
+  "thresholds": {
+    "pairwise_accuracy_min": 0.9,
+    "gap_min": 1.0,
+    "survivors_min": 300,
+    "template_floor": 30
+  },
+  "verdict": null,
+  "statistics": {
+    "n": 2000,
+    "pairwise_accuracy": 0.99,
+    "pairwise_accuracy_corrupt": 0.0065,
+    "top1_rate": 0.9195,
+    "clean": {
+      "mean_ld": 3.651366949081421,
+      "std_ld": 1.5967369079589844,
+      "sem_ld": 0.035704124718904495,
+      "mean_p_c": 0.5240890979766846
+    },
+    "corrupt": {
+      "mean_ld": -3.641700267791748,
+      "std_ld": 1.5679538249969482,
+      "sem_ld": 0.03506051376461983,
+      "mean_p_c": 0.024545492604374886
+    },
+    "gap": 7.293067455291748,
+    "gap_sem": 0.05732983723282814,
+    "fraction_removed": 1.9973526509370618,
+    "by_template": {
+      "ABBA/0": {
+        "n": 63,
+        "mean_ld_clean": 4.187239170074463,
+        "mean_ld_corrupt": -4.1978020668029785
+      },
+      "ABBA/1": {
+        "n": 65,
+        "mean_ld_clean": 3.759056806564331,
+        "mean_ld_corrupt": -3.796438455581665
+      },
+      "ABBA/10": {
+        "n": 68,
+        "mean_ld_clean": 3.991555690765381,
+        "mean_ld_corrupt": -3.791926145553589
+      },
+      "ABBA/11": {
+        "n": 68,
+        "mean_ld_clean": 4.277545928955078,
+        "mean_ld_corrupt": -4.332123756408691
+      },
+      "ABBA/12": {
+        "n": 70,
+        "mean_ld_clean": 4.225973129272461,
+        "mean_ld_corrupt": -4.48729944229126
+      },
+      "ABBA/13": {
+        "n": 82,
+        "mean_ld_clean": 4.672540664672852,
+        "mean_ld_corrupt": -4.689528465270996
+      },
+      "ABBA/14": {
+        "n": 67,
+        "mean_ld_clean": 4.4991068840026855,
+        "mean_ld_corrupt": -4.535137176513672
+      },
+      "ABBA/2": {
+        "n": 69,
+        "mean_ld_clean": 3.6450066566467285,
+        "mean_ld_corrupt": -3.67694091796875
+      },
+      "ABBA/3": {
+        "n": 66,
+        "mean_ld_clean": 3.2361042499542236,
+        "mean_ld_corrupt": -3.1950454711914062
+      },
+      "ABBA/4": {
+        "n": 58,
+        "mean_ld_clean": 4.1172099113464355,
+        "mean_ld_corrupt": -4.112237930297852
+      },
+      "ABBA/5": {
+        "n": 72,
+        "mean_ld_clean": 3.5687828063964844,
+        "mean_ld_corrupt": -3.5934219360351562
+      },
+      "ABBA/6": {
+        "n": 73,
+        "mean_ld_clean": 3.1337878704071045,
+        "mean_ld_corrupt": -3.4062397480010986
+      },
+      "ABBA/7": {
+        "n": 58,
+        "mean_ld_clean": 3.018350601196289,
+        "mean_ld_corrupt": -2.7563445568084717
+      },
+      "ABBA/8": {
+        "n": 52,
+        "mean_ld_clean": 2.946319103240967,
+        "mean_ld_corrupt": -3.088578701019287
+      },
+      "ABBA/9": {
+        "n": 65,
+        "mean_ld_clean": 3.194977283477783,
+        "mean_ld_corrupt": -3.2752482891082764
+      },
+      "BABA/0": {
+        "n": 67,
+        "mean_ld_clean": 3.471635103225708,
+        "mean_ld_corrupt": -3.4003756046295166
+      },
+      "BABA/1": {
+        "n": 58,
+        "mean_ld_clean": 4.254199981689453,
+        "mean_ld_corrupt": -3.692690134048462
+      },
+      "BABA/10": {
+        "n": 69,
+        "mean_ld_clean": 3.6976029872894287,
+        "mean_ld_corrupt": -3.4152469635009766
+      },
+      "BABA/11": {
+        "n": 52,
+        "mean_ld_clean": 2.860844135284424,
+        "mean_ld_corrupt": -2.626638889312744
+      },
+      "BABA/12": {
+        "n": 61,
+        "mean_ld_clean": 2.158393621444702,
+        "mean_ld_corrupt": -2.6430344581604004
+      },
+      "BABA/13": {
+        "n": 71,
+        "mean_ld_clean": 4.9300312995910645,
+        "mean_ld_corrupt": -4.823339939117432
+      },
+      "BABA/14": {
+        "n": 54,
+        "mean_ld_clean": 4.551095962524414,
+        "mean_ld_corrupt": -4.7906670570373535
+      },
+      "BABA/2": {
+        "n": 77,
+        "mean_ld_clean": 3.734226703643799,
+        "mean_ld_corrupt": -3.619889736175537
+      },
+      "BABA/3": {
+        "n": 63,
+        "mean_ld_clean": 3.183086633682251,
+        "mean_ld_corrupt": -3.003391742706299
+      },
+      "BABA/4": {
+        "n": 73,
+        "mean_ld_clean": 2.737842321395874,
+        "mean_ld_corrupt": -2.7702951431274414
+      },
+      "BABA/5": {
+        "n": 66,
+        "mean_ld_clean": 2.3893635272979736,
+        "mean_ld_corrupt": -2.227031707763672
+      },
+      "BABA/6": {
+        "n": 73,
+        "mean_ld_clean": 4.441546440124512,
+        "mean_ld_corrupt": -4.177282810211182
+      },
+      "BABA/7": {
+        "n": 69,
+        "mean_ld_clean": 4.388201713562012,
+        "mean_ld_corrupt": -4.466724395751953
+      },
+      "BABA/8": {
+        "n": 79,
+        "mean_ld_clean": 2.942556858062744,
+        "mean_ld_corrupt": -3.0797555446624756
+      },
+      "BABA/9": {
+        "n": 72,
+        "mean_ld_clean": 2.924105644226074,
+        "mean_ld_corrupt": -3.099536657333374
+      }
+    }
+  },
+  "reference_floor": {
+    "ref_n": 1000,
+    "ref_seed": 0,
+    "floor": 30,
+    "per_template_counts": {
+      "ABBA/0": 33,
+      "ABBA/1": 31,
+      "ABBA/10": 37,
+      "ABBA/11": 36,
+      "ABBA/12": 30,
+      "ABBA/13": 35,
+      "ABBA/14": 34,
+      "ABBA/2": 35,
+      "ABBA/3": 34,
+      "ABBA/4": 35,
+      "ABBA/5": 40,
+      "ABBA/6": 36,
+      "ABBA/7": 22,
+      "ABBA/8": 28,
+      "ABBA/9": 28,
+      "BABA/0": 36,
+      "BABA/1": 28,
+      "BABA/10": 41,
+      "BABA/11": 33,
+      "BABA/12": 31,
+      "BABA/13": 30,
+      "BABA/14": 30,
+      "BABA/2": 37,
+      "BABA/3": 25,
+      "BABA/4": 35,
+      "BABA/5": 38,
+      "BABA/6": 34,
+      "BABA/7": 35,
+      "BABA/8": 37,
+      "BABA/9": 36
+    },
+    "min": 22,
+    "templates_below_floor": [
+      "ABBA/7",
+      "ABBA/8",
+      "ABBA/9",
+      "BABA/1",
+      "BABA/3"
+    ]
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "repl_flip",
+      "removes": "the token signal, inverted: IO is now the repeated name and S occurs once; the repeated name stays at the S1 and S2 positions (position signal original)",
+      "inserts": "IO at the S1 and S2 positions, S at the IO position (S2 replaced by IO, then IO and S1 exchanged); template, place and object kept",
+      "source": "wang-2022 App. A"
+    },
+    "expected_direction": "positive"
+  },
+  "environment": {
+    "repo_commit": "ad9dcd3ad33b2ed9828bd5af80723681563f18fc",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 3.0738203525543213
+  }
+}

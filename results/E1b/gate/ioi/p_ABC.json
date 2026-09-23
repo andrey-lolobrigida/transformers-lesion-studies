@@ -1,0 +1,300 @@
+{
+  "phase": "E1b",
+  "command": "uv run python -m src.lesion.e1b_gate --item all",
+  "item": "ioi",
+  "scheme": "p_ABC",
+  "gated": true,
+  "pre_registered": true,
+  "thresholds": {
+    "pairwise_accuracy_min": 0.9,
+    "gap_min": 1.0,
+    "survivors_min": 300,
+    "template_floor": 30
+  },
+  "verdict": {
+    "conditions": {
+      "pairwise_accuracy": {
+        "value": 0.99,
+        "threshold": 0.9,
+        "pass": true
+      },
+      "gap": {
+        "value": 3.5895166397094727,
+        "threshold": 1.0,
+        "pass": true
+      }
+    },
+    "pass": true
+  },
+  "statistics": {
+    "n": 2000,
+    "pairwise_accuracy": 0.99,
+    "pairwise_accuracy_corrupt": 0.511,
+    "top1_rate": 0.9195,
+    "clean": {
+      "mean_ld": 3.651366949081421,
+      "std_ld": 1.5967369079589844,
+      "sem_ld": 0.035704124718904495,
+      "mean_p_c": 0.5240890979766846
+    },
+    "corrupt": {
+      "mean_ld": 0.06185034289956093,
+      "std_ld": 1.93349027633667,
+      "sem_ld": 0.04323415830731392,
+      "mean_p_c": 0.0007351120002567768
+    },
+    "gap": 3.5895166397094727,
+    "gap_sem": 0.05267675593495369,
+    "fraction_removed": 0.9830610535083284,
+    "by_template": {
+      "ABBA/0": {
+        "n": 63,
+        "mean_ld_clean": 4.187239170074463,
+        "mean_ld_corrupt": -0.23602916300296783
+      },
+      "ABBA/1": {
+        "n": 65,
+        "mean_ld_clean": 3.759056806564331,
+        "mean_ld_corrupt": -0.2881317436695099
+      },
+      "ABBA/10": {
+        "n": 68,
+        "mean_ld_clean": 3.991555690765381,
+        "mean_ld_corrupt": -0.0032574639189988375
+      },
+      "ABBA/11": {
+        "n": 68,
+        "mean_ld_clean": 4.277545928955078,
+        "mean_ld_corrupt": 0.2581515908241272
+      },
+      "ABBA/12": {
+        "n": 70,
+        "mean_ld_clean": 4.225973129272461,
+        "mean_ld_corrupt": 0.038275010883808136
+      },
+      "ABBA/13": {
+        "n": 82,
+        "mean_ld_clean": 4.672540664672852,
+        "mean_ld_corrupt": -0.13567937910556793
+      },
+      "ABBA/14": {
+        "n": 67,
+        "mean_ld_clean": 4.4991068840026855,
+        "mean_ld_corrupt": -0.18366208672523499
+      },
+      "ABBA/2": {
+        "n": 69,
+        "mean_ld_clean": 3.6450066566467285,
+        "mean_ld_corrupt": -0.08977208286523819
+      },
+      "ABBA/3": {
+        "n": 66,
+        "mean_ld_clean": 3.2361042499542236,
+        "mean_ld_corrupt": 0.2134421318769455
+      },
+      "ABBA/4": {
+        "n": 58,
+        "mean_ld_clean": 4.1172099113464355,
+        "mean_ld_corrupt": 0.1706608086824417
+      },
+      "ABBA/5": {
+        "n": 72,
+        "mean_ld_clean": 3.5687828063964844,
+        "mean_ld_corrupt": -0.1365732103586197
+      },
+      "ABBA/6": {
+        "n": 73,
+        "mean_ld_clean": 3.1337878704071045,
+        "mean_ld_corrupt": 0.09263509511947632
+      },
+      "ABBA/7": {
+        "n": 58,
+        "mean_ld_clean": 3.018350601196289,
+        "mean_ld_corrupt": 0.651163637638092
+      },
+      "ABBA/8": {
+        "n": 52,
+        "mean_ld_clean": 2.946319103240967,
+        "mean_ld_corrupt": 0.37178707122802734
+      },
+      "ABBA/9": {
+        "n": 65,
+        "mean_ld_clean": 3.194977283477783,
+        "mean_ld_corrupt": -0.2925609350204468
+      },
+      "BABA/0": {
+        "n": 67,
+        "mean_ld_clean": 3.471635103225708,
+        "mean_ld_corrupt": -0.04295766353607178
+      },
+      "BABA/1": {
+        "n": 58,
+        "mean_ld_clean": 4.254199981689453,
+        "mean_ld_corrupt": 0.5149427056312561
+      },
+      "BABA/10": {
+        "n": 69,
+        "mean_ld_clean": 3.6976029872894287,
+        "mean_ld_corrupt": 0.22478081285953522
+      },
+      "BABA/11": {
+        "n": 52,
+        "mean_ld_clean": 2.860844135284424,
+        "mean_ld_corrupt": 0.17344063520431519
+      },
+      "BABA/12": {
+        "n": 61,
+        "mean_ld_clean": 2.158393621444702,
+        "mean_ld_corrupt": -0.19178791344165802
+      },
+      "BABA/13": {
+        "n": 71,
+        "mean_ld_clean": 4.9300312995910645,
+        "mean_ld_corrupt": 0.33192723989486694
+      },
+      "BABA/14": {
+        "n": 54,
+        "mean_ld_clean": 4.551095962524414,
+        "mean_ld_corrupt": 0.307519793510437
+      },
+      "BABA/2": {
+        "n": 77,
+        "mean_ld_clean": 3.734226703643799,
+        "mean_ld_corrupt": 0.12913799285888672
+      },
+      "BABA/3": {
+        "n": 63,
+        "mean_ld_clean": 3.183086633682251,
+        "mean_ld_corrupt": -0.29264408349990845
+      },
+      "BABA/4": {
+        "n": 73,
+        "mean_ld_clean": 2.737842321395874,
+        "mean_ld_corrupt": -0.029684707522392273
+      },
+      "BABA/5": {
+        "n": 66,
+        "mean_ld_clean": 2.3893635272979736,
+        "mean_ld_corrupt": 0.2565114498138428
+      },
+      "BABA/6": {
+        "n": 73,
+        "mean_ld_clean": 4.441546440124512,
+        "mean_ld_corrupt": -0.009180324152112007
+      },
+      "BABA/7": {
+        "n": 69,
+        "mean_ld_clean": 4.388201713562012,
+        "mean_ld_corrupt": -0.14266972243785858
+      },
+      "BABA/8": {
+        "n": 79,
+        "mean_ld_clean": 2.942556858062744,
+        "mean_ld_corrupt": 0.3312806785106659
+      },
+      "BABA/9": {
+        "n": 72,
+        "mean_ld_clean": 2.924105644226074,
+        "mean_ld_corrupt": 0.0832785815000534
+      }
+    }
+  },
+  "reference_floor": {
+    "ref_n": 1000,
+    "ref_seed": 0,
+    "floor": 30,
+    "per_template_counts": {
+      "ABBA/0": 33,
+      "ABBA/1": 31,
+      "ABBA/10": 37,
+      "ABBA/11": 36,
+      "ABBA/12": 30,
+      "ABBA/13": 35,
+      "ABBA/14": 34,
+      "ABBA/2": 35,
+      "ABBA/3": 34,
+      "ABBA/4": 35,
+      "ABBA/5": 40,
+      "ABBA/6": 36,
+      "ABBA/7": 22,
+      "ABBA/8": 28,
+      "ABBA/9": 28,
+      "BABA/0": 36,
+      "BABA/1": 28,
+      "BABA/10": 41,
+      "BABA/11": 33,
+      "BABA/12": 31,
+      "BABA/13": 30,
+      "BABA/14": 30,
+      "BABA/2": 37,
+      "BABA/3": 25,
+      "BABA/4": 35,
+      "BABA/5": 38,
+      "BABA/6": 34,
+      "BABA/7": 35,
+      "BABA/8": 37,
+      "BABA/9": 36
+    },
+    "min": 22,
+    "templates_below_floor": [
+      "ABBA/7",
+      "ABBA/8",
+      "ABBA/9",
+      "BABA/1",
+      "BABA/3"
+    ]
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "p_ABC",
+      "removes": "the repetition of the subject name: no name occurs twice, so nothing in the prompt singles out an indirect object",
+      "inserts": "three distinct fresh names in the three name slots, none equal to the clean IO or S; same template, place and object",
+      "source": "wang-2022 \u00a72.1"
+    },
+    "expected_direction": "positive"
+  },
+  "environment": {
+    "repo_commit": "ad9dcd3ad33b2ed9828bd5af80723681563f18fc",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 3.179589033126831
+  }
+}
