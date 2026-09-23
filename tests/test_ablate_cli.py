@@ -134,3 +134,11 @@ def test_induction_refuses_ioi_labels():
         ablate.main(["--battery", "induction", "--component", "L5H1", "--type", "node", "--positions", "S2",
                      "--direction", "ablate-clean", "--no-freeze", "--value", "zero"])
     assert e.value.code == 2
+
+
+def test_factual_without_survivor_file_exits_2_before_model_loads(tmp_path, monkeypatch):
+    monkeypatch.setattr("src.lesion.factual.SURVIVORS", tmp_path / "missing.json")
+    with pytest.raises(SystemExit) as e:
+        ablate.main(["--battery", "factual", "--component", "L0.mlp", "--type", "node", "--positions", "all",
+                     "--direction", "ablate-clean", "--no-freeze", "--value", "zero"])
+    assert e.value.code == 2
