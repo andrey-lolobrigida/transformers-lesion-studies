@@ -322,7 +322,7 @@ needs the contrast).
 `uv run python -m src.lesion.e1b_gate --item all`): pairwise accuracy 1.000
 against 0.90 (pass), gap +4.104 ± 0.374 logits against 1.0 (pass), admitted
 survivors 64 against 300 (fail). The ROME known-facts filter re-run on
-GPT-2 small left 1,965 survivors spread over 672 templates, of which 2 reach
+GPT-2 small, plus the partner requirement (ours), left 1,965 survivors spread over 672 templates, of which 2 reach
 the per-template floor of 30. **The fallback is triggered; the agreement
 addendum is pending the author.** Numbers and the survivor funnel:
 `results/E1b/README.md` §3–4; null-results row below.

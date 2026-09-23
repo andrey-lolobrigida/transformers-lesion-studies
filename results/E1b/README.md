@@ -1,8 +1,9 @@
 # E1b — Task battery: gate, reference floor, noise floor
 
 *Run 2026-09-23 on branch `phase-E1b-battery`, GPT-2 small at HF revision
-`607a30d783dfa663caf39e06633721c8d4cfcd7e`. Survivor file and gate artifacts written at repo
-commit `ad9dcd3` (gate runs recorded that commit), noise floors at `74a659a`. Interpretation
+`607a30d783dfa663caf39e06633721c8d4cfcd7e`. Survivor file written at repo commit `f1afd56`
+(committed in `ad9dcd3`); gate artifacts at `ad9dcd3`; noise floors at `74a659a` (each
+artifact's own `environment.repo_commit`). Interpretation
 of the artifacts in this directory and of `batteries/factual/survivors.json`. Decisions:
 D-013, D-014, the O-009 resolution; open question O-015.*
 
@@ -140,7 +141,9 @@ of `docs/04-decisions.md`.
 The extra `subject_swap_sym` uses the same prompts and partners with `s` set to the
 partner's own object `o′`. Because `s` differs, its clean `ld` differs too (+4.808 ± 0.293
 against +4.291); its corrupt `ld` is -2.676, gap +7.484 ± 0.542, fraction removed 1.56,
-and the corrupt pairwise accuracy is 0.172. Ungated.
+and the corrupt pairwise accuracy is 0.172. Ungated. The spec runs named extras only on items that
+pass; the gate CLI measured this extra on factual recall anyway, and it is reported because
+it was measured.
 
 ## 5. IOI App. A extras
 
