@@ -29,6 +29,7 @@ import sys
 from pathlib import Path
 
 from src.lesion.battery import resolve_scheme
+from src.lesion.induction import InductionBattery
 from src.lesion.ioi import IOIBattery
 from src.lesion.spec import (
     MLP, AblationSpec, All, Component, Head, Indices, Inputs, Labels, Logits, MeanReference, Positions, SpecError,
@@ -36,7 +37,7 @@ from src.lesion.spec import (
 
 # name -> battery class. Class attributes (labels, schemes, default_prepend_bos)
 # are read before the model loads; instances are built after, by make_battery.
-BATTERIES = {"ioi": IOIBattery}
+BATTERIES = {"ioi": IOIBattery, "induction": InductionBattery}
 
 
 def make_battery(name: str, tokenizer, scheme: str | None):

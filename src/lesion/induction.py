@@ -1,0 +1,89 @@
+"""Induction pairs: a repeated sequence of random tokens, read where the
+second copy predicts the successor of its last token.
+
+Stimulus copied from Olsson et al. [olsson-2022 §Data Collection (3)]: 25
+random tokens, distinct within the sequence, excluding the most and least
+common tokens; BOS prepended (through the harness's ``prepend_bos``, never by
+this generator). The source gives no thresholds for the exclusion, so the rule
+is ours: token ids uniform in [LO, HI), the GPT-2 BPE id standing in for
+frequency rank (low ids are bytes and early, frequent merges; the highest ids
+are late, rare merges). Departure: 2 repeats rather than 4, the second cut
+after x_i. Token ids are used directly; nothing is decoded or re-encoded.
+
+Metric: logit difference at END (rule 5). Olsson's in-context learning score
+is a loss and is not used."""
+
+from __future__ import annotations
+
+import random
+
+from src.lesion.battery import Corruption, PromptPair, resolve_scheme, with_bos
+
+LO, HI = 1000, 45000  # sampled id range, a frequency proxy (ours)
+SEQ = 25  # tokens per repeat [olsson-2022]
+I_MAX = 22  # i uniform in 1..I_MAX, so j = i+3..25 is never empty
+
+# A1: x_i in the first repeat; B1: x_{i+1} in the first repeat (where c sits);
+# S_POS: x_j in the first repeat (where s sits); END: x_i in the second repeat.
+LABELS = ("A1", "B1", "S_POS", "END")
+
+FRESH_PREFIX = Corruption(
+    name="fresh_prefix",
+    removes="the earlier occurrence of x_i and its successor (what induction copies), and the in-context "
+            "occurrence of both c and s",
+    inserts="an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, "
+            "distinct from each other and from every clean token; length, positions, the second half and the "
+            "sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+    source="olsson-2022 §Data Collection (3) (stimulus); corruption ours (E1b spec)",
+)
+
+
+def _fresh(rng: random.Random, k: int, exclude) -> list[int]:
+    """``k`` distinct ids uniform in [LO, HI), none in ``exclude``."""
+    seen = set(exclude)
+    out: list[int] = []
+    while len(out) < k:
+        t = rng.randrange(LO, HI)
+        if t not in seen:
+            seen.add(t)
+            out.append(t)
+    return out
+
+
+class InductionBattery:
+    """Repeated random tokens, corrupt ``fresh_prefix``. Implements ``battery.Battery``."""
+
+    name = "induction"
+    labels = LABELS
+    schemes = ("fresh_prefix",)
+    expected_direction = "positive"
+    default_prepend_bos = True  # Olsson: omitting BOS gave anomalously low scores
+    template_set = (f"olsson-2022 §Data Collection (3) with departures: {SEQ} distinct token ids uniform in "
+                    f"[{LO}, {HI}) as a frequency proxy (ours); 2 repeats, the second cut after x_i, "
+                    f"i uniform in 1..{I_MAX}; competitor x_j, j uniform in i+3..{SEQ}")
+
+    def __init__(self, tokenizer, scheme: str | None = None) -> None:
+        self.bos_id = tokenizer.bos_token_id
+        self.scheme = resolve_scheme(self.schemes, scheme)
+        self.corruption = FRESH_PREFIX
+
+    def pairs(self, n: int, seed: int, prepend_bos: bool) -> list[PromptPair]:
+        rng = random.Random(seed)
+        crng = random.Random(f"fresh_prefix/{seed}")  # the clean stream never depends on the corruption
+        out = []
+        for _ in range(n):
+            xs = _fresh(rng, SEQ, ())
+            i = rng.randint(1, I_MAX)
+            j = rng.randint(i + 3, SEQ)
+            ys = _fresh(crng, SEQ, xs)
+            clean, corrupt = xs + xs[:i], ys + xs[:i]
+            pos = {"A1": i - 1, "B1": i, "S_POS": j - 1, "END": SEQ + i - 1}
+            cpos = dict(pos)
+            if prepend_bos:
+                clean, pos = with_bos(clean, pos, self.bos_id)
+                corrupt, cpos = with_bos(corrupt, cpos, self.bos_id)
+            out.append(PromptPair(
+                clean_ids=tuple(clean), corrupt_ids=tuple(corrupt), answer_id=xs[i], competitor_id=xs[j - 1],
+                positions=pos, corrupt_positions=cpos, template=f"i{i}", meta={"i": str(i), "j": str(j)},
+            ))
+        return out

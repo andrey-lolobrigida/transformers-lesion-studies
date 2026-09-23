@@ -119,3 +119,18 @@ def test_explicit_prepend_bos_is_kept():
 def test_make_battery_builds_the_named_scheme(word_tokenizer):
     b = ablate.make_battery("ioi", word_tokenizer, "repl")
     assert b.name == "ioi" and b.corruption.name == "repl"
+
+
+def test_induction_defaults_resolve_to_bos_and_fresh_prefix():
+    a = parse(["--battery", "induction", "--component", "L5H1", "--type", "node", "--positions", "A1,END",
+               "--direction", "ablate-clean", "--no-freeze", "--value", "zero"])
+    ablate.resolve_battery_defaults(a)
+    assert (a.prepend_bos, a.corruption) == ("true", "fresh_prefix")
+    assert ablate.specs_from_args(a)[0].positions == Labels(("A1", "END"))
+
+
+def test_induction_refuses_ioi_labels():
+    with pytest.raises(SystemExit) as e:
+        ablate.main(["--battery", "induction", "--component", "L5H1", "--type", "node", "--positions", "S2",
+                     "--direction", "ablate-clean", "--no-freeze", "--value", "zero"])
+    assert e.value.code == 2
