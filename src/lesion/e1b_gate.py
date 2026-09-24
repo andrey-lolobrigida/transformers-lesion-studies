@@ -117,7 +117,7 @@ def breakdown(cols: dict[str, Tensor], groups: dict[str, list[str]]) -> dict:
 
 def is_pre_registered(n: int, seed: int, n_admitted: int | None, prepend_bos: bool, default_prepend_bos: bool) -> bool:
     """The gate is defined only at the spec's n and seed -- 2,000 (IOI,
-    induction) or every admitted survivor (factual), always at seed 0 -- and
+    induction, agreement) or every admitted survivor (factual), always at seed 0 -- and
     at the battery's default BOS setting."""
     return seed == 0 and n == (DEFAULT_N if n_admitted is None else n_admitted) and prepend_bos == default_prepend_bos
 

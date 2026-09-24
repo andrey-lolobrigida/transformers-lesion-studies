@@ -12,14 +12,14 @@ D-013, D-014, the O-009 and O-015 resolutions.*
 
 ## 1. What this is
 
-E1b builds the battery that E2 and E3 measure on: three items (IOI, induction, factual
-recall), each with a clean/corrupt generator, a metric (`ld = logit[c] − logit[s]` at `END`),
+E1b builds the battery that E2 and E3 measure on: four items, three of which passed their
+gate (IOI, induction, subject–verb agreement) and one of which failed (factual recall), each with a clean/corrupt generator, a metric (`ld = logit[c] − logit[s]` at `END`),
 a declared expected direction (`positive` for every item: damage is expected to lower `ld`)
 and a corruption scheme whose `removes`/`inserts` are recorded in every artifact. The rules
 it is measured against — the pre-registered clean-accuracy gate, the per-template reference
 floor of 30, the statistical noise floor instead of a control item, filtering only for
 factual recall — are recorded in D-014 and the O-009 resolution; the item order and the
-agreement fallback in D-013. Factual recall failed its gate, so a fourth item, subject–verb
+agreement fallback in D-013. Factual recall failed its gate, so the fourth item, subject–verb
 agreement, was built as that fallback: ours and unsourced (section 10). Everything below is measured on the clean model with no
 intervention, except the noise floor (section 7), which is a mean-ablation sample.
 
@@ -263,16 +263,21 @@ drawn from, taken from the table in section 3. For the three items that passed: 
 removes 0.98 (IOI), `fresh_prefix` removes 1.00 (induction), `number_flip` removes 1.98
 (agreement), each measured at n = 2,000, seed 0.
 
-The agreement value is near 2 by construction: `c` and `s` stay the clean labels, and the
-corrupt prompt (subject in the other number) favours `s` (mean corrupt `ld` -2.558 against
-clean +2.611). A mean-ablation effect on agreement is therefore to be read against a
-reference that points the other way, not against one near zero as for IOI and induction.
+The agreement value is near 2 by design and measured at 1.98: `c` and `s` stay the clean
+labels, so the corrupt prompt (subject in the other number) is built to favour `s` if the
+model agrees, and on the clean model it does (mean corrupt `ld` -2.558 against clean
++2.611). Under resample ablation the source is that paired corrupt prompt, whose `ld` points
+the other way, and 1.98 describes it. Under mean ablation the reference is the
+template-matched mean over corrupt prompts (section 7), and subject number is not in the
+template key, so that reference mixes both subject numbers (section 10); 1.98 is cited
+beside a mean-ablation number per D-014 item 2, but it does not describe that reference's
+direction.
 
 ## 9. What this does not show
 
 - The gate is a clean-model sanity floor, not evidence of a circuit. Passing says the clean
   model separates `c` from `s` on these prompts and the corruption removes most of that
-  separation; it says nothing about which components do it.
+  separation (IOI, induction) or reverses it (agreement); it says nothing about which components do it.
 - Nothing here is a necessity or sufficiency claim. The noise-floor runs are mean
   ablations, but they are used only to size noise; no component's effect is interpreted.
 - The noise floor is a sample of 24 components under 5 reference seeds, not the floor for
@@ -314,9 +319,13 @@ regular `-s` plurals, of which 46 are kept because singular and plural are each 
 per prompt and is not in the prompt: it picks the two logits `ld` reads, `c` the form that
 agrees with `N1` and `s` the other form. The template key is `{prep}/{congruency}` (8
 templates); subject number is not in it, so each template's mean-ablation reference mixes
-both numbers. Default corruption `number_flip` replaces `N1` with its other-number form,
+both numbers: number-balanced in expectation (independent 50/50 draws), not exactly per
+template. Default corruption `number_flip` replaces `N1` with its other-number form,
 which turns congruent prompts into incongruent ones and back; the extra `number_flip_all`
-flips both `N1` and `N2`, which keeps congruency. No prompt filter. The build choices the
+flips both `N1` and `N2`, which keeps congruency. Under `number_flip` the corrupt side
+carries the clean prompt's template key, so the mean reference for `{prep}/congruent` is
+built from corrupt prompts that are incongruent on the surface, and the reverse; under
+`number_flip_all` the key and the surface congruency agree. No prompt filter. The build choices the
 addendum left open (the noun list, how draws are made, labels, the breakdown keys) are
 pending the author's ruling at review and are not in the decision log.
 
@@ -362,7 +371,7 @@ the same under both schemes, since the clean prompts are the same.
 Readings, not tests: on the clean prompts, pairwise accuracy is 1.000 on congruent and 0.964
 on incongruent prompts (mean clean `ld` +3.181 against +2.013), and 0.997 with a singular
 subject against 0.967 with a plural one (+2.885 against +2.315). The two verb pairs differ by
-0.001 in pairwise accuracy (0.982 is/are, 0.983 has/have) and by 0.478 in gap under
+under 0.001 in pairwise accuracy (0.982 is/are, 0.983 has/have) and by 0.478 in gap under
 `number_flip` (+5.403 against +4.925). Under `number_flip` the congruent and incongruent gaps
 are +5.189 and +5.148; under `number_flip_all`, which keeps congruency, they are +6.370 and
 +4.032.

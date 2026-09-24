@@ -14,7 +14,8 @@ picks the two logits ``ld`` reads (``c`` the form agreeing with N1, ``s`` the
 other form). N2 is the attractor, a different noun that shares N1's number
 (congruent) or not (incongruent), 50/50. Template key ``{prep}/{congruency}``;
 subject number is deliberately not in it, so each template's mean-ablation
-reference is number-balanced.
+reference is number-balanced in expectation (independent 50/50 draws), not
+exactly per template.
 
 Prompts are concatenations of single-token ids; nothing is decoded and
 re-encoded. BOS is added only through ``prepend_bos``."""

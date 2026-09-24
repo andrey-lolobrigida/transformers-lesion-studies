@@ -366,7 +366,8 @@ so no published number is checked against it". The fallback is unchanged.
 (`number_flip`, n = 2,000, seed 0, BOS prepended;
 `uv run python -m src.lesion.e1b_gate --item agreement`, at `718ec4b`):
 pairwise accuracy 0.983 against 0.90 (pass), gap +5.169 ± 0.041 logits
-against 1.0 (pass). Fraction removed 1.98, near 2 by construction (item 5).
+against 1.0 (pass). Fraction removed 1.98, near 2 as expected by design (item 5); measured, not
+guaranteed.
 The failure branch of item 7 is not triggered; agreement stays in the
 battery as the fallback, unsourced and ours. Noise floor measured
 (`uv run python -m src.lesion.e1b_noise --item agreement`). Numbers, the

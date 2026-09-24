@@ -6,7 +6,7 @@ reference draw changes.
 Per item, default scheme, seed 0, n = 2,000 (every admitted survivor for
 factual recall): node mean ablation at all positions, ablate-clean, no
 pattern freezing, reference over the corrupt side, template-matched, n =
-1,000 (factual: min(1,000, survivors), logged), for each of the 12 MLP layers
+2,000 (REF_N, O-015; factual: min(2,000, survivors), logged), for each of the 12 MLP layers
 and head 0 of each layer, under reference seeds 0-4. Reported per component:
 the sample standard deviation of effect_mean across reference seeds, the
 per-prompt sem of the seed-0 run, and the larger of the two (the floor a

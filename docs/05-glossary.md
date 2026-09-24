@@ -697,8 +697,8 @@ key `{prep}/{congruency}`. D-013 addendum item 4.
 **`number_flip`** — the agreement item's default corruption: `N1` replaced by
 its own other-number form (`dog` ↔ `dogs`), everything else kept, so
 congruent prompts become incongruent and back. `c` and `s` stay the clean
-labels, so the corrupt prompt favours `s` and the fraction removed is near 2
-by construction. Ours. D-013 addendum item 5; `results/E1b/README.md` §10.
+labels, so the corrupt prompt is built to favour `s` if the model agrees, and
+the fraction removed is expected near 2 by design (measured: 1.98). Ours. D-013 addendum item 5; `results/E1b/README.md` §10.
 
 **`number_flip_all`** — the agreement item's named extra: `N1` and `N2` both
 replaced by their other-number forms, so congruency is kept. Ungated. Ours.
