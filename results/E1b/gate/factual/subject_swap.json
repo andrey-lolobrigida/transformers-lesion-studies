@@ -99,7 +99,7 @@
     "expected_direction": "positive"
   },
   "environment": {
-    "repo_commit": "ad9dcd3ad33b2ed9828bd5af80723681563f18fc",
+    "repo_commit": "20fb4a9cd4d8a228c944d41f9648a4cfcb956825",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -120,6 +120,6 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 128,
-    "seconds": 0.06380057334899902
+    "seconds": 0.07390999794006348
   }
 }

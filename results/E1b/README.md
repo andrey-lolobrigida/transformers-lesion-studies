@@ -2,10 +2,11 @@
 
 *Run 2026-09-23 on branch `phase-E1b-battery`, GPT-2 small at HF revision
 `607a30d783dfa663caf39e06633721c8d4cfcd7e`. Survivor file written at repo commit `f1afd56`
-(committed in `ad9dcd3`); gate artifacts at `ad9dcd3`; noise floors at `74a659a` (each
+(committed in `ad9dcd3`); gate artifacts and noise floors rerun on 2026-09-24 at `20fb4a9`, reference n 2,000
+(O-015); the 1,000 versions are at `ad9dcd3` (gate) and `74a659a` (noise) (each
 artifact's own `environment.repo_commit`). Interpretation
 of the artifacts in this directory and of `batteries/factual/survivors.json`. Decisions:
-D-013, D-014, the O-009 resolution; open question O-015.*
+D-013, D-014, the O-009 and O-015 resolutions.*
 
 ## 1. What this is
 
@@ -27,10 +28,10 @@ and determinism flags. All runs use model revision `607a30d783dfa663caf39e066337
 | What | Command | Seed / n |
 |---|---|---|
 | Factual survivor file | `uv run python -m src.lesion.counterfact` | greedy decoding, no seed; all 21,919 CounterFact records; no BOS; 10 generated tokens |
-| Gate, all nine (item, scheme) pairs | `uv run python -m src.lesion.e1b_gate --item all` | seed 0; n = 2,000 for IOI and induction, n = 64 (every admitted survivor) for factual; reference-floor count at ref n = 1,000 (factual: 64), ref seed 0 |
+| Gate, all nine (item, scheme) pairs | `uv run python -m src.lesion.e1b_gate --item all` | seed 0; n = 2,000 for IOI and induction, n = 64 (every admitted survivor) for factual; reference-floor count at ref n = 2,000 (factual: 64), ref seed 0 |
 | Identity against E0 | `uv run python -m src.lesion.ablate --battery ioi --component L0H0 --value zero --type node --positions all --direction ablate-clean --no-freeze --n 100000 --seed 0 --prepend-bos false --batch-size 512 --out-dir results/E1b/identity` | seed 0, n = 100,000, no BOS |
-| Noise floor, IOI | `uv run python -m src.lesion.e1b_noise --item ioi` | seed 0, n = 2,000, ref n = 1,000, ref seeds 0–4, no BOS |
-| Noise floor, induction | `uv run python -m src.lesion.e1b_noise --item induction` | seed 0, n = 2,000, ref n = 1,000, ref seeds 0–4, BOS prepended |
+| Noise floor, IOI | `uv run python -m src.lesion.e1b_noise --item ioi` | seed 0, n = 2,000, ref n = 2,000, ref seeds 0–4, no BOS |
+| Noise floor, induction | `uv run python -m src.lesion.e1b_noise --item induction` | seed 0, n = 2,000, ref n = 2,000, ref seeds 0–4, BOS prepended |
 
 BOS defaults are per item (D-014 / E1b spec): no BOS for IOI (as in E0 and E1a) and factual
 recall, BOS prepended for induction.
@@ -60,19 +61,19 @@ Named extras are measured and reported, not gated (`extra` in the table).
 
 | item | scheme | verdict | n | pairwise acc | clean ld ± sem | corrupt ld | gap ± sem | fraction removed | top-1 | P[c] clean / corrupt | sd of clean ld | min per-template ref count |
 |---|---|---|---|---|---|---|---|---|---|---|---|---|
-| ioi | p_ABC | PASS | 2000 | 0.990 | +3.651 ± 0.036 | +0.062 | +3.590 ± 0.053 | 0.98 | 0.919 | 0.524 / 0.001 | 1.60 | 22 (5 below 30) |
-| ioi | rand_names | extra | 2000 | 0.990 | +3.651 ± 0.036 | +0.039 | +3.613 ± 0.054 | 0.99 | 0.919 | 0.524 / 0.000 | 1.60 | 22 (5 below 30) |
-| ioi | flip | extra | 2000 | 0.990 | +3.651 ± 0.036 | +3.632 | +0.019 ± 0.038 | 0.01 | 0.919 | 0.524 / 0.521 | 1.60 | 22 (5 below 30) |
-| ioi | flip_rand | extra | 2000 | 0.990 | +3.651 ± 0.036 | +0.067 | +3.585 ± 0.056 | 0.98 | 0.919 | 0.524 / 0.000 | 1.60 | 22 (5 below 30) |
-| ioi | repl_flip | extra | 2000 | 0.990 | +3.651 ± 0.036 | -3.642 | +7.293 ± 0.057 | 2.00 | 0.919 | 0.524 / 0.025 | 1.60 | 22 (5 below 30) |
-| ioi | repl | extra | 2000 | 0.990 | +3.651 ± 0.036 | -3.597 | +7.248 ± 0.053 | 1.99 | 0.919 | 0.524 / 0.025 | 1.60 | 22 (5 below 30) |
-| induction | fresh_prefix | PASS | 2000 | 0.999 | +17.005 ± 0.139 | -0.007 | +17.012 ± 0.138 | 1.00 | 0.974 | 0.768 / 0.000 | 6.22 | 37 (0 below 30) |
+| ioi | p_ABC | PASS | 2000 | 0.990 | +3.651 ± 0.036 | +0.062 | +3.590 ± 0.053 | 0.98 | 0.919 | 0.524 / 0.001 | 1.60 | 52 (0 below 30) |
+| ioi | rand_names | extra | 2000 | 0.990 | +3.651 ± 0.036 | +0.039 | +3.613 ± 0.054 | 0.99 | 0.919 | 0.524 / 0.000 | 1.60 | 52 (0 below 30) |
+| ioi | flip | extra | 2000 | 0.990 | +3.651 ± 0.036 | +3.632 | +0.019 ± 0.038 | 0.01 | 0.919 | 0.524 / 0.521 | 1.60 | 52 (0 below 30) |
+| ioi | flip_rand | extra | 2000 | 0.990 | +3.651 ± 0.036 | +0.067 | +3.585 ± 0.056 | 0.98 | 0.919 | 0.524 / 0.000 | 1.60 | 52 (0 below 30) |
+| ioi | repl_flip | extra | 2000 | 0.990 | +3.651 ± 0.036 | -3.642 | +7.293 ± 0.057 | 2.00 | 0.919 | 0.524 / 0.025 | 1.60 | 52 (0 below 30) |
+| ioi | repl | extra | 2000 | 0.990 | +3.651 ± 0.036 | -3.597 | +7.248 ± 0.053 | 1.99 | 0.919 | 0.524 / 0.025 | 1.60 | 52 (0 below 30) |
+| induction | fresh_prefix | PASS | 2000 | 0.999 | +17.005 ± 0.139 | -0.007 | +17.012 ± 0.138 | 1.00 | 0.974 | 0.768 / 0.000 | 6.22 | 71 (0 below 30) |
 | factual | subject_swap | FAIL | 64 | 1.000 | +4.291 ± 0.312 | +0.187 | +4.104 ± 0.374 | 0.96 | 1.000 | 0.208 / 0.009 | 2.50 | 31 (0 below 30) |
 | factual | subject_swap_sym | extra | 64 | 1.000 | +4.808 ± 0.293 | -2.676 | +7.484 ± 0.542 | 1.56 | 1.000 | 0.208 / 0.009 | 2.35 | 31 (0 below 30) |
 
 Columns: fraction removed is `(mean clean ld − mean corrupt ld) / mean clean ld`; top-1 is
 the rate at which `c` is the argmax over the full vocabulary on the clean prompt; the last
-column is the smallest per-template count in a reference draw at ref n = 1,000 (factual:
+column is the smallest per-template count in a reference draw at ref n = 2,000 (factual:
 64), ref seed 0, with the number of templates under the floor of 30.
 
 Per default scheme, per condition:
@@ -135,7 +136,7 @@ expected by construction, since each prompt ends where greedy generation produce
 **Verdict.** The gate fails on the survivor condition: 64 admitted survivors against a
 pre-registered 300. Pairwise accuracy (1.000) and gap (+4.104 ± 0.374) clear their
 thresholds. **D-013's fallback is triggered**, with survivors as the failing condition; the
-agreement addendum is pending the author. The failure is logged in the null-results table
+agreement addendum was decided on 2026-09-24 (D-013) and the item is not yet built. The failure is logged in the null-results table
 of `docs/04-decisions.md`.
 
 The extra `subject_swap_sym` uses the same prompts and partners with `s` set to the
@@ -190,15 +191,16 @@ E1b does not do (E2), and no reproduction of it is claimed.
 
 A template enters a mean-ablation run only with ≥ 30 reference prompts (D-014 item 5);
 the gate reports it, the harness does not enforce it. Counts are for one reference draw at
-ref seed 0.
+ref seed 0. The reference n is **2,000 for IOI and induction** (O-015 resolution,
+2026-09-24): at 1,000, IOI had five templates under 30 at ref seed 0 (minimum 22:
+ABBA/7 22, ABBA/8 28, ABBA/9 28, BABA/1 28, BABA/3 25), and a count over ref seeds 0–4
+put 5–7 templates under the floor at every seed. The 1,000 gate counts are in history at
+`ad9dcd3`.
 
-- **IOI** (`p_ABC`, ref n = 1,000, 30 templates): minimum 22. **Five templates are below
-  30:** ABBA/7 (22), ABBA/8 (28), ABBA/9 (28), BABA/1 (28), BABA/3 (25). At n = 1,000 the
-  IOI reference does not meet the floor. The E1a MLP mean-ablation artifacts
-  (`results/E1a/mlp/mean/`, the same `p_ABC` reference at n = 1,000, seed 0) record the
-  same per-template counts. Which reference n E3 uses for IOI needs the author's decision;
-  it is open as O-015 and is not chosen here.
-- **Induction** (`fresh_prefix`, ref n = 1,000, 22 templates `i1`…`i22`): minimum 37, none
+- **IOI** (`p_ABC`, ref n = 2,000, 30 templates): minimum 52, none below 30. The E1a
+  MLP mean-ablation artifacts (`results/E1a/mlp/mean/`) keep their reference of n = 1,000
+  and its per-template counts, as logged there.
+- **Induction** (`fresh_prefix`, ref n = 2,000, 22 templates `i1`…`i22`): minimum 71, none
   below 30.
 - **Factual recall** (`subject_swap`, ref n = 64, every admitted survivor, 2 templates):
   minimum 31, none below 30. Moot while the item's gate has failed.
@@ -206,16 +208,23 @@ ref seed 0.
 ## 7. Noise floor
 
 Per passing item, default scheme, seed 0, n = 2,000: node mean ablation at all positions,
-ablate-clean, reference n = 1,000 drawn from the default corrupt scheme and matched by
+ablate-clean, reference n = 2,000 drawn from the default corrupt scheme and matched by
 template, under reference seeds 0–4, for the 12 MLP layers and head 0 of each layer (24
 components). Per component the floor is the larger of the standard deviation of
 `effect_mean` across the five reference seeds and the per-prompt `sem` of the seed-0 run.
 
-- **IOI** (`p_ABC`, no BOS): largest floor 0.0459, on L0.mlp, where the reference-seed spread
-  dominates (spread 0.0459 against sem 0.0413). The spread dominates in 5 of the 24
-  components (L0.mlp, L3.mlp, L6.mlp, L2H0, L4H0), the sem in the other 19.
-- **Induction** (`fresh_prefix`, BOS prepended): largest floor 0.1419, on L0.mlp, where the
-  sem dominates (sem 0.1419 against spread 0.0679). The sem dominates in all 24 components.
+- **IOI** (`p_ABC`, no BOS): largest floor 0.0404, on L0.mlp, where the sem dominates
+  (sem 0.0404 against spread 0.0240). The spread dominates in 2 of the 24 components
+  (L4H0 and L7H0, both about 0.001), the sem in the other 22.
+- **Induction** (`fresh_prefix`, BOS prepended): largest floor 0.1422, on L0.mlp, where the
+  sem dominates (sem 0.1422 against spread 0.0728). The sem dominates in all 24 components.
+
+Against the reference n = 1,000 floors (`74a659a`): on IOI the largest reference-seed
+spread fell from 0.0459 to 0.0240 and the spread now dominates in 2 components rather than
+5; the median per-component spread is 0.77 of its 1,000 value (range 0.29–1.60). On
+induction the median is 0.91 (range 0.45–2.08) and the largest floor barely moves, since
+the sem, which does not depend on the reference n, dominates there. Five seeds give a
+rough estimate of each spread, so single-component ratios are noisy.
 - **Factual recall:** no floor was measured, because its gate failed; `e1b_noise` refuses an
   item whose gate did not pass.
 

@@ -186,49 +186,43 @@
     }
   },
   "reference_floor": {
-    "ref_n": 1000,
+    "ref_n": 2000,
     "ref_seed": 0,
     "floor": 30,
     "per_template_counts": {
-      "ABBA/0": 33,
-      "ABBA/1": 31,
-      "ABBA/10": 37,
-      "ABBA/11": 36,
-      "ABBA/12": 30,
-      "ABBA/13": 35,
-      "ABBA/14": 34,
-      "ABBA/2": 35,
-      "ABBA/3": 34,
-      "ABBA/4": 35,
-      "ABBA/5": 40,
-      "ABBA/6": 36,
-      "ABBA/7": 22,
-      "ABBA/8": 28,
-      "ABBA/9": 28,
-      "BABA/0": 36,
-      "BABA/1": 28,
-      "BABA/10": 41,
-      "BABA/11": 33,
-      "BABA/12": 31,
-      "BABA/13": 30,
-      "BABA/14": 30,
-      "BABA/2": 37,
-      "BABA/3": 25,
-      "BABA/4": 35,
-      "BABA/5": 38,
-      "BABA/6": 34,
-      "BABA/7": 35,
-      "BABA/8": 37,
-      "BABA/9": 36
+      "ABBA/0": 63,
+      "ABBA/1": 65,
+      "ABBA/10": 68,
+      "ABBA/11": 68,
+      "ABBA/12": 70,
+      "ABBA/13": 82,
+      "ABBA/14": 67,
+      "ABBA/2": 69,
+      "ABBA/3": 66,
+      "ABBA/4": 58,
+      "ABBA/5": 72,
+      "ABBA/6": 73,
+      "ABBA/7": 58,
+      "ABBA/8": 52,
+      "ABBA/9": 65,
+      "BABA/0": 67,
+      "BABA/1": 58,
+      "BABA/10": 69,
+      "BABA/11": 52,
+      "BABA/12": 61,
+      "BABA/13": 71,
+      "BABA/14": 54,
+      "BABA/2": 77,
+      "BABA/3": 63,
+      "BABA/4": 73,
+      "BABA/5": 66,
+      "BABA/6": 73,
+      "BABA/7": 69,
+      "BABA/8": 79,
+      "BABA/9": 72
     },
-    "min": 22,
-    "templates_below_floor": [
-      "ABBA/7",
-      "ABBA/8",
-      "ABBA/9",
-      "BABA/1",
-      "BABA/3"
-    ]
+    "min": 52,
+    "templates_below_floor": []
   },
   "battery": {
     "name": "ioi",
@@ -260,7 +254,7 @@
     "expected_direction": "positive"
   },
   "environment": {
-    "repo_commit": "ad9dcd3ad33b2ed9828bd5af80723681563f18fc",
+    "repo_commit": "20fb4a9cd4d8a228c944d41f9648a4cfcb956825",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -281,6 +275,6 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 128,
-    "seconds": 3.0724127292633057
+    "seconds": 3.4299631118774414
   }
 }
