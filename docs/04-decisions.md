@@ -408,6 +408,37 @@ thresholds (D-014 item 1) did not change. The failure branch of item 7 is
 not triggered. Details and the side-by-side L0.mlp rows:
 `results/E1b/README.md` §7, §10.
 
+*Agreement build choices accepted, 2026-09-24.* The E1b agreement plan made
+nine choices the addendum left open; the author accepted them as built
+(choice 3 was replaced, as above).
+
+1. The candidate noun list is 50 words chosen by Claude, animals, occupations
+   and people with regular `-s` plurals. 46 are kept on the pinned GPT-2
+   tokenizer; `owl`, `eagle`, `baker` and `painter` drop because their
+   plurals are two tokens.
+2. N1 and N2 are always different nouns.
+3. Replaced by exact per-template balance (paragraph above).
+4. The labels are `N1`, `PREP`, `N2` and `END`, with `END` = `N2`'s index.
+   Sentence-initial `The` carries no leading space; ` the` does.
+5. The corruption draws no random numbers, so both schemes share one clean
+   stream at a given seed.
+6. The gate records an ungated per-value `breakdown` for the keys a battery
+   names in an optional `breakdown_keys` attribute, read with `getattr` so the
+   `Battery` protocol does not change. Agreement names `congruency`, `verb` and
+   `subject_number`. The last was added by the plan to separate a
+   number prior from agreement.
+7. Only `--item agreement` was run. The other items' gate artifacts were not
+   regenerated, and they carry no `breakdown` field.
+8. The README section is appended as §10, so earlier section numbers do not
+   move.
+9. The fast tier stays offline. The noun-list check against the real
+   tokenizer is a slow test.
+
+Also noted and accepted without action: on the gate prompts the agreeing verb
+is rarely the clean top-1 token (top-1 rate 0.060, mean P[c] 0.032), so `ld`
+on this item reads as a two-form preference conditional on a verb of the drawn
+pair, not as what the model generates (`results/E1b/README.md` §10).
+
 ### D-014 — E1b battery rules: the gate, the noise floor, the interface
 *2026-09-23, E1b design. Proposed by Claude, each point confirmed by the
 author the same session. Item-level detail lives in the E1b spec; this
