@@ -15,7 +15,7 @@ pytestmark = pytest.mark.slow
 E0 = Path("results/E0/e0_smoke_seed0_n100000.json")
 E1B = Path("results/E1b")
 IDENTITY = E1B / "identity" / "ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0.json"
-PAIRS = [(item, scheme) for item in ("ioi", "induction", "factual") for scheme in BATTERIES[item].schemes]
+PAIRS = [(item, scheme) for item in ("ioi", "induction", "factual", "agreement") for scheme in BATTERIES[item].schemes]
 
 
 def load(path: Path) -> dict:
@@ -61,7 +61,7 @@ def test_gate_artifact(item, scheme):
     if item != "factual":
         assert d["battery"]["n"] == 2000 and d["reference_floor"]["ref_n"] == 2000
         assert d["reference_floor"]["templates_below_floor"] == []  # O-015: ref n chosen to meet the floor
-    assert d["battery"]["prepend_bos"] is (item == "induction")
+    assert d["battery"]["prepend_bos"] is BATTERIES[item].default_prepend_bos
 
 
 def test_factual_gate_reads_the_survivor_file():
@@ -70,7 +70,7 @@ def test_factual_gate_reads_the_survivor_file():
     assert d["verdict"]["conditions"]["survivors"]["value"] == survivors == d["battery"]["n"]
 
 
-@pytest.mark.parametrize("item", ["ioi", "induction", "factual"])
+@pytest.mark.parametrize("item", ["ioi", "induction", "factual", "agreement"])
 def test_noise_floor(item):
     default = BATTERIES[item].schemes[0]
     if not gate(item, default)["verdict"]["pass"]:
@@ -85,10 +85,21 @@ def test_noise_floor(item):
         assert (d["n"], d["ref_n"]) == (2000, 2000)
 
 
-@pytest.mark.parametrize("item", ["ioi", "induction", "factual"])
+@pytest.mark.parametrize("item", ["ioi", "induction", "factual", "agreement"])
 def test_readme_cites_the_gate_numbers(item):
     d = gate(item, BATTERIES[item].schemes[0])
     readme = (E1B / "README.md").read_text()
     if d["statistics"] is not None:
         assert f"{d['statistics']['pairwise_accuracy']:.3f}" in readme
         assert f"{d['statistics']['gap']:+.3f}" in readme
+
+
+def test_agreement_gate_breakdown_and_labelling():
+    for scheme in BATTERIES["agreement"].schemes:
+        d = gate("agreement", scheme)
+        assert d["battery"]["corruption"]["source"] == "ours (D-013 fallback; unsourced)"
+        b = d["breakdown"]
+        assert set(b) == {"congruency", "verb", "subject_number"}
+        assert set(b["congruency"]) == {"congruent", "incongruent"} and set(b["verb"]) == {"is/are", "has/have"}
+        assert sum(r["n"] for r in b["congruency"].values()) == d["statistics"]["n"] == 2000
+        assert len(d["reference_floor"]["per_template_counts"]) == 8

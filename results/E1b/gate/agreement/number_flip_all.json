@@ -1,0 +1,193 @@
+{
+  "phase": "E1b",
+  "command": "uv run python -m src.lesion.e1b_gate --item agreement",
+  "item": "agreement",
+  "scheme": "number_flip_all",
+  "gated": false,
+  "pre_registered": true,
+  "thresholds": {
+    "pairwise_accuracy_min": 0.9,
+    "gap_min": 1.0,
+    "survivors_min": 300,
+    "template_floor": 30
+  },
+  "verdict": null,
+  "statistics": {
+    "n": 2000,
+    "pairwise_accuracy": 0.9825,
+    "pairwise_accuracy_corrupt": 0.0195,
+    "top1_rate": 0.0595,
+    "clean": {
+      "mean_ld": 2.6109373569488525,
+      "std_ld": 1.2166420221328735,
+      "sem_ld": 0.02720494195818901,
+      "mean_p_c": 0.03256969153881073
+    },
+    "corrupt": {
+      "mean_ld": -2.6180243492126465,
+      "std_ld": 1.2060500383377075,
+      "sem_ld": 0.026968099176883698,
+      "mean_p_c": 0.0023797869216650724
+    },
+    "gap": 5.228962421417236,
+    "gap_sem": 0.04509684816002846,
+    "fraction_removed": 2.002714621819887,
+    "by_template": {
+      "behind/congruent": {
+        "n": 258,
+        "mean_ld_clean": 2.7743473052978516,
+        "mean_ld_corrupt": -2.765730619430542
+      },
+      "behind/incongruent": {
+        "n": 229,
+        "mean_ld_clean": 1.5734443664550781,
+        "mean_ld_corrupt": -1.6351579427719116
+      },
+      "beside/congruent": {
+        "n": 281,
+        "mean_ld_clean": 4.053133964538574,
+        "mean_ld_corrupt": -3.9801528453826904
+      },
+      "beside/incongruent": {
+        "n": 251,
+        "mean_ld_clean": 2.8136343955993652,
+        "mean_ld_corrupt": -2.833329200744629
+      },
+      "near/congruent": {
+        "n": 234,
+        "mean_ld_clean": 2.5657906532287598,
+        "mean_ld_corrupt": -2.7144243717193604
+      },
+      "near/incongruent": {
+        "n": 238,
+        "mean_ld_clean": 1.5490413904190063,
+        "mean_ld_corrupt": -1.5109654664993286
+      },
+      "with/congruent": {
+        "n": 251,
+        "mean_ld_clean": 3.1962177753448486,
+        "mean_ld_corrupt": -3.1815152168273926
+      },
+      "with/incongruent": {
+        "n": 258,
+        "mean_ld_clean": 2.051565170288086,
+        "mean_ld_corrupt": -2.035292148590088
+      }
+    }
+  },
+  "breakdown": {
+    "congruency": {
+      "congruent": {
+        "n": 1024,
+        "pairwise_accuracy": 1.0,
+        "mean_ld_clean": 3.181013584136963,
+        "mean_ld_corrupt": -3.189176559448242,
+        "gap": 6.370190620422363
+      },
+      "incongruent": {
+        "n": 976,
+        "pairwise_accuracy": 0.9641393442622951,
+        "mean_ld_clean": 2.012824296951294,
+        "mean_ld_corrupt": -2.0187828540802,
+        "gap": 4.031607151031494
+      }
+    },
+    "verb": {
+      "has/have": {
+        "n": 981,
+        "pairwise_accuracy": 0.9826707441386341,
+        "mean_ld_clean": 2.4765093326568604,
+        "mean_ld_corrupt": -2.515359878540039,
+        "gap": 4.99186897277832
+      },
+      "is/are": {
+        "n": 1019,
+        "pairwise_accuracy": 0.9823356231599607,
+        "mean_ld_clean": 2.7403523921966553,
+        "mean_ld_corrupt": -2.716860294342041,
+        "gap": 5.457213401794434
+      }
+    },
+    "subject_number": {
+      "plural": {
+        "n": 962,
+        "pairwise_accuracy": 0.9667359667359667,
+        "mean_ld_clean": 2.3151018619537354,
+        "mean_ld_corrupt": -2.8789103031158447,
+        "gap": 5.19401216506958
+      },
+      "singular": {
+        "n": 1038,
+        "pairwise_accuracy": 0.9971098265895953,
+        "mean_ld_clean": 2.8851125240325928,
+        "mean_ld_corrupt": -2.3762402534484863,
+        "gap": 5.2613525390625
+      }
+    }
+  },
+  "reference_floor": {
+    "ref_n": 2000,
+    "ref_seed": 0,
+    "floor": 30,
+    "per_template_counts": {
+      "behind/congruent": 258,
+      "behind/incongruent": 229,
+      "beside/congruent": 281,
+      "beside/incongruent": 251,
+      "near/congruent": 234,
+      "near/incongruent": 238,
+      "with/congruent": 251,
+      "with/incongruent": 258
+    },
+    "min": 229,
+    "templates_below_floor": []
+  },
+  "battery": {
+    "name": "agreement",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": true,
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun, congruent/incongruent 50/50; template key prep/congruency",
+    "labels": [
+      "N1",
+      "PREP",
+      "N2",
+      "END"
+    ],
+    "schemes": [
+      "number_flip",
+      "number_flip_all"
+    ],
+    "corruption": {
+      "name": "number_flip_all",
+      "removes": "the grammatical number of both nouns: N1 and N2 each replaced by their own other-number form",
+      "inserts": "the opposite number on both nouns; congruency and length kept. c and s stay the clean labels: expected fraction removed near 2, as number_flip, with the attractor's number moved too",
+      "source": "ours (D-013 fallback; unsourced)"
+    },
+    "expected_direction": "positive"
+  },
+  "environment": {
+    "repo_commit": "718ec4ba206c064c8c5e33d56356662035c15ef9",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 0.9192636013031006
+  }
+}
