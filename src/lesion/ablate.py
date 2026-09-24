@@ -29,6 +29,7 @@ import sys
 from pathlib import Path
 
 from src.lesion.battery import resolve_scheme
+from src.lesion.agreement import AgreementBattery
 from src.lesion.factual import FactualBattery
 from src.lesion.induction import InductionBattery
 from src.lesion.ioi import IOIBattery
@@ -38,7 +39,8 @@ from src.lesion.spec import (
 
 # name -> battery class. Class attributes (labels, schemes, default_prepend_bos)
 # are read before the model loads; instances are built after, by make_battery.
-BATTERIES = {"ioi": IOIBattery, "induction": InductionBattery, "factual": FactualBattery}
+BATTERIES = {"ioi": IOIBattery, "induction": InductionBattery, "factual": FactualBattery,
+             "agreement": AgreementBattery}
 
 
 def make_battery(name: str, tokenizer, scheme: str | None):
@@ -118,7 +120,7 @@ def build_parser() -> argparse.ArgumentParser:
     ap.add_argument("--n", type=int, default=1000)
     ap.add_argument("--seed", type=int, default=0)
     ap.add_argument("--prepend-bos", default=None,
-                    help="true|false (default: the battery's own; false for ioi and factual, true for induction)")
+                    help="true|false (default: the battery's own; false for ioi and factual, true for induction and agreement)")
     ap.add_argument("--batch-size", type=int, default=256)
     ap.add_argument("--device", default="cuda")
     ap.add_argument("--out-dir", default="results/E1a")

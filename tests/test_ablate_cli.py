@@ -142,3 +142,22 @@ def test_factual_without_survivor_file_exits_2_before_model_loads(tmp_path, monk
         ablate.main(["--battery", "factual", "--component", "L0.mlp", "--type", "node", "--positions", "all",
                      "--direction", "ablate-clean", "--no-freeze", "--value", "zero"])
     assert e.value.code == 2
+
+
+AGREEMENT = ["--battery", "agreement", "--component", "L0H0", "--type", "node", "--direction", "ablate-clean",
+             "--no-freeze", "--value", "zero"]
+
+
+def test_agreement_defaults_resolve_to_bos_and_number_flip():
+    a = parse(AGREEMENT + ["--positions", "all"])
+    ablate.resolve_battery_defaults(a)
+    assert (a.prepend_bos, a.corruption) == ("true", "number_flip")
+
+
+def test_agreement_label_masks():
+    a = parse(AGREEMENT + ["--positions", "N1,END"])
+    ablate.resolve_battery_defaults(a)
+    assert ablate.specs_from_args(a)[0].positions == Labels(("N1", "END"))
+    with pytest.raises(SystemExit) as e:
+        ablate.main(AGREEMENT + ["--positions", "S2"])
+    assert e.value.code == 2

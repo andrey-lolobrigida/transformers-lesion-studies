@@ -8,11 +8,13 @@ for the named extras.
 Gate (D-014 item 1; thresholds fixed before any generator ran, never relaxed):
 pairwise accuracy mean 1[ld_clean > 0] >= 0.90; gap mean ld_clean - mean
 ld_corrupt >= 1.0 logit; factual recall additionally >= 300 admitted
-survivors. n = 2,000 for IOI and induction, every admitted survivor for
+survivors. n = 2,000 for IOI, induction and agreement, every admitted survivor for
 factual recall; seed 0. A run at any other n or seed records statistics but
 no verdict. Also reported, ungated: top-1 rate of c, mean P[c] clean and
 corrupt, fraction removed, the per-prompt spread, and per-template
 reference counts at the reference n E3 will use, against the floor of 30.
+Batteries that name ``breakdown_keys`` also get ungated per-value readings
+(agreement: congruency, verb, subject number).
 
 One JSON (+ per-prompt parquet) per (item, scheme) under results/E1b/gate/{item}/."""
 
@@ -39,7 +41,7 @@ from src.lesion.runner import group_by_length, metrics
 ACC_MIN, GAP_MIN, SURVIVORS_MIN = 0.90, 1.0, 300
 REF_N, REF_SEED = 2000, 0  # the reference draw E3 uses (O-015 resolution); E1a used 1,000
 DEFAULT_N = 2000
-ITEMS = ("ioi", "induction", "factual")
+ITEMS = ("ioi", "induction", "factual", "agreement")
 THRESHOLDS = {"pairwise_accuracy_min": ACC_MIN, "gap_min": GAP_MIN, "survivors_min": SURVIVORS_MIN,
               "template_floor": TEMPLATE_FLOOR}
 
@@ -95,6 +97,22 @@ def statistics(cols: dict[str, Tensor], templates: list[str]) -> dict:
         "fraction_removed": diff.mean().item() / mean_clean if mean_clean != 0 else None,
         "by_template": by_template,
     }
+
+
+def breakdown(cols: dict[str, Tensor], groups: dict[str, list[str]]) -> dict:
+    """Ungated readings per value of each meta key a battery names in its
+    optional ``breakdown_keys`` (agreement: congruency, verb, subject number)."""
+    clean, corrupt = cols["ld_clean"].float(), cols["ld_corrupt"].float()
+    out = {}
+    for key, values in groups.items():
+        out[key] = {}
+        for v in sorted(set(values)):
+            m = torch.tensor([x == v for x in values])
+            k = int(m.sum())
+            out[key][v] = {"n": k, "pairwise_accuracy": int((clean[m] > 0).sum()) / k,
+                           "mean_ld_clean": clean[m].mean().item(), "mean_ld_corrupt": corrupt[m].mean().item(),
+                           "gap": (clean[m] - corrupt[m]).mean().item()}
+    return out
 
 
 def is_pre_registered(n: int, seed: int, n_admitted: int | None, prepend_bos: bool, default_prepend_bos: bool) -> bool:
@@ -191,6 +209,9 @@ def main(argv: list[str] | None = None) -> int:
             t0 = time.time()
             cols, templates = measure(model, battery, n, args.seed, prepend_bos, args.batch_size) if n > 0 else (None, [])
             stats = statistics(cols, templates) if n > 0 else None
+            keys = getattr(battery, "breakdown_keys", ())
+            groups = ({k: [p.meta[k] for p in battery.pairs(n, args.seed, prepend_bos)] for k in keys}
+                      if keys and n > 0 else {})
             gated = scheme == cls.schemes[0]
             record = {
                 "phase": "E1b", "command": command, "item": item, "scheme": scheme, "gated": gated,
@@ -198,6 +219,7 @@ def main(argv: list[str] | None = None) -> int:
                 "thresholds": THRESHOLDS,
                 "verdict": verdict(stats, n_admitted) if gated and pre_registered else None,
                 "statistics": stats,
+                "breakdown": breakdown(cols, groups) if groups else None,
                 "reference_floor": reference_floor(battery, ref_n, prepend_bos) if ref_n > 0 else None,
                 "battery": battery_record(battery, n, args.seed, prepend_bos),
                 "environment": artifact.environment_record(model, args.batch_size, time.time() - t0),
@@ -215,6 +237,10 @@ def main(argv: list[str] | None = None) -> int:
             else:
                 tag = "PASS" if record["verdict"]["pass"] else "FAIL"
             print(f"{item:9} {scheme:16} {tag:5} n={n:<5} {line}  -> {path}", flush=True)
+            if record["breakdown"] is not None:
+                for key, vals in record["breakdown"].items():
+                    print("    " + key + ": " + "  ".join(f"{v} acc {r['pairwise_accuracy']:.3f} gap {r['gap']:+.3f}"
+                                                    for v, r in vals.items()), flush=True)
     return 0
 
 

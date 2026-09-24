@@ -117,3 +117,27 @@ def test_refusals_exit_2_before_model_loads(never_load_model, argv):
     with pytest.raises(SystemExit) as e:
         g.main(argv)
     assert e.value.code == 2
+
+
+def test_items_include_agreement():
+    assert g.ITEMS == ("ioi", "induction", "factual", "agreement")
+
+
+def test_breakdown_on_hand_values():
+    cols = {"ld_clean": torch.tensor([2., -1., 3., 1.]), "ld_corrupt": torch.tensor([-2., 0., -3., 0.])}
+    b = g.breakdown(cols, {"congruency": ["congruent", "incongruent", "congruent", "incongruent"]})
+    assert set(b) == {"congruency"}
+    c, i = b["congruency"]["congruent"], b["congruency"]["incongruent"]
+    assert c["n"] == 2 and c["pairwise_accuracy"] == 1.0
+    assert c["mean_ld_clean"] == pytest.approx(2.5) and c["mean_ld_corrupt"] == pytest.approx(-2.5)
+    assert c["gap"] == pytest.approx(5.0)
+    assert i["n"] == 2 and i["pairwise_accuracy"] == 0.5 and i["gap"] == pytest.approx(0.0)
+
+
+def test_agreement_scheme_refused_before_model_loads(monkeypatch):
+    def boom(*a, **k):
+        raise AssertionError("model loaded")
+    monkeypatch.setattr("src.lesion.model.load_model", boom)
+    with pytest.raises(SystemExit) as e:
+        g.main(["--item", "agreement", "--scheme", "flip"])
+    assert e.value.code == 2
