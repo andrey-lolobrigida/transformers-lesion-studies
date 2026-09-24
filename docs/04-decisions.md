@@ -374,6 +374,39 @@ battery as the fallback, unsourced and ours. Noise floor measured
 ungated breakdown and the noise floor: `results/E1b/README.md` §3, §7, §10.
 The build choices the addendum left open are listed in the agreement plan
 and are pending the author's ruling; none is recorded here yet.
+*(Superseded by the balanced-draw rerun below; numbers kept as the record of
+the first run.)*
+
+*Agreement: draws balanced per template, 2026-09-24.* Decided by the author
+after the first gate and noise run. The generator no longer draws
+preposition, congruency and subject number independently (50/50 for the last
+two, so balanced in expectation only); prompts now come in blocks of 16, each
+block one shuffle of every (preposition, congruency, subject number) cell, so
+at n a multiple of 16 each template `{prep}/{congruency}` has exactly n/8
+prompts, half singular and half plural; the verb pair is still drawn per
+prompt (`src/lesion/agreement.py`, `803ec36`). This settles "how draws are
+made", one of the build choices the addendum left open; the others are still
+pending. Reason: the first run's largest noise floor, 0.2977 on L0.mlp, came
+from the reference-seed spread (sd 0.2977 against sem 0.0608), with
+`effect_mean` +0.856 to +1.494 across ref seeds 0–4. A reviewer's scratch
+check (five reference seeds, not a repo artifact, not a result) found that
+L0.mlp's `effect_mean` followed each reference draw's plural fraction: seeds
+2, 1, 3, 0, 4 had plural fractions 0.479, 0.488, 0.488, 0.519, 0.520 and
+`effect_mean` 0.86, 0.91, 0.98, 1.49, 1.41; that is five points. First run: gate at `718ec4b`
+(artifacts in `17cb218`), `number_flip` PASS, pairwise accuracy 0.983, gap
++5.169 ± 0.041; noise floor in `e460d90`. Rerun
+(`uv run python -m src.lesion.e1b_gate --item agreement`, n = 2,000, seed 0,
+BOS prepended, at `803ec36`, artifacts in `5a53407`): `number_flip` **PASS**,
+pairwise accuracy 0.981 against 0.90, gap +5.141 ± 0.040 logits against
+1.0, fraction removed 2.00; every template has exactly 250 reference prompts
+at ref n = 2,000. Rerun noise floor
+(`uv run python -m src.lesion.e1b_noise --item agreement`, ref n = 2,000,
+ref seeds 0–4, at `5a53407`, committed in `7d25f69`): largest floor 0.0537
+on L0.mlp, where the sem dominates (sem 0.0537 against reference-seed sd
+0.0425); the sem dominates all 24 components. The gate rule and its
+thresholds (D-014 item 1) did not change. The failure branch of item 7 is
+not triggered. Details and the side-by-side L0.mlp rows:
+`results/E1b/README.md` §7, §10.
 
 ### D-014 — E1b battery rules: the gate, the noise floor, the interface
 *2026-09-23, E1b design. Proposed by Claude, each point confirmed by the

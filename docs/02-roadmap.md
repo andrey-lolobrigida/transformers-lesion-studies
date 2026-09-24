@@ -171,8 +171,9 @@ resolves here.
 Gate: IOI pass, induction pass, factual recall fail (64 admitted survivors
 against 300), so D-013's fallback is triggered. Subject–verb agreement (ours,
 unsourced) was built 2026-09-24 under the D-013 addendum and passes its gate
-(`number_flip`, n = 2,000, seed 0, BOS: pairwise accuracy 0.983, gap
-+5.169 ± 0.041). Awaiting the author's review and `v-E1b`.*
+on the balanced-draw rerun (`number_flip`, n = 2,000, seed 0, BOS: pairwise
+accuracy 0.981, gap +5.141 ± 0.040; first run 0.983, +5.169 ± 0.041).
+Awaiting the author's review and `v-E1b`.*
 
 ---
 

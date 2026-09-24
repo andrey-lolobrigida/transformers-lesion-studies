@@ -5,8 +5,10 @@
 (committed in `ad9dcd3`); gate artifacts and noise floors rerun on 2026-09-24 at `20fb4a9`, reference n 2,000
 (O-015); the 1,000 versions are at `ad9dcd3` (gate) and `74a659a` (noise) (each
 artifact's own `environment.repo_commit`). Subject–verb agreement (the D-013 fallback, section 10)
-was run on 2026-09-24: gate at `718ec4b` (committed in `17cb218`), noise floor at `17cb218`
-(committed in `e460d90`). Interpretation
+was run on 2026-09-24 and rerun the same day on per-template balanced draws: gate at
+`803ec36` (committed in `5a53407`), noise floor at `5a53407` (committed in `7d25f69`); the
+first run (independent draws; gate at `718ec4b`, committed in `17cb218`; noise floor at
+`17cb218`, committed in `e460d90`) is kept as a record in section 10. Interpretation
 of the artifacts in this directory and of `batteries/factual/survivors.json`. Decisions:
 D-013, D-014, the O-009 and O-015 resolutions.*
 
@@ -78,8 +80,8 @@ Named extras are measured and reported, not gated (`extra` in the table).
 | induction | fresh_prefix | PASS | 2000 | 0.999 | +17.005 ± 0.139 | -0.007 | +17.012 ± 0.138 | 1.00 | 0.974 | 0.768 / 0.000 | 6.22 | 71 (0 below 30) |
 | factual | subject_swap | FAIL | 64 | 1.000 | +4.291 ± 0.312 | +0.187 | +4.104 ± 0.374 | 0.96 | 1.000 | 0.208 / 0.009 | 2.50 | 31 (0 below 30) |
 | factual | subject_swap_sym | extra | 64 | 1.000 | +4.808 ± 0.293 | -2.676 | +7.484 ± 0.542 | 1.56 | 1.000 | 0.208 / 0.009 | 2.35 | 31 (0 below 30) |
-| agreement | number_flip | PASS | 2000 | 0.983 | +2.611 ± 0.027 | -2.558 | +5.169 ± 0.041 | 1.98 | 0.059 | 0.033 / 0.002 | 1.22 | 229 (0 below 30) |
-| agreement | number_flip_all | extra | 2000 | 0.983 | +2.611 ± 0.027 | -2.618 | +5.229 ± 0.045 | 2.00 | 0.059 | 0.033 / 0.002 | 1.22 | 229 (0 below 30) |
+| agreement | number_flip | PASS | 2000 | 0.981 | +2.568 ± 0.027 | -2.574 | +5.141 ± 0.040 | 2.00 | 0.060 | 0.032 / 0.002 | 1.21 | 250 (0 below 30) |
+| agreement | number_flip_all | extra | 2000 | 0.981 | +2.568 ± 0.027 | -2.569 | +5.137 ± 0.044 | 2.00 | 0.060 | 0.032 / 0.002 | 1.21 | 250 (0 below 30) |
 
 Columns: fraction removed is `(mean clean ld − mean corrupt ld) / mean clean ld`; top-1 is
 the rate at which `c` is the argmax over the full vocabulary on the clean prompt; the last
@@ -96,8 +98,9 @@ Per default scheme, per condition:
   is 1.000 against 0.90 and the gap is +4.104 ± 0.374 logits against 1.0; the admitted
   survivor count is 64 against 300. FAIL, on the survivor condition alone.
 - **Agreement** (D-013 fallback, unsourced; section 10): on `number_flip`, n=2000, seed 0,
-  BOS prepended, the clean pairwise accuracy is 0.983 against 0.90 and the gap is
-  +5.169 ± 0.041 logits against 1.0. PASS.
+  BOS prepended, per-template balanced draws, the clean pairwise accuracy is 0.981 against
+  0.90 and the gap is +5.141 ± 0.040 logits against 1.0. PASS. (The first run, on
+  independent draws, also passed: section 10.)
 
 ## 4. Factual recall
 
@@ -218,8 +221,10 @@ put 5–7 templates under the floor at every seed. The 1,000 gate counts are in 
   below 30.
 - **Factual recall** (`subject_swap`, ref n = 64, every admitted survivor, 2 templates):
   minimum 31, none below 30. Moot while the item's gate has failed.
-- **Agreement** (`number_flip`, ref n = 2,000, 8 templates `{prep}/{congruency}`): minimum
-  229 (`behind/incongruent`), none below 30.
+- **Agreement** (`number_flip`, ref n = 2,000, 8 templates `{prep}/{congruency}`): every
+  template has exactly 250, none below 30. The draws are balanced per template (section 10),
+  so 250 = 2,000 / 8 by construction at any ref seed; the first run's independent draws gave
+  a minimum of 229 (`17cb218`).
 
 ## 7. Noise floor
 
@@ -243,12 +248,15 @@ the sem, which does not depend on the reference n, dominates there. Five seeds g
 rough estimate of each spread, so single-component ratios are noisy.
 - **Factual recall:** no floor was measured, because its gate failed; `e1b_noise` refuses an
   item whose gate did not pass.
-- **Agreement** (`number_flip`, BOS prepended): largest floor 0.2977, on L0.mlp, where the
-  reference-seed spread dominates (spread 0.2977 against sem 0.0608). Under node mean
-  ablation of L0.mlp on `number_flip` (n = 2,000, seed 0, ref n = 2,000), `effect_mean` is
-  +1.494, +0.914, +0.856, +0.982 and +1.411 under ref seeds 0–4. The sem dominates in the
-  other 23 components; the next-largest floor is 0.0246 (L8.mlp, sem). On IOI and induction
-  L0.mlp also has the largest floor, but there the sem dominates it.
+- **Agreement** (`number_flip`, BOS prepended, per-template balanced draws): largest floor
+  0.0537, on L0.mlp, where the sem dominates (sem 0.0537 against spread 0.0425). Under node
+  mean ablation of L0.mlp on `number_flip` (n = 2,000, seed 0, ref n = 2,000), `effect_mean`
+  is +1.077, +1.045, +1.159, +1.094 and +1.114 under ref seeds 0–4. The sem dominates in all
+  24 components; the next-largest floor is 0.0248 (L8.mlp, sem). On all three passing items
+  L0.mlp has the largest floor and the sem dominates it; agreement's (0.0537) lies between
+  IOI's (0.0404) and induction's (0.1422). The first run, on independent draws, had a
+  largest floor of 0.2977 on L0.mlp, dominated by the reference-seed spread (`e460d90`;
+  section 10).
 
 The rule for E3: **a heatmap cell under this item has to clear its component's floor, where
 one was measured (the 24 components here); for other components E3 has to extend the
@@ -260,18 +268,18 @@ is not measured for zero or resample ablation.
 Per D-014 item 2, every later mean- or resample-ablation number cites, beside it, the
 reference size and the fraction of the clean `ld` removed by the scheme its reference is
 drawn from, taken from the table in section 3. For the three items that passed: `p_ABC`
-removes 0.98 (IOI), `fresh_prefix` removes 1.00 (induction), `number_flip` removes 1.98
+removes 0.98 (IOI), `fresh_prefix` removes 1.00 (induction), `number_flip` removes 2.00
 (agreement), each measured at n = 2,000, seed 0.
 
-The agreement value is near 2 by design and measured at 1.98: `c` and `s` stay the clean
+The agreement value is near 2 by design and measured at 2.00: `c` and `s` stay the clean
 labels, so the corrupt prompt (subject in the other number) is built to favour `s` if the
-model agrees, and on the clean model it does (mean corrupt `ld` -2.558 against clean
-+2.611). Under resample ablation the source is that paired corrupt prompt, whose `ld` points
-the other way, and 1.98 describes it. Under mean ablation the reference is the
+model agrees, and on the clean model it does (mean corrupt `ld` -2.574 against clean
++2.568). Under resample ablation the source is that paired corrupt prompt, whose `ld` points
+the other way, and 2.00 describes it. Under mean ablation the reference is the
 template-matched mean over corrupt prompts (section 7), and subject number is not in the
-template key, so that reference mixes both subject numbers (section 10); 1.98 is cited
-beside a mean-ablation number per D-014 item 2, but it does not describe that reference's
-direction.
+template key, so that reference mixes both subject numbers, half and half (section 10);
+2.00 is cited beside a mean-ablation number per D-014 item 2, but it does not describe that
+reference's direction.
 
 ## 9. What this does not show
 
@@ -319,62 +327,108 @@ regular `-s` plurals, of which 46 are kept because singular and plural are each 
 per prompt and is not in the prompt: it picks the two logits `ld` reads, `c` the form that
 agrees with `N1` and `s` the other form. The template key is `{prep}/{congruency}` (8
 templates); subject number is not in it, so each template's mean-ablation reference mixes
-both numbers: number-balanced in expectation (independent 50/50 draws), not exactly per
-template. Default corruption `number_flip` replaces `N1` with its other-number form,
+both numbers. Draws are balanced exactly: prompts come in blocks of 16, each block one
+shuffle of the 16 (preposition, congruency, subject number) cells, so at n a multiple of 16
+each template has exactly n/8 prompts, half with a singular subject and half with a plural
+one; the verb pair is drawn independently per prompt. (This replaced independent 50/50
+draws after the first run; see below.) Default corruption `number_flip` replaces `N1` with its other-number form,
 which turns congruent prompts into incongruent ones and back; the extra `number_flip_all`
 flips both `N1` and `N2`, which keeps congruency. Under `number_flip` the corrupt side
 carries the clean prompt's template key, so the mean reference for `{prep}/congruent` is
 built from corrupt prompts that are incongruent on the surface, and the reverse; under
-`number_flip_all` the key and the surface congruency agree. No prompt filter. The build choices the
-addendum left open (the noun list, how draws are made, labels, the breakdown keys) are
+`number_flip_all` the key and the surface congruency agree. No prompt filter. How draws are
+made was decided by the author on 2026-09-24 (D-013, balanced-draw paragraph). The other
+build choices the addendum left open (the noun list, labels, the breakdown keys) are
 pending the author's ruling at review and are not in the decision log.
 
-**Gate.** Under no intervention, on `number_flip`, n = 2,000, seed 0, BOS prepended
-(`uv run python -m src.lesion.e1b_gate --item agreement`, repo commit `718ec4b`): the clean
-pairwise accuracy is 0.983 against 0.90 (pass) and the gap is +5.169 ± 0.041 logits against
-1.0 (pass). **PASS.** Clean `ld` +2.611 ± 0.027 (sd 1.22), corrupt `ld` -2.558 ± 0.027,
-fraction removed 1.98; on the corrupt prompts `logit[c] > logit[s]` in 0.021 of cases. The
-failure branch of D-013 item 7 is not triggered.
+**Gate.** Under no intervention, on `number_flip`, n = 2,000, seed 0, BOS prepended,
+per-template balanced draws (`uv run python -m src.lesion.e1b_gate --item agreement`, repo
+commit `803ec36`): the clean pairwise accuracy is 0.981 against 0.90 (pass) and the gap is
++5.141 ± 0.040 logits against 1.0 (pass). **PASS.** Clean `ld` +2.568 ± 0.027 (sd 1.21),
+corrupt `ld` -2.574 ± 0.026, fraction removed 2.00; on the corrupt prompts
+`logit[c] > logit[s]` in 0.015 of cases. The failure branch of D-013 item 7 is not
+triggered.
 
 **What pairwise accuracy measures here.** It compares only `c` with `s`. On the clean prompts
-`c` is the argmax over the full vocabulary in 0.059 of cases, and the mean `P[c]` is 0.033
-(0.002 on the corrupt prompts). So a pairwise accuracy of 0.983 says that the agreeing form
+`c` is the argmax over the full vocabulary in 0.060 of cases, and the mean `P[c]` is 0.032
+(0.002 on the corrupt prompts). So a pairwise accuracy of 0.981 says that the agreeing form
 outscores the other form of the same verb, not that the model predicts that verb next; after
 these prompts `c` is rarely the top next token.
 
 **Breakdown** (ungated; n = 2,000, seed 0, BOS prepended; from the artifacts' `breakdown`
 block; no per-condition standard errors are recorded). Clean `ld` and pairwise accuracy are
-the same under both schemes, since the clean prompts are the same.
+the same under both schemes, since the clean prompts are the same. Congruency and subject
+number each split 1,000 / 1,000 by construction; the verb pair is drawn independently.
 
 `number_flip` (gated scheme):
 
 | key | value | n | pairwise acc | clean ld | corrupt ld | gap |
 |---|---|---|---|---|---|---|
-| congruency | congruent | 1024 | 1.000 | +3.181 | -2.008 | +5.189 |
-| congruency | incongruent | 976 | 0.964 | +2.013 | -3.135 | +5.148 |
-| verb | is/are | 1019 | 0.982 | +2.740 | -2.663 | +5.403 |
-| verb | has/have | 981 | 0.983 | +2.477 | -2.449 | +4.925 |
-| subject number | singular | 1038 | 0.997 | +2.885 | -2.308 | +5.193 |
-| subject number | plural | 962 | 0.967 | +2.315 | -2.828 | +5.143 |
+| congruency | congruent | 1000 | 1.000 | +3.149 | -2.036 | +5.185 |
+| congruency | incongruent | 1000 | 0.961 | +1.986 | -3.111 | +5.098 |
+| verb | is/are | 984 | 0.980 | +2.666 | -2.729 | +5.395 |
+| verb | has/have | 1016 | 0.981 | +2.473 | -2.423 | +4.896 |
+| subject number | singular | 1000 | 0.995 | +2.828 | -2.323 | +5.151 |
+| subject number | plural | 1000 | 0.966 | +2.307 | -2.824 | +5.131 |
 
 `number_flip_all` (extra):
 
 | key | value | n | pairwise acc | clean ld | corrupt ld | gap |
 |---|---|---|---|---|---|---|
-| congruency | congruent | 1024 | 1.000 | +3.181 | -3.189 | +6.370 |
-| congruency | incongruent | 976 | 0.964 | +2.013 | -2.019 | +4.032 |
-| verb | is/are | 1019 | 0.982 | +2.740 | -2.717 | +5.457 |
-| verb | has/have | 981 | 0.983 | +2.477 | -2.515 | +4.992 |
-| subject number | singular | 1038 | 0.997 | +2.885 | -2.376 | +5.261 |
-| subject number | plural | 962 | 0.967 | +2.315 | -2.879 | +5.194 |
+| congruency | congruent | 1000 | 1.000 | +3.149 | -3.128 | +6.277 |
+| congruency | incongruent | 1000 | 0.961 | +1.986 | -2.010 | +3.996 |
+| verb | is/are | 984 | 0.980 | +2.666 | -2.714 | +5.379 |
+| verb | has/have | 1016 | 0.981 | +2.473 | -2.429 | +4.901 |
+| subject number | singular | 1000 | 0.995 | +2.828 | -2.312 | +5.140 |
+| subject number | plural | 1000 | 0.966 | +2.307 | -2.826 | +5.133 |
 
-Readings, not tests: on the clean prompts, pairwise accuracy is 1.000 on congruent and 0.964
-on incongruent prompts (mean clean `ld` +3.181 against +2.013), and 0.997 with a singular
-subject against 0.967 with a plural one (+2.885 against +2.315). The two verb pairs differ by
-under 0.001 in pairwise accuracy (0.982 is/are, 0.983 has/have) and by 0.478 in gap under
-`number_flip` (+5.403 against +4.925). Under `number_flip` the congruent and incongruent gaps
-are +5.189 and +5.148; under `number_flip_all`, which keeps congruency, they are +6.370 and
-+4.032.
+Readings, not tests: on the clean prompts, pairwise accuracy is 1.000 on congruent and 0.961
+on incongruent prompts (mean clean `ld` +3.149 against +1.986), and 0.995 with a singular
+subject against 0.966 with a plural one (+2.828 against +2.307). The two verb pairs differ by
+under 0.002 in pairwise accuracy (0.980 is/are, 0.981 has/have) and by 0.499 in gap under
+`number_flip` (+5.395 against +4.896). Under `number_flip` the congruent and incongruent gaps
+are +5.185 and +5.098; under `number_flip_all`, which keeps congruency, they are +6.277 and
++3.996.
+
+### First run (independent draws), superseded
+
+The item was first gated and its noise floor measured with independent draws: each prompt's
+preposition, congruency and subject number drawn separately (50/50 for the last two), so
+templates and subject numbers were balanced in expectation only. Same command, n = 2,000,
+seed 0, BOS prepended, ref n = 2,000, ref seeds 0–4. Gate at repo commit `718ec4b`
+(artifacts committed in `17cb218`): `number_flip` PASS, pairwise accuracy 0.983 (0.9825),
+gap +5.169 ± 0.041, clean `ld` +2.611 ± 0.027, corrupt `ld` -2.558, fraction removed 1.98;
+per-template reference counts at ref seed 0 from 229 (`behind/incongruent`) to 281
+(`beside/congruent`). Noise floor at `17cb218` (committed in `e460d90`): largest floor
+0.2977 on L0.mlp, from the reference-seed spread (sd 0.2977 against sem 0.0608); the sem
+dominated the other 23 components. Those artifacts stay in git history at those commits.
+
+The author changed the draw after seeing that floor, on 2026-09-24 (D-013, balanced-draw
+paragraph). The reason was the L0.mlp floor: under node mean ablation of L0.mlp,
+`effect_mean` ranged from +0.856 to +1.494 across the five reference seeds. A reviewer's
+scratch check, which is not a repo artifact and not a result, set those five values beside
+each reference draw's plural fraction: seeds 2, 1, 3, 0, 4 had plural fractions 0.479,
+0.488, 0.488, 0.519, 0.520 and `effect_mean` 0.86, 0.91, 0.98, 1.49, 1.41. That is five
+points. The gate rule and its thresholds (D-014 item 1) did not change.
+
+Rerun against first run, L0.mlp under node mean ablation on `number_flip` (n = 2,000,
+seed 0, ref n = 2,000, ref seeds 0–4):
+
+| run | `effect_mean` by ref seed 0–4 | ref-seed sd | sem (seed 0) | floor | source |
+|---|---|---|---|---|---|
+| first (independent draws, `e460d90`) | +1.494, +0.914, +0.856, +0.982, +1.411 | 0.2977 | 0.0608 | 0.2977 | ref-seed sd |
+| rerun (balanced draws, `7d25f69`) | +1.077, +1.045, +1.159, +1.094, +1.114 | 0.0425 | 0.0537 | 0.0537 | sem |
+
+On the rerun the L0.mlp reference-seed sd is 0.0425, against 0.2977 on the first run, and it
+no longer dominates: the floor is the sem, 0.0537, and the largest floor across the 24
+components fell from 0.2977 to 0.0537. The sem moved too (0.0608 to 0.0537); the balanced
+generator draws a different clean sample at the same seed, so the two runs are not on the
+same prompts. Over the other 23 components the reference-seed sd changed by a median
+factor of 0.95 (range 0.18–2.31). Both runs use five reference seeds, so each sd is a rough
+estimate. The gated numbers: pairwise accuracy 0.983
+on the first run and 0.981 on the rerun, gap +5.169 ± 0.041 and +5.141 ± 0.040; both runs
+pass. These are two runs on different samples; they show that the L0.mlp spread across
+reference seeds was smaller under balanced draws in this measurement, not why.
 
 ## Files
 

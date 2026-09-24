@@ -691,14 +691,16 @@ or may not share the subject's grammatical number. D-013 addendum item 4;
 
 **Congruent / incongruent** — an agreement prompt is congruent when the
 attractor `N2` shares the subject `N1`'s number (both singular or both
-plural) and incongruent when it does not. Drawn 50/50; part of the template
-key `{prep}/{congruency}`. D-013 addendum item 4.
+plural) and incongruent when it does not. Exactly 50/50: prompts are drawn
+in blocks of 16 balancing (preposition, congruency, subject number); part of
+the template key `{prep}/{congruency}`. D-013 addendum item 4 and
+balanced-draw paragraph.
 
 **`number_flip`** — the agreement item's default corruption: `N1` replaced by
 its own other-number form (`dog` ↔ `dogs`), everything else kept, so
 congruent prompts become incongruent and back. `c` and `s` stay the clean
 labels, so the corrupt prompt is built to favour `s` if the model agrees, and
-the fraction removed is expected near 2 by design (measured: 1.98). Ours. D-013 addendum item 5; `results/E1b/README.md` §10.
+the fraction removed is expected near 2 by design (measured: 2.00 on balanced draws; 1.98 on the first run). Ours. D-013 addendum item 5; `results/E1b/README.md` §10.
 
 **`number_flip_all`** — the agreement item's named extra: `N1` and `N2` both
 replaced by their other-number forms, so congruency is kept. Ungated. Ours.
