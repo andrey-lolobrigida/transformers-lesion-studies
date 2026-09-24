@@ -681,3 +681,25 @@ heatmap cell has to clear its component's floor. O-009 resolution;
 **Survivor** — a factual-recall prompt that passed the single-token, segmentation,
 known-facts and partner filters; it counts toward the gate only in a template
 with ≥ 30 survivors ("admitted"). `results/E1b/README.md` §4; D-014 item 3.
+
+## Added 2026-09-24 — E1b agreement item (D-013 fallback)
+
+**Attractor** — in the agreement item's prompts `The {N1} {prep} the {N2}`,
+the second noun `N2`: a noun between the subject `N1` and the verb, which may
+or may not share the subject's grammatical number. D-013 addendum item 4;
+`results/E1b/README.md` §10.
+
+**Congruent / incongruent** — an agreement prompt is congruent when the
+attractor `N2` shares the subject `N1`'s number (both singular or both
+plural) and incongruent when it does not. Drawn 50/50; part of the template
+key `{prep}/{congruency}`. D-013 addendum item 4.
+
+**`number_flip`** — the agreement item's default corruption: `N1` replaced by
+its own other-number form (`dog` ↔ `dogs`), everything else kept, so
+congruent prompts become incongruent and back. `c` and `s` stay the clean
+labels, so the corrupt prompt favours `s` and the fraction removed is near 2
+by construction. Ours. D-013 addendum item 5; `results/E1b/README.md` §10.
+
+**`number_flip_all`** — the agreement item's named extra: `N1` and `N2` both
+replaced by their other-number forms, so congruency is kept. Ungated. Ours.
+D-013 addendum item 5.

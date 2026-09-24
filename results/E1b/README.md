@@ -4,7 +4,9 @@
 `607a30d783dfa663caf39e06633721c8d4cfcd7e`. Survivor file written at repo commit `f1afd56`
 (committed in `ad9dcd3`); gate artifacts and noise floors rerun on 2026-09-24 at `20fb4a9`, reference n 2,000
 (O-015); the 1,000 versions are at `ad9dcd3` (gate) and `74a659a` (noise) (each
-artifact's own `environment.repo_commit`). Interpretation
+artifact's own `environment.repo_commit`). Subject–verb agreement (the D-013 fallback, section 10)
+was run on 2026-09-24: gate at `718ec4b` (committed in `17cb218`), noise floor at `17cb218`
+(committed in `e460d90`). Interpretation
 of the artifacts in this directory and of `batteries/factual/survivors.json`. Decisions:
 D-013, D-014, the O-009 and O-015 resolutions.*
 
@@ -12,12 +14,13 @@ D-013, D-014, the O-009 and O-015 resolutions.*
 
 E1b builds the battery that E2 and E3 measure on: three items (IOI, induction, factual
 recall), each with a clean/corrupt generator, a metric (`ld = logit[c] − logit[s]` at `END`),
-a declared expected direction (`positive` for all three: damage is expected to lower `ld`)
+a declared expected direction (`positive` for every item: damage is expected to lower `ld`)
 and a corruption scheme whose `removes`/`inserts` are recorded in every artifact. The rules
 it is measured against — the pre-registered clean-accuracy gate, the per-template reference
 floor of 30, the statistical noise floor instead of a control item, filtering only for
 factual recall — are recorded in D-014 and the O-009 resolution; the item order and the
-agreement fallback in D-013. Everything below is measured on the clean model with no
+agreement fallback in D-013. Factual recall failed its gate, so a fourth item, subject–verb
+agreement, was built as that fallback: ours and unsourced (section 10). Everything below is measured on the clean model with no
 intervention, except the noise floor (section 7), which is a mean-ablation sample.
 
 ## 2. Commands
@@ -32,13 +35,18 @@ and determinism flags. All runs use model revision `607a30d783dfa663caf39e066337
 | Identity against E0 | `uv run python -m src.lesion.ablate --battery ioi --component L0H0 --value zero --type node --positions all --direction ablate-clean --no-freeze --n 100000 --seed 0 --prepend-bos false --batch-size 512 --out-dir results/E1b/identity` | seed 0, n = 100,000, no BOS |
 | Noise floor, IOI | `uv run python -m src.lesion.e1b_noise --item ioi` | seed 0, n = 2,000, ref n = 2,000, ref seeds 0–4, no BOS |
 | Noise floor, induction | `uv run python -m src.lesion.e1b_noise --item induction` | seed 0, n = 2,000, ref n = 2,000, ref seeds 0–4, BOS prepended |
+| Gate, agreement (`number_flip`, `number_flip_all`) | `uv run python -m src.lesion.e1b_gate --item agreement` | seed 0, n = 2,000, BOS prepended; reference-floor count at ref n = 2,000, ref seed 0 |
+| Noise floor, agreement | `uv run python -m src.lesion.e1b_noise --item agreement` | seed 0, n = 2,000, ref n = 2,000, ref seeds 0–4, BOS prepended |
 
-BOS defaults are per item (D-014 / E1b spec): no BOS for IOI (as in E0 and E1a) and factual
-recall, BOS prepended for induction.
+The `--item all` row produced the IOI, induction and factual artifacts before agreement
+existed; agreement was run on its own, and the other items' artifacts were not regenerated.
+
+BOS defaults are per item (D-014 / E1b spec; D-013 addendum item 6): no BOS for IOI (as in
+E0 and E1a) and factual recall, BOS prepended for induction and agreement.
 
 Every gate artifact carries a top-level `pre_registered` field: the gate CLI writes a
 verdict only when the run is at the pre-registered seed 0 and n (2,000; all admitted
-survivors for factual), and all three gated artifacts here have `pre_registered: true`.
+survivors for factual), and all four gated artifacts here have `pre_registered: true`.
 
 **Identity check.** Under no intervention (the clean pass of the identity run), on `p_IOI`,
 seed 0, n = 100,000, no BOS, batch size 512, the mean `ld` is 3.6481308937072754
@@ -70,6 +78,8 @@ Named extras are measured and reported, not gated (`extra` in the table).
 | induction | fresh_prefix | PASS | 2000 | 0.999 | +17.005 ± 0.139 | -0.007 | +17.012 ± 0.138 | 1.00 | 0.974 | 0.768 / 0.000 | 6.22 | 71 (0 below 30) |
 | factual | subject_swap | FAIL | 64 | 1.000 | +4.291 ± 0.312 | +0.187 | +4.104 ± 0.374 | 0.96 | 1.000 | 0.208 / 0.009 | 2.50 | 31 (0 below 30) |
 | factual | subject_swap_sym | extra | 64 | 1.000 | +4.808 ± 0.293 | -2.676 | +7.484 ± 0.542 | 1.56 | 1.000 | 0.208 / 0.009 | 2.35 | 31 (0 below 30) |
+| agreement | number_flip | PASS | 2000 | 0.983 | +2.611 ± 0.027 | -2.558 | +5.169 ± 0.041 | 1.98 | 0.059 | 0.033 / 0.002 | 1.22 | 229 (0 below 30) |
+| agreement | number_flip_all | extra | 2000 | 0.983 | +2.611 ± 0.027 | -2.618 | +5.229 ± 0.045 | 2.00 | 0.059 | 0.033 / 0.002 | 1.22 | 229 (0 below 30) |
 
 Columns: fraction removed is `(mean clean ld − mean corrupt ld) / mean clean ld`; top-1 is
 the rate at which `c` is the argmax over the full vocabulary on the clean prompt; the last
@@ -85,6 +95,9 @@ Per default scheme, per condition:
 - **Factual recall:** on `subject_swap`, n=64, seed 0, no BOS, the clean pairwise accuracy
   is 1.000 against 0.90 and the gap is +4.104 ± 0.374 logits against 1.0; the admitted
   survivor count is 64 against 300. FAIL, on the survivor condition alone.
+- **Agreement** (D-013 fallback, unsourced; section 10): on `number_flip`, n=2000, seed 0,
+  BOS prepended, the clean pairwise accuracy is 0.983 against 0.90 and the gap is
+  +5.169 ± 0.041 logits against 1.0. PASS.
 
 ## 4. Factual recall
 
@@ -136,7 +149,8 @@ expected by construction, since each prompt ends where greedy generation produce
 **Verdict.** The gate fails on the survivor condition: 64 admitted survivors against a
 pre-registered 300. Pairwise accuracy (1.000) and gap (+4.104 ± 0.374) clear their
 thresholds. **D-013's fallback is triggered**, with survivors as the failing condition; the
-agreement addendum was decided on 2026-09-24 (D-013) and the item is not yet built. The failure is logged in the null-results table
+agreement addendum was decided on 2026-09-24 (D-013), and the item was built and gated the
+same day (section 10). The failure is logged in the null-results table
 of `docs/04-decisions.md`.
 
 The extra `subject_swap_sym` uses the same prompts and partners with `s` set to the
@@ -204,6 +218,8 @@ put 5–7 templates under the floor at every seed. The 1,000 gate counts are in 
   below 30.
 - **Factual recall** (`subject_swap`, ref n = 64, every admitted survivor, 2 templates):
   minimum 31, none below 30. Moot while the item's gate has failed.
+- **Agreement** (`number_flip`, ref n = 2,000, 8 templates `{prep}/{congruency}`): minimum
+  229 (`behind/incongruent`), none below 30.
 
 ## 7. Noise floor
 
@@ -227,6 +243,12 @@ the sem, which does not depend on the reference n, dominates there. Five seeds g
 rough estimate of each spread, so single-component ratios are noisy.
 - **Factual recall:** no floor was measured, because its gate failed; `e1b_noise` refuses an
   item whose gate did not pass.
+- **Agreement** (`number_flip`, BOS prepended): largest floor 0.2977, on L0.mlp, where the
+  reference-seed spread dominates (spread 0.2977 against sem 0.0608). Under node mean
+  ablation of L0.mlp on `number_flip` (n = 2,000, seed 0, ref n = 2,000), `effect_mean` is
+  +1.494, +0.914, +0.856, +0.982 and +1.411 under ref seeds 0–4. The sem dominates in the
+  other 23 components; the next-largest floor is 0.0246 (L8.mlp, sem). On IOI and induction
+  L0.mlp also has the largest floor, but there the sem dominates it.
 
 The rule for E3: **a heatmap cell under this item has to clear its component's floor, where
 one was measured (the 24 components here); for other components E3 has to extend the
@@ -237,9 +259,14 @@ is not measured for zero or resample ablation.
 
 Per D-014 item 2, every later mean- or resample-ablation number cites, beside it, the
 reference size and the fraction of the clean `ld` removed by the scheme its reference is
-drawn from, taken from the table in section 3. For the two items that passed: `p_ABC`
-removes 0.98 (IOI), `fresh_prefix` removes 1.00 (induction), each measured at n = 2,000,
-seed 0.
+drawn from, taken from the table in section 3. For the three items that passed: `p_ABC`
+removes 0.98 (IOI), `fresh_prefix` removes 1.00 (induction), `number_flip` removes 1.98
+(agreement), each measured at n = 2,000, seed 0.
+
+The agreement value is near 2 by construction: `c` and `s` stay the clean labels, and the
+corrupt prompt (subject in the other number) favours `s` (mean corrupt `ld` -2.558 against
+clean +2.611). A mean-ablation effect on agreement is therefore to be read against a
+reference that points the other way, not against one near zero as for IOI and induction.
 
 ## 9. What this does not show
 
@@ -254,12 +281,97 @@ seed 0.
   App. A fit or show how GPT-2 small uses position or token information.
 - The factual-recall readings rest on n = 64 prompts in two templates; they are reported
   because they were measured, and the item's gate has failed.
+- The agreement item is ours and unsourced (D-013): no published number is checked against
+  it, and its pass is not a reproduction of anything.
+- The agreement breakdown (section 10) is ungated. Its per-condition differences are
+  readings on one sample with no standard errors recorded, not tests, and they say nothing
+  about which components are involved.
+- The agreement prompts are one construction, `The {N1} {prep} the {N2}`, with 46 nouns,
+  4 prepositions and 2 verb pairs, so a reading is about this construction, not about
+  subject–verb agreement in general.
+
+## 10. Subject–verb agreement (D-013 fallback; unsourced)
+
+**Why it exists.** Factual recall failed its gate on the survivor condition (sections 3–4).
+D-013 pre-registered agreement as the fallback for that case, because without a third item
+the battery is IOI plus induction, which overlap through heads 5.5 and 6.9
+[wang-2022 §3.3]. The item was built under the agreement addendum to D-013 (2026-09-24),
+with the D-014 gate unchanged and its thresholds fixed before the generator ran.
+
+**Labelling.** This item is ours and unsourced. It departs from reproduction-first: every
+design choice below was made in this project, and no published number is checked against
+it. Agreement has a literature, including work on GPT-2, but none of it is on the reading
+list [unverified: Linzen, Dupoux & Goldberg 2016; Finlayson et al. 2021] (D-013, wording
+correction).
+
+**Design** (`src/lesion/agreement.py`; D-013 addendum items 1–6). Prompts are
+`The {N1} {prep} the {N2}`, six tokens with BOS prepended, read at `N2` (`END`), where the
+next token is the verb. `N1` and `N2` come from 50 candidate animate common nouns with
+regular `-s` plurals, of which 46 are kept because singular and plural are each one token
+(`owl`, `eagle`, `baker` and `painter` are dropped); `N2` is a different noun from `N1`.
+`prep` is one of `near`, `behind`, `beside`, `with`. The attractor `N2` shares `N1`'s number
+(congruent) or not (incongruent), 50/50. The verb pair, `is`/`are` or `has`/`have`, is drawn
+per prompt and is not in the prompt: it picks the two logits `ld` reads, `c` the form that
+agrees with `N1` and `s` the other form. The template key is `{prep}/{congruency}` (8
+templates); subject number is not in it, so each template's mean-ablation reference mixes
+both numbers. Default corruption `number_flip` replaces `N1` with its other-number form,
+which turns congruent prompts into incongruent ones and back; the extra `number_flip_all`
+flips both `N1` and `N2`, which keeps congruency. No prompt filter. The build choices the
+addendum left open (the noun list, how draws are made, labels, the breakdown keys) are
+pending the author's ruling at review and are not in the decision log.
+
+**Gate.** Under no intervention, on `number_flip`, n = 2,000, seed 0, BOS prepended
+(`uv run python -m src.lesion.e1b_gate --item agreement`, repo commit `718ec4b`): the clean
+pairwise accuracy is 0.983 against 0.90 (pass) and the gap is +5.169 ± 0.041 logits against
+1.0 (pass). **PASS.** Clean `ld` +2.611 ± 0.027 (sd 1.22), corrupt `ld` -2.558 ± 0.027,
+fraction removed 1.98; on the corrupt prompts `logit[c] > logit[s]` in 0.021 of cases. The
+failure branch of D-013 item 7 is not triggered.
+
+**What pairwise accuracy measures here.** It compares only `c` with `s`. On the clean prompts
+`c` is the argmax over the full vocabulary in 0.059 of cases, and the mean `P[c]` is 0.033
+(0.002 on the corrupt prompts). So a pairwise accuracy of 0.983 says that the agreeing form
+outscores the other form of the same verb, not that the model predicts that verb next; after
+these prompts `c` is rarely the top next token.
+
+**Breakdown** (ungated; n = 2,000, seed 0, BOS prepended; from the artifacts' `breakdown`
+block; no per-condition standard errors are recorded). Clean `ld` and pairwise accuracy are
+the same under both schemes, since the clean prompts are the same.
+
+`number_flip` (gated scheme):
+
+| key | value | n | pairwise acc | clean ld | corrupt ld | gap |
+|---|---|---|---|---|---|---|
+| congruency | congruent | 1024 | 1.000 | +3.181 | -2.008 | +5.189 |
+| congruency | incongruent | 976 | 0.964 | +2.013 | -3.135 | +5.148 |
+| verb | is/are | 1019 | 0.982 | +2.740 | -2.663 | +5.403 |
+| verb | has/have | 981 | 0.983 | +2.477 | -2.449 | +4.925 |
+| subject number | singular | 1038 | 0.997 | +2.885 | -2.308 | +5.193 |
+| subject number | plural | 962 | 0.967 | +2.315 | -2.828 | +5.143 |
+
+`number_flip_all` (extra):
+
+| key | value | n | pairwise acc | clean ld | corrupt ld | gap |
+|---|---|---|---|---|---|---|
+| congruency | congruent | 1024 | 1.000 | +3.181 | -3.189 | +6.370 |
+| congruency | incongruent | 976 | 0.964 | +2.013 | -2.019 | +4.032 |
+| verb | is/are | 1019 | 0.982 | +2.740 | -2.717 | +5.457 |
+| verb | has/have | 981 | 0.983 | +2.477 | -2.515 | +4.992 |
+| subject number | singular | 1038 | 0.997 | +2.885 | -2.376 | +5.261 |
+| subject number | plural | 962 | 0.967 | +2.315 | -2.879 | +5.194 |
+
+Readings, not tests: on the clean prompts, pairwise accuracy is 1.000 on congruent and 0.964
+on incongruent prompts (mean clean `ld` +3.181 against +2.013), and 0.997 with a singular
+subject against 0.967 with a plural one (+2.885 against +2.315). The two verb pairs differ by
+0.001 in pairwise accuracy (0.982 is/are, 0.983 has/have) and by 0.478 in gap under
+`number_flip` (+5.403 against +4.925). Under `number_flip` the congruent and incongruent gaps
+are +5.189 and +5.148; under `number_flip_all`, which keeps congruency, they are +6.370 and
++4.032.
 
 ## Files
 
 | Path | What |
 |---|---|
-| `gate/{ioi,induction,factual}/{scheme}.json` (+ `.parquet` per prompt) | section 3; one per (item, scheme) |
+| `gate/{ioi,induction,factual,agreement}/{scheme}.json` (+ `.parquet` per prompt) | sections 3 and 10; one per (item, scheme) |
 | `identity/ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0.json` (+ `.parquet`) | identity check, section 2 |
-| `noise/{ioi,induction}/floor.json` | section 7 |
+| `noise/{ioi,induction,agreement}/floor.json` | section 7 |
 | `../../batteries/factual/survivors.json` | section 4 funnel, templates, survivors, partners |

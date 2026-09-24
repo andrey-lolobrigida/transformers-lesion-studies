@@ -362,6 +362,18 @@ what was checked. Agreement has a literature, including work on GPT-2
 is on the reading list. Read the sentence as "no source on the reading list,
 so no published number is checked against it". The fallback is unchanged.
 
+*Agreement outcome, 2026-09-24:* agreement **passed** its pre-registered gate
+(`number_flip`, n = 2,000, seed 0, BOS prepended;
+`uv run python -m src.lesion.e1b_gate --item agreement`, at `718ec4b`):
+pairwise accuracy 0.983 against 0.90 (pass), gap +5.169 ± 0.041 logits
+against 1.0 (pass). Fraction removed 1.98, near 2 by construction (item 5).
+The failure branch of item 7 is not triggered; agreement stays in the
+battery as the fallback, unsourced and ours. Noise floor measured
+(`uv run python -m src.lesion.e1b_noise --item agreement`). Numbers, the
+ungated breakdown and the noise floor: `results/E1b/README.md` §3, §7, §10.
+The build choices the addendum left open are listed in the agreement plan
+and are pending the author's ruling; none is recorded here yet.
+
 ### D-014 — E1b battery rules: the gate, the noise floor, the interface
 *2026-09-23, E1b design. Proposed by Claude, each point confirmed by the
 author the same session. Item-level detail lives in the E1b spec; this

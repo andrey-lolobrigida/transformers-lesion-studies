@@ -169,8 +169,10 @@ resolves here.
 **Tag:** `v-E1b` — this is what E2 is gated on.
 *Built 2026-09-23 on `phase-E1b-battery`; see `results/E1b/README.md`.
 Gate: IOI pass, induction pass, factual recall fail (64 admitted survivors
-against 300), so D-013's fallback is triggered and the agreement addendum is
-pending the author. Awaiting the author's review and `v-E1b`.*
+against 300), so D-013's fallback is triggered. Subject–verb agreement (ours,
+unsourced) was built 2026-09-24 under the D-013 addendum and passes its gate
+(`number_flip`, n = 2,000, seed 0, BOS: pairwise accuracy 0.983, gap
++5.169 ± 0.041). Awaiting the author's review and `v-E1b`.*
 
 ---
 
