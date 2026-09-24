@@ -32,7 +32,7 @@ from src.lesion.spec import MLP, AblationSpec, All, Component, Head, MeanReferen
 
 COMPONENTS: tuple[Component, ...] = tuple([MLP(layer) for layer in range(12)] + [Head(layer, 0) for layer in range(12)])
 REF_SEEDS = (0, 1, 2, 3, 4)
-REF_N = 1000
+REF_N = 2000  # the reference n E3 uses (O-015 resolution)
 DEFAULT_N = 2000
 
 

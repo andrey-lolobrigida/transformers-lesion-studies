@@ -327,6 +327,41 @@ the per-template floor of 30. **The fallback is triggered; the agreement
 addendum is pending the author.** Numbers and the survivor funnel:
 `results/E1b/README.md` §3–4; null-results row below.
 
+*Agreement addendum, 2026-09-24.* Proposed by Claude
+(`.superpowers/specs/2026-09-24-e1b-agreement-addendum.md`), every
+recommendation accepted by the author the same session. Agreement is built
+under the unchanged D-014 gate (pairwise accuracy ≥ 0.90, gap ≥ 1.0 logit,
+seed 0, n = 2,000), thresholds fixed here, before the generator runs. All
+choices are ours; no published number is checked against the item.
+
+1. **Nouns:** about 40 animate common nouns with regular `-s` plurals; a noun
+   is kept only if singular and plural are each one token (enforced by the
+   generator, pinned by a fast-tier test). Irregular plurals are out.
+2. **Verbs:** `is`/`are` and `has`/`have`, present tense, drawn per prompt.
+   The verb is not in the prompt; it only picks the two logits `ld` reads
+   (`c` = the agreeing form, `s` = the other form of the same verb).
+3. **Structure:** `The {N1} {prep} the {N2}` → verb, `prep` ∈ {`near`,
+   `behind`, `beside`, `with`}; one fixed length.
+4. **Attractor:** `N2` shares `N1`'s number or not, 50/50; congruency is in
+   the template key (8 templates: preposition × congruency); subject number
+   is not. The gate reads the pooled default; per-congruency readings are
+   logged, ungated.
+5. **Default corruption `number_flip`:** `N1` replaced by its other-number
+   form. Expected fraction removed ≈ 2 (cited per D-014 item 2); it turns
+   congruent prompts into incongruent ones and back. Keeping subject number
+   out of the template key keeps each template's mean-ablation reference
+   number-balanced. Extra: `number_flip_all` (`N1` and `N2` flipped), ungated.
+6. **BOS prepended** by default; **no prompt filter** (D-014 item 3).
+7. **If agreement fails its gate:** the null is logged at full strength and
+   E3 runs on IOI and induction, stating the overlap this entry names. No
+   threshold relaxation and no re-cut of templates.
+
+*Wording correction.* "No published number exists for it" above overstates
+what was checked. Agreement has a literature, including work on GPT-2
+[unverified: Linzen, Dupoux & Goldberg 2016; Finlayson et al. 2021]. Neither
+is on the reading list. Read the sentence as "no source on the reading list,
+so no published number is checked against it". The fallback is unchanged.
+
 ### D-014 — E1b battery rules: the gate, the noise floor, the interface
 *2026-09-23, E1b design. Proposed by Claude, each point confirmed by the
 author the same session. Item-level detail lives in the E1b spec; this
@@ -1023,6 +1058,30 @@ templates that do not meet the project's own floor. The noise floor
 (`results/E1b/noise/ioi/floor.json`) was measured at ref n = 1,000.
 **Resolution path:** the author's call on the reference n (or on how the
 floor is applied) before E3 runs IOI; E1b does not choose.
+
+#### Resolution — *2026-09-24*
+
+Options proposed by Claude; the author chose **ref n = 2,000 for both
+passing items** (IOI and induction), so mean-ablation numbers use the same
+reference size across the E3 map. The floor of 30 is unchanged; only the
+sample size needed to meet it was chosen.
+
+Basis: the minimum per-template count of the `p_ABC` reference draw under
+the five reference seeds the noise floor uses (0–4), from the prompt
+generator's template stream (a scratch count, not an artifact; the rerun
+gate records the seed-0 count). At n = 1,000 every seed misses the floor
+(minimum 22–25; 5–7 templates under 30), so seed 0 was not an unlucky draw.
+The smallest n meeting the floor was 1,102–1,350 depending on seed. At
+1,500 the minimum is 33 (seed 3), which is too thin a margin; at 2,000 it is
+48–54. Rejected: keeping 1,000 and dropping the templates under the floor
+(this moves IOI away from Wang's template mix, and which templates are
+dropped depends on the seed); a stratified draw (would change the generator
+or `reference.py`, which nothing forces).
+
+Consequences: `REF_N` is 2,000 in `e1b_gate.py` and `e1b_noise.py`; the gate
+and both noise floors are rerun at 2,000. The 1,000 noise floors stay in
+history at `74a659a`. E1a's MLP numbers keep their reference n of 1,000, as
+logged in their artifacts.
 
 ## Null and negative results
 

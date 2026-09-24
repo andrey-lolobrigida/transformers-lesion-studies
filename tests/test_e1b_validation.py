@@ -59,7 +59,8 @@ def test_gate_artifact(item, scheme):
     else:
         assert d["verdict"] is None
     if item != "factual":
-        assert d["battery"]["n"] == 2000 and d["reference_floor"]["ref_n"] == 1000
+        assert d["battery"]["n"] == 2000 and d["reference_floor"]["ref_n"] == 2000
+        assert d["reference_floor"]["templates_below_floor"] == []  # O-015: ref n chosen to meet the floor
     assert d["battery"]["prepend_bos"] is (item == "induction")
 
 
@@ -81,7 +82,7 @@ def test_noise_floor(item):
     assert d["spec_template"]["reference"]["n"] == d["ref_n"] and d["spec_template"]["reference"]["match"] == "template"
     assert d["max_floor"] == max(r["floor"] for r in d["rows"])
     if item != "factual":
-        assert (d["n"], d["ref_n"]) == (2000, 1000)
+        assert (d["n"], d["ref_n"]) == (2000, 2000)
 
 
 @pytest.mark.parametrize("item", ["ioi", "induction", "factual"])

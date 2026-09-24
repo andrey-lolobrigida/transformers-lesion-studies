@@ -13,7 +13,7 @@ from src.lesion.spec import AblationSpec, All, Head
 
 def test_thresholds_are_the_pre_registered_ones():
     assert (g.ACC_MIN, g.GAP_MIN, g.SURVIVORS_MIN) == (0.90, 1.0, 300)
-    assert (g.REF_N, g.REF_SEED, g.DEFAULT_N) == (1000, 0, 2000)
+    assert (g.REF_N, g.REF_SEED, g.DEFAULT_N) == (2000, 0, 2000)
     assert g.THRESHOLDS == {"pairwise_accuracy_min": 0.90, "gap_min": 1.0, "survivors_min": 300, "template_floor": 30}
 
 

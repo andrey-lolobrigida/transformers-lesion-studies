@@ -37,7 +37,7 @@ from src.lesion.battery import TEMPLATE_FLOOR, resolve_scheme
 from src.lesion.runner import group_by_length, metrics
 
 ACC_MIN, GAP_MIN, SURVIVORS_MIN = 0.90, 1.0, 300
-REF_N, REF_SEED = 1000, 0  # the reference draw E1a used and E3 is expected to use
+REF_N, REF_SEED = 2000, 0  # the reference draw E3 uses (O-015 resolution); E1a used 1,000
 DEFAULT_N = 2000
 ITEMS = ("ioi", "induction", "factual")
 THRESHOLDS = {"pairwise_accuracy_min": ACC_MIN, "gap_min": GAP_MIN, "survivors_min": SURVIVORS_MIN,
