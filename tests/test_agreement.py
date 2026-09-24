@@ -113,14 +113,40 @@ def test_clean_stream_is_scheme_independent(word_tokenizer):
                (y.clean_ids, y.answer_id, y.competitor_id, y.template, y.meta)
 
 
-def test_draws_are_balanced(word_tokenizer):
-    pairs = AgreementBattery(word_tokenizer).pairs(4000, seed=0, prepend_bos=False)
+def _check_exact_balance(pairs, n):
     templates = Counter(p.template for p in pairs)
     assert set(templates) == {f"{p}/{c}" for p in PREPS for c in ("congruent", "incongruent")}
-    assert all(400 <= k <= 600 for k in templates.values())  # 500 expected each
-    for key in ("congruency", "subject_number", "verb"):
+    assert all(k == n // 8 for k in templates.values())
+    by_template = {}
+    for p in pairs:
+        by_template.setdefault(p.template, Counter())[p.meta["subject_number"]] += 1
+    for template, counts in by_template.items():
+        assert counts["singular"] == counts["plural"] == n // 16, template
+    for key in ("congruency", "subject_number"):
         counts = Counter(p.meta[key] for p in pairs)
-        assert len(counts) == 2 and all(1850 <= k <= 2150 for k in counts.values()), key
+        assert len(counts) == 2 and all(k == n // 2 for k in counts.values()), key
+    verb_counts = Counter(p.meta["verb"] for p in pairs)
+    assert len(verb_counts) == 2 and all(n * 0.4625 <= k <= n * 0.5375 for k in verb_counts.values())
+
+
+def test_draws_are_balanced(word_tokenizer):
+    pairs = AgreementBattery(word_tokenizer).pairs(4000, seed=0, prepend_bos=False)
+    _check_exact_balance(pairs, 4000)
+
+
+def test_draws_are_balanced_other_seed_and_n(word_tokenizer):
+    pairs = AgreementBattery(word_tokenizer).pairs(2000, seed=3, prepend_bos=False)
+    _check_exact_balance(pairs, 2000)
+
+
+@pytest.mark.parametrize("n", [5, 16, 17, 37])
+def test_partial_block_is_within_one(word_tokenizer, n):
+    pairs = AgreementBattery(word_tokenizer).pairs(n, seed=0, prepend_bos=False)
+    counts = Counter((p.meta["prep"], p.meta["congruency"], p.meta["subject_number"]) for p in pairs)
+    all_cells = [(prep, c, s) for prep in PREPS for c in ("congruent", "incongruent")
+                 for s in ("singular", "plural")]
+    values = [counts.get(cell, 0) for cell in all_cells]
+    assert max(values) - min(values) <= 1
 
 
 def test_seeded(word_tokenizer):

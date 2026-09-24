@@ -13,9 +13,12 @@ present tense, drawn per prompt. The verb never appears in the prompt: it only
 picks the two logits ``ld`` reads (``c`` the form agreeing with N1, ``s`` the
 other form). N2 is the attractor, a different noun that shares N1's number
 (congruent) or not (incongruent), 50/50. Template key ``{prep}/{congruency}``;
-subject number is deliberately not in it, so each template's mean-ablation
-reference is number-balanced in expectation (independent 50/50 draws), not
-exactly per template.
+subject number is deliberately not in it, but prompts come in blocks of 16,
+each block one shuffle of every (preposition, congruency, subject number)
+cell, so at n a multiple of 16 every template has exactly n/8 prompts, half
+singular and half plural, and each template's mean-ablation reference is
+exactly number-balanced; verb pair drawn independently per prompt. This
+replaced independent 50/50 draws on 2026-09-24 (D-013).
 
 Prompts are concatenations of single-token ids; nothing is decoded and
 re-encoded. BOS is added only through ``prepend_bos``."""
@@ -73,6 +76,9 @@ def _one(tokenizer, word: str) -> int:
     return t
 
 
+_CELLS = [(k, congruent, plural) for k in range(len(PREPS)) for congruent in (True, False) for plural in (True, False)]
+
+
 class AgreementBattery:
     """Subject-verb agreement across a prepositional-phrase attractor, corrupt
     ``number_flip``. Implements ``battery.Battery``."""
@@ -101,17 +107,20 @@ class AgreementBattery:
             f"ours (D-013 fallback, unsourced; no published number is checked against it): "
             f"'The {{N1}} {{prep}} the {{N2}}' -> verb; {len(self.nouns)} of {len(NOUNS)} candidate nouns kept "
             f"(regular -s plurals, both forms one token); prep in {PREPS}; verb pair in {VERBS}, drawn per prompt; "
-            f"N2 a different noun, congruent/incongruent 50/50; template key prep/congruency")
+            f"N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; "
+            f"template key prep/congruency")
 
     def pairs(self, n: int, seed: int, prepend_bos: bool) -> list[PromptPair]:
         rng = random.Random(seed)
         flip_n2 = self.scheme == "number_flip_all"
         out = []
+        block: list[tuple[int, bool, bool]] = []
         for _ in range(n):
+            if not block:
+                block = list(_CELLS)
+                rng.shuffle(block)
+            k, congruent, plural = block.pop()
             a, b = rng.sample(range(len(self.nouns)), 2)
-            k = rng.randrange(len(PREPS))
-            plural = rng.random() < 0.5
-            congruent = rng.random() < 0.5
             v = rng.randrange(len(VERBS))
             (w1, sg1, pl1), (w2, sg2, pl2) = self.nouns[a], self.nouns[b]
             n2_plural = plural if congruent else not plural
