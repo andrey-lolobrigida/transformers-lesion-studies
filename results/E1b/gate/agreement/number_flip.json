@@ -14,12 +14,12 @@
   "verdict": {
     "conditions": {
       "pairwise_accuracy": {
-        "value": 0.9825,
+        "value": 0.9805,
         "threshold": 0.9,
         "pass": true
       },
       "gap": {
-        "value": 5.168878078460693,
+        "value": 5.141272068023682,
         "threshold": 1.0,
         "pass": true
       }
@@ -28,114 +28,114 @@
   },
   "statistics": {
     "n": 2000,
-    "pairwise_accuracy": 0.9825,
-    "pairwise_accuracy_corrupt": 0.0205,
-    "top1_rate": 0.0595,
+    "pairwise_accuracy": 0.9805,
+    "pairwise_accuracy_corrupt": 0.015,
+    "top1_rate": 0.06,
     "clean": {
-      "mean_ld": 2.6109373569488525,
-      "std_ld": 1.2166420221328735,
-      "sem_ld": 0.02720494195818901,
-      "mean_p_c": 0.03256969153881073
+      "mean_ld": 2.56754994392395,
+      "std_ld": 1.2118690013885498,
+      "sem_ld": 0.027098214253783226,
+      "mean_p_c": 0.03218638524413109
     },
     "corrupt": {
-      "mean_ld": -2.5579404830932617,
-      "std_ld": 1.1978672742843628,
-      "sem_ld": 0.026785125955939293,
-      "mean_p_c": 0.002395017771050334
+      "mean_ld": -2.5737216472625732,
+      "std_ld": 1.174850583076477,
+      "sem_ld": 0.026270458474755287,
+      "mean_p_c": 0.0023619343992322683
     },
-    "gap": 5.168878078460693,
-    "gap_sem": 0.04070015624165535,
-    "fraction_removed": 1.979702065506871,
+    "gap": 5.141272068023682,
+    "gap_sem": 0.04035920649766922,
+    "fraction_removed": 2.0024039182530364,
     "by_template": {
       "behind/congruent": {
-        "n": 258,
-        "mean_ld_clean": 2.7743473052978516,
-        "mean_ld_corrupt": -1.5850297212600708
+        "n": 250,
+        "mean_ld_clean": 2.698183536529541,
+        "mean_ld_corrupt": -1.6576941013336182
       },
       "behind/incongruent": {
-        "n": 229,
-        "mean_ld_clean": 1.5734443664550781,
-        "mean_ld_corrupt": -2.7566580772399902
+        "n": 250,
+        "mean_ld_clean": 1.66212797164917,
+        "mean_ld_corrupt": -2.657020330429077
       },
       "beside/congruent": {
-        "n": 281,
-        "mean_ld_clean": 4.053133964538574,
-        "mean_ld_corrupt": -2.803414821624756
+        "n": 250,
+        "mean_ld_clean": 4.056141376495361,
+        "mean_ld_corrupt": -2.8430016040802
       },
       "beside/incongruent": {
-        "n": 251,
-        "mean_ld_clean": 2.8136343955993652,
-        "mean_ld_corrupt": -4.018074989318848
+        "n": 250,
+        "mean_ld_clean": 2.823500871658325,
+        "mean_ld_corrupt": -3.9988722801208496
       },
       "near/congruent": {
-        "n": 234,
-        "mean_ld_clean": 2.5657906532287598,
-        "mean_ld_corrupt": -1.3879634141921997
+        "n": 250,
+        "mean_ld_clean": 2.7258427143096924,
+        "mean_ld_corrupt": -1.5202370882034302
       },
       "near/incongruent": {
-        "n": 238,
-        "mean_ld_clean": 1.5490413904190063,
-        "mean_ld_corrupt": -2.7367496490478516
+        "n": 250,
+        "mean_ld_clean": 1.4666208028793335,
+        "mean_ld_corrupt": -2.743591070175171
       },
       "with/congruent": {
-        "n": 251,
-        "mean_ld_clean": 3.1962177753448486,
-        "mean_ld_corrupt": -2.130964517593384
+        "n": 250,
+        "mean_ld_clean": 3.1145455837249756,
+        "mean_ld_corrupt": -2.123385429382324
       },
       "with/incongruent": {
-        "n": 258,
-        "mean_ld_clean": 2.051565170288086,
-        "mean_ld_corrupt": -2.978180170059204
+        "n": 250,
+        "mean_ld_clean": 1.9934369325637817,
+        "mean_ld_corrupt": -3.045970916748047
       }
     }
   },
   "breakdown": {
     "congruency": {
       "congruent": {
-        "n": 1024,
+        "n": 1000,
         "pairwise_accuracy": 1.0,
-        "mean_ld_clean": 3.181013584136963,
-        "mean_ld_corrupt": -2.0081570148468018,
-        "gap": 5.189170837402344
+        "mean_ld_clean": 3.1486785411834717,
+        "mean_ld_corrupt": -2.0360796451568604,
+        "gap": 5.184757709503174
       },
       "incongruent": {
-        "n": 976,
-        "pairwise_accuracy": 0.9641393442622951,
-        "mean_ld_clean": 2.012824296951294,
-        "mean_ld_corrupt": -3.134762763977051,
-        "gap": 5.147586822509766
+        "n": 1000,
+        "pairwise_accuracy": 0.961,
+        "mean_ld_clean": 1.9864214658737183,
+        "mean_ld_corrupt": -3.111363410949707,
+        "gap": 5.097784996032715
       }
     },
     "verb": {
       "has/have": {
-        "n": 981,
-        "pairwise_accuracy": 0.9826707441386341,
-        "mean_ld_clean": 2.4765093326568604,
-        "mean_ld_corrupt": -2.448685646057129,
-        "gap": 4.92519474029541
+        "n": 1016,
+        "pairwise_accuracy": 0.9812992125984252,
+        "mean_ld_clean": 2.472522020339966,
+        "mean_ld_corrupt": -2.4230432510375977,
+        "gap": 4.895565509796143
       },
       "is/are": {
-        "n": 1019,
-        "pairwise_accuracy": 0.9823356231599607,
-        "mean_ld_clean": 2.7403523921966553,
-        "mean_ld_corrupt": -2.663121223449707,
-        "gap": 5.403473854064941
+        "n": 984,
+        "pairwise_accuracy": 0.9796747967479674,
+        "mean_ld_clean": 2.665668249130249,
+        "mean_ld_corrupt": -2.729299783706665,
+        "gap": 5.394968509674072
       }
     },
     "subject_number": {
       "plural": {
-        "n": 962,
-        "pairwise_accuracy": 0.9667359667359667,
-        "mean_ld_clean": 2.3151018619537354,
-        "mean_ld_corrupt": -2.8281259536743164,
-        "gap": 5.143227577209473
+        "n": 1000,
+        "pairwise_accuracy": 0.966,
+        "mean_ld_clean": 2.3071188926696777,
+        "mean_ld_corrupt": -2.824085235595703,
+        "gap": 5.131203651428223
       },
       "singular": {
-        "n": 1038,
-        "pairwise_accuracy": 0.9971098265895953,
-        "mean_ld_clean": 2.8851125240325928,
-        "mean_ld_corrupt": -2.30753755569458,
-        "gap": 5.192649841308594
+        "n": 1000,
+        "pairwise_accuracy": 0.995,
+        "mean_ld_clean": 2.8279805183410645,
+        "mean_ld_corrupt": -2.3233580589294434,
+        "gap": 5.151339054107666
       }
     }
   },
@@ -144,16 +144,16 @@
     "ref_seed": 0,
     "floor": 30,
     "per_template_counts": {
-      "behind/congruent": 258,
-      "behind/incongruent": 229,
-      "beside/congruent": 281,
-      "beside/incongruent": 251,
-      "near/congruent": 234,
-      "near/incongruent": 238,
-      "with/congruent": 251,
-      "with/incongruent": 258
+      "behind/congruent": 250,
+      "behind/incongruent": 250,
+      "beside/congruent": 250,
+      "beside/incongruent": 250,
+      "near/congruent": 250,
+      "near/incongruent": 250,
+      "with/congruent": 250,
+      "with/incongruent": 250
     },
-    "min": 229,
+    "min": 250,
     "templates_below_floor": []
   },
   "battery": {
@@ -161,7 +161,7 @@
     "n": 2000,
     "seed": 0,
     "prepend_bos": true,
-    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun, congruent/incongruent 50/50; template key prep/congruency",
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; template key prep/congruency",
     "labels": [
       "N1",
       "PREP",
@@ -181,7 +181,7 @@
     "expected_direction": "positive"
   },
   "environment": {
-    "repo_commit": "718ec4ba206c064c8c5e33d56356662035c15ef9",
+    "repo_commit": "803ec36192c243d192739713a4ff99fecd15e776",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -202,6 +202,6 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 128,
-    "seconds": 1.2098729610443115
+    "seconds": 1.1153244972229004
   }
 }
