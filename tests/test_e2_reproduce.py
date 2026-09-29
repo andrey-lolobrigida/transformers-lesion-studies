@@ -152,6 +152,25 @@ def test_magnitude_rule_branches():
     assert R.magnitude_verdict(four, 0.87, 1.0)["width"] == pytest.approx(0.10)
 
 
+def test_sign_and_magnitude_refuse_nonfinite_inputs():
+    nan = float("nan")
+    with pytest.raises(ValueError, match="non-finite"):
+        R.sign_verdict(nan, 0.01, 0.04, "positive")
+    with pytest.raises(ValueError, match="non-finite"):
+        R.sign_verdict(0.5, nan, 0.04, "positive")
+    with pytest.raises(ValueError, match="non-finite"):
+        R.sign_verdict(0.5, 0.01, nan, "positive")
+    four = {"a": 0.80, "b": 0.85, "c": 0.90, "d": 0.88}
+    with pytest.raises(ValueError, match="non-finite"):
+        R.magnitude_verdict({**four, "d": nan}, 0.87, 1.0)
+    with pytest.raises(ValueError, match="non-finite"):
+        R.magnitude_verdict(four, nan, 1.0)
+    with pytest.raises(ValueError, match="non-finite"):
+        R.magnitude_verdict(four, 0.87, nan)
+    with pytest.raises(ValueError, match="non-finite"):
+        R.magnitude_verdict(four, 0.87, {"a": 0.20, "b": nan})
+
+
 def test_verdicts_are_withheld_off_pre_registration(tmp_path):
     e = R.entry("I2/x", "src", 1.0, 2.0, "tol", {"rule": "sign", "verdict": R.MATCHED})
     d = json.loads(R.write_verdicts(tmp_path, "I2", [e], pre_registered=False).read_text())

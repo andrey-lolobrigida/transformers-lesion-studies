@@ -241,6 +241,9 @@ def identity_verdict(scores: dict[str, float], members: tuple[str, ...], k: int,
 def sign_verdict(effect: float, sem: float, floor: float, expected: str) -> dict:
     """D-015 item 4. ``effect`` is mean(ld unintervened - ld intervened):
     positive when the intervention lowers the logit difference."""
+    bad = [name for name, v in (("effect", effect), ("sem", sem), ("floor", floor)) if not math.isfinite(v)]
+    if bad:
+        raise ValueError(f"non-finite {', '.join(bad)}")
     bound = max(2 * sem, floor)
     if expected == "null":
         ok = abs(effect) <= bound
@@ -258,8 +261,17 @@ def magnitude_verdict(corners: dict[str, float], published: float, contrast: flo
     """D-015 item 5. The bracket is [min, max] over the corners. Uninformative
     if it overlaps the contrast (a value, or its range over the corners);
     otherwise matched iff the published value lies inside."""
-    lo, hi = min(corners.values()), max(corners.values())
     cvals = list(contrast.values()) if isinstance(contrast, dict) else [contrast]
+    bad = [f"corners[{k!r}]" for k, v in corners.items() if not math.isfinite(v)]
+    if not math.isfinite(published):
+        bad.append("published")
+    if isinstance(contrast, dict):
+        bad += [f"contrast[{k!r}]" for k, v in contrast.items() if not math.isfinite(v)]
+    elif not math.isfinite(contrast):
+        bad.append("contrast")
+    if bad:
+        raise ValueError(f"non-finite {', '.join(bad)}")
+    lo, hi = min(corners.values()), max(corners.values())
     c_lo, c_hi = min(cvals), max(cvals)
     if c_lo <= hi and c_hi >= lo:
         v = UNINFORMATIVE
