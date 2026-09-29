@@ -101,10 +101,17 @@ class IOIPrompt:
         return self.text[: -len(suffix)]
 
 
-def generate_prompts(n: int, seed: int, orders: tuple[str, ...] = ("BABA", "ABBA")) -> list[IOIPrompt]:
-    """Draw ``n`` prompts from p_IOI with a private RNG seeded by ``seed``."""
+def generate_prompts(n: int, seed: int, orders: tuple[str, ...] = ("BABA", "ABBA"),
+                     templates_per_order: int = 15) -> list[IOIPrompt]:
+    """Draw ``n`` prompts from p_IOI with a private RNG seeded by ``seed``.
+    ``templates_per_order`` < 15 keeps templates 0..k-1 of each order: the
+    released code's ``mixed`` mode with its default count uses 7 (O-014), one
+    of E2's bracket corners (D-015 item 5). At 15 the stream is the one every
+    earlier artifact used."""
+    if not 1 <= templates_per_order <= len(BABA_TEMPLATES):
+        raise ValueError(f"templates_per_order must be in 1..{len(BABA_TEMPLATES)}, got {templates_per_order}")
     rng = random.Random(seed)
-    templates = [(order, i, t) for order in orders for i, t in enumerate(ORDERS[order])]
+    templates = [(order, i, t) for order in orders for i, t in enumerate(ORDERS[order]) if i < templates_per_order]
     out: list[IOIPrompt] = []
     for _ in range(n):
         order, idx, template = rng.choice(templates)
@@ -239,10 +246,17 @@ class IOIBattery:
     default_prepend_bos = False  # E0 and E1a ran without BOS: the paper's procedure
     template_set = "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)"
 
-    def __init__(self, tokenizer, scheme: str | None = None) -> None:
+    def __init__(self, tokenizer, scheme: str | None = None, templates_per_order: int = 15) -> None:
         self.tok = tokenizer
         self.scheme = resolve_scheme(self.schemes, scheme)
         self.corruption = SCHEMES[self.scheme]
+        if not 1 <= templates_per_order <= len(BABA_TEMPLATES):
+            raise ValueError(f"templates_per_order must be in 1..{len(BABA_TEMPLATES)}, got {templates_per_order}")
+        self.templates_per_order = templates_per_order
+        if templates_per_order != len(BABA_TEMPLATES):  # E2 bracket corner; the default string is unchanged
+            self.template_set = (f"{IOIBattery.template_set}; subset: templates 0-{templates_per_order - 1} of each "
+                                 f"order ({2 * templates_per_order} templates), the released code's `mixed` "
+                                 f"default (O-014)")
 
     def encode_clean(self, p: IOIPrompt, prepend_bos: bool) -> tuple[list[int], int, int, dict[str, int]]:
         """E0's encoder: (ids, IO id, S id, positions), every alignment the
@@ -309,7 +323,7 @@ class IOIBattery:
         )
 
     def pairs(self, n: int, seed: int, prepend_bos: bool) -> list[PromptPair]:
-        prompts = generate_prompts(n, seed)
+        prompts = generate_prompts(n, seed, templates_per_order=self.templates_per_order)
         if self.scheme == "p_ABC":  # E1a's path, byte for byte
             rng = random.Random(f"p_ABC/{seed}")
             return [self.encode_pair(p, abc_counterpart(p, rng), prepend_bos) for p in prompts]

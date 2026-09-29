@@ -230,3 +230,36 @@ def test_app_a_is_seeded_and_names_are_fresh():
     text, once, repeated = a
     assert once != repeated and not ({once, repeated} & {p.io, p.s}) and {once, repeated} <= set(NAMES)
     assert text.split().count(repeated) == 2 and text.split().count(once) == 1
+
+
+# --- E2 additions: template subset parameter ---
+
+
+def test_default_stream_matches_the_committed_e1b_gate_draw():
+    """The subset option leaves the default stream unchanged: the template
+    column of the committed IOI gate artifact (n=2000, seed 0) is regenerated
+    exactly, and templates_per_order=15 is the default."""
+    import pyarrow.parquet as pq
+
+    committed = pq.read_table("results/E1b/gate/ioi/p_ABC.parquet", columns=["template"]).column("template").to_pylist()
+    assert [f"{p.order}/{p.template_idx}" for p in generate_prompts(2000, 0)] == committed
+    assert generate_prompts(300, 4) == generate_prompts(300, 4, templates_per_order=15)
+
+
+def test_template_subset_keeps_the_first_k_of_each_order(word_tokenizer):
+    prompts = generate_prompts(500, 0, templates_per_order=7)
+    assert {p.template_idx for p in prompts} == set(range(7))
+    assert {p.order for p in prompts} == {"BABA", "ABBA"}
+    b = IOIBattery(word_tokenizer, templates_per_order=7)
+    assert b.templates_per_order == 7
+    assert {pp.template for pp in b.pairs(200, 0, False)} <= {f"{o}/{i}" for o in ("BABA", "ABBA") for i in range(7)}
+    assert "subset: templates 0-6 of each order (14 templates)" in b.template_set
+    assert IOIBattery(word_tokenizer).template_set == IOIBattery.template_set
+
+
+@pytest.mark.parametrize("k", [0, 16])
+def test_template_subset_bounds(word_tokenizer, k):
+    with pytest.raises(ValueError):
+        generate_prompts(10, 0, templates_per_order=k)
+    with pytest.raises(ValueError):
+        IOIBattery(word_tokenizer, templates_per_order=k)
