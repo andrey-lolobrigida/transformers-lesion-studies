@@ -1,0 +1,346 @@
+{
+  "target": "I1",
+  "pre_registered": true,
+  "entries": [
+    {
+      "id": "I1/previous_token",
+      "source": "wang-2022 App. H: the two heads with the highest previous token score",
+      "published": "4.11, 2.2 in the top 2",
+      "ours": {
+        "L4H11": 1,
+        "L2H2": 4
+      },
+      "tolerance": "top k = 4 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 4,
+        "bottom": false,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L4H11": 1,
+          "L2H2": 4
+        },
+        "member_scores": {
+          "L4H11": 0.9887397289276123,
+          "L2H2": 0.4847189784049988
+        },
+        "top_k": [
+          [
+            "L4H11",
+            0.9887397289276123
+          ],
+          [
+            "L3H7",
+            0.5357017517089844
+          ],
+          [
+            "L6H8",
+            0.49366992712020874
+          ],
+          [
+            "L2H2",
+            0.4847189784049988
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "bos": {
+            "L4H11": 1,
+            "L2H2": 4
+          },
+          "seed1": {
+            "L4H11": 1,
+            "L2H2": 4
+          },
+          "seed2": {
+            "L4H11": 1,
+            "L2H2": 4
+          },
+          "seed3": {
+            "L4H11": 1,
+            "L2H2": 4
+          },
+          "seed4": {
+            "L4H11": 1,
+            "L2H2": 4
+          }
+        }
+      }
+    },
+    {
+      "id": "I1/induction",
+      "source": "wang-2022 App. H: among the 5 heads with the highest induction score",
+      "published": "5.5, 6.9 in the top 5",
+      "ours": {
+        "L5H5": 2,
+        "L6H9": 3
+      },
+      "tolerance": "top k = 5 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 5,
+        "bottom": false,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L5H5": 2,
+          "L6H9": 3
+        },
+        "member_scores": {
+          "L5H5": 0.9279071688652039,
+          "L6H9": 0.9223843812942505
+        },
+        "top_k": [
+          [
+            "L5H1",
+            0.9368599057197571
+          ],
+          [
+            "L5H5",
+            0.9279071688652039
+          ],
+          [
+            "L6H9",
+            0.9223843812942505
+          ],
+          [
+            "L7H10",
+            0.9077436327934265
+          ],
+          [
+            "L7H2",
+            0.8345355987548828
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "bos": {
+            "L5H5": 2,
+            "L6H9": 3
+          },
+          "seed1": {
+            "L5H5": 2,
+            "L6H9": 3
+          },
+          "seed2": {
+            "L5H5": 2,
+            "L6H9": 3
+          },
+          "seed3": {
+            "L5H5": 2,
+            "L6H9": 3
+          },
+          "seed4": {
+            "L5H5": 2,
+            "L6H9": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "I1/duplicate",
+      "source": "wang-2022 App. I: among the three heads with the highest duplicate token score",
+      "published": "3.0, 0.1 in the top 3",
+      "ours": {
+        "L3H0": 2,
+        "L0H1": 3
+      },
+      "tolerance": "top k = 4 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 4,
+        "bottom": false,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L3H0": 2,
+          "L0H1": 3
+        },
+        "member_scores": {
+          "L3H0": 0.6454168558120728,
+          "L0H1": 0.14675691723823547
+        },
+        "top_k": [
+          [
+            "L0H5",
+            0.7043886184692383
+          ],
+          [
+            "L3H0",
+            0.6454168558120728
+          ],
+          [
+            "L0H1",
+            0.14675691723823547
+          ],
+          [
+            "L7H1",
+            0.04992944002151489
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "bos": {
+            "L3H0": 2,
+            "L0H1": 3
+          },
+          "seed1": {
+            "L3H0": 2,
+            "L0H1": 3
+          },
+          "seed2": {
+            "L3H0": 2,
+            "L0H1": 3
+          },
+          "seed3": {
+            "L3H0": 2,
+            "L0H1": 3
+          },
+          "seed4": {
+            "L3H0": 2,
+            "L0H1": 3
+          }
+        }
+      }
+    },
+    {
+      "id": "I1/copy",
+      "source": "wang-2022 App. H, Fig. 17: in the 20 heads contributing the most",
+      "published": "5.5, 6.9 in the top 20",
+      "ours": {
+        "L5H5": 16,
+        "L6H9": 5
+      },
+      "tolerance": "top k = 20 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 20,
+        "bottom": false,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L5H5": 16,
+          "L6H9": 5
+        },
+        "member_scores": {
+          "L5H5": 4.670993804931641,
+          "L6H9": 17.698143005371094
+        },
+        "top_k": [
+          [
+            "L7H2",
+            24.72930145263672
+          ],
+          [
+            "L9H9",
+            22.000507354736328
+          ],
+          [
+            "L9H6",
+            21.027896881103516
+          ],
+          [
+            "L7H10",
+            19.36631202697754
+          ],
+          [
+            "L6H9",
+            17.698143005371094
+          ],
+          [
+            "L10H0",
+            17.374095916748047
+          ],
+          [
+            "L10H7",
+            16.197580337524414
+          ],
+          [
+            "L10H1",
+            13.561315536499023
+          ],
+          [
+            "L11H9",
+            12.719488143920898
+          ],
+          [
+            "L5H1",
+            11.4686861038208
+          ],
+          [
+            "L11H10",
+            11.308614730834961
+          ],
+          [
+            "L10H6",
+            8.991011619567871
+          ],
+          [
+            "L10H10",
+            6.281081676483154
+          ],
+          [
+            "L8H1",
+            6.184232234954834
+          ],
+          [
+            "L10H11",
+            5.614323139190674
+          ],
+          [
+            "L5H5",
+            4.670993804931641
+          ],
+          [
+            "L7H1",
+            3.6017417907714844
+          ],
+          [
+            "L9H0",
+            3.5364978313446045
+          ],
+          [
+            "L5H0",
+            2.9984912872314453
+          ],
+          [
+            "L9H1",
+            2.997624158859253
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "bos": {
+            "L5H5": 16,
+            "L6H9": 6
+          },
+          "seed1": {
+            "L5H5": 16,
+            "L6H9": 5
+          },
+          "seed2": {
+            "L5H5": 16,
+            "L6H9": 5
+          },
+          "seed3": {
+            "L5H5": 16,
+            "L6H9": 5
+          },
+          "seed4": {
+            "L5H5": 16,
+            "L6H9": 5
+          },
+          "signed": {
+            "L5H5": 14,
+            "L6H9": 5
+          }
+        }
+      }
+    }
+  ]
+}
