@@ -242,8 +242,8 @@ What the ROME skim did:
 
 - **[[causal-tracing]] opened** — the restore-direction worked example
   [[activation-patching]] had a slot for, and the reference setup for the
-  E1 factual-recall item: known-facts filter, `3σ` Gaussian noise on
-  subject embeddings, ten-layer restoration windows, `P[o]` as the metric.
+  E1 factual-recall item: known-facts filter, $3\sigma$ Gaussian noise on
+  subject embeddings, ten-layer restoration windows, $P[o]$ as the metric.
   Nothing in it is on GPT-2 small or in logit difference.
 - **[[activation-patching]]** gains two caveats: single-component
   restoration reads as blank where ten-layer windows do not, and Meng et

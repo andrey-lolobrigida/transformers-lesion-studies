@@ -43,13 +43,13 @@ be indexed by that choice.
 
 ## Intuition, then mechanism
 
-**The analogy:** distributing a product over sums. `(a + b)(c + d)` is opaque;
-`ac + ad + bc + bd` lists every way to pick one factor from each bracket. Here
-each bracket is a layer, `(Id + Σ_h A^h ⊗ W_OV^h)`, whose terms are "do
-nothing" (the identity, i.e. the residual connection) or "go through head h",
+**The analogy:** distributing a product over sums. $(a + b)(c + d)$ is opaque;
+$ac + ad + bc + bd$ lists every way to pick one factor from each bracket. Here
+each bracket is a layer, $(\mathrm{Id} + \sum_h A^h \otimes W_{OV}^h)$, whose terms are "do
+nothing" (the identity, i.e. the residual connection) or "go through head $h$",
 and a path is one choice per layer.
 
-**Where the analogy breaks.** The attention patterns `A^h` in the brackets
+**Where the analogy breaks.** The attention patterns $A^h$ in the brackets
 are not constants — they are computed from the very stream the earlier
 brackets produced. The expansion is exact only after you freeze them. The
 paper's thought experiment: run the model once and record every pattern; run
@@ -61,7 +61,7 @@ attention scores, on [[attention-head-composition]].
 
 **Now the mechanism.**
 
-*Zero layers.* `T = W_U W_E`. The model can only map the present token to the
+*Zero layers.* $T = W_U W_E$. The model can only map the present token to the
 next, so the optimum is the bigram log-likelihood. This "direct path" term
 appears in every deeper model and there still "can only affect the bigram
 log-likelihoods"; in larger models it acts as a residual for bigram facts no
@@ -69,22 +69,26 @@ rule covers, e.g. `Barack → Obama` [elhage-2021 §Zero-Layer Transformers].
 
 *One layer.*
 
-    T = (Id ⊗ W_U) · (Id + Σ_h A^h ⊗ W_OV^h) · (Id ⊗ W_E)
-      = Id ⊗ W_U W_E  +  Σ_h  A^h ⊗ (W_U W_OV^h W_E)
+$$
+\begin{aligned}
+T &= (\mathrm{Id} \otimes W_U) \cdot (\mathrm{Id} + \textstyle\sum_h A^h \otimes W_{OV}^h) \cdot (\mathrm{Id} \otimes W_E) \\
+  &= \mathrm{Id} \otimes W_U W_E + \textstyle\sum_h A^h \otimes (W_U W_{OV}^h W_E)
+\end{aligned}
+$$
 
 The direct path plus one term per head; the per-head term splits into the QK
 and OV circuits on [[qk-ov-circuits]] [elhage-2021 §The Path Expansion Trick,
 §Splitting Attention Head terms…].
 
 *Two layers.* Expanding two brackets gives the direct path, the layer-1 head
-terms, the layer-2 head terms, and cross terms `(A^{h₂}A^{h₁}) ⊗ (W_U
-W_OV^{h₂} W_OV^{h₁} W_E)` — the **virtual attention heads** (V-composition)
-[elhage-2021 §Path Expansion of Logits]. Depth `n` gives terms of every order
-up to `n`.
+terms, the layer-2 head terms, and cross terms $(A^{h_2} A^{h_1}) \otimes (W_U
+W_{OV}^{h_2} W_{OV}^{h_1} W_E)$ — the **virtual attention heads** (V-composition)
+[elhage-2021 §Path Expansion of Logits]. Depth $n$ gives terms of every order
+up to $n$.
 
 *With MLPs.* The pre-activations of an MLP in a one-layer model expand the same
-way: `a_pre = W_I W_E + Σ_h A^h ⊗ (W_I W_OV^h W_E)`, so "how much a token
-excites this neuron directly" and "how much it excites it via head h" are
+way: $a_{\text{pre}} = W_I W_E + \sum_h A^h \otimes (W_I W_{OV}^h W_E)$, so "how much a token
+excites this neuron directly" and "how much it excites it via head $h$" are
 readable matrices. But the GeLU "means we can't linearize through MLP layers as
 we did attention layers"; past it, the paper falls back to the Zoom In
 programme of understanding individual neurons, and reports little success
@@ -96,7 +100,7 @@ and ablate.
 
 ## Precisely
 
-**Term-importance ablation** — measuring the marginal effect of all nth-order
+**Term-importance ablation** — measuring the marginal effect of all $n$th-order
 paths, without ever materialising the expansion [elhage-2021 §Term Importance
 Analysis]:
 
@@ -105,12 +109,12 @@ Analysis]:
    each head's output to the stream, *save* it and add a zero tensor. Record
    the loss. (All paths through any head are now cut; only the direct path
    remains.)
-3. Step *n*: run again with patterns frozen; for each head, save its output
+3. Step $n$: run again with patterns frozen; for each head, save its output
    and replace it with the output saved for that head in the previous step.
-   Record the loss. (Paths of order ≤ n−1 are now present.)
+   Record the loss. (Paths of order $\le n-1$ are now present.)
 
 Differences between successive losses are the marginal contribution of the
-nth-order terms. The paper notes that "freezing the attention patterns to
+$n$th-order terms. The paper notes that "freezing the attention patterns to
 ground truth is what makes this ablation only target V-composition", and that
 variants could isolate Q- or K-composition instead. In their two-layer model:
 second-order (virtual-head) terms small; among first-order terms, layer-2
@@ -119,7 +123,7 @@ heads dominate layer-1 heads.
 **LayerNorm.** Fold mean-subtraction, scale and bias into adjacent weights;
 carry the per-token standard-deviation divisor as a scalar reweighting of every
 path through that LayerNorm [elhage-2021 §Handling Layer Normalization]. First-
-layer LayerNorm can alternatively be applied to every column of `W_E` and then
+layer LayerNorm can alternatively be applied to every column of $W_E$ and then
 ignored.
 
 **Relation to Olsson et al.'s ablation.** Their pattern-preserving ablation is
@@ -131,10 +135,10 @@ order. Same freezing trick, different question. Recorded on
 ## What it licenses
 
 - **Reading a term** licenses a claim about *weights along a route*: "the
-  direct path from token `A` through head `h` to logit `C` has this sign and
+  direct path from token $A$ through head $h$ to logit $C$ has this sign and
   size, with patterns fixed." Not a claim about behaviour on a distribution.
 - **The term-importance ablation** licenses a *necessity-shaped* claim about
-  an order of paths, at frozen patterns: "removing all paths of order ≥ n
+  an order of paths, at frozen patterns: "removing all paths of order $\ge n$
   changes loss by this much on this dataset." Because patterns are frozen, it
   is silent on Q/K-composition; the authors say so [elhage-2021 §Term
   Importance Analysis].
@@ -164,8 +168,8 @@ order. Same freezing trick, different question. Recorded on
   the head's write and let everything downstream, including patterns, respond
   — no expansion involved. Pattern-preserving: freeze patterns, remove the
   head's write — every term through the head is cut, Q/K-composition routes are
-  held fixed. Direct effect: keep only the head's own term `A^h ⊗ W_U W_OV^h
-  (…)`. The E1 design note should define the three this way, with this page as
+  held fixed. Direct effect: keep only the head's own term $A^h \otimes W_U W_{OV}^h
+  (\ldots)$. The E1 design note should define the three this way, with this page as
   the reference. *Caveat added 2026-09-19:* that is **not** what Wang et al.
   measure as "direct effect". Their [[path-patching]] to the residual end
   state keeps every path from the head that avoids other *heads*, and MLPs

@@ -93,7 +93,7 @@ freezing as a third ablation axis).
    the §Behavior 3 prose.
 3. "Up to 12B parameter models" in §Argument 4 versus 13B non-embedding
    parameters for the 40-layer model in the model properties table.
-4. The in-context learning score is defined as loss(500) − loss(50), which is
+4. The in-context learning score is defined as $\mathrm{loss}(500) - \mathrm{loss}(50)$, which is
    negative under in-context learning, but is reported as positive nats
    throughout.
 

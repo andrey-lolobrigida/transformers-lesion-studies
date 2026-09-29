@@ -56,12 +56,12 @@ validations, the MLP experiment and the minimality sets.
 | Section | What it holds |
 |---|---|
 | 1 Introduction | Three "insights": redundancy incl. backup heads; known structures used unexpectedly; negative heads |
-| 2 Background, 2.1 Circuits and Knockouts | Task, metrics, notation; circuit as subgraph with `C(x)` via knockout; zero vs mean ablation; `p_ABC`; template-matched means |
+| 2 Background, 2.1 Circuits and Knockouts | Task, metrics, notation; circuit as subgraph with $C(x)$ via knockout; zero vs mean ablation; `p_ABC`; template-matched means |
 | 3 Discovering the Circuit | The three-step algorithm; seven head classes; MLPs not intervened on |
 | 3.1–3.4 | Path patching per receiver; head characterisation; token/position signals; the Backup Name Mover discovery |
-| 4 Experimental validation | `F(C)`; faithfulness 87%; completeness (three searches); minimality; naïve baseline; adversarial examples |
+| 4 Experimental validation | $F(C)$; faithfulness 87%; completeness (three searches); minimality; naïve baseline; adversarial examples |
 | 5 Discussion | Pointers; compensation; negative heads beyond IOI; limitations (S-Inhibition attention, MLPs, LayerNorm); GPT-2 medium |
-| App. A | Six counterfactual datasets; `2.31 S_pos + 0.99 S_tok`; relative-position check |
+| App. A | Six counterfactual datasets; $2.31\, S_{\text{pos}} + 0.99\, S_{\text{tok}}$; relative-position check |
 | App. B | Path patching, Algorithm 1, four forward passes; freezing defined |
 | App. C, D | S-Inhibition keys (fuzzy heads); Previous Token heads via Induction keys; Q-composition route null |
 | App. E, L | Templates; adversarial sentences |

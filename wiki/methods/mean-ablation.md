@@ -40,7 +40,7 @@ Nanda & Lieberum's grokking analysis.
 
 The page earns its place because D-006 commits E3 to running this alongside
 zero and resample, and because the definition of a circuit Wang et al. use
-(`C(x)` = the model with everything outside `C` knocked out) makes the
+($C(x)$ = the model with everything outside $C$ knocked out) makes the
 knockout method part of what "circuit" means; see [[circuit]].
 
 ## Intuition, then mechanism
@@ -77,19 +77,19 @@ removes what varies over it and keeps what does not.
 
 ## Precisely
 
-For a circuit `C` in the model's computational graph `M`, the paper defines
-`C(x)` as the logits of `M` on `x` with every node in `M \ C` mean-ablated on
-`p_ABC`, and `F(C) = E_{X ~ p_IOI}[ f(C(X); X) ]` with `f` the IO−S logit
+For a circuit $C$ in the model's computational graph $M$, the paper defines
+$C(x)$ as the logits of $M$ on $x$ with every node in $M \setminus C$ mean-ablated on
+`p_ABC`, and $F(C) = \mathbb{E}_{X \sim p_{\text{IOI}}}[f(C(X); X)]$ with $f$ the IO−S logit
 difference [wang-2022 §2.1, §4]. Every faithfulness, completeness and
-minimality number on [[circuit-validation-criteria]] is an `F` computed this
+minimality number on [[circuit-validation-criteria]] is an $F$ computed this
 way.
 
 Numbers from the paper that are mean-ablation results:
 
 | Quantity | Value | Where |
 |---|---|---|
-| `F(M)`, clean model, over 100,000 samples | 3.56 | §2, §4 |
-| `F(C)`, the 26-head circuit | `|F(M) − F(C)|` = 0.46, so `F(C)` ≈ 3.10 (derived) | §4 |
+| $F(M)$, clean model, over 100,000 samples | 3.56 | §2, §4 |
+| $F(C)$, the 26-head circuit | $\lvert F(M) - F(C) \rvert$ = 0.46, so $F(C)$ ≈ 3.10 (derived) | §4 |
 | Drop after knocking out the three Name Movers | ≈ 5% | §3.4, App. F |
 | Largest greedy incompleteness score | 3.09 | §4.1 |
 | MLP0 knocked out | sign of logit difference reverses | App. J |
@@ -106,19 +106,19 @@ mechanism is proposed in the paper.
 ## What it licenses
 
 Under rule 1: "under mean ablation on `p_ABC` (template-matched, per
-position; reference size N), knocking out {nodes} changes mean logit
+position; reference size $N$), knocking out {nodes} changes mean logit
 difference on `p_IOI` by {amount}." A necessity claim about the
 distribution-varying part of what those nodes carry.
 
 Two things the paper shows it does *not* license:
 
-- **Faithfulness is not completeness.** The circuit reaches 87% of `F(M)`
+- **Faithfulness is not completeness.** The circuit reaches 87% of $F(M)$
   under this knockout, and a greedy search still finds subsets whose removal
   separates circuit and model by 87% of the baseline. See
   [[circuit-validation-criteria]].
 - **A single-node number is not a stable property of the node.** The Backup
   Name Movers have the smallest minimality scores in the circuit — down to
-  about 1% of `F(M)`, computed against `K` = the other name-moving heads —
+  about 1% of $F(M)$, computed against $K$ = the other name-moving heads —
   and carry the task after the Name Movers are removed [wang-2022 §4.2, App.
   F, App. K].
 
@@ -150,7 +150,7 @@ Two things the paper shows it does *not* license:
   with a *logged size*, per template and per position where the battery item
   has templates. The harness should make "which reference?" a required
   argument, not a default.
-- **E2:** reproducing `F(C)` = 87% requires `p_ABC`, template-matched means
+- **E2:** reproducing $F(C)$ = 87% requires `p_ABC`, template-matched means
   and (head, position) nodes. Any deviation goes in the tolerance statement.
 - **E3:** D-006's mean map is this method with the battery's own corruption
   set as reference. The choice of reference per battery item is a documented

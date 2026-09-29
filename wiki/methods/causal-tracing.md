@@ -58,28 +58,28 @@ corruption rule) and the decisive moments can move. And "restoring a
 moment" here is restoring a vector that everything downstream re-reads, so
 what you measure includes every downstream readjustment.
 
-**Mechanism** [meng-2022 §2.1, App. B.1]. Three runs on a prompt `p`
-describing subject `s` and relation `r`, whose correct completion is the
-object `o`:
+**Mechanism** [meng-2022 §2.1, App. B.1]. Three runs on a prompt $p$
+describing subject $s$ and relation $r$, whose correct completion is the
+object $o$:
 
-1. **Clean run.** Run `p`; cache every hidden state `h_i^(l)` (token `i`,
-   layer `l`), plus each layer's MLP output `m_i^(l)` and attention output
-   `a_i^(l)`.
+1. **Clean run.** Run $p$; cache every hidden state $h_i^{(l)}$ (token $i$,
+   layer $l$), plus each layer's MLP output $m_i^{(l)}$ and attention output
+   $a_i^{(l)}$.
 2. **Corrupted run.** Immediately after embedding, add Gaussian noise
-   `ε ~ N(0, ν)` to the embeddings of every token in the subject, with `ν`
+   $\epsilon \sim \mathcal{N}(0, \nu)$ to the embeddings of every token in the subject, with $\nu$
    set to **three times** the empirical standard deviation of token
    embeddings over a body of text. Run forward. Repeat with ten different
    noise samples per prompt. On the 1000 known facts this drops the mean
-   `P[o]` from 27.0% to 8.47% [meng-2022 App. B.1].
+   $P[o]$ from 27.0% to 8.47% [meng-2022 App. B.1].
 3. **Corrupted-with-restoration run.** Same noisy input, but at one chosen
-   `(token i, layer l)` hook the state to its clean value and let the rest
+   $(\text{token } i,\ \text{layer } l)$ hook the state to its clean value and let the rest
    of the forward pass proceed untouched.
 
-The effects, with `P[o]`, `P*[o]`, `P*,clean h[o]` the correct-object
+The effects, with $P[o]$, $P_*[o]$, $P_{*,\,\text{clean}\ h}[o]$ the correct-object
 probabilities under the three runs:
 
-- **Total effect** `TE = P[o] − P*[o]`: what the corruption costs.
-- **Indirect effect** of state `h_i^(l)`: `IE = P*,clean h_i^(l)[o] − P*[o]`,
+- **Total effect** $\mathrm{TE} = P[o] - P_*[o]$: what the corruption costs.
+- **Indirect effect** of state $h_i^{(l)}$: $\mathrm{IE} = P_{*,\,\text{clean}\ h_i^{(l)}}[o] - P_*[o]$,
   the recovery from restoring that one state while the subject stays
   corrupted.
 - **ATE, AIE**: the same, averaged over the prompt sample.
@@ -91,10 +91,10 @@ al." [meng-2022 §2.1 fn. 3]. (This is not this project's "direct effect";
 see "Where it's contested".)
 
 **Restoring modules rather than states.** Restoring a *single* MLP output
-`m_i^(l)` or attention output `a_i^(l)` "had generally negligible effects,
+$m_i^{(l)}$ or attention output $a_i^{(l)}$ "had generally negligible effects,
 suggesting the decisive information is accumulated across layers". So for
 the MLP and attention maps the paper restores a **run of ten consecutive
-layers** centred on `l`, clipped at the edges, and plots the result at `l`
+layers** centred on $l$, clipped at the edges, and plots the result at $l$
 [meng-2022 App. B.2]. The hidden-state map (Fig. 1e/2a) is single-vector;
 the MLP and attention maps (Fig. 1f–g/2b–c) are windows.
 
@@ -103,14 +103,14 @@ difference; the map is where the difference is large.
 
 ## Precisely
 
-**What was found on GPT-2 XL**, 1000 facts, all figures in `P[o]` and layer
+**What was found on GPT-2 XL**, 1000 facts, all figures in $P[o]$ and layer
 indices from 0 [meng-2022 §2.2, App. B.1–B.2]:
 
 | Quantity | Value |
 |---|---|
 | ATE | 18.6 percentage points |
 | Peak single-state AIE, last subject token | 8.7 pp at layer 15 |
-| Restoring the best single state at the last subject token, per prompt | raises `P[o]` to 19.5% on average (27.0% clean, 8.47% corrupted) |
+| Restoring the best single state at the last subject token, per prompt | raises $P[o]$ to 19.5% on average (27.0% clean, 8.47% corrupted) |
 | Same, bucketed by layer, peak | 15.0% at layer 15 |
 | MLP-window AIE peak, last subject token | 6.6 pp; window centred at layer 17 restores to 15.0% |
 | Attention-window AIE at last subject token | 1.6 pp |
@@ -138,7 +138,7 @@ corrupted input.
 - Also corrupting the token *after* the subject: "substantially the same",
   effects somewhat reduced, early site still at the last subject token
   (Figs. 12, 15).
-- Noise much smaller than `3σ`: ATE "become[s] very small" and the
+- Noise much smaller than $3\sigma$: ATE "become[s] very small" and the
   indirect effects are hard to discern. **Noise has to be big enough to
   make a total effect.**
 - Uniform noise, or Gaussian with the embeddings' empirical mean and
@@ -210,11 +210,11 @@ paper's storage claim; the trace alone does not.
 
 - **E1 factual-recall battery item** (roadmap E1; O-009). The reference
   setup is: prompts from a fact set, filtered to those the clean model
-  answers (ROME's rule: greedy generation names `o` before any other
-  capitalised word, text before `o` becomes the prompt) [meng-2022
+  answers (ROME's rule: greedy generation names $o$ before any other
+  capitalised word, text before $o$ becomes the prompt) [meng-2022
   App. B.1]; corruption = Gaussian noise on subject-token embeddings at
-  `3σ`, ten samples; metric translated to logit difference per rule 5,
-  with the `P[o]` version kept alongside for comparability. The filter
+  $3\sigma$, ten samples; metric translated to logit difference per rule 5,
+  with the $P[o]$ version kept alongside for comparability. The filter
   count is a battery artifact field.
 - **O-007 (MLPs first-class).** Third datapoint, after Wang and Miller:
   causal tracing's headline is an MLP result, at the level of ten-layer
@@ -242,7 +242,7 @@ paper's storage claim; the trace alone does not.
 
 - Does GPT-2 small show an early site at all, and at what window width?
   Measured at E1, not guessed (O-009).
-- What does the trace look like in logit difference rather than `P[o]`?
-  The battery README records the answer next to the `P[o]` version.
+- What does the trace look like in logit difference rather than $P[o]$?
+  The battery README records the answer next to the $P[o]$ version.
 - Is a ten-layer window meaningful in a 12-layer model, or does E1 need a
   narrower one? The paper gives no rule for choosing the width.

@@ -68,7 +68,7 @@ patterns and targeted tests [wang-2022 §3].
 
 **Two signals in the S-Inhibition output.** A *token* signal (the identity
 of S) and a *position* signal (where S1 is). Both matter; position matters
-more: patched logit difference ≈ `2.31 S_pos + 0.99 S_tok` [wang-2022 §3.2,
+more: patched logit difference ≈ $2.31\, S_{\text{pos}} + 0.99\, S_{\text{tok}}$ [wang-2022 §3.2,
 App. A]. The position signal originates in the Duplicate Token and Induction
 heads and is passed by V-composition into the S-Inhibition heads: patching
 those heads' outputs from altered-position sentences reproduces ≥ 88% of the
@@ -115,15 +115,15 @@ position); path patching corrupts from `p_ABC`; metric is [[logit-difference]].
 | Clean mean logit difference | 3.56 | 100,000 samples | §2 |
 | Clean IO probability; IO over S | 49%; 99.3% | same | §2 |
 | Name Movers' mean attention to IO | 0.59 | `p_IOI` | §3.1 |
-| Name Mover attention-vs-projection correlation | ρ > 0.81 | N = 500 | §3.1 |
+| Name Mover attention-vs-projection correlation | $\rho > 0.81$ | N = 500 | §3.1 |
 | Name Mover copy score / average head | > 95% / < 20% | N = 1000, top-5 | §3.1 |
 | Negative Name Mover negative copy score / average | 98% / 12% | same | §3.1 |
 | S-Inhibition mean attention END → S2 | 0.51 | four heads | §3.2 |
 | Position vs token signal weights | 2.31 vs 0.99 | six datasets, 7% mean error | App. A |
-| Faithfulness `|F(M) − F(C)|` | 0.46 (13%); C at 87% | 26 nodes | §4 |
+| Faithfulness $\lvert F(M) - F(C) \rvert$ | 0.46 (13%); $C$ at 87% | 26 nodes | §4 |
 | Drop after knocking out the three Name Movers | ≈ 5% | mean ablation | §3.4, App. F |
 | Greedy incompleteness, max | 3.09 (87%) | k = 10, 10 runs | §4.1 |
-| Minimality, every node | ≥ 1% of `F(M)` | per-node `K` in App. K | §4.2 |
+| Minimality, every node | ≥ 1% of $F(M)$ | per-node $K$ in App. K | §4.2 |
 | Naïve circuit faithfulness | 0.1 | see §4.3 | §4.3 |
 | Adversarial (duplicate IO): logit diff; S over IO | 1.23; 23.4% | App. L templates | §4.4 |
 | Control (extra S) | 3.64; 0.4% | | §4.4 |
@@ -137,10 +137,10 @@ token; 5.5 and 6.9 in the top five on induction and top twenty on copying;
 3.0 and 0.1 in the top three on duplicate) [wang-2022 App. H, App. I].
 
 **Copy score** [wang-2022 §3.1]: take the residual stream at a name token
-after MLP0, multiply by the head's OV matrix, then by `W_U`, apply the final
+after MLP0, multiply by the head's OV matrix, then by $W_U$, apply the final
 LayerNorm, and count the proportion of samples with the name in the top five
-logits. The *negative* copy score uses `−W_OV`. A hybrid of a weight
-statistic and an activation: the input is a real residual vector, not `W_E`.
+logits. The *negative* copy score uses $-W_{OV}$. A hybrid of a weight
+statistic and an activation: the input is a real residual vector, not $W_E$.
 Compare [[weight-statistics]] and [[head-activation-evaluators]].
 
 ## What it licenses

@@ -74,7 +74,7 @@ fixed locations and dedicated wiring. Two problems for this project:
    version of this concept comes from Elhage et al. 2021, not from here — and
    it does supply the missing object: the **virtual weight** between two
    components is the product of the earlier one's write matrix and the later
-   one's read matrix through the stream, `W_in² W_out¹` [elhage-2021 §Virtual
+   one's read matrix through the stream, $W_{\text{in}}^2 W_{\text{out}}^1$ [elhage-2021 §Virtual
    Weights]. An edge in a transformer circuit is a virtual weight; the
    composition scores on [[weight-statistics]] are its normalised size. See
    [[residual-stream]].
@@ -91,7 +91,7 @@ From the paper's own glossary [olah-2020 §Glossary]:
 > **Circuit** — A subgraph of a neural network. Nodes correspond to neurons or
 > directions (linear combinations of neurons). Two nodes have an edge between
 > them if they are in adjacent layers. The edges have weights which are the
-> weights between those neurons (or `n₁ W n₂ᵀ` if the nodes are linear
+> weights between those neurons (or $n_1 W n_2^\top$ if the nodes are linear
 > combinations). For convolutional layers, the weights are 2D matrices
 > representing the weights for different relative positions of the layers.
 
@@ -99,17 +99,17 @@ Note what this definition does *not* contain: any reference to a task, a
 behaviour, or a dataset. It is purely structural.
 
 **The behavioural definition, from Wang et al. 2022** — added 2026-09-19.
-Think of the model as a computational graph `M` "where nodes are terms in
+Think of the model as a computational graph $M$ "where nodes are terms in
 its forward pass (neurons, attention heads, embeddings, etc.) and edges are
-the interactions between those terms"; then "a circuit `C` is a subgraph of
-`M` responsible for some behavior (such as completing the IOI task)". The
+the interactions between those terms"; then "a circuit $C$ is a subgraph of
+$M$ responsible for some behavior (such as completing the IOI task)". The
 authors say directly that this "is more coarse-grained than the one
 presented in Olah et al. (2020), where nodes are features … instead of model
 components" [wang-2022 §2.1]. Two things follow that Zoom In's definition
 does not have:
 
-- **A circuit has a function.** `C(x)` is defined as the logits of `M` on
-  `x` with every node outside `C` *knocked out* — so the knockout method
+- **A circuit has a function.** $C(x)$ is defined as the logits of $M$ on
+  $x$ with every node outside $C$ *knocked out* — so the knockout method
   (in the paper, [[mean-ablation]] on `p_ABC`) is part of what the circuit
   *is*, not a way of testing it afterwards [wang-2022 §2.1].
 - **Nodes are (component, position) pairs.** The 26-head circuit is "1.1%
@@ -166,9 +166,9 @@ See `docs/00-motivation.md` on phrenology risk.
   `docs/05-glossary.md` defines a circuit behaviourally — "a subgraph of
   components that together implement a behaviour" — and adds that which
   subgraph counts depends partly on the ablation methodology. That is Wang
-  et al.'s definition, and the caveat is a direct consequence of it: `C(x)`
+  et al.'s definition, and the caveat is a direct consequence of it: $C(x)$
   is *defined* through a knockout, so a different knockout defines a
-  different `C(x)` [wang-2022 §2.1]. Miller et al. (R1) make the
+  different $C(x)$ [wang-2022 §2.1]. Miller et al. (R1) make the
   consequence empirical. **Proposed reconciliation for D-010 item 3:** keep
   both senses, named — a *structural* circuit (Zoom In; Elhage et al.'s
   virtual weights) is read off parameters; a *behavioural* circuit (Wang et

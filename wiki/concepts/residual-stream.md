@@ -57,7 +57,7 @@ licenses the three consequences the paper draws:
 
 1. **Virtual weights.** Any two layers, however far apart, are implicitly
    connected by the product of the earlier one's output weights and the later
-   one's input weights, e.g. `W_I² W_O¹`, describing how much the later layer
+   one's input weights, e.g. $W_I^2 W_O^1$, describing how much the later layer
    reads of what the earlier one wrote [elhage-2021 §Virtual Weights].
 2. **Subspaces as memory.** Once written, information persists in its subspace
    until something actively deletes it. The stream is hundreds to tens of
@@ -74,7 +74,7 @@ licenses the three consequences the paper draws:
 
 From (3) the authors speculate that some components do **memory management**:
 MLP neurons with strongly negative cosine similarity between input and output
-weights, and heads with large negative `W_OV` eigenvalues that mostly attend to
+weights, and heads with large negative $W_{OV}$ eigenvalues that mostly attend to
 the present token, may be deleting information others wrote. Stated as "hints",
 not a result [elhage-2021 §Subspaces and Residual Stream Bandwidth].
 
@@ -84,15 +84,15 @@ matrix product you can compute.
 
 ## Precisely
 
-With `t` the one-hot tokens `[n_context, n_vocab]`, `W_E` the embedding
-`[d_model, n_vocab]` and `W_U` the unembedding `[n_vocab, d_model]`
+With $t$ the one-hot tokens $[n_{\text{context}}, n_{\text{vocab}}]$, $W_E$ the embedding
+$[d_{\text{model}}, n_{\text{vocab}}]$ and $W_U$ the unembedding $[n_{\text{vocab}}, d_{\text{model}}]$
 [elhage-2021 §Variable Definitions]:
 
-- `x⁰ = W_E t` (plus positional embedding, in architectures that add one to
+- $x^0 = W_E t$ (plus positional embedding, in architectures that add one to
   the stream — the paper's own models do not; see below).
-- Each residual block: `x^{n+1} = x^n + Σ_h h(x^n) + m(x^{n} + Σ_h h(x^n))`,
+- Each residual block: $x^{n+1} = x^n + \sum_h h(x^n) + m(x^n + \sum_h h(x^n))$,
   attention heads then MLP, each adding.
-- Logits `T(t) = W_U x^{final}`.
+- Logits $T(t) = W_U x^{\text{final}}$.
 
 **Which activations have a privileged basis.** Tokens, attention patterns and
 MLP activations do. The residual stream, keys, queries and values do **not**.
@@ -109,7 +109,7 @@ normalization". Cost: paths through different layers stop being directly
 comparable [elhage-2021 §Handling Layer Normalization].
 
 **The paper's models put no position in the stream.** Sinusoidal position is
-added just before `W_Q` and `W_K`, so position affects attention scores but is
+added just before $W_Q$ and $W_K$, so position affects attention scores but is
 never written to the residual stream. GPT-2 does add a positional embedding to
 the stream, which "opens up" mechanisms unavailable to the paper's models —
 notably pointer arithmetic on positions [elhage-2021 §Model Details, §Pointer
@@ -122,7 +122,7 @@ The stream is an architectural fact, not a hypothesis, so nothing needs to be
 of claims*:
 
 - "Head 2 reads a subspace head 1 writes" is demonstrated, at the weight level,
-  by a non-trivial virtual weight `W_in² W_out¹` — the composition scores on
+  by a non-trivial virtual weight $W_{\text{in}}^2 W_{\text{out}}^1$ — the composition scores on
   [[weight-statistics]] are exactly this, normalised.
 - That is a statement about **parameters**. Whether the model *uses* that
   connection on a given input is a separate, behavioural question, answered by
@@ -149,7 +149,7 @@ of claims*:
 ## What this project does with it
 
 - **E1 hooks live here.** Total-effect ablation replaces a head's *write* to
-  the stream; direct effect reads only the write's contribution through `W_U`
+  the stream; direct effect reads only the write's contribution through $W_U$
   (the direct path, see [[path-expansion]]). Both are operations on the stream,
   and the harness should name them that way.
 - **E4's decomposition is this paper's LayerNorm scalar.** D-002's "mechanical

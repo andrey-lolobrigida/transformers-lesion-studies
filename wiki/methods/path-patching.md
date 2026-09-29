@@ -20,10 +20,10 @@ different input, and measure how much the metric drops.
 
 | | |
 |---|---|
-| **Answers** | Necessity of a *route*, not of a component: "does the model's output on the clean input depend on what head `h` sends to receiver `r` along the direct path `h → r`?" With `r` = the final residual state, this is the head's **direct effect** on the logits. |
+| **Answers** | Necessity of a *route*, not of a component: "does the model's output on the clean input depend on what head $h$ sends to receiver $r$ along the direct path $h \to r$?" With $r$ = the final residual state, this is the head's **direct effect** on the logits. |
 | **Does NOT answer** | Sufficiency. The intervention in Wang et al. is *noising* — a corrupted activation is written into a clean run — so a large effect says the clean path was needed, not that it would suffice. It is also silent about every path that passes through another head: those are held at their clean values by construction, so a head whose whole influence is routed through other heads scores zero here and is not thereby shown unimportant. |
 | **Confounds** | The corrupted input defines what is removed (Wang et al. use `p_ABC`, which removes name identity and duplication while keeping the template). Other heads are frozen to clean values, which is a state the model never produces. MLPs and LayerNorms *are* recomputed, so the "direct" path includes MLP mediation. Backup behaviour is invisible: freezing the other heads prevents any compensation, which is the point, but means the number is not the one a full ablation would give. |
-| **Always log** | The sender, the receiver set (which input — Q, K or V — of which heads, or the residual end state), the pair of distributions `(x_orig, x_new)`, the number of pairs averaged (Wang et al.: more than 200), the metric, seed, model revision hash. |
+| **Always log** | The sender, the receiver set (which input — Q, K or V — of which heads, or the residual end state), the pair of distributions $(x_{\text{orig}}, x_{\text{new}})$, the number of pairs averaged (Wang et al.: more than 200), the metric, seed, model revision hash. |
 
 ## Why it exists
 
@@ -44,7 +44,7 @@ end state, and because E2's IOI reproduction cannot be run without it.
 ## Intuition, then mechanism
 
 **The analogy:** a plumbing test. You want to know whether the water reaching
-tap `r` comes through pipe `h → r` specifically. So you hold every other
+tap $r$ comes through pipe $h \to r$ specifically. So you hold every other
 pipe's flow exactly where it was, swap the contents of that one pipe for
 coloured water, and look at the tap. If the tap runs coloured, the pipe was
 carrying something the tap used.
@@ -62,23 +62,23 @@ contested*.
 
 **Now the mechanism.** Four forward passes [wang-2022 §App. B, Algorithm 1]:
 
-- **A.** Run on `x_new` (corrupted); cache every activation.
-- **B.** Run on `x_orig` (clean); cache every activation.
-- **C.** Run on `x_orig` with every head *frozen* to its pass-B output,
-  except the sender `h`, which is set to its pass-A output. MLPs and
-  LayerNorms recompute. Save what the receivers `r ∈ R` *would* compute in
+- **A.** Run on $x_{\text{new}}$ (corrupted); cache every activation.
+- **B.** Run on $x_{\text{orig}}$ (clean); cache every activation.
+- **C.** Run on $x_{\text{orig}}$ with every head *frozen* to its pass-B output,
+  except the sender $h$, which is set to its pass-A output. MLPs and
+  LayerNorms recompute. Save what the receivers $r \in R$ *would* compute in
   this state (their own value is then overwritten, since they are frozen).
-- **D.** Run on `x_orig` normally, but overwrite each receiver with the value
+- **D.** Run on $x_{\text{orig}}$ normally, but overwrite each receiver with the value
   saved in C. Everything after the receivers recomputes as in a normal
   forward pass. Read the logits.
 
 The metric (logit difference in every experiment of the paper) is compared
-between pass D and the clean model, averaged over more than 200 `(x_orig,
-x_new)` pairs [wang-2022 §App. B].
+between pass D and the clean model, averaged over more than 200 $(x_{\text{orig}},
+x_{\text{new}})$ pairs [wang-2022 §App. B].
 
 "Freezing" is defined in the paper as the special case of patching where a
-forward pass on `x` has some earlier activations edited and an activation is
-then patched back to the value it had on the *unedited* run of `x`
+forward pass on $x$ has some earlier activations edited and an activation is
+then patched back to the value it had on the *unedited* run of $x$
 [wang-2022 §App. B, fn. 4]. It is freezing of **head outputs**, not of
 attention patterns — the distinction from [[pattern-preserving-ablation]] is
 exactly this.
@@ -91,24 +91,24 @@ drop.
 
 Inputs [wang-2022 §App. B]:
 
-- `x_orig`: a sample from `p_IOI`; `x_new`: the corresponding sample from
+- $x_{\text{orig}}$: a sample from `p_IOI`; $x_{\text{new}}$: the corresponding sample from
   `p_ABC` (names replaced by three unrelated random names, template kept).
-- `h`: the sender, a (head, position) pair — in the paper always a single
+- $h$: the sender, a (head, position) pair — in the paper always a single
   head at one named position (END, S2, S1+1).
-- `R ⊆ M`: the receivers. Either the Q, K or V input of a set of heads, or
+- $R \subseteq M$: the receivers. Either the Q, K or V input of a set of heads, or
   the residual end state. The end state is what the logits are computed from
-  (after the final LayerNorm), so choosing `R` = end state measures the
-  direct effect of `h` on the logits [wang-2022 §App. B, fn. 3].
+  (after the final LayerNorm), so choosing $R$ = end state measures the
+  direct effect of $h$ on the logits [wang-2022 §App. B, fn. 3].
 
-In pass C, "all attention heads except `h` have their output frozen to their
-value on `x_orig`. This means that we remove the influence of every path
-including one (or more) intermediate attention heads `p` of the form
-`h → p → r`" [wang-2022 §App. B]. What remains is every path `h → r` whose
+In pass C, "all attention heads except $h$ have their output frozen to their
+value on $x_{\text{orig}}$. This means that we remove the influence of every path
+including one (or more) intermediate attention heads $p$ of the form
+$h \to p \to r$" [wang-2022 §App. B]. What remains is every path $h \to r$ whose
 only intermediate nodes are residual connections, MLPs and LayerNorms.
 
 The experiments the paper runs with it, receiver by receiver:
 
-| Receiver `R` | Sender position | Finds | Section |
+| Receiver $R$ | Sender position | Finds | Section |
 |---|---|---|---|
 | Residual end state (logits) | END | Name Movers 9.6, 9.9, 10.0; Negative Name Movers 10.7, 11.10 | §3.1 |
 | Name Movers' queries | END | S-Inhibition 7.3, 7.9, 8.6, 8.10 | §3.2 |
@@ -127,7 +127,7 @@ means the path contributes *positively*; the Negative Name Movers produce a
 ## What it licenses
 
 Under epistemic rule 1: "under path patching from `p_ABC` into `p_IOI`, with
-receiver `R`, corrupting the path `h → R` changes mean logit difference by
+receiver $R$, corrupting the path $h \to R$ changes mean logit difference by
 {amount} over {N} pairs." Read as a **necessity claim about that route**.
 
 Three things it does not license, all of which the paper itself respects:
@@ -142,7 +142,7 @@ Three things it does not license, all of which the paper itself respects:
   Movers' queries, their own senders are found via *their* inputs. The
   indirect effect is recovered edge by edge, never in one number.
 - **Not robust to what has already been removed.** Running the same
-  `h → logits` experiment after knocking out the Name Movers produces a
+  $h \to \text{logits}$ experiment after knocking out the Name Movers produces a
   different ranking — that is how the Backup Name Movers were found
   [wang-2022 §3.4]. The paper's own summary: "different model structure is
   found when some components are ablated" [wang-2022 §1]. See [[self-repair]].
@@ -152,8 +152,8 @@ Three things it does not license, all of which the paper itself respects:
 - **"Direct effect" means something different here than on
   [[path-expansion]].** The O-011 resolution defines direct effect as "only
   the head's own contribution to the logits", and the path-expansion page
-  restates it as keeping only the term `A^h ⊗ W_U W_OV^h (…)`. Wang et al.'s
-  direct effect keeps every path from `h` to the logits that avoids other
+  restates it as keeping only the term $A^h \otimes W_U W_{OV}^h (\ldots)$. Wang et al.'s
+  direct effect keeps every path from $h$ to the logits that avoids other
   *heads* — MLPs and LayerNorms are recomputed and so mediate the effect
   [wang-2022 §3.1, §App. B]. In an attention-only model the two coincide; in
   GPT-2 small they do not. Which one E1 implements is an unmade decision;
@@ -174,7 +174,7 @@ Three things it does not license, all of which the paper itself respects:
 - **The paper uses two different "freezings", and neither is Olsson's.**
   Path patching freezes *head outputs* (pass C). [[pattern-preserving-ablation]]
   freezes *attention patterns* and lets outputs respond. A pattern-preserving
-  ablation of `h` lets the ablation reach later heads' values; path patching
+  ablation of $h$ lets the ablation reach later heads' values; path patching
   to the logits lets it reach nothing downstream except MLPs. These are three
   distinct points on the path-restriction axis, not two.
 - **The corrupted distribution is part of the measurement.** `p_ABC` was
@@ -200,8 +200,8 @@ Three things it does not license, all of which the paper itself respects:
   structure (A, B, C, D) is the reference implementation; any deviation is a
   recorded choice.
 - **E2's IOI reproduction** re-runs the first three rows of the table above:
-  `h → logits` at END, `h → Name Mover queries` at END, `h → S-Inhibition
-  values` at S2. Published head identities, and the sign of each, are the
+  $h \to \text{logits}$ at END, $h \to$ Name Mover queries at END, $h \to$ S-Inhibition
+  values at S2. Published head identities, and the sign of each, are the
   numbers to check against; see [[ioi-circuit]].
 - **E3 records direct effect per head in the same run as total effect**
   (O-011 resolution, decision 2). This page is what "direct effect" cites.
@@ -229,6 +229,6 @@ Three things it does not license, all of which the paper itself respects:
   (MLPs recompute) or the pure path-expansion term (MLPs held)? Cheap to
   offer both; expensive to discover after E3 that the wrong one was
   recorded. Proposed for O-011.
-- **Does path patching with `x_new` drawn from a different corruption change
+- **Does path patching with $x_{\text{new}}$ drawn from a different corruption change
   the found circuit?** The paper only ever uses `p_ABC`. Same question as
   O-003, seen from this method.

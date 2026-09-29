@@ -11,20 +11,20 @@ updated: 2026-09-19
 
 ## In one sentence
 
-Three knockout-based scores for a proposed circuit `C` inside a model `M`:
-**faithfulness** (does `C` alone perform like `M`?), **completeness** (does
-`C` keep performing like `M` when the *same* pieces are removed from both?),
-and **minimality** (does every node in `C` earn its place under *some*
+Three knockout-based scores for a proposed circuit $C$ inside a model $M$:
+**faithfulness** (does $C$ alone perform like $M$?), **completeness** (does
+$C$ keep performing like $M$ when the *same* pieces are removed from both?),
+and **minimality** (does every node in $C$ earn its place under *some*
 knockout?).
 
 ## Claim-licence block
 
 | | |
 |---|---|
-| **Answers** | Faithfulness: "with everything outside `C` knocked out, how much of the metric survives?" Completeness: "is there a subset `K ⊆ C` whose removal hurts `C` much more than it hurts `M`?" — i.e. does `M` have something outside `C` that fills in. Minimality: "for node `v`, is there a context `K` in which removing `v` matters?" |
-| **Does NOT answer** | Whether `C` is *the* mechanism. Faithfulness is explicitly not enough: the paper's toy example (two identical parallel circuits behind an OR) is faithful with either half alone. None of the three is a sufficiency claim in rule 2's sense; all are computed by knocking things out. Completeness is only ever *searched*, never proven — the subset space is exponential. |
-| **Confounds** | Every score is an `F` computed under one knockout method on one reference distribution ([[mean-ablation]] on `p_ABC`, per (head, position)); change the knockout and the numbers change. Completeness depends on the search strategy: random and class-wise `K` said "complete", greedy `K` said otherwise. Minimality's `K` is chosen per node by hand. |
-| **Always log** | Knockout method and reference; the metric `f`; the exact `C`; for completeness, the sampling strategy and every `K` tried; for minimality, the `K` used per node; sample sizes; seed; model revision hash. |
+| **Answers** | Faithfulness: "with everything outside $C$ knocked out, how much of the metric survives?" Completeness: "is there a subset $K \subseteq C$ whose removal hurts $C$ much more than it hurts $M$?" — i.e. does $M$ have something outside $C$ that fills in. Minimality: "for node $v$, is there a context $K$ in which removing $v$ matters?" |
+| **Does NOT answer** | Whether $C$ is *the* mechanism. Faithfulness is explicitly not enough: the paper's toy example (two identical parallel circuits behind an OR) is faithful with either half alone. None of the three is a sufficiency claim in rule 2's sense; all are computed by knocking things out. Completeness is only ever *searched*, never proven — the subset space is exponential. |
+| **Confounds** | Every score is an $F$ computed under one knockout method on one reference distribution ([[mean-ablation]] on `p_ABC`, per (head, position)); change the knockout and the numbers change. Completeness depends on the search strategy: random and class-wise $K$ said "complete", greedy $K$ said otherwise. Minimality's $K$ is chosen per node by hand. |
+| **Always log** | Knockout method and reference; the metric $f$; the exact $C$; for completeness, the sampling strategy and every $K$ tried; for minimality, the $K$ used per node; sample sizes; seed; model revision hash. |
 
 ## Why it exists
 
@@ -57,34 +57,34 @@ knockout choice — there is no knockout-free fact of the matter. And the
 completeness check has to *search* for the spare; not finding one under one
 search says less than it seems.
 
-**Mechanism.** Let `f(C(X); X)` be the IO−S logit difference when the circuit
-`C` runs on input `X` — `C(X)` meaning `M` with every node outside `C`
-knocked out — and `F(C) = E_{X ~ p_IOI}[ f(C(X); X) ]` [wang-2022 §4].
+**Mechanism.** Let $f(C(X); X)$ be the IO−S logit difference when the circuit
+$C$ runs on input $X$ — $C(X)$ meaning $M$ with every node outside $C$
+knocked out — and $F(C) = \mathbb{E}_{X \sim p_{\text{IOI}}}[f(C(X); X)]$ [wang-2022 §4].
 
-- **Faithfulness:** `|F(M) − F(C)|` small. Result: 0.46, which is 13% of
-  `F(M)` = 3.56; "C achieves 87% of the performance of M" [wang-2022 §4].
-- **Completeness:** for every `K ⊆ C`, the *incompleteness score*
-  `|F(C \ K) − F(M \ K)|` should be small. "C and M should not just be
+- **Faithfulness:** $\lvert F(M) - F(C) \rvert$ small. Result: 0.46, which is 13% of
+  $F(M)$ = 3.56; "C achieves 87% of the performance of M" [wang-2022 §4].
+- **Completeness:** for every $K \subseteq C$, the *incompleteness score*
+  $\lvert F(C \setminus K) - F(M \setminus K) \rvert$ should be small. "C and M should not just be
   similar, but remain similar under knockouts" [wang-2022 §4.1]. Searched
-  three ways: `K` uniformly random; `K` = one whole class of heads; `K`
+  three ways: $K$ uniformly random; $K$ = one whole class of heads; $K$
   built greedily, node by node, to maximise the score (Algorithm 3, App. M:
-  sample `k` candidate nodes, add the one that moves the score most, repeat;
-  `k` = 10 for the full circuit and 5 for the naïve one; 10 runs, 5 best
+  sample $k$ candidate nodes, add the one that moves the score most, repeat;
+  $k$ = 10 for the full circuit and 5 for the naïve one; 10 runs, 5 best
   sets kept). The first two methods found only small scores; the greedy one
   found scores **up to 3.09 — 87% of the original logit difference** — with
   sets "usually not semantically interpretable (containing heads from
   multiple categories)" [wang-2022 §4.1, App. M, Fig. 22].
-- **Minimality:** for every `v ∈ C` there should exist `K ⊆ C \ {v}` with a
-  large *minimality score* `|F(C \ (K ∪ {v})) − F(C \ K)|` [wang-2022 §4.2].
-  For most heads, `K` = the rest of `v`'s class works; some need a hand-picked
-  `K` (the Induction heads 5.9 and 5.8 are scored against `K` = the two
+- **Minimality:** for every $v \in C$ there should exist $K \subseteq C \setminus \{v\}$ with a
+  large *minimality score* $\lvert F(C \setminus (K \cup \{v\})) - F(C \setminus K) \rvert$ [wang-2022 §4.2].
+  For most heads, $K$ = the rest of $v$'s class works; some need a hand-picked
+  $K$ (the Induction heads 5.9 and 5.8 are scored against $K$ = the two
   Negative Name Movers, for instance). All 26 nodes score at least 1% of
-  `F(M)`; the Backup Name Movers are the smallest [wang-2022 §4.2, App. K,
+  $F(M)$; the Backup Name Movers are the smallest [wang-2022 §4.2, App. K,
   Fig. 20].
 - **Baseline:** a *naïve* circuit — Name Movers, S-Inhibition, two Induction,
   two Duplicate Token, Previous Token heads; no Backup or Negative heads —
   has faithfulness 0.1, "comparable to the full circuit", but is *more easily*
-  shown incomplete by random and class-wise `K`; under greedy search "both
+  shown incomplete by random and class-wise $K$; under greedy search "both
   circuits have similarly large incompleteness scores" [wang-2022 §4.3].
 
 **One-line checkpoint:** faithfulness says the listed parts run the task;
@@ -93,15 +93,15 @@ is load-bearing somewhere — and all three are numbers under one knockout.
 
 ## What it licenses
 
-- **Faithfulness** licenses: "under {knockout} on {reference}, `C` alone
-  retains {x}% of `F(M)` on {task}." It does *not* license "C is the
+- **Faithfulness** licenses: "under {knockout} on {reference}, $C$ alone
+  retains {x}% of $F(M)$ on {task}." It does *not* license "C is the
   circuit": the naïve circuit is as faithful as the full one.
 - **A large incompleteness score** licenses: "the model has task-relevant
-  structure outside `C` that is exposed when `K` is removed." A *small* one
-  under a given search licenses only "this search did not find such a `K`."
+  structure outside $C$ that is exposed when $K$ is removed." A *small* one
+  under a given search licenses only "this search did not find such a $K$."
   The paper's own random and class-wise searches were falsely reassuring.
-- **A minimality score** licenses: "in the context `C \ K`, node `v`
-  contributes {amount}." It is a *conditional* necessity claim — the `K` is
+- **A minimality score** licenses: "in the context $C \setminus K$, node $v$
+  contributes {amount}." It is a *conditional* necessity claim — the $K$ is
   part of the statement.
 
 ## Where it's contested
@@ -133,7 +133,7 @@ is load-bearing somewhere — and all three are numbers under one knockout.
   not.** In a compiled Tracr model the correct circuit differs between
   zero and resample ablation, because one edge carries only information
   constant across inputs [miller-2024 §5]. Faithfulness, completeness and
-  minimality are all `F`-based, so all three inherit this.
+  minimality are all $F$-based, so all three inherit this.
 - **Two of the three searches said "complete"; the third said "87%
   incomplete".** The disagreement is inside the paper, not between sources.
   Which search strategy a completeness claim used has to be stated with it.
@@ -159,7 +159,7 @@ is load-bearing somewhere — and all three are numbers under one knockout.
   apply to the heatmaps directly. They apply the moment any subset of heads
   is *named* as "the X circuit" in a writeup.
 - **E4:** the completeness failure is self-repair seen from the validation
-  side — the model has spares. `M \ K` outperforming `C \ K` is the
+  side — the model has spares. $M \setminus K$ outperforming $C \setminus K$ is the
   quantity E4's backups produce. See [[self-repair]].
 - **D-006** is the reason to compute each criterion under more than one
   knockout, not one.
@@ -179,5 +179,5 @@ is load-bearing somewhere — and all three are numbers under one knockout.
   *faithfulness* arm only; completeness and minimality under other
   six-tuples remain unmeasured.
 - What is the right *reporting* unit for completeness in a results doc —
-  the max score found, the search budget, or the full set of `K`s? The paper
+  the max score found, the search budget, or the full set of $K$s? The paper
   gives all three in an appendix; a reproduction should too.

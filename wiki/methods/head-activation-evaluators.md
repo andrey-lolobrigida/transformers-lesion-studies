@@ -71,14 +71,14 @@ not.
 
 **Previous token.** Draw an example from the training distribution (not random
 tokens). Compute the attention pattern; the score is the average of entries
-attending from token *i* to token *i−1*.
+attending from token $i$ to token $i-1$.
 
 **The weight-based counterpart.** A fourth measurement exists as a validation
 target: the **trace of QK eigenvalues** for the previous-token QK-circuit term
 [olsson-2022 §Data Collection (4)]. It restricts the QK circuit expansion to
 pure K-composition terms with earlier heads that attend to the previous token,
 weights each such term by how previous-token-like that earlier head is, sums
-them, and takes the trace of the resulting `W`. Positive eigenvalues indicate
+them, and takes the trace of the resulting $W$. Positive eigenvalues indicate
 "same-matching". It is defined only for models deeper than one layer and only
 for heads in layer 2 onwards.
 
@@ -94,16 +94,16 @@ sequences of 100 tokens sampled uniformly from the vocabulary, each
 duplicated to form `AA` [wang-2022 App. H]. Scores from the attention
 patterns:
 
-- *Previous token score*: mean attention on the off-diagonal (position `i`
-  to `i−1`). Highest two heads: **4.11, 2.2**.
-- *Induction score*: mean attention from `T_i` to the token after the first
-  occurrence of `T_i` (i.e. `T_{i−99}`). **5.5 and 6.9** are among the top
+- *Previous token score*: mean attention on the off-diagonal (position $i$
+  to $i-1$). Highest two heads: **4.11, 2.2**.
+- *Induction score*: mean attention from $T_i$ to the token after the first
+  occurrence of $T_i$ (i.e. $T_{i-99}$). **5.5 and 6.9** are among the top
   five.
-- *Duplicate score*: for each `T_i` in the second half, mean attention to its
-  earlier occurrence `T_{i−100}`. **3.0 and 0.1** are among the top three;
+- *Duplicate score*: for each $T_i$ in the second half, mean attention to its
+  earlier occurrence $T_{i-100}$. **3.0 and 0.1** are among the top three;
   the "fuzzy" duplicate head 0.10 does not appear and, on OpenWebText,
   attends mostly to the current token [wang-2022 App. I].
-- *Copy check*: the dot product `⟨h_i(X), W_U[B]⟩` between the head's output
+- *Copy check*: the dot product $\langle h_i(X), W_U[B] \rangle$ between the head's output
   and the unembedding of the token to be predicted; 5.5 and 6.9 are among the
   20 heads contributing most [wang-2022 App. H, Fig. 17].
 
@@ -111,10 +111,10 @@ Differences from Olsson et al.: 100 tokens × 2 rather than 25 × 4; no BOS
 token mentioned; no token exclusions mentioned; copying checked by a raw
 dot product rather than the ReLU-and-ratio score. **Rankings are reported,
 not values.** A separate **copy score** in the main text (residual stream
-at a name after MLP0 × `W_OV` × `W_U` → final LayerNorm → is the name in the
+at a name after MLP0 × $W_{OV}$ × $W_U$ → final LayerNorm → is the name in the
 top five; N = 1000) characterises the Name Movers at > 95% against < 20% for
 an average head [wang-2022 §3.1]; it is an OV-circuit measurement on a real
-residual vector rather than on `W_E`, so it sits between this page and
+residual vector rather than on $W_E$, so it sits between this page and
 [[weight-statistics]].
 
 **Joint distribution.** Heads with a positive prefix-matching score are more

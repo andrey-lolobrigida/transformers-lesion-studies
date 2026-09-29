@@ -26,8 +26,8 @@ information it carried and its average contribution to the residual stream.
 ## Why it exists, and what question it asks
 
 Wang et al. reject it in a sentence: "a first naïve knockout approach
-consists of simply deleting each node in `K` from `M`. The net effect of
-this removal is to zero ablate `K` … we find zero ablation to lead to noisy
+consists of simply deleting each node in $K$ from $M$. The net effect of
+this removal is to zero ablate $K$ … we find zero ablation to lead to noisy
 results in practice" [wang-2022 §2.1]. No comparison is shown. Miller et
 al. agree that "the zero point is arbitrary" and that zero and
 Gaussian-noise ablation "can take the model significantly out of

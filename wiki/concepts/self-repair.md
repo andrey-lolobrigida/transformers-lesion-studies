@@ -43,7 +43,7 @@ lead in place.
 **Where it breaks.** An understudy is idle until needed. Wang et al.'s
 Backup Name Movers are *not* idle: they have small but non-zero effects
 intact (the smallest minimality scores in the circuit, down to about 1% of
-`F(M)` against `K` = the other name-moving heads [wang-2022 App. K]), and several are doing
+$F(M)$ against $K$ = the other name-moving heads [wang-2022 App. K]), and several are doing
 something else — attending equally to IO and S, or preferring S1, or
 tracking clause subjects [wang-2022 §App. F]. And "compensation" is a
 description of the logits, not of a mechanism: the paper says explicitly
@@ -60,7 +60,7 @@ still unclear" [wang-2022 §App. F].
 - Eight of them, not already in any class and with effect above 2%, are
   named Backup Name Movers: 9.0, 10.1, 10.10, 10.6 (Name-Mover-like
   pre-knockout); 10.2, 11.9 (attend equally to S1 and IO, write both); 11.2
-  (attends more to S1, writes toward `W_U[S]`); 9.7 (attends to S2, writes
+  (attends more to S1, writes toward $W_U[\mathrm{S}]$); 9.7 (attends to S2, writes
   negatively) [wang-2022 App. F, Fig. 16].
 - Among heads that turn positive after the knockout are also the
   S-Inhibition heads [wang-2022 App. F].

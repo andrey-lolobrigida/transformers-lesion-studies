@@ -45,8 +45,8 @@ K-composition circuit with a previous-token head.
 
 ## Intuition, then mechanism
 
-**The analogy the authors chose** is inductive reasoning: if `A` was followed by
-`B` earlier in this context, `A` is more likely to be followed by `B` again.
+**The analogy the authors chose** is inductive reasoning: if $A$ was followed by
+$B$ earlier in this context, $A$ is more likely to be followed by $B$ again.
 "Induction heads crystallize that inference" [olsson-2022 §Induction Heads].
 Note the qualifier — induction *over the context*, not over the training data.
 A bigram table is induction over the training data and is a different object.
@@ -62,7 +62,7 @@ late-context ones [olsson-2022 §Induction Heads].
 **Now the mechanism**, which needs two heads in different layers:
 
 1. A **previous-token head** in an earlier layer copies information about token
-   `i-1` into position `i`. This is what makes it possible for a later head to
+   $i-1$ into position $i$. This is what makes it possible for a later head to
    attend to a token based on *what came before it* rather than on its own
    content.
 2. The **induction head** in a later layer uses that shifted information to
@@ -129,10 +129,10 @@ the circuits on [[qk-ov-circuits]]:
   computed from tokens shifted one token back. The query searches for
   'similar' key vectors, but because keys are shifted, finds the next token."
   The minimal implementation is K-composition with a previous-token head,
-  giving a QK term `Id ⊗ A^{h₋₁} ⊗ W` in which `W` is same-matching
+  giving a QK term $\mathrm{Id} \otimes A^{h_{-1}} \otimes W$ in which $W$ is same-matching
   [elhage-2021 §How Induction Heads Work]. Induction heads "can be more
   complicated than this": other two-layer models add a head attending further
-  back, presumably for an `A^{h₋₁} ⊗ A^{h₋₂} ⊗ W` term.
+  back, presumably for an $A^{h_{-1}} \otimes A^{h_{-2}} \otimes W$ term.
 - **Check.** The theory predicts a copying OV matrix and a same-matching QK
   term; plotted on (QK positivity, OV positivity), "all the induction heads
   turn out to be in an extreme right hand corner". The authors pre-empt the
@@ -154,8 +154,8 @@ Reverse Engineering Induction Heads]:
   eigenvalues*. Induction heads are a subset of the copying heads a transformer
   contains.
 - **Prefix matching is done by the QK circuit via K-composition**: the induction
-  head's `W_K` reads from a subspace written by an earlier head. The basic form
-  produces a QK term `Id ⊗ h_prev ⊗ W` with `W` having positive eigenvalues,
+  head's $W_K$ reads from a subspace written by an earlier head. The basic form
+  produces a QK term $\mathrm{Id} \otimes h_{\text{prev}} \otimes W$ with $W$ having positive eigenvalues,
   which makes the head compare the *current* token against every earlier
   position's *preceding* token.
 - The attention pattern and the output are computed by separable circuits. For
@@ -164,7 +164,7 @@ Reverse Engineering Induction Heads]:
 
 **The fuzzy generalisation.** The hypothesis the paper is actually arguing is
 larger than literal copying: that the same heads implement `[A*][B*] … [A] →
-[B]` where `A* ≈ A` and `B* ≈ B` in some representation — an "in-context
+[B]` where $A^* \approx A$ and $B^* \approx B$ in some representation — an "in-context
 nearest neighbours" [olsson-2022 §Induction Heads]. Three heads in the 40-layer
 model are shown doing this while still scoring as induction heads on random
 sequences [olsson-2022 §Argument 4]:
@@ -350,5 +350,5 @@ to match or declare.
   config and in every result doc that uses it.
 - ~~Does a previous-token head deserve its own page?~~ Decided no at the
   Elhage extraction (2026-09-14): it is one positional attention pattern plus a
-  `W_OV` that copies token identity into a subspace, fully stated on
+  $W_{OV}$ that copies token identity into a subspace, fully stated on
   [[attention-head-composition]].

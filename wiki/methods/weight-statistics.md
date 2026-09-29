@@ -23,10 +23,10 @@ what another writes; both are data-free and neither is a behavioural claim.
 
 | | |
 |---|---|
-| **Answers** | "Is this matrix, on average, mapping a token's direction to itself?" (eigenvalues). "Does head h₂'s Q/K/V read overlap head h₁'s write more than chance?" (composition). Both are statements about **parameters**. |
+| **Answers** | "Is this matrix, on average, mapping a token's direction to itself?" (eigenvalues). "Does head $h_2$'s Q/K/V read overlap head $h_1$'s write more than chance?" (composition). Both are statements about **parameters**. |
 | **Does NOT answer** | Whether the head *does* copy on any input (that is Olsson's copying evaluator, a forward-pass measurement). Necessity or sufficiency of anything. Whether the composition is *used*. "Not all matrices with positive eigenvalues are things we necessarily want to consider to be copying" [elhage-2021 §Detecting Copying Behavior]. |
-| **Confounds** | Non-orthogonal eigenvectors can make an all-positive-eigenvalue matrix decrease some tokens' own logits. Copying may be of an attribute (gender, number, tense), not a token. Composition scores need a random-matrix baseline subtracted and the paper's own were once computed wrong. Convention: whether `W_E`/`W_U` are multiplied in changes the object. LayerNorm folding. |
-| **Always log** | Exactly which matrix (`W_OV` vs `W_U W_OV W_E`; which composed term); the baseline subtraction procedure; the weight convention used; model revision hash. |
+| **Confounds** | Non-orthogonal eigenvectors can make an all-positive-eigenvalue matrix decrease some tokens' own logits. Copying may be of an attribute (gender, number, tense), not a token. Composition scores need a random-matrix baseline subtracted and the paper's own were once computed wrong. Convention: whether $W_E$/$W_U$ are multiplied in changes the object. LayerNorm folding. |
+| **Always log** | Exactly which matrix ($W_{OV}$ vs $W_U W_{OV} W_E$; which composed term); the baseline subtraction procedure; the weight convention used; model revision hash. |
 
 ## Why it exists
 
@@ -40,7 +40,7 @@ which pairs of heads, out of all pairs, are worth looking at.
 
 ## Intuition, then mechanism
 
-**Copying.** If attending to token `A` should raise the logit of `A`, the OV
+**Copying.** If attending to token $A$ should raise the logit of $A$, the OV
 circuit should send the direction "A" back toward "A". An eigenvector with a
 positive real eigenvalue is exactly a direction sent to a positive multiple of
 itself — "a linear combination of tokens which increases the linear
@@ -55,7 +55,7 @@ eigenvectors generally have mixed signs, so the picture is really two sets of
 tokens each raising their own set and lowering the other — e.g. singular vs
 plural [elhage-2021 §Detecting Copying Behavior].
 
-**Composition.** A virtual weight `W_in^{h₂} W_out^{h₁}` is large when the
+**Composition.** A virtual weight $W_{\text{in}}^{h_2} W_{\text{out}}^{h_1}$ is large when the
 subspaces overlap. Normalising by the two norms and subtracting what random
 matrices of the same shape give leaves a number that is near zero for most
 pairs and positive for the few that matter.
@@ -63,12 +63,12 @@ pairs and positive for the few that matter.
 ## Precisely
 
 **Eigenvalue copying statistic** [elhage-2021 §Detecting Copying Behavior]. For
-`M = W_U W_OV^h W_E` (or the composed QK matrix `W` of a term), compute the
+$M = W_U W_{OV}^h W_E$ (or the composed QK matrix $W$ of a term), compute the
 eigenvalues and summarise their positivity; the paper plots them and reports a
 per-head number, then a histogram over heads. Result in the 12-head one-layer
 model: "10 out of 12 heads are significantly copying", agreeing with manual
 inspection. Alternatives the paper names, all consistent with each other via
-trace = Σ diagonal = Σ eigenvalues: the diagonal's sign; how often a random
+$\operatorname{trace} = \sum \text{diagonal} = \sum \text{eigenvalues}$: the diagonal's sign; how often a random
 token's own logit is the most (or top-k most) increased.
 
 For induction heads, plot each head at (QK-matrix positivity, OV-matrix
@@ -80,17 +80,21 @@ independent evidence.
 
 **Composition scores** [elhage-2021 §Analyzing a Two-Layer Model]:
 
-    Q:  ‖W_QK^{h₂ T} W_OV^{h₁}‖_F / (‖W_QK^{h₂ T}‖_F · ‖W_OV^{h₁}‖_F)
-    K:  ‖W_QK^{h₂}   W_OV^{h₁}‖_F / (‖W_QK^{h₂}‖_F   · ‖W_OV^{h₁}‖_F)
-    V:  ‖W_OV^{h₂}   W_OV^{h₁}‖_F / (‖W_OV^{h₂}‖_F   · ‖W_OV^{h₁}‖_F)
+$$
+\begin{aligned}
+\text{Q:}\quad & \lVert W_{QK}^{h_2\top} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{QK}^{h_2\top} \rVert_F \cdot \lVert W_{OV}^{h_1} \rVert_F\big) \\
+\text{K:}\quad & \lVert W_{QK}^{h_2} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{QK}^{h_2} \rVert_F \cdot \lVert W_{OV}^{h_1} \rVert_F\big) \\
+\text{V:}\quad & \lVert W_{OV}^{h_2} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{OV}^{h_2} \rVert_F \cdot \lVert W_{OV}^{h_1} \rVert_F\big)
+\end{aligned}
+$$
 
 minus "the empirical expected amount for random matrices of the same shapes".
 
 **The bug, recorded because E2 will reimplement this.** The authors' low-rank
 library applied a transpose identity valid for traces and eigenvalues
-(`Tr(AB) = Tr(BA)`, `λ(AB) = λ(BA)`) to the Frobenius norm, where it is not
-valid. Instead of `‖W_Q^{h₂T} W_K^{h₂} W_O^{h₁} W_V^{h₁}‖_F` they computed a
-cyclic rotation such as `‖W_K^{h₂} W_O^{h₁} W_V^{h₁} W_Q^{h₂T}‖_F`. The quantity
+($\operatorname{Tr}(AB) = \operatorname{Tr}(BA)$, $\lambda(AB) = \lambda(BA)$) to the Frobenius norm, where it is not
+valid. Instead of $\lVert W_Q^{h_2\top} W_K^{h_2} W_O^{h_1} W_V^{h_1} \rVert_F$ they computed a
+cyclic rotation such as $\lVert W_K^{h_2} W_O^{h_1} W_V^{h_1} W_Q^{h_2\top} \rVert_F$. The quantity
 they accidentally computed measures whether the induction head's query is built
 from the subspace the previous-token head moved data into, which is exactly
 what an induction head's K-composition should look like — so the bug
@@ -99,10 +103,10 @@ affected; corrected figure shows more composition [elhage-2021 §Correction:
 Attention Head Composition Diagram].
 
 **Computing with low-rank matrices** [elhage-2021 §Working with Low-Rank
-Matrices]. Keep everything factored at the narrowest point (`d_head`).
-Eigenvalues: `λ(AB) = λ(BA)`, so a `50k × 50k` product's eigenvalues come from
+Matrices]. Keep everything factored at the narrowest point ($d_{\text{head}}$).
+Eigenvalues: $\lambda(AB) = \lambda(BA)$, so a `50k × 50k` product's eigenvalues come from
 a `64 × 64` one. SVD of a product: SVD each factor, SVD the small core
-`S_A V_A U_B S_B`, recombine.
+$S_A V_A U_B S_B$, recombine.
 
 ## What it licenses
 
@@ -111,20 +115,20 @@ a `64 × 64` one. SVD of a product: SVD each factor, SVD the small core
   "empirically aligned with copying" — and, per the authors, "not a dispositive
   proof that a matrix is copying in all senses one might reasonably mean"
   [elhage-2021 §Detecting Copying Behavior].
-- A high K-composition score licenses: *the key side of h₂ reads a subspace
-  h₁ writes, more than chance.* It does not license "h₁ feeds h₂ during
+- A high K-composition score licenses: *the key side of $h_2$ reads a subspace
+  $h_1$ writes, more than chance.* It does not license "$h_1$ feeds $h_2$ during
   induction"; that needs the behavioural test on [[induction-head]] and then an
   intervention.
 - Neither is an ablation result. Under epistemic rule 1, a sentence built on
-  these alone reads "under the eigenvalue statistic on W_U W_OV W_E, head X has
+  these alone reads "under the eigenvalue statistic on $W_U W_{OV} W_E$, head X has
   positivity Y" — and stops.
 
 ## Where it's contested
 
 - **A hybrid statistic exists between this page and the activation
   evaluators** — added 2026-09-19. Wang et al.'s *copy score* pushes a real
-  residual-stream vector (at a name token, after MLP0) through `W_OV` and
-  `W_U`, applies the final LayerNorm, and checks whether the name is in the
+  residual-stream vector (at a name token, after MLP0) through $W_{OV}$ and
+  $W_U$, applies the final LayerNorm, and checks whether the name is in the
   top five logits [wang-2022 §3.1]. It is data-dependent, unlike the
   eigenvalue statistic, and direct-path-only, like Olsson's evaluator. Which
   of the three E2 uses to say "copying" is a recorded choice. Details on
@@ -147,7 +151,7 @@ a `64 × 64` one. SVD of a product: SVD each factor, SVD the small core
   the convention and the baseline.
 - **O-010 candidate 3** is the K-composition score over Pythia checkpoints.
 - **Implementation note.** `[unverified]` TransformerLens exposes factored
-  QK/OV objects; if so, use them rather than materialising `n_vocab × n_vocab`
+  QK/OV objects; if so, use them rather than materialising $n_{\text{vocab}} \times n_{\text{vocab}}$
   matrices. Confirm at E0.
 
 ## Sources

@@ -47,8 +47,8 @@ superposition.
 **Why a network would do this.** To conserve neurons for more important tasks.
 As long as cars and dogs do not co-occur, the model can accurately recover the
 dog feature at a later layer, so it stores the car feature without dedicating a
-neuron to it. The underlying fact is geometric: a space of dimension *n* admits
-only *n* orthogonal vectors, but exponentially many **almost** orthogonal ones
+neuron to it. The underlying fact is geometric: a space of dimension $n$ admits
+only $n$ orthogonal vectors, but exponentially many **almost** orthogonal ones
 [olah-2020 §Circuit 3].
 
 **Where the intuition breaks.** "Spreading" suggests loss or dilution. The claim

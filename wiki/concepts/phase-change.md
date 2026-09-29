@@ -87,9 +87,9 @@ one window, and only in models that can express induction heads.
 
 **The interventional version** [olsson-2022 §Argument 2]. Rather than only
 observing, the authors change the architecture so induction becomes expressible
-in one layer: a "smeared key" model with a trainable `α` per head, using
-`σ(α) ∈ [0,1]` to interpolate each key with the previous position's key,
-`k_j = σ(α)·k_j + (1−σ(α))·k_{j−1}` (the first token is unchanged). One-layer
+in one layer: a "smeared key" model with a trainable $\alpha$ per head, using
+$\sigma(\alpha) \in [0,1]$ to interpolate each key with the previous position's key,
+$k_j = \sigma(\alpha) \cdot k_j + (1 - \sigma(\alpha)) \cdot k_{j-1}$ (the first token is unchanged). One-layer
 smeared-key models then *do* develop in-context learning, and deeper ones
 develop it earlier. This is the strongest causal handle in the paper outside the
 ablations, and it is still graded Medium/Interventional for small models and
@@ -150,7 +150,7 @@ supported than the claim that they do so **at the end of training**.
 ## Open questions
 
 - **Does the phase change appear in Pythia at all, and at what token count?**
-  The models here are Anthropic's, with an 8192-token context and a 2^16
+  The models here are Anthropic's, with an 8192-token context and a $2^{16}$
   vocabulary — not Pythia's setup. Feeds O-004.
 - Is the loss bump detectable in a public model's published loss curve, or only
   in the derived per-token analysis? Determines whether E6 can check its

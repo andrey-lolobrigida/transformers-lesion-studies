@@ -11,7 +11,7 @@ updated: 2026-09-19
 
 ## In one sentence
 
-Two heads **compose** when a later head's `W_Q`, `W_K` or `W_V` reads a
+Two heads **compose** when a later head's $W_Q$, $W_K$ or $W_V$ reads a
 subspace of the residual stream that an earlier head wrote — **Q-** and
 **K-composition** change *where* the later head attends, **V-composition**
 changes *what it moves* and makes the pair behave as one "virtual" head.
@@ -45,12 +45,12 @@ interaction", and most do [elhage-2021 §Three Kinds of Composition, §Analyzing
 a Two-Layer Model].
 
 **Now the mechanism.** Recall the stream is a communication channel and each
-head reads it through `W_Q`, `W_K`, `W_V` and writes through `W_O`. Then
+head reads it through $W_Q$, $W_K$, $W_V$ and writes through $W_O$. Then
 [elhage-2021 §Three Kinds of Composition]:
 
-- **Q-composition:** `W_Q` reads in a subspace affected by a previous head.
-- **K-composition:** `W_K` reads in a subspace affected by a previous head.
-- **V-composition:** `W_V` reads in a subspace affected by a previous head.
+- **Q-composition:** $W_Q$ reads in a subspace affected by a previous head.
+- **K-composition:** $W_K$ reads in a subspace affected by a previous head.
+- **V-composition:** $W_V$ reads in a subspace affected by a previous head.
 
 Q and K both affect the attention pattern and "allow attention heads to express
 much more complex patterns". V affects what is moved; "composing movement of
@@ -64,40 +64,44 @@ earlier head's write; Q/K change the pattern, V makes a virtual head.
 ## Precisely
 
 **Virtual attention heads** [elhage-2021 §Virtual Attention Heads]. The
-V-composition of `h₁` then `h₂` is the term `(A^{h₂} A^{h₁}) ⊗ (W_OV^{h₂}
-W_OV^{h₁})` in the logit path expansion: an object with its own pattern
-`A^{h₂∘h₁} = A^{h₂}A^{h₁}` and its own OV matrix. Two remarks from the paper:
+V-composition of $h_1$ then $h_2$ is the term $(A^{h_2} A^{h_1}) \otimes (W_{OV}^{h_2}
+W_{OV}^{h_1})$ in the logit path expansion: an object with its own pattern
+$A^{h_2 \circ h_1} = A^{h_2} A^{h_1}$ and its own OV matrix. Two remarks from the paper:
 
 - The number of ordinary heads grows linearly with depth; two-head virtual
   heads grow quadratically, three-head cubically. Virtual heads may be the
   model's way of doing "small" tasks — copying tense or person — that a full
-  head with `d_head` dimensions is too large for.
+  head with $d_{\text{head}}$ dimensions is too large for.
 - In the two-layer model analysed, the second-order terms have "a pretty
   small marginal effect", measured by the term-importance ablation on
   [[path-expansion]]. The authors expect them to matter more in larger models
   and say so twice.
 
 **The second-layer QK circuit** [elhage-2021 §Path Expansion of Attention
-Scores QK Circuit]. Expanding `x¹^T W_QK^{h} x¹` with `x¹ = x⁰ + Σ h(x⁰)` gives
-a sum of terms `A_q ⊗ A_k ⊗ W`, one for each (query-side head or identity,
-key-side head or identity) pair. The `Id ⊗ Id ⊗ W_E^T W_QK W_E` term is the
-one-layer table; a term `Id ⊗ A^{h₁} ⊗ W_E^T W_QK^{h₂} W_OV^{h₁} W_E` is
-K-composition with `h₁`; the mirror is Q-composition.
+Scores QK Circuit]. Expanding $x^{1\top} W_{QK}^h\, x^1$ with $x^1 = x^0 + \sum h(x^0)$ gives
+a sum of terms $A_q \otimes A_k \otimes W$, one for each (query-side head or identity,
+key-side head or identity) pair. The $\mathrm{Id} \otimes \mathrm{Id} \otimes W_E^\top W_{QK} W_E$ term is the
+one-layer table; a term $\mathrm{Id} \otimes A^{h_1} \otimes W_E^\top W_{QK}^{h_2} W_{OV}^{h_1} W_E$ is
+K-composition with $h_1$; the mirror is Q-composition.
 
 **The minimal induction term.** K-composition with a previous-token head
-`h₋₁` produces `Id ⊗ A^{h₋₁} ⊗ W`. If `W` is same-matching — "the QK version of
-a 'copying matrix'" — the term raises the score at source `j` when the token
-*before* `j` matches the destination token [elhage-2021 §How Induction Heads
+$h_{-1}$ produces $\mathrm{Id} \otimes A^{h_{-1}} \otimes W$. If $W$ is same-matching — "the QK version of
+a 'copying matrix'" — the term raises the score at source $j$ when the token
+*before* $j$ matches the destination token [elhage-2021 §How Induction Heads
 Work]. Other two-layer models grow a head attending slightly further back,
-presumably to add an `A^{h₋₁} ⊗ A^{h₋₂} ⊗ W` term.
+presumably to add an $A^{h_{-1}} \otimes A^{h_{-2}} \otimes W$ term.
 
 **Composition scores** [elhage-2021 §Analyzing a Two-Layer Model], normalised
 Frobenius norms of the relevant virtual weight, with the empirical value for
 random matrices of the same shape subtracted:
 
-    Q:  ‖W_QK^{h₂ T} W_OV^{h₁}‖_F / (‖W_QK^{h₂ T}‖_F ‖W_OV^{h₁}‖_F)
-    K:  ‖W_QK^{h₂}   W_OV^{h₁}‖_F / (‖W_QK^{h₂}‖_F   ‖W_OV^{h₁}‖_F)
-    V:  ‖W_OV^{h₂}   W_OV^{h₁}‖_F / (‖W_OV^{h₂}‖_F   ‖W_OV^{h₁}‖_F)
+$$
+\begin{aligned}
+\text{Q:}\quad & \lVert W_{QK}^{h_2\top} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{QK}^{h_2\top} \rVert_F\, \lVert W_{OV}^{h_1} \rVert_F\big) \\
+\text{K:}\quad & \lVert W_{QK}^{h_2} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{QK}^{h_2} \rVert_F\, \lVert W_{OV}^{h_1} \rVert_F\big) \\
+\text{V:}\quad & \lVert W_{OV}^{h_2} W_{OV}^{h_1} \rVert_F \,/\, \big(\lVert W_{OV}^{h_2} \rVert_F\, \lVert W_{OV}^{h_1} \rVert_F\big)
+\end{aligned}
+$$
 
 Licence and caveats for these are on [[weight-statistics]].
 
@@ -135,11 +139,11 @@ Elhage et al. situation.
 
 ## What it licenses
 
-A non-zero composition score licenses: *at the weight level, head h₂'s
-{query | key | value} read overlaps head h₁'s write more than random matrices
+A non-zero composition score licenses: *at the weight level, head $h_2$'s
+{query | key | value} read overlaps head $h_1$'s write more than random matrices
 of the same shape would.* It is a statement about parameters.
 
-It does **not** license "h₁ feeds h₂" as a behavioural claim on any dataset.
+It does **not** license "$h_1$ feeds $h_2$" as a behavioural claim on any dataset.
 The paper's own next move after finding the K-composition was to look at
 attention patterns on text and then on random repeated sequences, and only
 then to state the mechanism [elhage-2021 §Function of Induction Heads]. On
@@ -167,7 +171,7 @@ result (sufficiency), never the score alone.
 ## What this project does with it
 
 - **E2** looks for the K-composition structure in GPT-2 small: a
-  previous-token head in an early layer and later heads whose `W_QK W_OV^{prev}`
+  previous-token head in an early layer and later heads whose $W_{QK} W_{OV}^{\text{prev}}$
   is large and same-matching. The composition scores are cheap and run before
   any ablation. If the pointer-arithmetic route is what GPT-2 small uses, the
   K-score will be small and the Q-score large; that is a result either way.
@@ -201,7 +205,7 @@ result (sufficiency), never the score alone.
 ## Open questions
 
 - Does a previous-token head deserve its own page? Decided **no** for now:
-  its content is one positional `A` and a copying-into-a-subspace `W_OV`, fully
+  its content is one positional $A$ and a copying-into-a-subspace $W_{OV}$, fully
   stated here and on [[induction-head]].
 - What composition baseline should E2 subtract? The paper subtracts "the
   empirical expected amount for random matrices of the same shapes" without

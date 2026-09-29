@@ -53,8 +53,8 @@ activation actively argues for that other answer. That is the Sports
 Players effect, and it is why resample and mean can disagree "dramatically"
 on an accuracy metric while both being "principled" [miller-2024 App. D.2].
 
-**Mechanism.** For an activation `a` and a paired corrupt input `x'`, set
-`ã = a(x')` in `F(x) = M(x | do(a = ã))` [miller-2024 §3.1, eq. 1]. The
+**Mechanism.** For an activation $a$ and a paired corrupt input $x'$, set
+$\tilde a = a(x')$ in $F(x) = M(x \mid \operatorname{do}(a = \tilde a))$ [miller-2024 §3.1, eq. 1]. The
 paired corrupt prompt keeps the template and changes the task-critical
 token — for IOI, the ABC distribution [miller-2024 §4]. Whether the model
 runs on the clean input with corrupt values patched in (ablate clean) or on

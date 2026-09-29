@@ -90,8 +90,8 @@ present** — the paper states this explicitly, and GPT-2 small has MLPs.
 ablation results are in the appendix. Ablations were run on the small models
 only, across all 200 snapshots — over 50,000 individual head ablations, each
 evaluated on 10,000 examples. No ablations exist for the full-scale models: the
-cost scales as O(N^1.33), since there are O(N^0.33) heads and each ablation
-costs O(N) [olsson-2022 §Argument 3].
+cost scales as $O(N^{1.33})$, since there are $O(N^{0.33})$ heads and each ablation
+costs $O(N)$ [olsson-2022 §Argument 3].
 
 ## What it licenses
 
@@ -137,8 +137,8 @@ the spine attacks was visible as a caveat well before it was studied directly.
 - **The paper's own earlier work ablated differently.** Elhage et al.'s
   ablation is a *term-importance* procedure: with all patterns frozen, replace
   every head's output with zero (step 2), then with the outputs saved from the
-  previous step (step n), and difference the losses to get the marginal effect
-  of all paths of order n. It manipulates every head at once and iterates over
+  previous step (step $n$), and difference the losses to get the marginal effect
+  of all paths of order $n$. It manipulates every head at once and iterates over
   path order; it is not a single-head ablation, and the authors note it
   "only target[s] V-composition" because patterns are frozen [elhage-2021 §Term
   Importance Analysis]. The shared freezing choice makes the two procedures
@@ -169,7 +169,7 @@ the spine attacks was visible as a caveat well before it was studied directly.
   [[path-patching]] holds every *non-sender head's output* at its clean
   value while MLPs and LayerNorms recompute [wang-2022 App. B]; this page's
   method holds every *attention pattern* and lets all outputs respond. A
-  pattern-preserving ablation of `h` reaches later heads' values; path
+  pattern-preserving ablation of $h$ reaches later heads' values; path
   patching to the logits reaches nothing downstream except MLPs. So the
   path-restriction axis has at least three distinct points — total,
   pattern-frozen, other-heads-frozen — and the O-011 resolution's "direct

@@ -75,10 +75,10 @@ and the wrong tool for "by which route does it matter?"
 3. Run on the original `p_IOI` sample with those outputs written in; recompute
    everything downstream; read logit difference.
 
-The result decomposes additively. With `S_pos ∈ {1, −1}` for original versus
-inverted position signal and `S_tok ∈ {1, 0, −1}` for original, uncorrelated,
+The result decomposes additively. With $S_{\text{pos}} \in \{1, -1\}$ for original versus
+inverted position signal and $S_{\text{tok}} \in \{1, 0, -1\}$ for original, uncorrelated,
 inverted token signal, the patched logit difference is approximated by
-`2.31 S_pos + 0.99 S_tok`, with mean error 7% relative to the baseline
+$2.31\, S_{\text{pos}} + 0.99\, S_{\text{tok}}$, with mean error 7% relative to the baseline
 [wang-2022 §App. A, Fig. 9]:
 
 | | Original position | Inverted position |

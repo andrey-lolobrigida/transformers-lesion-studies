@@ -31,9 +31,9 @@ Authorship: Elhage, Nanda and Olsson marked core research contributors;
 Henighan, Joseph and Mann core infrastructure; Olah correspondence.
 
 **Evidence base:** zero-, one- and two-layer *attention-only* decoder
-transformers trained by the authors, typically 12 heads × d_head 64
-(d_model 768), with one 32-head × 128 example; context 2048, dense attention;
-sinusoidal position added immediately before W_Q and W_K, so **no positional
+transformers trained by the authors, typically 12 heads × $d_{\text{head}}$ 64
+($d_{\text{model}}$ 768), with one 32-head × 128 example; context 2048, dense attention;
+sinusoidal position added immediately before $W_Q$ and $W_K$, so **no positional
 information in the residual stream**. Training data as in Kaplan et al.
 Biases dropped, LayerNorm folded. Everything about MLPs is an appendix
 speculation, stated as such.
@@ -51,8 +51,8 @@ caused by a bug in the authors' low-rank library.
 | Section | What it holds |
 |---|---|
 | Summary of Results | The four reverse-engineering findings and seven conceptual take-aways |
-| Transformer Overview | Model simplifications; residual stream as communication channel; virtual weights; bandwidth; heads independent and additive; heads as information movement; the A ⊗ W_OV form |
-| Zero-Layer Transformers | W_U W_E as bigram statistics; the "direct path" |
+| Transformer Overview | Model simplifications; residual stream as communication channel; virtual weights; bandwidth; heads independent and additive; heads as information movement; the $A \otimes W_{OV}$ form |
+| Zero-Layer Transformers | $W_U W_E$ as bigram statistics; the "direct path" |
 | One-Layer Attention-Only Transformers | Path expansion; QK/OV split; freezing trick; skip-trigrams; copying; positional heads; skip-trigram "bugs"; eigenvalue copying statistic; "fully understand?" |
 | Two-Layer Attention-Only Transformers | Q/K/V-composition; path expansion of logits and of attention scores; the analysed model; induction heads (function, mechanism, check); term-importance ablation; virtual attention heads |
 | Where Does This Leave Us? | Transfer to large models; MLPs as 2/3 of parameters |
@@ -76,7 +76,7 @@ proposed for `docs/05-glossary.md`. One open question proposed for
 **Deliberately left:**
 
 - **Tensor-product notation** beyond what the pages need to state the
-  A ⊗ W_OV form. The notation appendix is a reference, not a claim.
+  $A \otimes W_{OV}$ form. The notation appendix is a reference, not a claim.
 - **The convolution analogy** (§Virtual Weights and Convolution-like
   Structure). Recorded in one line on [[attention-head]]; the Cordonnier et al.
   equivalence is not this project's question.
@@ -85,14 +85,14 @@ proposed for `docs/05-glossary.md`. One open question proposed for
   *shape* of the finding (copying dominates; factored form causes bugs) is on
   [[qk-ov-circuits]].
 - **Working with low-rank matrices** beyond the two identities E1 will need
-  (λ(AB) = λ(BA); keep matrices factored). Recorded on [[weight-statistics]].
+  ($\lambda(AB) = \lambda(BA)$; keep matrices factored). Recorded on [[weight-statistics]].
 - **Related-work and follow-up bibliographies.** R1 and R3 material.
 
 **Recorded source inconsistencies** (flagged on the pages, not resolved):
 
-1. The take-aways list writes the combined matrices as W_Q^T W_K and W_O W_V;
-   one sentence in §Observations about Attention Heads writes "W_Q W_K" without
-   the transpose before defining W_QK = W_Q^T W_K. Notational slip, not a
+1. The take-aways list writes the combined matrices as $W_Q^\top W_K$ and $W_O W_V$;
+   one sentence in §Observations about Attention Heads writes "$W_Q W_K$" without
+   the transpose before defining $W_{QK} = W_Q^\top W_K$. Notational slip, not a
    different object.
 2. §Analyzing a Two-Layer Model states there is "no significant V- or Q-
    composition in this particular model" and that most heads are not involved

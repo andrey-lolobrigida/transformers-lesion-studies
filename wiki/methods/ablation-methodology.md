@@ -55,12 +55,14 @@ between two ablation values, because one of them removes information the
 other leaves in place [miller-2024 §5]. There is no physiological pH to
 appeal to; the choice is about which task you mean.
 
-**Now the mechanism.** An ablation is a `do` intervention on activations
+**Now the mechanism.** An ablation is a $\operatorname{do}$ intervention on activations
 outside the circuit:
 
-    F(x) = M( x | do(a = ã) ),  a ∉ C
+$$
+F(x) = M(x \mid \operatorname{do}(a = \tilde a)), \quad a \notin C
+$$
 
-with `a` an internal activation and `ã` its ablated value [miller-2024
+with $a$ an internal activation and $\tilde a$ its ablated value [miller-2024
 §3.1, eq. 1]. The six choices [miller-2024 §3.1, Table 1]:
 
 | # | Axis | Values seen in the literature | This project's handle |
@@ -115,7 +117,7 @@ this wiki has read and the two it will:
 | Conmy et al. (ACDC) | heads, MLPs | edge | resample (corrupt) | all | ablate clean | complement |
 
 *ROME row, checked against the source (skim, 2026-09-20).* The
-"layers" granularity is two things: single hidden states `h_i^(l)` for the
+"layers" granularity is two things: single hidden states $h_i^{(l)}$ for the
 main map, and **windows of ten consecutive layers** of MLP or attention
 outputs for the module maps, because single-module restoration was
 "generally negligible" [meng-2022 App. B.2]. The Gaussian noise that Table

@@ -96,7 +96,7 @@ terminology collision on "direct effect").
    attention peak 1.6% at the last subject token (§2.2), plus the App. B
    restoration averages. Confidence intervals are in Fig. 7 only.
 3. **The metric is a probability, not a logit difference.** All effects
-   are differences of `P[o]`, the correct object's probability. Nothing in
+   are differences of $P[o]$, the correct object's probability. Nothing in
    the paper reports a logit-difference version; epistemic rule 5 makes
    that this project's default, so E1's factual-recall metric is a
    *translation*, not a reproduction, and the battery README must say so.
