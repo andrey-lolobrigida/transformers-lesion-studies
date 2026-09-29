@@ -473,6 +473,62 @@ entry records what outlives the phase.*
    swap (competitor: CounterFact's `target_new`) rather than ROME's embedding
    noise, which is deferred because it would change `interventions.py`.
 
+### D-015 — E2 rules: what "matched" means, and what the targets run on
+*2026-09-29, E2 design. Proposed by Claude, each point confirmed by the
+author the same session; the spec was approved the same day. Target-level
+detail lives in the E2 spec
+(`.superpowers/specs/2026-09-29-e2-reproduction-design.md`, untracked); this
+entry records what outlives the phase.*
+
+1. **Shape.** One phase, shaped like E1b: the shared rules first, then
+   induction (I1–I4), then IOI (P1–P4). One branch
+   (`phase-E2-reproduction`), one tag (`v-E2`). Rejected: an E2a/E2b split,
+   which would pin the matching rule and the new machinery before IOI had
+   exercised them.
+2. **Verdicts.** Each target gets one of: `matched` / `not matched` (a
+   published number or identity exists); `bracketed, uninformative` (a
+   magnitude whose bracket contains its contrast value); `measured` (no
+   published GPT-2 small counterpart). A verdict is written only at
+   pre-registered settings; the constants are committed before the first
+   GPU run.
+3. **Identity rule.** Rank every candidate sender by the class's own score,
+   receiver included. The class matches iff every published member is in
+   the top `k = max(class size + 2, the rank the source itself states)`, so
+   the rule is never stricter than the source. Negative classes rank from the
+   bottom. A tie straddling the cut counts as inside and is reported.
+4. **Sign rule.** Published sign **and** `|effect| > max(2 × sem, the item's
+   largest E1b noise floor)`. A published null matches iff the effect stays
+   inside that bound; the results doc says that matching a null shows only
+   that we also found nothing.
+5. **Magnitude rule.** A bracket over the settings the source leaves open.
+   For IOI there are four corners: {15, 7} templates per order ×
+   {≈ 7 per template, 2,000 total} mean-reference prompts. The ≈ 7 corner is
+   Miller et al.'s reading of Wang et al., who do not state it. It breaks
+   D-014's floor of 30, is labelled as doing so, and never stands alone.
+   Each quantity names a **contrast value**, an alternative that would change
+   the claim. A bracket that contains the contrast value is `bracketed,
+   uninformative`. Otherwise the verdict is `matched` if the published value
+   is inside, and `not matched`, at full strength, if it is outside. The width
+   is always reported. Rejected: a fixed band per quantity (a number chosen
+   with nothing behind it); statistical agreement alone (E0's baseline sat
+   seventeen standard errors off while inside the bracket).
+6. **D-006 inside a reproduction.** Verdicts are written at the source's
+   substitution value only. The other two values run beside every gated
+   number, ungated, in the same table.
+7. **Downstream targets run on the published head lists, verbatim**, whatever
+   our own rankings find. A rerun on our ranked heads is an ungated extra.
+   Rejected: our rankings (a different claim); published-if-matched (a fork
+   chosen after seeing data).
+8. **Set knockout is a sibling module** (`src/lesion/knockout.py`), built
+   from the existing primitives. `interventions.py`, `runner.py`,
+   `reference.py` and `spec.py` stay untouched. `ioi.py` (a template subset)
+   and `artifact.py` (a `set` block; `build_record(phase=...)`) change
+   additively. Logged as forced generalisations under D-014 item 6.
+9. **Induction ablation (I3) gets verdict `measured`.** Olsson et al.'s
+   expectation is stated beside it as coming from other models, not as a
+   published GPT-2 small claim. Their in-context learning score is deferred:
+   it needs a natural-text dataset the battery does not have.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
