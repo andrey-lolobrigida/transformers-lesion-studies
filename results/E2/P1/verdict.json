@@ -1,0 +1,776 @@
+{
+  "target": "P1",
+  "pre_registered": true,
+  "entries": [
+    {
+      "id": "P1/name_mover",
+      "source": "wang-2022 \u00a73.1",
+      "published": "9.6, 9.9, 10.0",
+      "ours": {
+        "L9H6": 2,
+        "L9H9": 1,
+        "L10H0": 3
+      },
+      "tolerance": "top k = 5 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 5,
+        "bottom": false,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L9H6": 2,
+          "L9H9": 1,
+          "L10H0": 3
+        },
+        "member_scores": {
+          "L9H6": 0.9558812379837036,
+          "L9H9": 2.5217792987823486,
+          "L10H0": 0.735691249370575
+        },
+        "top_k": [
+          [
+            "L9H9",
+            2.5217792987823486
+          ],
+          [
+            "L9H6",
+            0.9558812379837036
+          ],
+          [
+            "L10H0",
+            0.735691249370575
+          ],
+          [
+            "L10H10",
+            0.46276241540908813
+          ],
+          [
+            "L10H6",
+            0.2703356444835663
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "zero": {
+            "L9H6": 2,
+            "L9H9": 1,
+            "L10H0": 3
+          },
+          "mean": {
+            "L9H6": 2,
+            "L9H9": 1,
+            "L10H0": 3
+          }
+        },
+        "operationalisation": "ranking by path-patching effect; Wang et al. selected classes from path-patching figures plus follow-up tests",
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-logits-zero.json",
+          "mean": "results/E2/P1/sweep-logits-mean.json",
+          "resample": "results/E2/P1/sweep-logits-resample.json"
+        }
+      }
+    },
+    {
+      "id": "P1/negative_name_mover",
+      "source": "wang-2022 \u00a73.1",
+      "published": "10.7, 11.10",
+      "ours": {
+        "L10H7": 1,
+        "L11H10": 2
+      },
+      "tolerance": "bottom k = 4 of 144",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 4,
+        "bottom": true,
+        "n_candidates": 144,
+        "member_ranks": {
+          "L10H7": 1,
+          "L11H10": 2
+        },
+        "member_scores": {
+          "L10H7": -1.4962255954742432,
+          "L11H10": -0.8194202780723572
+        },
+        "top_k": [
+          [
+            "L10H7",
+            -1.4962255954742432
+          ],
+          [
+            "L11H10",
+            -0.8194202780723572
+          ],
+          [
+            "L11H2",
+            -0.3745008707046509
+          ],
+          [
+            "L9H8",
+            -0.036937255412340164
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "zero": {
+            "L10H7": 1,
+            "L11H10": 2
+          },
+          "mean": {
+            "L10H7": 1,
+            "L11H10": 2
+          }
+        },
+        "operationalisation": "ranking by path-patching effect; Wang et al. selected classes from path-patching figures plus follow-up tests",
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-logits-zero.json",
+          "mean": "results/E2/P1/sweep-logits-mean.json",
+          "resample": "results/E2/P1/sweep-logits-resample.json"
+        }
+      }
+    },
+    {
+      "id": "P1/s_inhibition",
+      "source": "wang-2022 \u00a73.2",
+      "published": "7.3, 7.9, 8.6, 8.10",
+      "ours": {
+        "L7H3": 4,
+        "L7H9": 3,
+        "L8H6": 1,
+        "L8H10": 2
+      },
+      "tolerance": "top k = 6 of 108",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 6,
+        "bottom": false,
+        "n_candidates": 108,
+        "member_ranks": {
+          "L7H3": 4,
+          "L7H9": 3,
+          "L8H6": 1,
+          "L8H10": 2
+        },
+        "member_scores": {
+          "L7H3": 0.18323150277137756,
+          "L7H9": 0.31598883867263794,
+          "L8H6": 0.47710663080215454,
+          "L8H10": 0.3671591281890869
+        },
+        "top_k": [
+          [
+            "L8H6",
+            0.47710663080215454
+          ],
+          [
+            "L8H10",
+            0.3671591281890869
+          ],
+          [
+            "L7H9",
+            0.31598883867263794
+          ],
+          [
+            "L7H3",
+            0.18323150277137756
+          ],
+          [
+            "L6H1",
+            0.02150692045688629
+          ],
+          [
+            "L8H3",
+            0.004956117365509272
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "zero": {
+            "L7H3": 4,
+            "L7H9": 3,
+            "L8H6": 1,
+            "L8H10": 2
+          },
+          "mean": {
+            "L7H3": 4,
+            "L7H9": 3,
+            "L8H6": 1,
+            "L8H10": 2
+          }
+        },
+        "operationalisation": "ranking by path-patching effect; Wang et al. selected classes from path-patching figures plus follow-up tests",
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-nm_queries-zero.json",
+          "mean": "results/E2/P1/sweep-nm_queries-mean.json",
+          "resample": "results/E2/P1/sweep-nm_queries-resample.json"
+        }
+      }
+    },
+    {
+      "id": "P1/induction_duplicate",
+      "source": "wang-2022 \u00a73.3",
+      "published": "5.5, 6.9, 3.0, 0.1",
+      "ours": {
+        "L5H5": 1,
+        "L6H9": 3,
+        "L3H0": 2,
+        "L0H1": 4
+      },
+      "tolerance": "top k = 6 of 84",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 6,
+        "bottom": false,
+        "n_candidates": 84,
+        "member_ranks": {
+          "L5H5": 1,
+          "L6H9": 3,
+          "L3H0": 2,
+          "L0H1": 4
+        },
+        "member_scores": {
+          "L5H5": 1.2819757461547852,
+          "L6H9": 0.4065737724304199,
+          "L3H0": 0.4680923819541931,
+          "L0H1": 0.1917407512664795
+        },
+        "top_k": [
+          [
+            "L5H5",
+            1.2819757461547852
+          ],
+          [
+            "L3H0",
+            0.4680923819541931
+          ],
+          [
+            "L6H9",
+            0.4065737724304199
+          ],
+          [
+            "L0H1",
+            0.1917407512664795
+          ],
+          [
+            "L3H4",
+            0.08099628984928131
+          ],
+          [
+            "L5H1",
+            0.0475451834499836
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "zero": {
+            "L5H5": 1,
+            "L6H9": 3,
+            "L3H0": 2,
+            "L0H1": 17
+          },
+          "mean": {
+            "L5H5": 1,
+            "L6H9": 3,
+            "L3H0": 2,
+            "L0H1": 4
+          }
+        },
+        "fuzzy_ranks": {
+          "L0H10": 79,
+          "L5H8": 15,
+          "L5H9": 10
+        },
+        "operationalisation": "ranking by path-patching effect; Wang et al. selected classes from path-patching figures plus follow-up tests",
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-sinh_values-zero.json",
+          "mean": "results/E2/P1/sweep-sinh_values-mean.json",
+          "resample": "results/E2/P1/sweep-sinh_values-resample.json"
+        }
+      }
+    },
+    {
+      "id": "P1/previous_token",
+      "source": "wang-2022 App. D",
+      "published": "4.11, 2.2",
+      "ours": {
+        "L4H11": 1,
+        "L2H2": 2
+      },
+      "tolerance": "top k = 4 of 60",
+      "verdict": "matched",
+      "result": {
+        "rule": "identity",
+        "k": 4,
+        "bottom": false,
+        "n_candidates": 60,
+        "member_ranks": {
+          "L4H11": 1,
+          "L2H2": 2
+        },
+        "member_scores": {
+          "L4H11": 0.47943127155303955,
+          "L2H2": 0.1263291984796524
+        },
+        "top_k": [
+          [
+            "L4H11",
+            0.47943127155303955
+          ],
+          [
+            "L2H2",
+            0.1263291984796524
+          ],
+          [
+            "L3H7",
+            0.061573926359415054
+          ],
+          [
+            "L3H3",
+            0.04265801981091499
+          ]
+        ],
+        "tie_at_cut": false,
+        "verdict": "matched",
+        "ungated_beside": {
+          "zero": {
+            "L4H11": 1,
+            "L2H2": 10
+          },
+          "mean": {
+            "L4H11": 1,
+            "L2H2": 2
+          }
+        },
+        "operationalisation": "ranking by path-patching effect; Wang et al. selected classes from path-patching figures plus follow-up tests",
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-ind_keys-zero.json",
+          "mean": "results/E2/P1/sweep-ind_keys-mean.json",
+          "resample": "results/E2/P1/sweep-ind_keys-resample.json"
+        }
+      }
+    },
+    {
+      "id": "P1/name_mover/sign",
+      "source": "wang-2022 \u00a73.1, Fig. 3",
+      "published": "positive direct effect for each member",
+      "ours": {
+        "L9H6": 0.9558812379837036,
+        "L9H9": 2.5217792987823486,
+        "L10H0": 0.735691249370575
+      },
+      "tolerance": "each member: sign and |effect| > max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "positive",
+        "floor": 0.040434543043375015,
+        "members": {
+          "L9H6": {
+            "rule": "sign",
+            "expected": "positive",
+            "effect": 0.9558812379837036,
+            "sem": 0.017895499244332314,
+            "floor": 0.040434543043375015,
+            "bound": 0.040434543043375015,
+            "bound_source": "floor",
+            "verdict": "matched"
+          },
+          "L9H9": {
+            "rule": "sign",
+            "expected": "positive",
+            "effect": 2.5217792987823486,
+            "sem": 0.025867190212011337,
+            "floor": 0.040434543043375015,
+            "bound": 0.051734380424022675,
+            "bound_source": "2*sem",
+            "verdict": "matched"
+          },
+          "L10H0": {
+            "rule": "sign",
+            "expected": "positive",
+            "effect": 0.735691249370575,
+            "sem": 0.017137886956334114,
+            "floor": 0.040434543043375015,
+            "bound": 0.040434543043375015,
+            "bound_source": "floor",
+            "verdict": "matched"
+          }
+        },
+        "ungated_beside": {
+          "zero": {
+            "L9H6": 0.9506743550300598,
+            "L9H9": 2.5030298233032227,
+            "L10H0": 0.6941624879837036
+          },
+          "mean": {
+            "L9H6": 0.9441936016082764,
+            "L9H9": 2.50520920753479,
+            "L10H0": 0.7221413254737854
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-logits-zero.json",
+          "mean": "results/E2/P1/sweep-logits-mean.json",
+          "resample": "results/E2/P1/sweep-logits-resample.json"
+        },
+        "verdict": "matched"
+      }
+    },
+    {
+      "id": "P1/negative_name_mover/sign",
+      "source": "wang-2022 \u00a73.1, Fig. 3",
+      "published": "negative direct effect for each member",
+      "ours": {
+        "L10H7": -1.4962255954742432,
+        "L11H10": -0.8194202780723572
+      },
+      "tolerance": "each member: sign and |effect| > max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "negative",
+        "floor": 0.040434543043375015,
+        "members": {
+          "L10H7": {
+            "rule": "sign",
+            "expected": "negative",
+            "effect": -1.4962255954742432,
+            "sem": 0.02092095836997032,
+            "floor": 0.040434543043375015,
+            "bound": 0.04184191673994064,
+            "bound_source": "2*sem",
+            "verdict": "matched"
+          },
+          "L11H10": {
+            "rule": "sign",
+            "expected": "negative",
+            "effect": -0.8194202780723572,
+            "sem": 0.01412790548056364,
+            "floor": 0.040434543043375015,
+            "bound": 0.040434543043375015,
+            "bound_source": "floor",
+            "verdict": "matched"
+          }
+        },
+        "ungated_beside": {
+          "zero": {
+            "L10H7": -1.4186286926269531,
+            "L11H10": -0.8296791911125183
+          },
+          "mean": {
+            "L10H7": -1.519781470298767,
+            "L11H10": -0.8184584975242615
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        },
+        "mean_reference": {
+          "n": 2000,
+          "per_template_counts": {
+            "ABBA/0": 63,
+            "ABBA/1": 65,
+            "ABBA/10": 68,
+            "ABBA/11": 68,
+            "ABBA/12": 70,
+            "ABBA/13": 82,
+            "ABBA/14": 67,
+            "ABBA/2": 69,
+            "ABBA/3": 66,
+            "ABBA/4": 58,
+            "ABBA/5": 72,
+            "ABBA/6": 73,
+            "ABBA/7": 58,
+            "ABBA/8": 52,
+            "ABBA/9": 65,
+            "BABA/0": 67,
+            "BABA/1": 58,
+            "BABA/10": 69,
+            "BABA/11": 52,
+            "BABA/12": 61,
+            "BABA/13": 71,
+            "BABA/14": 54,
+            "BABA/2": 77,
+            "BABA/3": 63,
+            "BABA/4": 73,
+            "BABA/5": 66,
+            "BABA/6": 73,
+            "BABA/7": 69,
+            "BABA/8": 79,
+            "BABA/9": 72
+          }
+        },
+        "sweep_files": {
+          "zero": "results/E2/P1/sweep-logits-zero.json",
+          "mean": "results/E2/P1/sweep-logits-mean.json",
+          "resample": "results/E2/P1/sweep-logits-resample.json"
+        },
+        "verdict": "matched"
+      }
+    }
+  ]
+}
