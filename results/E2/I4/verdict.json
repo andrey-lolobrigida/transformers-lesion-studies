@@ -1,0 +1,123 @@
+{
+  "target": "I4",
+  "pre_registered": true,
+  "entries": [
+    {
+      "id": "I4/restore_clean",
+      "source": "ours (sufficiency direction)",
+      "published": null,
+      "ours": {
+        "L5H5@END": 0.0235,
+        "L6H9@END": 0.0721,
+        "L4H11@B1": -0.0003,
+        "L2H2@B1": -0.0,
+        "set of four": 0.1086
+      },
+      "tolerance": "measured; fraction of the gap restored",
+      "verdict": "measured",
+      "result": {
+        "rule": "measured",
+        "verdict": "measured",
+        "rows": [
+          {
+            "unit": "L5H5@END",
+            "effect_mean": -0.4004920423030853,
+            "sem": 0.010550974868237972,
+            "clean_mean_ld": -0.007094234693795443,
+            "ablated_mean_ld": 0.39339783787727356,
+            "ratio_of_means": -55.45317459106445,
+            "mean_of_ratios": -12.610002517700195,
+            "ratio_iqr": [
+              0.7334564924240112,
+              1.2131904363632202
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "fraction_restored": 0.023541967709990123
+          },
+          {
+            "unit": "L6H9@END",
+            "effect_mean": -1.2271302938461304,
+            "sem": 0.014921631664037704,
+            "clean_mean_ld": -0.007094234693795443,
+            "ablated_mean_ld": 1.2200361490249634,
+            "ratio_of_means": -171.97572326660156,
+            "mean_of_ratios": -39.841102600097656,
+            "ratio_iqr": [
+              0.2627210021018982,
+              1.7207881212234497
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "fraction_restored": 0.07213392186265641
+          },
+          {
+            "unit": "L4H11@B1",
+            "effect_mean": 0.005883382633328438,
+            "sem": 0.005319440271705389,
+            "clean_mean_ld": -0.007094234693795443,
+            "ablated_mean_ld": -0.012977608479559422,
+            "ratio_of_means": 1.829317569732666,
+            "mean_of_ratios": 3.936353921890259,
+            "ratio_iqr": [
+              0.9376837611198425,
+              1.0416128635406494
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "fraction_restored": -0.00034584004322752094
+          },
+          {
+            "unit": "L2H2@B1",
+            "effect_mean": 4.9055546696763486e-05,
+            "sem": 0.0005800069193355739,
+            "clean_mean_ld": -0.007094234693795443,
+            "ablated_mean_ld": -0.007143309805542231,
+            "ratio_of_means": 1.0069175958633423,
+            "mean_of_ratios": 0.903624951839447,
+            "ratio_iqr": [
+              0.9929370284080505,
+              1.0056064128875732
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "fraction_restored": -2.8847629584528755e-06
+          },
+          {
+            "unit": "set of four",
+            "effect_mean": -1.8480207920074463,
+            "sem": 0.027570361271500587,
+            "clean_mean_ld": -0.007094234693795443,
+            "ablated_mean_ld": 1.8409265279769897,
+            "ratio_of_means": -259.49615478515625,
+            "mean_of_ratios": -47.16229248046875,
+            "ratio_iqr": [
+              -0.12524831295013428,
+              2.0456886291503906
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "fraction_restored": 0.1086314763807631
+          }
+        ],
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 17.004741668701172,
+          "mean_ld_corrupt": -0.007094234693795443,
+          "gap": 17.0118350982666,
+          "fraction_removed": 1.0004171442121044
+        }
+      }
+    }
+  ]
+}
