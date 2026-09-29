@@ -705,3 +705,38 @@ the fraction removed is expected near 2 by design (measured: 2.00 on balanced dr
 **`number_flip_all`** — the agreement item's named extra: `N1` and `N2` both
 replaced by their other-number forms, so congruency is kept. Ungated. Ours.
 D-013 addendum item 5.
+
+## Added 2026-09-29 — E2 reproduction
+
+**Identity rule** — a published class matches iff every member ranks in the
+top `k = max(class size + 2, the rank the source states)` of all candidates
+under the class's own score and receiver (bottom `k` for negative classes); a
+tie straddling the cut counts as inside. Our ranking, not the source's
+selection procedure. D-015 item 3; `src/lesion/e2_reproduce.py`.
+
+**Sign rule** — matches iff the effect has the published sign and
+`|effect| > max(2 × sem, the item's largest E1b noise floor)`; a published
+null matches iff the effect stays inside that bound, which shows only that
+nothing was found. D-015 item 4; `src/lesion/e2_reproduce.py`.
+
+**Bracket corner** — one full run at one combination of the settings a source
+leaves open; for IOI, {15, 7} templates per order × {≈ 7 per template, 2,000
+total} mean-reference prompts. The ≈ 7 corners break D-014's floor of 30 and
+are labelled so. D-015 item 5; `results/E2/README.md` Pre-registration.
+
+**Contrast value** — for a bracketed magnitude, a named alternative value
+that would change the claim (P2: the summed direct effects over F(M); P3:
+1.0). A bracket containing it is `bracketed, uninformative`. D-015 item 5.
+
+**Set knockout** — one intervention over several (head, positions) members
+at once, with one value, reference, direction and freeze setting, recorded in
+the artifact's `spec.set` block. D-015 item 8; `src/lesion/knockout.py`.
+
+**Complement knockout** — a set knockout applied to every head node *outside*
+the named members (heads only, MLPs untouched), used for Wang et al.'s F(C).
+D-015 item 8; `src/lesion/knockout.py`.
+
+**Fraction restored** — for a restore-clean run, (mean `ld` with clean
+activations written in − mean corrupt `ld`) / (mean clean `ld` − mean corrupt
+`ld`): a sufficiency reading, never a necessity one. Can exceed 1 or be
+negative. `src/lesion/e2_targets.py`; `results/E2/README.md` I4, P4.

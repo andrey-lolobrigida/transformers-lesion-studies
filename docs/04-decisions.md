@@ -529,6 +529,19 @@ entry records what outlives the phase.*
    published GPT-2 small claim. Their in-context learning score is deferred:
    it needs a natural-text dataset the battery does not have.
 
+**Outcome — *2026-09-29*.** E2 ran under these rules on
+`phase-E2-reproduction`, pre-registration commit `4675ba6`, every verdict at
+n = 2,000 and seed 0. Of 21 entries (`results/E2/verdicts.json`): **matched
+16, measured 4, not matched 1** (P2, the Name Mover knockout: bracket
+[0.0038, 0.0130] of F(M) over the four corners, published 0.05), bracketed,
+uninformative 0. P3 (faithfulness) matched, with a bracket whose lower end
+comes from the ≈ 7-per-template corners below D-014's floor of 30. The
+validation gates passed (14 of 14). Two code changes landed after the
+pre-registration commit, both below its block: non-finite inputs refused by
+the verdict rules (`6c464c4`), mean reference size on P1 entries
+(`869a833`). Results and caveats: `results/E2/README.md`. Awaiting the
+author's review; `v-E2` not tagged.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -1041,6 +1054,33 @@ defines the project's term should say which of the three it is not.
 
 `docs/02-roadmap.md` E1 updated to match in the same session.
 
+*Addendum, 2026-09-29 — E2 data point (induction, `fresh_prefix`).* I3 ran
+every unit frozen and unfrozen (`results/E2/I3/`). Under node ablation at all
+positions, ablate-clean, on induction/`fresh_prefix`, n = 2,000, seed 0, BOS
+prepended, the frozen-minus-unfrozen delta in effect on mean `ld` (effect =
+mean `ld` drop; mean: template-matched corrupt-side reference, ref n 2,000,
+per-template minimum 71; fraction removed 1.000):
+
+| Unit | Delta at zero (Olsson's value) | Delta at mean | Delta at resample |
+|---|---|---|---|
+| 5.5 | −1.763 | −0.411 | −0.432 |
+| 6.9 | −1.163 | −0.934 | −0.928 |
+| 4.11 | −3.456 | −3.554 | −5.169 |
+| 2.2 | −0.369 | −0.297 | −0.312 |
+| {5.5, 6.9} | −3.230 | −1.834 | −1.852 |
+
+For example: under zero, node, ablate-clean on induction/`fresh_prefix`,
+n = 2,000, ablating 4.11 with patterns frozen raises mean `ld` by
+0.290 ± 0.014, and with patterns unfrozen lowers it by 3.166 ± 0.061; the
+delta is −3.456. As a comparison, not a conclusion: every delta in the table
+is larger in magnitude than the induction noise floor's `max_floor`, 0.1422
+(`results/E1b/noise/induction/floor.json`; the smallest is 0.297, 2.2 under
+mean). That floor was measured under unfrozen node mean ablation of 24 other
+components (MLPs and head 0 of each layer), and the deltas carry no standard
+error of their own in the artifact, so the comparison does not make the
+deltas significant by any pre-registered rule. What decision 4's "large
+delta" means for E3's four maps is for the author to decide at E3.
+
 ### O-012 — Which induction mechanism does GPT-2 small use?
 *Raised 2026-09-14, during the R0 extraction of Elhage et al. 2021. Confirmed
 as an open question by the author 2026-09-19. Resolves at E2.*
@@ -1088,6 +1128,44 @@ the weight-level check E2 plans; and the position-signal role means the
 heads do something on IOI that neither mechanism description covers. It
 does give E2 head indices to start from and a prior that the K-route will
 show. Wiki: `concepts/induction-head.md`.
+
+#### Resolution — *2026-09-29*
+
+Measured at E2 (I2), before any ablation; recorded for the author's review.
+Weight level: Q-, K- and V-composition scores for every (earlier, later)
+head pair on the weights as loaded (LayerNorm folded, centred), exact norms,
+minus a random baseline of 200 Gaussian-factor draws of the same shapes,
+seed 0 (K mean 0.03607, sd 0.00043; Q mean 0.03607, sd 0.00044). Path level:
+on ioi/`p_ABC`, n = 2,000, seed 0, no BOS, resample path patching (edge,
+Wang convention, ablate-clean), senders 4.11 and 2.2, receivers 5.5 and 6.9
+jointly, sign rule with F_ioi = 0.0404.
+
+- **5.5.** At weight level, 5.5's K-composition with 4.11 and 2.2 is above
+  the random baseline (by 0.0611 and 0.0339; ranks 1 and 6 of 60 earlier
+  heads), and so is its Q-composition (by 0.0068 and 0.0153; ranks 15 and
+  5); at path level on IOI, patching 4.11 or 2.2 into the keys of 5.5 and
+  6.9 at S1+1 lowers mean `ld` beyond the bound (0.4794 and 0.1263; sign
+  verdicts `matched`), while patching them into the queries at S2 does not
+  (0.0004 and 0.0115; null verdicts `matched`), so the two levels agree on
+  the K-route and disagree on the Q-route, where the weights show
+  above-baseline composition that the IOI path patch does not register.
+- **6.9.** At weight level, 6.9's K-composition with 4.11 and 2.2 is above
+  the random baseline (by 0.0674 and 0.0349; ranks 1 and 6 of 72 earlier
+  heads), and so is its Q-composition (by 0.0145 and 0.0137; ranks 4 and
+  7); at path level, the same joint runs show the K-route effect and no
+  Q-route effect above the bound, so the levels agree on the K-route and
+  disagree on the Q-route in the same way as for 5.5 — with the limit that
+  the path runs patch 5.5 and 6.9 together as receivers and cannot separate
+  the two heads.
+
+Limits, stated with the resolution: the Q-route null is a published null
+matched, which shows only that this measurement also found nothing above the
+bound; the path level is one task; and the pre-named question checks
+Q-composition with 4.11 and 2.2 only, not with any other head that could
+supply mechanism 2's positional signal. Per the question's own rule, any
+later weight-based claim about these heads states the mechanism it assumes.
+Artifacts: `results/E2/I2/` (`composition.json`, `path/`, `verdict.json`);
+`results/E2/README.md` §I2 and §O-012.
 
 ### O-013 — Does the harness ablate whole heads or (head, position) nodes?
 *Proposed 2026-09-19, during the R1 extraction of Wang et al. Confirmed and
@@ -1227,3 +1305,4 @@ destroys the most useful information the project produces.*
 | 2026-09-20 | E0 | Wang et al.'s clean mean logit difference on `p_IOI`, 3.56 over 100,000 samples, reproduced exactly from the released templates and word lists. | 3.648 ± 0.005 (no BOS, 15 templates per order), 3.485 (no BOS, 7 per order), 3.922 ± 0.006 (BOS). Not matched at 2 dp; bracketed by the two no-BOS readings. Released word lists differ from the paper's text; paper-era lists unrecoverable. IO-over-S 99.4% vs 99.3% and IO probability 52.7% vs 49% are close. See D-011, O-014. | `results/E0/e0_smoke_seed0_n100000.json` |
 | 2026-09-20 | E1a | Wang et al. App. J: mean-ablating MLP0 alone on `p_ABC` reverses the sign of the mean logit difference; no other single MLP layer does much. | Under node mean ablation (reference `p_ABC`, n=1,000, template-matched), n=2,000, seed 0, no BOS: MLP0 -0.401 (sign reversed); largest other layer L5 +0.406. Zero: MLP0 -1.405 (sign reversed); four other layers past 0.5 (L4 +0.730, L10 +0.711, L5 +0.652, L6 +0.512). Resample: MLP0 -0.816 (sign reversed); one other layer past 0.5 (L5 +0.531). Bracket, not match: reference and sample sizes are ours. | `results/E1a/README.md` |
 | 2026-09-23 | E1b | Factual recall (`subject_swap`): pre-registered gate holds on all three thresholds — pairwise accuracy mean 1[ld_clean > 0] >= 0.90, gap mean ld_clean - mean ld_corrupt >= 1.0 logit, and (factual recall only) >= 300 admitted survivors. | n=64, seed 0, no BOS. Pairwise accuracy 1.000 >= 0.90, pass. Gap +4.104 ± 0.374 >= 1.0, pass. Survivors 64 < 300, fail. Verdict: FAIL, on the survivors condition alone. 64 is the full admitted pool from the CounterFact survivor filter, not a subsample. | `results/E1b/gate/factual/subject_swap.json` |
+| 2026-09-29 | E2 | Wang et al. §3.4, App. F: mean-ablating the three Name Movers (9.6, 9.9, 10.0) together at END lowers the logit difference by about 5% of F(M) (published 0.05), far less than their summed direct effects (pre-registered contrast). Magnitude rule, bracket over four corners (D-015 item 5). | Not matched. Under mean, node, ablate-clean, unfrozen, on ioi/`p_ABC`, n = 2,000, seed 0, no BOS, (F(M) − F(K)) / F(M) = 0.0130 (15 templates per order, ref n 210, per-template min 2 — below D-014's floor of 30), 0.0038 (15, ref n 2,000, min 52), 0.0110 (7, ref n 98, min 3 — below the floor), 0.0101 (7, ref n 2,000, min 121); knockout effects 0.0137–0.0475 logits, sem 0.017–0.018. Bracket [0.0038, 0.0130], width 0.0093; published 0.05 above it. Contrast range [1.1244, 1.1430], not overlapped, so not uninformative. Fraction removed 0.983 (15) / 0.961 (7). Ungated siblings: zero −0.0245 / −0.0199, resample 0.0544 / 0.0552. | `results/E2/P2/verdict.json`; `results/E2/README.md` §P2 |
