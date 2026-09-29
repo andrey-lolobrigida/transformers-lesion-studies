@@ -49,7 +49,7 @@
     "freeze_patterns": false
   },
   "environment": {
-    "repo_commit": "faf02996f31d44e14f77ab2bdfe4cffd2cf61954",
+    "repo_commit": "84e9af656bcd2f502c6081ee9c960e8900cb0b14",
     "model": {
       "name": "gpt2",
       "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
@@ -70,7 +70,7 @@
       "cublas_workspace_config": ":4096:8"
     },
     "batch_size": 128,
-    "seconds": 5.449662208557129
+    "seconds": 5.4651780128479
   },
   "battery": {
     "name": "ioi",
