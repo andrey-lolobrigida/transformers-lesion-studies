@@ -58,6 +58,15 @@ def test_sweep_resume_reuses_only_a_matching_file(tiny_model, tiny_battery, tmp_
         T.run_sweep(ctx(tiny_model, tmp_path), tiny_battery, SWEEP, "zero", False, path, candidates=CANDS)
 
 
+@torch.no_grad()
+def test_mean_reference_block_reads_a_mean_sweep_record(tiny_model, tiny_battery, tmp_path):
+    rec = T.run_sweep(ctx(tiny_model, tmp_path), tiny_battery, SWEEP, "mean", False, tmp_path / "s.json",
+                      candidates=CANDS)
+    block = T.mean_reference_block(rec)
+    assert block == {"n": rec["reference"]["n"], "per_template_counts": rec["reference"]["per_template_counts"]}
+    assert block["per_template_counts"] == {"A": 1000, "B": 1000}
+
+
 def test_edge_spec_refuses_an_empty_path():
     with pytest.raises(SpecError):
         T.edge_spec(Head(4, 11), "resample", "S1+1", R.I2_ROUTES[1].receiver)

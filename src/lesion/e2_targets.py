@@ -220,6 +220,14 @@ def sweep_scores(record: dict) -> dict[str, float]:
     return {r["sender"]: r["effect_mean"] for r in record["rows"]}
 
 
+def mean_reference_block(record: dict) -> dict:
+    """A mean-value sweep record's reference size and per-template counts
+    (D-014 items 2, 5), for entries whose ``ungated_beside`` cites a mean run
+    without going through ``summary()``."""
+    ref = record["reference"]
+    return {"n": ref["n"], "per_template_counts": ref["per_template_counts"]}
+
+
 # --- targets ----------------------------------------------------------------------------------------
 
 
@@ -371,6 +379,8 @@ def target_p1(ctx: Ctx) -> list[dict]:
         res["operationalisation"] = ("ranking by path-patching effect; Wang et al. selected classes from "
                                      "path-patching figures plus follow-up tests")
         res["context"] = context
+        res["mean_reference"] = mean_reference_block(recs[(row.score, "mean")])
+        res["sweep_files"] = {v: str(out / f"sweep-{row.score}-{v}.json") for v in VALUES}
         side = "bottom" if row.bottom else "top"
         entries.append(entry(row.id, row.source, wang_names(row.members), res["member_ranks"],
                              f"{side} k = {row.k} of {res['n_candidates']}", res))
@@ -380,7 +390,8 @@ def target_p1(ctx: Ctx) -> list[dict]:
                for h in members}
         beside = {v: {label(h): sweep_scores(recs[(sweep_name, v)])[label(h)] for h in members} for v in ("zero", "mean")}
         res = {"rule": "sign", "expected": expected, "floor": floor, "members": per, "ungated_beside": beside,
-               "context": context,
+               "context": context, "mean_reference": mean_reference_block(recs[(sweep_name, "mean")]),
+               "sweep_files": {v: str(out / f"sweep-{sweep_name}-{v}.json") for v in VALUES},
                "verdict": MATCHED if all(p["verdict"] == MATCHED for p in per.values()) else NOT_MATCHED}
         entries.append(entry(id_, "wang-2022 §3.1, Fig. 3", f"{expected} direct effect for each member",
                              {k: p["effect"] for k, p in per.items()},
