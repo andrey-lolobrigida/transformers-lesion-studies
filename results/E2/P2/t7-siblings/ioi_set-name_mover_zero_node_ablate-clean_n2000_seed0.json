@@ -1,0 +1,343 @@
+{
+  "phase": "E2",
+  "command": "uv run python -m src.lesion.e2_reproduce --target P2",
+  "cli": {
+    "target": "P2",
+    "n": 2000,
+    "seed": 0,
+    "batch_size": 128,
+    "device": "cuda",
+    "out_dir": "results/E2",
+    "resume": false
+  },
+  "spec": {
+    "granularity": "heads",
+    "component_type": "node",
+    "value": "zero",
+    "reference": null,
+    "direction": "ablate-clean",
+    "freeze_patterns": false,
+    "set": {
+      "complement": false,
+      "members": [
+        {
+          "head": {
+            "layer": 9,
+            "head": 6
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 9,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 0
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "environment": {
+    "repo_commit": "f342f807d40a04fdc157c36be90f314f3f4bf15b",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 2.993175745010376
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects); subset: templates 0-6 of each order (14 templates), the released code's `mixed` default (O-014)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "p_ABC",
+      "removes": "the repetition of the subject name: no name occurs twice, so nothing in the prompt singles out an indirect object",
+      "inserts": "three distinct fresh names in the three name slots, none equal to the clean IO or S; same template, place and object",
+      "source": "wang-2022 \u00a72.1"
+    }
+  },
+  "destination_prompt": "clean",
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "expected_direction": "positive",
+  "reference": null,
+  "results": {
+    "clean": {
+      "n": 2000,
+      "mean_ld": 3.475369691848755,
+      "std_ld": 1.4677481651306152,
+      "sem_ld": 0.032819848507642746,
+      "mean_p_c": 0.49464911222457886,
+      "c_over_s": 0.9944999814033508
+    },
+    "ablated": {
+      "n": 2000,
+      "mean_ld": 3.5445265769958496,
+      "std_ld": 1.632780909538269,
+      "sem_ld": 0.03651009127497673,
+      "mean_p_c": 0.3845299184322357,
+      "c_over_s": 0.9909999966621399
+    },
+    "effect": {
+      "ld": {
+        "effect_mean": -0.06915716826915741,
+        "sem": 0.017905574291944504,
+        "ratio_of_means": 1.0198991298675537,
+        "mean_of_ratios": 1.0421051979064941,
+        "ratio_iqr": [
+          0.8650996685028076,
+          1.1726794242858887
+        ],
+        "n_abs_clean_below_0.1": 4
+      },
+      "p_c": {
+        "effect_mean": 0.11011923849582672,
+        "sem": 0.0022498297039419413
+      },
+      "c_over_s": {
+        "effect_mean": 0.0035000001080334187,
+        "sem": 0.0018015264067798853
+      }
+    },
+    "by_template": {
+      "ABBA/0": {
+        "n": 133,
+        "clean": {
+          "mean_ld": 4.159119606018066,
+          "mean_p_c": 0.6592933535575867,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 4.743402004241943,
+          "mean_p_c": 0.5951488614082336,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/1": {
+        "n": 140,
+        "clean": {
+          "mean_ld": 3.6644177436828613,
+          "mean_p_c": 0.58750319480896,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 4.109858989715576,
+          "mean_p_c": 0.48976582288742065,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/2": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 3.58939266204834,
+          "mean_p_c": 0.47667911648750305,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.885470390319824,
+          "mean_p_c": 0.35634028911590576,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/3": {
+        "n": 139,
+        "clean": {
+          "mean_ld": 3.260317087173462,
+          "mean_p_c": 0.3275470733642578,
+          "c_over_s": 0.9856114983558655
+        },
+        "ablated": {
+          "mean_ld": 3.446265459060669,
+          "mean_p_c": 0.24530205130577087,
+          "c_over_s": 0.9856114983558655
+        }
+      },
+      "ABBA/4": {
+        "n": 121,
+        "clean": {
+          "mean_ld": 3.869544506072998,
+          "mean_p_c": 0.787338376045227,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 4.4631667137146,
+          "mean_p_c": 0.7273489236831665,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/5": {
+        "n": 131,
+        "clean": {
+          "mean_ld": 3.408862829208374,
+          "mean_p_c": 0.5878546833992004,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.578518867492676,
+          "mean_p_c": 0.42328086495399475,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/6": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 3.3042008876800537,
+          "mean_p_c": 0.3647131025791168,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.2534193992614746,
+          "mean_p_c": 0.19565381109714508,
+          "c_over_s": 1.0
+        }
+      },
+      "BABA/0": {
+        "n": 138,
+        "clean": {
+          "mean_ld": 3.582967519760132,
+          "mean_p_c": 0.5423647165298462,
+          "c_over_s": 0.9855072498321533
+        },
+        "ablated": {
+          "mean_ld": 3.3147897720336914,
+          "mean_p_c": 0.4351893663406372,
+          "c_over_s": 0.9927536249160767
+        }
+      },
+      "BABA/1": {
+        "n": 150,
+        "clean": {
+          "mean_ld": 3.844623327255249,
+          "mean_p_c": 0.5374212265014648,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.455218553543091,
+          "mean_p_c": 0.3981271982192993,
+          "c_over_s": 1.0
+        }
+      },
+      "BABA/2": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 3.1812500953674316,
+          "mean_p_c": 0.4038032591342926,
+          "c_over_s": 0.9932432174682617
+        },
+        "ablated": {
+          "mean_ld": 2.9243438243865967,
+          "mean_p_c": 0.2825320363044739,
+          "c_over_s": 0.9797297120094299
+        }
+      },
+      "BABA/3": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 3.1613759994506836,
+          "mean_p_c": 0.28557729721069336,
+          "c_over_s": 0.9741935729980469
+        },
+        "ablated": {
+          "mean_ld": 2.964611768722534,
+          "mean_p_c": 0.20149609446525574,
+          "c_over_s": 0.9677419066429138
+        }
+      },
+      "BABA/4": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 2.745662212371826,
+          "mean_p_c": 0.6261391043663025,
+          "c_over_s": 0.9870967864990234
+        },
+        "ablated": {
+          "mean_ld": 2.392479658126831,
+          "mean_p_c": 0.4863860011100769,
+          "c_over_s": 0.9548386931419373
+        }
+      },
+      "BABA/5": {
+        "n": 139,
+        "clean": {
+          "mean_ld": 2.9017348289489746,
+          "mean_p_c": 0.4549559950828552,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.321871757507324,
+          "mean_p_c": 0.3689655363559723,
+          "c_over_s": 1.0
+        }
+      },
+      "BABA/6": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 4.137271881103516,
+          "mean_p_c": 0.3695911765098572,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 4.155370712280273,
+          "mean_p_c": 0.2785080075263977,
+          "c_over_s": 1.0
+        }
+      }
+    }
+  },
+  "direct_effect_definition": null,
+  "pre_registered": true
+}

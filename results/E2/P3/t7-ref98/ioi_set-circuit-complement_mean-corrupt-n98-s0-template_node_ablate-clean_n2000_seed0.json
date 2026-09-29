@@ -1,0 +1,660 @@
+{
+  "phase": "E2",
+  "command": "uv run python -m src.lesion.e2_reproduce --target P3",
+  "cli": {
+    "target": "P3",
+    "n": 2000,
+    "seed": 0,
+    "batch_size": 128,
+    "device": "cuda",
+    "out_dir": "results/E2",
+    "resume": false
+  },
+  "spec": {
+    "granularity": "heads",
+    "component_type": "node",
+    "value": "mean",
+    "reference": {
+      "battery_side": "corrupt",
+      "n": 98,
+      "seed": 0,
+      "match": "template"
+    },
+    "direction": "ablate-clean",
+    "freeze_patterns": false,
+    "set": {
+      "complement": true,
+      "members": [
+        {
+          "head": {
+            "layer": 9,
+            "head": 6
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 9,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 0
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 7
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 11,
+            "head": 10
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 7,
+            "head": 3
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 7,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 8,
+            "head": 6
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 8,
+            "head": 10
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 5,
+            "head": 5
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 5,
+            "head": 8
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 5,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 6,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 0,
+            "head": 1
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 0,
+            "head": 10
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 3,
+            "head": 0
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S2"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 2,
+            "head": 2
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S1+1"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 4,
+            "head": 11
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "S1+1"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 9,
+            "head": 0
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 9,
+            "head": 7
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 1
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 2
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 6
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 10,
+            "head": 10
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 11,
+            "head": 2
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        },
+        {
+          "head": {
+            "layer": 11,
+            "head": 9
+          },
+          "positions": {
+            "kind": "labels",
+            "labels": [
+              "END"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  "environment": {
+    "repo_commit": "f342f807d40a04fdc157c36be90f314f3f4bf15b",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 3.5336835384368896
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 0,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects); subset: templates 0-6 of each order (14 templates), the released code's `mixed` default (O-014)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "p_ABC",
+      "removes": "the repetition of the subject name: no name occurs twice, so nothing in the prompt singles out an indirect object",
+      "inserts": "three distinct fresh names in the three name slots, none equal to the clean IO or S; same template, place and object",
+      "source": "wang-2022 \u00a72.1"
+    }
+  },
+  "destination_prompt": "clean",
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "expected_direction": "positive",
+  "reference": {
+    "battery_side": "corrupt",
+    "n": 98,
+    "seed": 0,
+    "match": "template",
+    "n_prompts_used": 98,
+    "per_template_counts": {
+      "ABBA/0": 6,
+      "ABBA/1": 10,
+      "ABBA/2": 6,
+      "ABBA/3": 8,
+      "ABBA/4": 3,
+      "ABBA/5": 11,
+      "ABBA/6": 5,
+      "BABA/0": 6,
+      "BABA/1": 10,
+      "BABA/2": 5,
+      "BABA/3": 6,
+      "BABA/4": 7,
+      "BABA/5": 5,
+      "BABA/6": 10
+    },
+    "hook": [
+      "blocks.0.attn.hook_z",
+      "blocks.1.attn.hook_z",
+      "blocks.2.attn.hook_z",
+      "blocks.3.attn.hook_z",
+      "blocks.4.attn.hook_z",
+      "blocks.5.attn.hook_z",
+      "blocks.6.attn.hook_z",
+      "blocks.7.attn.hook_z",
+      "blocks.8.attn.hook_z",
+      "blocks.9.attn.hook_z",
+      "blocks.10.attn.hook_z",
+      "blocks.11.attn.hook_z"
+    ]
+  },
+  "results": {
+    "clean": {
+      "n": 2000,
+      "mean_ld": 3.475369691848755,
+      "std_ld": 1.4677481651306152,
+      "sem_ld": 0.032819848507642746,
+      "mean_p_c": 0.49464911222457886,
+      "c_over_s": 0.9944999814033508
+    },
+    "ablated": {
+      "n": 2000,
+      "mean_ld": 2.963963270187378,
+      "std_ld": 1.4296547174453735,
+      "sem_ld": 0.031968049705028534,
+      "mean_p_c": 0.20687039196491241,
+      "c_over_s": 0.987500011920929
+    },
+    "effect": {
+      "ld": {
+        "effect_mean": 0.511406421661377,
+        "sem": 0.027830448001623154,
+        "ratio_of_means": 0.8528483510017395,
+        "mean_of_ratios": 0.8849477171897888,
+        "ratio_iqr": [
+          0.637365996837616,
+          1.102049469947815
+        ],
+        "n_abs_clean_below_0.1": 4
+      },
+      "p_c": {
+        "effect_mean": 0.28777873516082764,
+        "sem": 0.0038009537383913994
+      },
+      "c_over_s": {
+        "effect_mean": 0.007000000216066837,
+        "sem": 0.0029119993560016155
+      }
+    },
+    "by_template": {
+      "ABBA/0": {
+        "n": 133,
+        "clean": {
+          "mean_ld": 4.159119606018066,
+          "mean_p_c": 0.6592933535575867,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.035562753677368,
+          "mean_p_c": 0.27663475275039673,
+          "c_over_s": 0.9849624037742615
+        }
+      },
+      "ABBA/1": {
+        "n": 140,
+        "clean": {
+          "mean_ld": 3.6644177436828613,
+          "mean_p_c": 0.58750319480896,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 2.866297721862793,
+          "mean_p_c": 0.24540460109710693,
+          "c_over_s": 0.9928571581840515
+        }
+      },
+      "ABBA/2": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 3.58939266204834,
+          "mean_p_c": 0.47667911648750305,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 2.813096046447754,
+          "mean_p_c": 0.13992170989513397,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/3": {
+        "n": 139,
+        "clean": {
+          "mean_ld": 3.260317087173462,
+          "mean_p_c": 0.3275470733642578,
+          "c_over_s": 0.9856114983558655
+        },
+        "ablated": {
+          "mean_ld": 3.0233724117279053,
+          "mean_p_c": 0.1727360486984253,
+          "c_over_s": 0.9856114983558655
+        }
+      },
+      "ABBA/4": {
+        "n": 121,
+        "clean": {
+          "mean_ld": 3.869544506072998,
+          "mean_p_c": 0.787338376045227,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.0236892700195312,
+          "mean_p_c": 0.3920314610004425,
+          "c_over_s": 1.0
+        }
+      },
+      "ABBA/5": {
+        "n": 131,
+        "clean": {
+          "mean_ld": 3.408862829208374,
+          "mean_p_c": 0.5878546833992004,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 2.3805630207061768,
+          "mean_p_c": 0.2353072464466095,
+          "c_over_s": 0.9694656729698181
+        }
+      },
+      "ABBA/6": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 3.3042008876800537,
+          "mean_p_c": 0.3647131025791168,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 2.0088233947753906,
+          "mean_p_c": 0.06201063469052315,
+          "c_over_s": 0.9548386931419373
+        }
+      },
+      "BABA/0": {
+        "n": 138,
+        "clean": {
+          "mean_ld": 3.582967519760132,
+          "mean_p_c": 0.5423647165298462,
+          "c_over_s": 0.9855072498321533
+        },
+        "ablated": {
+          "mean_ld": 3.0980052947998047,
+          "mean_p_c": 0.2714095115661621,
+          "c_over_s": 0.9927536249160767
+        }
+      },
+      "BABA/1": {
+        "n": 150,
+        "clean": {
+          "mean_ld": 3.844623327255249,
+          "mean_p_c": 0.5374212265014648,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.9043684005737305,
+          "mean_p_c": 0.28635847568511963,
+          "c_over_s": 1.0
+        }
+      },
+      "BABA/2": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 3.1812500953674316,
+          "mean_p_c": 0.4038032591342926,
+          "c_over_s": 0.9932432174682617
+        },
+        "ablated": {
+          "mean_ld": 2.827263832092285,
+          "mean_p_c": 0.17568933963775635,
+          "c_over_s": 0.9932432174682617
+        }
+      },
+      "BABA/3": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 3.1613759994506836,
+          "mean_p_c": 0.28557729721069336,
+          "c_over_s": 0.9741935729980469
+        },
+        "ablated": {
+          "mean_ld": 2.876457691192627,
+          "mean_p_c": 0.11470142751932144,
+          "c_over_s": 0.9935483932495117
+        }
+      },
+      "BABA/4": {
+        "n": 155,
+        "clean": {
+          "mean_ld": 2.745662212371826,
+          "mean_p_c": 0.6261391043663025,
+          "c_over_s": 0.9870967864990234
+        },
+        "ablated": {
+          "mean_ld": 3.2328577041625977,
+          "mean_p_c": 0.23707523941993713,
+          "c_over_s": 0.9741935729980469
+        }
+      },
+      "BABA/5": {
+        "n": 139,
+        "clean": {
+          "mean_ld": 2.9017348289489746,
+          "mean_p_c": 0.4549559950828552,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 2.7147791385650635,
+          "mean_p_c": 0.26363328099250793,
+          "c_over_s": 0.9856114983558655
+        }
+      },
+      "BABA/6": {
+        "n": 148,
+        "clean": {
+          "mean_ld": 4.137271881103516,
+          "mean_p_c": 0.3695911765098572,
+          "c_over_s": 1.0
+        },
+        "ablated": {
+          "mean_ld": 3.657611846923828,
+          "mean_p_c": 0.08391602337360382,
+          "c_over_s": 1.0
+        }
+      }
+    }
+  },
+  "direct_effect_definition": null,
+  "pre_registered": true
+}

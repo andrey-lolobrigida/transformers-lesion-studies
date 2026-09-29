@@ -1,0 +1,780 @@
+{
+  "target": "P2",
+  "pre_registered": true,
+  "entries": [
+    {
+      "id": "P2/nm_knockout_drop",
+      "source": "wang-2022 \u00a73.4, App. F",
+      "published": 0.05,
+      "ours": [
+        0.0037601006130091375,
+        0.013015960131226084
+      ],
+      "tolerance": "bracket over four corners; uninformative if it overlaps the contrast's range",
+      "verdict": "not matched",
+      "result": {
+        "rule": "magnitude",
+        "corners": {
+          "t15-ref210": 0.013015960131226084,
+          "t15-ref2000": 0.0037601006130091375,
+          "t7-ref98": 0.010982837694968777,
+          "t7-ref2000": 0.010061340718652305
+        },
+        "bracket": [
+          0.0037601006130091375,
+          0.013015960131226084
+        ],
+        "width": 0.009255859518216947,
+        "published": 0.05,
+        "contrast": {
+          "t15-ref210": 1.1430169704190214,
+          "t15-ref2000": 1.1424609448432161,
+          "t7-ref98": 1.1243697243495243,
+          "t7-ref2000": 1.126486450312645
+        },
+        "contrast_range": [
+          1.1243697243495243,
+          1.1430169704190214
+        ],
+        "verdict": "not matched",
+        "per_corner": {
+          "t15-ref210": {
+            "knockout": {
+              "effect_mean": 0.0475260466337204,
+              "sem": 0.018332749605178833,
+              "clean_mean_ld": 3.651366949081421,
+              "ablated_mean_ld": 3.6038408279418945,
+              "ratio_of_means": 0.9869840145111084,
+              "mean_of_ratios": 1.0342724323272705,
+              "ratio_iqr": [
+                0.8389365673065186,
+                1.1466349363327026
+              ],
+              "value": "mean",
+              "n": 2000,
+              "ref_n": 210,
+              "ref_per_template_counts": {
+                "ABBA/0": 7,
+                "ABBA/1": 9,
+                "ABBA/10": 8,
+                "ABBA/11": 4,
+                "ABBA/12": 4,
+                "ABBA/13": 3,
+                "ABBA/14": 8,
+                "ABBA/2": 7,
+                "ABBA/3": 7,
+                "ABBA/4": 8,
+                "ABBA/5": 8,
+                "ABBA/6": 10,
+                "ABBA/7": 2,
+                "ABBA/8": 8,
+                "ABBA/9": 6,
+                "BABA/0": 6,
+                "BABA/1": 6,
+                "BABA/10": 5,
+                "BABA/11": 8,
+                "BABA/12": 10,
+                "BABA/13": 4,
+                "BABA/14": 7,
+                "BABA/2": 11,
+                "BABA/3": 10,
+                "BABA/4": 7,
+                "BABA/5": 7,
+                "BABA/6": 6,
+                "BABA/7": 6,
+                "BABA/8": 8,
+                "BABA/9": 10
+              }
+            },
+            "direct_effects": {
+              "L9H6": {
+                "effect_mean": 0.9426584839820862,
+                "sem": 0.016902171075344086,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 2.7087085247039795,
+                "ratio_of_means": 0.7418341040611267,
+                "mean_of_ratios": 0.6761825084686279,
+                "ratio_iqr": [
+                  0.6071293950080872,
+                  0.8877384662628174
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 210,
+                "ref_per_template_counts": {
+                  "ABBA/0": 7,
+                  "ABBA/1": 9,
+                  "ABBA/10": 8,
+                  "ABBA/11": 4,
+                  "ABBA/12": 4,
+                  "ABBA/13": 3,
+                  "ABBA/14": 8,
+                  "ABBA/2": 7,
+                  "ABBA/3": 7,
+                  "ABBA/4": 8,
+                  "ABBA/5": 8,
+                  "ABBA/6": 10,
+                  "ABBA/7": 2,
+                  "ABBA/8": 8,
+                  "ABBA/9": 6,
+                  "BABA/0": 6,
+                  "BABA/1": 6,
+                  "BABA/10": 5,
+                  "BABA/11": 8,
+                  "BABA/12": 10,
+                  "BABA/13": 4,
+                  "BABA/14": 7,
+                  "BABA/2": 11,
+                  "BABA/3": 10,
+                  "BABA/4": 7,
+                  "BABA/5": 7,
+                  "BABA/6": 6,
+                  "BABA/7": 6,
+                  "BABA/8": 8,
+                  "BABA/9": 10
+                }
+              },
+              "L9H9": {
+                "effect_mean": 2.5074374675750732,
+                "sem": 0.02500586025416851,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 1.143929362297058,
+                "ratio_of_means": 0.31328797340393066,
+                "mean_of_ratios": 0.027355238795280457,
+                "ratio_iqr": [
+                  0.0522274523973465,
+                  0.5268979668617249
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 210,
+                "ref_per_template_counts": {
+                  "ABBA/0": 7,
+                  "ABBA/1": 9,
+                  "ABBA/10": 8,
+                  "ABBA/11": 4,
+                  "ABBA/12": 4,
+                  "ABBA/13": 3,
+                  "ABBA/14": 8,
+                  "ABBA/2": 7,
+                  "ABBA/3": 7,
+                  "ABBA/4": 8,
+                  "ABBA/5": 8,
+                  "ABBA/6": 10,
+                  "ABBA/7": 2,
+                  "ABBA/8": 8,
+                  "ABBA/9": 6,
+                  "BABA/0": 6,
+                  "BABA/1": 6,
+                  "BABA/10": 5,
+                  "BABA/11": 8,
+                  "BABA/12": 10,
+                  "BABA/13": 4,
+                  "BABA/14": 7,
+                  "BABA/2": 11,
+                  "BABA/3": 10,
+                  "BABA/4": 7,
+                  "BABA/5": 7,
+                  "BABA/6": 6,
+                  "BABA/7": 6,
+                  "BABA/8": 8,
+                  "BABA/9": 10
+                }
+              },
+              "L10H0": {
+                "effect_mean": 0.7234784364700317,
+                "sem": 0.015742560848593712,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 2.9278883934020996,
+                "ratio_of_means": 0.8018609285354614,
+                "mean_of_ratios": 0.782622754573822,
+                "ratio_iqr": [
+                  0.678351640701294,
+                  0.92919921875
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 210,
+                "ref_per_template_counts": {
+                  "ABBA/0": 7,
+                  "ABBA/1": 9,
+                  "ABBA/10": 8,
+                  "ABBA/11": 4,
+                  "ABBA/12": 4,
+                  "ABBA/13": 3,
+                  "ABBA/14": 8,
+                  "ABBA/2": 7,
+                  "ABBA/3": 7,
+                  "ABBA/4": 8,
+                  "ABBA/5": 8,
+                  "ABBA/6": 10,
+                  "ABBA/7": 2,
+                  "ABBA/8": 8,
+                  "ABBA/9": 6,
+                  "BABA/0": 6,
+                  "BABA/1": 6,
+                  "BABA/10": 5,
+                  "BABA/11": 8,
+                  "BABA/12": 10,
+                  "BABA/13": 4,
+                  "BABA/14": 7,
+                  "BABA/2": 11,
+                  "BABA/3": 10,
+                  "BABA/4": 7,
+                  "BABA/5": 7,
+                  "BABA/6": 6,
+                  "BABA/7": 6,
+                  "BABA/8": 8,
+                  "BABA/9": 10
+                }
+              }
+            },
+            "F_M": 3.651366949081421,
+            "below_template_floor": true
+          },
+          "t15-ref2000": {
+            "knockout": {
+              "effect_mean": 0.013729507103562355,
+              "sem": 0.018107950687408447,
+              "clean_mean_ld": 3.651366949081421,
+              "ablated_mean_ld": 3.637637138366699,
+              "ratio_of_means": 0.9962398409843445,
+              "mean_of_ratios": 1.038158893585205,
+              "ratio_iqr": [
+                0.8483296036720276,
+                1.145264744758606
+              ],
+              "value": "mean",
+              "n": 2000,
+              "ref_n": 2000,
+              "ref_per_template_counts": {
+                "ABBA/0": 63,
+                "ABBA/1": 65,
+                "ABBA/10": 68,
+                "ABBA/11": 68,
+                "ABBA/12": 70,
+                "ABBA/13": 82,
+                "ABBA/14": 67,
+                "ABBA/2": 69,
+                "ABBA/3": 66,
+                "ABBA/4": 58,
+                "ABBA/5": 72,
+                "ABBA/6": 73,
+                "ABBA/7": 58,
+                "ABBA/8": 52,
+                "ABBA/9": 65,
+                "BABA/0": 67,
+                "BABA/1": 58,
+                "BABA/10": 69,
+                "BABA/11": 52,
+                "BABA/12": 61,
+                "BABA/13": 71,
+                "BABA/14": 54,
+                "BABA/2": 77,
+                "BABA/3": 63,
+                "BABA/4": 73,
+                "BABA/5": 66,
+                "BABA/6": 73,
+                "BABA/7": 69,
+                "BABA/8": 79,
+                "BABA/9": 72
+              }
+            },
+            "direct_effects": {
+              "L9H6": {
+                "effect_mean": 0.9441936016082764,
+                "sem": 0.016800446435809135,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 2.7071733474731445,
+                "ratio_of_means": 0.7414136528968811,
+                "mean_of_ratios": 0.6588326692581177,
+                "ratio_iqr": [
+                  0.6019913554191589,
+                  0.8834471106529236
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 63,
+                  "ABBA/1": 65,
+                  "ABBA/10": 68,
+                  "ABBA/11": 68,
+                  "ABBA/12": 70,
+                  "ABBA/13": 82,
+                  "ABBA/14": 67,
+                  "ABBA/2": 69,
+                  "ABBA/3": 66,
+                  "ABBA/4": 58,
+                  "ABBA/5": 72,
+                  "ABBA/6": 73,
+                  "ABBA/7": 58,
+                  "ABBA/8": 52,
+                  "ABBA/9": 65,
+                  "BABA/0": 67,
+                  "BABA/1": 58,
+                  "BABA/10": 69,
+                  "BABA/11": 52,
+                  "BABA/12": 61,
+                  "BABA/13": 71,
+                  "BABA/14": 54,
+                  "BABA/2": 77,
+                  "BABA/3": 63,
+                  "BABA/4": 73,
+                  "BABA/5": 66,
+                  "BABA/6": 73,
+                  "BABA/7": 69,
+                  "BABA/8": 79,
+                  "BABA/9": 72
+                }
+              },
+              "L9H9": {
+                "effect_mean": 2.50520920753479,
+                "sem": 0.024714618921279907,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 1.14615797996521,
+                "ratio_of_means": 0.31389832496643066,
+                "mean_of_ratios": -0.0016684532165527344,
+                "ratio_iqr": [
+                  0.060390084981918335,
+                  0.5167945623397827
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 63,
+                  "ABBA/1": 65,
+                  "ABBA/10": 68,
+                  "ABBA/11": 68,
+                  "ABBA/12": 70,
+                  "ABBA/13": 82,
+                  "ABBA/14": 67,
+                  "ABBA/2": 69,
+                  "ABBA/3": 66,
+                  "ABBA/4": 58,
+                  "ABBA/5": 72,
+                  "ABBA/6": 73,
+                  "ABBA/7": 58,
+                  "ABBA/8": 52,
+                  "ABBA/9": 65,
+                  "BABA/0": 67,
+                  "BABA/1": 58,
+                  "BABA/10": 69,
+                  "BABA/11": 52,
+                  "BABA/12": 61,
+                  "BABA/13": 71,
+                  "BABA/14": 54,
+                  "BABA/2": 77,
+                  "BABA/3": 63,
+                  "BABA/4": 73,
+                  "BABA/5": 66,
+                  "BABA/6": 73,
+                  "BABA/7": 69,
+                  "BABA/8": 79,
+                  "BABA/9": 72
+                }
+              },
+              "L10H0": {
+                "effect_mean": 0.7221413254737854,
+                "sem": 0.015481511130928993,
+                "clean_mean_ld": 3.651366949081421,
+                "ablated_mean_ld": 2.9292256832122803,
+                "ratio_of_means": 0.8022271394729614,
+                "mean_of_ratios": 0.7959326505661011,
+                "ratio_iqr": [
+                  0.6801621913909912,
+                  0.9253761768341064
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 63,
+                  "ABBA/1": 65,
+                  "ABBA/10": 68,
+                  "ABBA/11": 68,
+                  "ABBA/12": 70,
+                  "ABBA/13": 82,
+                  "ABBA/14": 67,
+                  "ABBA/2": 69,
+                  "ABBA/3": 66,
+                  "ABBA/4": 58,
+                  "ABBA/5": 72,
+                  "ABBA/6": 73,
+                  "ABBA/7": 58,
+                  "ABBA/8": 52,
+                  "ABBA/9": 65,
+                  "BABA/0": 67,
+                  "BABA/1": 58,
+                  "BABA/10": 69,
+                  "BABA/11": 52,
+                  "BABA/12": 61,
+                  "BABA/13": 71,
+                  "BABA/14": 54,
+                  "BABA/2": 77,
+                  "BABA/3": 63,
+                  "BABA/4": 73,
+                  "BABA/5": 66,
+                  "BABA/6": 73,
+                  "BABA/7": 69,
+                  "BABA/8": 79,
+                  "BABA/9": 72
+                }
+              }
+            },
+            "F_M": 3.651366949081421,
+            "below_template_floor": false
+          },
+          "t7-ref98": {
+            "knockout": {
+              "effect_mean": 0.03816942125558853,
+              "sem": 0.017496410757303238,
+              "clean_mean_ld": 3.475369691848755,
+              "ablated_mean_ld": 3.4372000694274902,
+              "ratio_of_means": 0.989017128944397,
+              "mean_of_ratios": 0.9999191164970398,
+              "ratio_iqr": [
+                0.8311569690704346,
+                1.1404473781585693
+              ],
+              "value": "mean",
+              "n": 2000,
+              "ref_n": 98,
+              "ref_per_template_counts": {
+                "ABBA/0": 6,
+                "ABBA/1": 10,
+                "ABBA/2": 6,
+                "ABBA/3": 8,
+                "ABBA/4": 3,
+                "ABBA/5": 11,
+                "ABBA/6": 5,
+                "BABA/0": 6,
+                "BABA/1": 10,
+                "BABA/2": 5,
+                "BABA/3": 6,
+                "BABA/4": 7,
+                "BABA/5": 5,
+                "BABA/6": 10
+              }
+            },
+            "direct_effects": {
+              "L9H6": {
+                "effect_mean": 0.8892145752906799,
+                "sem": 0.01646360568702221,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 2.5861549377441406,
+                "ratio_of_means": 0.7441380620002747,
+                "mean_of_ratios": 0.6917368173599243,
+                "ratio_iqr": [
+                  0.5908615589141846,
+                  0.8877109289169312
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 98,
+                "ref_per_template_counts": {
+                  "ABBA/0": 6,
+                  "ABBA/1": 10,
+                  "ABBA/2": 6,
+                  "ABBA/3": 8,
+                  "ABBA/4": 3,
+                  "ABBA/5": 11,
+                  "ABBA/6": 5,
+                  "BABA/0": 6,
+                  "BABA/1": 10,
+                  "BABA/2": 5,
+                  "BABA/3": 6,
+                  "BABA/4": 7,
+                  "BABA/5": 5,
+                  "BABA/6": 10
+                }
+              },
+              "L9H9": {
+                "effect_mean": 2.3059864044189453,
+                "sem": 0.02439969591796398,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 1.16938316822052,
+                "ratio_of_means": 0.3364773392677307,
+                "mean_of_ratios": 0.20818248391151428,
+                "ratio_iqr": [
+                  0.07662231475114822,
+                  0.5568114519119263
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 98,
+                "ref_per_template_counts": {
+                  "ABBA/0": 6,
+                  "ABBA/1": 10,
+                  "ABBA/2": 6,
+                  "ABBA/3": 8,
+                  "ABBA/4": 3,
+                  "ABBA/5": 11,
+                  "ABBA/6": 5,
+                  "BABA/0": 6,
+                  "BABA/1": 10,
+                  "BABA/2": 5,
+                  "BABA/3": 6,
+                  "BABA/4": 7,
+                  "BABA/5": 5,
+                  "BABA/6": 10
+                }
+              },
+              "L10H0": {
+                "effect_mean": 0.7123994827270508,
+                "sem": 0.015806693583726883,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 2.762969970703125,
+                "ratio_of_means": 0.7950146794319153,
+                "mean_of_ratios": 0.754194974899292,
+                "ratio_iqr": [
+                  0.6556047797203064,
+                  0.9288792610168457
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 98,
+                "ref_per_template_counts": {
+                  "ABBA/0": 6,
+                  "ABBA/1": 10,
+                  "ABBA/2": 6,
+                  "ABBA/3": 8,
+                  "ABBA/4": 3,
+                  "ABBA/5": 11,
+                  "ABBA/6": 5,
+                  "BABA/0": 6,
+                  "BABA/1": 10,
+                  "BABA/2": 5,
+                  "BABA/3": 6,
+                  "BABA/4": 7,
+                  "BABA/5": 5,
+                  "BABA/6": 10
+                }
+              }
+            },
+            "F_M": 3.475369691848755,
+            "below_template_floor": true
+          },
+          "t7-ref2000": {
+            "knockout": {
+              "effect_mean": 0.03496687859296799,
+              "sem": 0.01705954223871231,
+              "clean_mean_ld": 3.475369691848755,
+              "ablated_mean_ld": 3.4404025077819824,
+              "ratio_of_means": 0.9899385571479797,
+              "mean_of_ratios": 1.0084240436553955,
+              "ratio_iqr": [
+                0.8380497694015503,
+                1.1364341974258423
+              ],
+              "value": "mean",
+              "n": 2000,
+              "ref_n": 2000,
+              "ref_per_template_counts": {
+                "ABBA/0": 133,
+                "ABBA/1": 140,
+                "ABBA/2": 148,
+                "ABBA/3": 139,
+                "ABBA/4": 121,
+                "ABBA/5": 131,
+                "ABBA/6": 155,
+                "BABA/0": 138,
+                "BABA/1": 150,
+                "BABA/2": 148,
+                "BABA/3": 155,
+                "BABA/4": 155,
+                "BABA/5": 139,
+                "BABA/6": 148
+              }
+            },
+            "direct_effects": {
+              "L9H6": {
+                "effect_mean": 0.8939337134361267,
+                "sem": 0.016216065734624863,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 2.5814356803894043,
+                "ratio_of_means": 0.7427801489830017,
+                "mean_of_ratios": 0.6947702169418335,
+                "ratio_iqr": [
+                  0.5914270877838135,
+                  0.8832365274429321
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 133,
+                  "ABBA/1": 140,
+                  "ABBA/2": 148,
+                  "ABBA/3": 139,
+                  "ABBA/4": 121,
+                  "ABBA/5": 131,
+                  "ABBA/6": 155,
+                  "BABA/0": 138,
+                  "BABA/1": 150,
+                  "BABA/2": 148,
+                  "BABA/3": 155,
+                  "BABA/4": 155,
+                  "BABA/5": 139,
+                  "BABA/6": 148
+                }
+              },
+              "L9H9": {
+                "effect_mean": 2.306342363357544,
+                "sem": 0.024072453379631042,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 1.1690270900726318,
+                "ratio_of_means": 0.3363748788833618,
+                "mean_of_ratios": 0.21095965802669525,
+                "ratio_iqr": [
+                  0.08150546252727509,
+                  0.5549633502960205
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 133,
+                  "ABBA/1": 140,
+                  "ABBA/2": 148,
+                  "ABBA/3": 139,
+                  "ABBA/4": 121,
+                  "ABBA/5": 131,
+                  "ABBA/6": 155,
+                  "BABA/0": 138,
+                  "BABA/1": 150,
+                  "BABA/2": 148,
+                  "BABA/3": 155,
+                  "BABA/4": 155,
+                  "BABA/5": 139,
+                  "BABA/6": 148
+                }
+              },
+              "L10H0": {
+                "effect_mean": 0.7146807909011841,
+                "sem": 0.015422469936311245,
+                "clean_mean_ld": 3.475369691848755,
+                "ablated_mean_ld": 2.7606887817382812,
+                "ratio_of_means": 0.7943583130836487,
+                "mean_of_ratios": 0.761970043182373,
+                "ratio_iqr": [
+                  0.6580281257629395,
+                  0.9216598272323608
+                ],
+                "value": "mean",
+                "n": 2000,
+                "ref_n": 2000,
+                "ref_per_template_counts": {
+                  "ABBA/0": 133,
+                  "ABBA/1": 140,
+                  "ABBA/2": 148,
+                  "ABBA/3": 139,
+                  "ABBA/4": 121,
+                  "ABBA/5": 131,
+                  "ABBA/6": 155,
+                  "BABA/0": 138,
+                  "BABA/1": 150,
+                  "BABA/2": 148,
+                  "BABA/3": 155,
+                  "BABA/4": 155,
+                  "BABA/5": 139,
+                  "BABA/6": 148
+                }
+              }
+            },
+            "F_M": 3.475369691848755,
+            "below_template_floor": false
+          }
+        },
+        "ungated_beside": {
+          "t15/zero": {
+            "effect_mean": -0.08957350254058838,
+            "sem": 0.019171014428138733,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.7409403324127197,
+            "ratio_of_means": 1.0245314836502075,
+            "mean_of_ratios": 1.1018898487091064,
+            "ratio_iqr": [
+              0.8669834136962891,
+              1.1850725412368774
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "quantity": -0.02453149841955011
+          },
+          "t15/resample": {
+            "effect_mean": 0.1987883597612381,
+            "sem": 0.019884031265974045,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.45257830619812,
+            "ratio_of_means": 0.9455577731132507,
+            "mean_of_ratios": 0.8799686431884766,
+            "ratio_iqr": [
+              0.7761155366897583,
+              1.1032146215438843
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "quantity": 0.054442175364283106
+          },
+          "t7/zero": {
+            "effect_mean": -0.06915716826915741,
+            "sem": 0.017905574291944504,
+            "clean_mean_ld": 3.475369691848755,
+            "ablated_mean_ld": 3.5445265769958496,
+            "ratio_of_means": 1.0198991298675537,
+            "mean_of_ratios": 1.0421051979064941,
+            "ratio_iqr": [
+              0.8650996685028076,
+              1.1726794242858887
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "quantity": -0.01989922638485364
+          },
+          "t7/resample": {
+            "effect_mean": 0.19196832180023193,
+            "sem": 0.018959173932671547,
+            "clean_mean_ld": 3.475369691848755,
+            "ablated_mean_ld": 3.2834010124206543,
+            "ratio_of_means": 0.9447630643844604,
+            "mean_of_ratios": 0.9562532901763916,
+            "ratio_iqr": [
+              0.7736862301826477,
+              1.114771842956543
+            ],
+            "value": "resample",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null,
+            "quantity": 0.055236806101658965
+          }
+        },
+        "context": {
+          "t15": {
+            "n": 2000,
+            "mean_ld_clean": 3.651366949081421,
+            "mean_ld_corrupt": 0.06185034289956093,
+            "gap": 3.5895166397094727,
+            "fraction_removed": 0.9830610535083284
+          },
+          "t7": {
+            "n": 2000,
+            "mean_ld_clean": 3.475369691848755,
+            "mean_ld_corrupt": 0.13496679067611694,
+            "gap": 3.340402603149414,
+            "fraction_removed": 0.9611646815543402
+          }
+        },
+        "contrast_definition": "sum of the three single-head direct effects (edge to logits, wang, mean, same corner) over F(M); a sum, not a joint edge ablation"
+      }
+    }
+  ]
+}
