@@ -19,14 +19,14 @@ The **QK circuit** is the bilinear form that scores every (destination, source)
 token pair and so determines *where* a head attends; the **OV circuit** is the
 linear map that determines *what a source token contributes to the output* if
 it is attended to; in a one-layer model both can be multiplied all the way out
-to `n_vocab × n_vocab` tables and read directly off the weights.
+to $n_{\text{vocab}} \times n_{\text{vocab}}$ tables and read directly off the weights.
 
 ## Why it exists
 
 Because "what does head h do?" is two questions, answered by two disjoint sets
 of parameters, and the standard q/k/v presentation hides that. Elhage et al.
 show that queries, keys and values are "intermediary by-products" of two
-low-rank matrices, `W_QK = W_Q^T W_K` and `W_OV = W_O W_V`, and that "it can be
+low-rank matrices, $W_{QK} = W_Q^\top W_K$ and $W_{OV} = W_O W_V$, and that "it can be
 useful to describe transformers without reference to them" [elhage-2021
 §Summary of Results: Conceptual Take-Aways]. Naming the two circuits is what
 lets you study one while holding the other fixed — which is the structural
@@ -42,9 +42,9 @@ a **skip-trigram**, `[A] … [B] → [C]`: the source, the destination, and the
 output whose logit is moved [elhage-2021 §Interpretation as Skip-Trigrams].
 
 **Where the analogy breaks — and the paper says so.** A true trigram table is a
-function `f(A, B, C)`. What the head stores is a *factored* form, roughly
-`f₁(A, B) · f₂(A, C)`: the QK table knows about `A` and `B`, the OV table about
-`A` and `C`, and neither knows about the pair `(B, C)`. So a head that raises
+function $f(A, B, C)$. What the head stores is a *factored* form, roughly
+$f_1(A, B) \cdot f_2(A, C)$: the QK table knows about $A$ and $B$, the OV table about
+$A$ and $C$, and neither knows about the pair $(B, C)$. So a head that raises
 both `keep … in → mind` and `keep … at → bay` must also raise `keep … in → bay`
 and `keep … at → mind`. The authors call these skip-trigram "bugs", observe
 them frequently, and note they are probably a good trade for the model on
@@ -54,23 +54,23 @@ has many terms, one per way information can reach the query and key sides
 (see [[attention-head-composition]]).
 
 **Now the mechanism**, for a one-layer attention-only model. Tokens are one-hot
-`t`; the stream is `x = W_E t`; logits are `W_U x`. Expand the model into paths
+$t$; the stream is $x = W_E t$; logits are $W_U x$. Expand the model into paths
 ([[path-expansion]]) and each head contributes one term
-`A^h ⊗ (W_U W_OV^h W_E)`, where `A^h = softmax(t^T · W_E^T W_QK^h W_E · t)`.
-Two `n_vocab × n_vocab` matrices appear [elhage-2021 §Splitting Attention Head
+$A^h \otimes (W_U W_{OV}^h W_E)$, where $A^h = \operatorname{softmax}(t^\top \cdot W_E^\top W_{QK}^h W_E \cdot t)$.
+Two $n_{\text{vocab}} \times n_{\text{vocab}}$ matrices appear [elhage-2021 §Splitting Attention Head
 terms into Query-Key and Output-Value Circuits]:
 
-- **`W_E^T W_QK^h W_E` — the QK circuit.** Entry `(query token, key token)` is
+- **$W_E^\top W_{QK}^h W_E$ — the QK circuit.** Entry $(\text{query token}, \text{key token})$ is
   "how much a given query token 'wants' to attend to a given key token".
-- **`W_U W_OV^h W_E` — the OV circuit.** Entry `(output token, source token)`
+- **$W_U W_{OV}^h W_E$ — the OV circuit.** Entry $(\text{output token}, \text{source token})$
   is "how a given token will affect the output logits if attended to".
 
 The QK circuit is a path traced from two tokens up to the head, where they
 meet in a dot product. The OV circuit is a path traced from a token, through
 the head's value and output, up to the logits.
 
-**One-line checkpoint:** QK is `x_dest^T W_QK x_src → score`; OV is
-`x_src → W_OV x_src → added to x_dest`; in one layer, wrap both in the
+**One-line checkpoint:** QK is $x_{\text{dest}}^\top W_{QK}\, x_{\text{src}} \to \text{score}$; OV is
+$x_{\text{src}} \to W_{OV}\, x_{\text{src}} \to$ added to $x_{\text{dest}}$; in one layer, wrap both in the
 embeddings and they become vocabulary tables.
 
 ## Precisely
@@ -78,41 +78,53 @@ embeddings and they become vocabulary tables.
 Per-head matrices (paper's shapes; see the convention warning on
 [[attention-head]]):
 
-    W_QK = W_Q^T W_K      [d_model, d_model], rank ≤ d_head
-    W_OV = W_O  W_V       [d_model, d_model], rank ≤ d_head
+$$
+\begin{aligned}
+W_{QK} &= W_Q^\top W_K && [d_{\text{model}}, d_{\text{model}}],\ \operatorname{rank} \le d_{\text{head}} \\
+W_{OV} &= W_O W_V && [d_{\text{model}}, d_{\text{model}}],\ \operatorname{rank} \le d_{\text{head}}
+\end{aligned}
+$$
 
-    score(i, j) = x_i^T W_QK x_j            (destination i, source j)
-    A = softmax over j ≤ i of score(i, ·)
-    h(x)_i = Σ_j A_{i,j} W_OV x_j
+$$
+\begin{aligned}
+\text{score}(i, j) &= x_i^\top W_{QK}\, x_j && (\text{destination } i,\ \text{source } j) \\
+A_{i,\cdot} &= \operatorname{softmax}_{j \le i}\, \text{score}(i, j) \\
+h(x)_i &= \textstyle\sum_j A_{i,j}\, W_{OV}\, x_j
+\end{aligned}
+$$
 
 **One-layer, token level:**
 
-    QK circuit:  C_QK^h = W_E^T W_QK^h W_E   [n_vocab, n_vocab]
-    OV circuit:  C_OV^h = W_U  W_OV^h W_E    [n_vocab, n_vocab]
+$$
+\begin{aligned}
+\text{QK circuit:}\quad C_{QK}^h &= W_E^\top W_{QK}^h W_E && [n_{\text{vocab}}, n_{\text{vocab}}] \\
+\text{OV circuit:}\quad C_{OV}^h &= W_U W_{OV}^h W_E && [n_{\text{vocab}}, n_{\text{vocab}}]
+\end{aligned}
+$$
 
 Both are enormous in expanded form (~2.5 billion entries for a 50k vocabulary)
-and rank ≤ `d_head` (64 or 128) — "quite small even though they appear large"
+and rank $\le d_{\text{head}}$ (64 or 128) — "quite small even though they appear large"
 [elhage-2021 §Summarizing OV/QK Matrices]. Keep them factored; see
 [[weight-statistics]] for the identities.
 
 **Deeper models.** The OV-side logic is unchanged (each head's term is still
-`A ⊗ W_U W_OV W_E`, plus virtual-head terms). The QK circuit is not: the
-second-layer score is `x¹^T W_QK x¹` with `x¹` containing first-layer writes on
+$A \otimes W_U W_{OV} W_E$, plus virtual-head terms). The QK circuit is not: the
+second-layer score is $x^{1\top} W_{QK}\, x^1$ with $x^1$ containing first-layer writes on
 *both* the query and key sides, so it expands into terms of the form
-`A_q ⊗ A_k ⊗ W`, read as `x (A_q ⊗ A_k ⊗ W) y = A_q^T x W y A_k`: `A_q` moves
-query-side information between tokens, `A_k` moves key-side information, `W`
+$A_q \otimes A_k \otimes W$, read as $x\,(A_q \otimes A_k \otimes W)\,y = A_q^\top x W y A_k$: $A_q$ moves
+query-side information between tokens, $A_k$ moves key-side information, $W$
 combines them into a score [elhage-2021 §Path Expansion of Attention Scores QK
-Circuit]. Olsson et al.'s `C_QK^h` is this object.
+Circuit]. Olsson et al.'s $C_{QK}^h$ is this object.
 
 **Two properties worth naming** [elhage-2021 §Detecting Copying Behavior,
 §Checking the Mechanistic Theory]:
 
-- A **copying** OV circuit maps tokens toward themselves: attending to `A`
-  raises the logit of `A` (and, to a lesser extent, similar tokens). The
-  paper's summary statistic is eigenvalue positivity of `C_OV`.
-- A **same-matching** QK matrix `W` (in the composed term above) scores
+- A **copying** OV circuit maps tokens toward themselves: attending to $A$
+  raises the logit of $A$ (and, to a lesser extent, similar tokens). The
+  paper's summary statistic is eigenvalue positivity of $C_{OV}$.
+- A **same-matching** QK matrix $W$ (in the composed term above) scores
   highest when query-side and key-side tokens agree. Same statistic, applied
-  to `W`.
+  to $W$.
 
 **What the paper found in one-layer models** [elhage-2021 §Copying / Primitive
 In-Context Learning, §Other Interesting Skip-Trigrams, §Detecting Copying
@@ -135,7 +147,7 @@ Behavior]:
   [elhage-2021 §Do We "Fully Understand" One-Layer Models?].
 
 **Value-weighted attention.** For visualisation the paper scales each
-attention weight by the norm of the value vector at the source, `‖v_src^h‖`,
+attention weight by the norm of the value vector at the source, $\lVert v_{\text{src}}^h \rVert$,
 because heads park on a default position (often the first token) with a small
 value vector when nothing matches; the raw pattern then over-reports that
 resting position [elhage-2021 §Analyzing a Two-Layer Model].
@@ -149,10 +161,10 @@ careful about what that buys:
   direct path. "The bigram and skip-trigram tables can be accessed directly
   from the weights, without running the model" [elhage-2021 §Summary of
   Results]. A large entry licenses "this head's OV circuit raises the logit of
-  `C` when `A` is attended, and its QK circuit attends from `B` to `A`" — a
+  $C$ when $A$ is attended, and its QK circuit attends from $B$ to $A$" — a
   sufficiency-flavoured claim, but only because there is nothing else in the
   model for it to interact with.
-- In GPT-2 small, the same tables are one term among many, `W_OV` sits between
+- In GPT-2 small, the same tables are one term among many, $W_{OV}$ sits between
   MLPs, and the QK circuit has composed terms. A table entry then licenses only
   "the head's direct-path contribution, with patterns fixed, has this sign and
   size". Whether the model *uses* it is a behavioural question for ablation and
@@ -167,23 +179,23 @@ careful about what that buys:
 
 - **Copying has no settled formalisation.** The eigenvalue statistic is the
   authors' working choice, not a definition; the diagonal, top-k self-rank and
-  trace are alternatives, all linked by trace = Σ diagonal = Σ eigenvalues, and
+  trace are alternatives, all linked by $\operatorname{trace} = \sum \text{diagonal} = \sum \text{eigenvalues}$, and
   "copying is actually a more complex concept than it might first appear"
   (gender, plurality, tense heads copy something without copying tokens)
   [elhage-2021 §Detecting Copying Behavior]. Details on [[weight-statistics]].
 - **The vocabulary-table form is a one-layer object.** Every later use of "the
-  QK circuit" (Olsson's `C_QK`) means the multi-term expansion, which is a
+  QK circuit" (Olsson's $C_{QK}$) means the multi-term expansion, which is a
   different, larger thing with the same name.
 - **Position is outside the tables** in the paper's models; with standard
   positional embeddings the one-layer QK circuit picks up an extra term from
-  `W_QK` acting on the positional embeddings [elhage-2021 §Primarily
+  $W_{QK}$ acting on the positional embeddings [elhage-2021 §Primarily
   Positional Attention Heads]. GPT-2 small is the latter case.
 
 ## What this project does with it
 
 - **The E3 direct-effect setting is the OV circuit's direct path.** O-011's
-  resolution defines three path-restriction values; "direct effect" is `W_U
-  W_OV^h` applied to what the head actually attended, which is this page's OV
+  resolution defines three path-restriction values; "direct effect" is $W_U
+  W_{OV}^h$ applied to what the head actually attended, which is this page's OV
   circuit evaluated on the run [elhage-2021 §Splitting…]. Olsson's copying
   evaluator measures the same object empirically [olsson-2022 §Data Collection
   (3)].
