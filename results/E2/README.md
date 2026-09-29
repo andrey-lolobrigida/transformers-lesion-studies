@@ -307,7 +307,11 @@ change mean `ld` by +0.0004 ± 0.0001 and +0.0115 ± 0.0004, inside the bound.
 
 The Q-route verdict is `matched` on a published null: it shows only that this
 measurement also found no effect above the bound, not that the route is
-absent. Under the ungated zero sibling, the 2.2 K-route effect (0.04041) sits
+absent. Both Q-route effects are nonzero relative to their own sem (2.2:
+0.0115 ± 0.0004, about 28 sem; 4.11: 0.0004 ± 0.0001, about 3.8 sem); they
+count as null only relative to the bound max(2 sem, F_ioi) = 0.0404, whose
+floor F_ioi was measured under node mean ablation of 24 other components,
+not on these heads or on path patching. Under the ungated zero sibling, the 2.2 K-route effect (0.04041) sits
 just below the floor (0.04043), so it would not clear the sign rule there;
 under resample and mean it does. That disagreement between values is reported,
 not resolved (epistemic rule 3).
@@ -359,6 +363,31 @@ set, it is the expected sign. The verdict is `measured`; there is no
 published number to match. The delta has no standard error of its own in
 the artifact (the frozen and unfrozen runs share prompts, but their
 covariance was not computed).
+
+The frozen sign is not specific to zero. Under frozen ablation, per the
+artifact (`result.table`), the units that raise mean `ld` are: under zero,
+all five; under mean, 6.9 (by 0.1298 ± 0.0189), 4.11 (0.3458 ± 0.0125) and
+2.2 (0.2496 ± 0.0076); under resample, 6.9 (0.1153 ± 0.0199) and 2.2
+(0.0876 ± 0.0075). Under frozen mean and resample, 5.5 (by 0.1065 ± 0.0176
+and 0.1241 ± 0.0182) and the set {5.5, 6.9} lower it, and so does 4.11 under
+frozen resample (by 0.0787 ± 0.0139). The sign opposite to Olsson et al.'s
+expectation therefore holds for 6.9 and 2.2 under all three values, for 4.11
+under zero and mean, and for 5.5 and the set under zero only.
+
+Epistemic rule 7 asks for variation of the ablation method, the prompt
+template and the corruption scheme before a surprising result is believed.
+Only the first is done here (three values, frozen and unfrozen). The other
+two are not possible inside E2: the induction battery has one corruption
+scheme (`InductionBattery.schemes == ("fresh_prefix",)`,
+`src/lesion/induction.py`) and one prompt construction (repeated random
+tokens). Remaining checks, proposed for the author and neither run nor
+planned in detail here:
+
+- a second corruption scheme or prompt construction for induction;
+- ablation at END only against ablation at all positions (I3 ablates at all
+  positions; I4's END-only restore-clean of 5.5 and 6.9 recovers 0.0235 and
+  0.0721 of the gap, a sufficiency reading in the other direction, so it does
+  not stand in for an END-only ablation).
 
 ### I4 — Restore-clean on induction
 
@@ -484,6 +513,18 @@ raises mean `ld`. What the artifacts show: at Wang's value, over the four
 pre-registered corners, the drop is 0.4% to 1.3% of F(M), not 5%. They do not
 show why.
 
+Under the ungated resample sibling the quantity is 0.0544 (15 per order) and
+0.0552 (7 per order), both above the published 0.05; under the ungated zero
+sibling it is −0.0245 and −0.0199. The gated verdict is at mean, Wang's
+stated value, where the bracket is [0.0038, 0.0130]. The disagreement between
+ablation values is reported, not resolved (epistemic rule 3); the verdict
+stays `not matched`.
+
+The pre-registered contrast (spec §P2: the total drop is far below the summed
+direct effect) is the relation observed: bracket [0.0038, 0.0130] against a
+contrast range of [1.1244, 1.1430]. This does not change the verdict against
+the published 0.05, which is `not matched`.
+
 ### P3 — Faithfulness [wang-2022 §4]
 
 Quantity: F(C)/F(M) as a ratio of means, with C the model in which every head
@@ -603,7 +644,10 @@ which P1–P3 measure.
   the settings the source leaves open span the contrast value, not that the
   claim fails.
 - **P2 is `not matched`** at Wang's value over all four pre-registered
-  corners. The artifacts do not say why, and this README does not offer a
+  corners. Under the ungated resample sibling the quantity is 0.0544 and
+  0.0552, above the published 0.05; the gated verdict is at mean, Wang's
+  stated value. That disagreement between ablation values is reported, not
+  resolved. The artifacts do not say why, and this README does not offer a
   reason.
 - **P3's `matched` rests on the ≈ 7-per-template corners**, which break
   D-014's floor of 30; the two corners that meet the floor alone would not
@@ -614,8 +658,13 @@ which P1–P3 measure.
   I4 and P4 ran with clean activations only (no siblings).
 - **I3 has no published GPT-2 small number.** Olsson et al.'s directional
   expectation comes from other models; under frozen zero ablation the sign
-  here is opposite to it for all five units. That is a measurement on this
-  battery item and prompt construction, not a test of Olsson et al.'s claim.
+  here is opposite to it for all five units, and under frozen mean and
+  resample it is still opposite for 6.9 and 2.2 (and for 4.11 under mean).
+  That is a measurement on this battery item and prompt construction, not a
+  test of Olsson et al.'s claim. It has been varied only in ablation value
+  and pattern freezing: the induction battery has one corruption scheme and
+  one prompt construction, so rule 7's template and scheme checks are not
+  done (proposals in §I3).
 - **Composition scores are weight statistics.** Above-baseline composition
   says the matrices overlap more than random ones of the same shape; it does
   not show that the model uses the route on any task. The path-level check
@@ -639,6 +688,8 @@ n = 2,000; mean references seed 0 on the corrupt side, template-matched;
 I1 stimulus seed 0 (ungated seeds 1–4); I2 baseline 200 draws, seed 0.
 Source unchanged between the gate commit `52dcb87` and the last run; each
 artifact's `environment.repo_commit` is the branch head when it was written.
+I2 was rerun at `84e9af6`, after `composition.json` gained its `environment`
+block; every number in its artifacts is bitwise equal to the earlier run.
 
 | Target | Command | Artifacts |
 |---|---|---|
@@ -646,7 +697,7 @@ artifact's `environment.repo_commit` is the branch head when it was written.
 | I2 | `uv run python -m src.lesion.e2_reproduce --target I2` | `I2/composition.{json,parquet}`, `I2/path/` (12 runs), `I2/verdict.json` |
 | I3 | `uv run python -m src.lesion.e2_reproduce --target I3` | 30 runs (5 units × 3 values × frozen/unfrozen), `I3/verdict.json` |
 | I4 | `uv run python -m src.lesion.e2_reproduce --target I4` | 5 runs, `I4/verdict.json` |
-| P1 | `uv run python -m src.lesion.e2_reproduce --target P1` (`--resume` continues an interrupted sweep) | `P1/sweep-{logits,nm_queries,sinh_values,ind_keys}-{zero,mean,resample}.json`, `P1/verdict.json` |
+| P1 | `uv run python -m src.lesion.e2_reproduce --target P1` (`--resume` skips finished (sweep, value) files) | `P1/sweep-{logits,nm_queries,sinh_values,ind_keys}-{zero,mean,resample}.json`, `P1/verdict.json` |
 | P2 | `uv run python -m src.lesion.e2_reproduce --target P2` | `P2/{t15-ref210,t15-ref2000,t7-ref98,t7-ref2000,t15-siblings,t7-siblings}/`, `P2/verdict.json` |
 | P3 | `uv run python -m src.lesion.e2_reproduce --target P3` | `P3/{t15-ref210,t15-ref2000,t7-ref98,t7-ref2000,t15-siblings,t7-siblings}/`, `P3/verdict.json` |
 | P4 | `uv run python -m src.lesion.e2_reproduce --target P4` | `P4/classes/` (7), `P4/heads/` (26), `P4/verdict.json` |
@@ -657,3 +708,21 @@ artifact's `environment.repo_commit` is the branch head when it was written.
 `pre_registered`; a run at any other n or seed writes `null` verdicts. Paths
 are relative to `results/E2/`. P1 took about 2 h 8 min on the RTX 5060; the
 other targets minutes each.
+
+Artifact shapes under `results/E2/` (key on `phase` and on the presence of
+`spec` or `rows`):
+
+- **Run records**: the E1a shape plus `pre_registered`, one JSON and one
+  per-prompt parquet per run. Set runs carry `spec.set` and have no
+  `spec.component`, `positions`, `receiver` or `mlp_convention`.
+- **P1 sweep records**: `config` and `rows` (per-sender aggregates), no
+  `spec` and no parquet. In `sweep-*-mean.json`, `reference.hook` names only
+  the last sender's `hook_z`; the per-template counts are identical across
+  senders.
+- **Bespoke records**: `I1/scores.json` and `I2/composition.json`.
+
+PyTorch caching-allocator OOM-retry warnings appeared in some run logs. The
+runs completed with all expected artifacts, and the P1 `ind_keys` sweep and
+the I2 K-route runs, written in separate processes, agree bitwise on the
+senders they share (4.11 and 2.2, effect and sem, under all three values),
+which is direct evidence that the numbers are unaffected.
