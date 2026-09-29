@@ -495,8 +495,8 @@ node, ablate-clean, unfrozen). Published: 0.87. Contrast: 1.0.
 |---|---|---|---|---|---|---|
 | `t15-ref210` — below D-014's floor of 30 (Miller et al.'s reading of Wang et al.) | 210 (2) | 3.6514 | 3.1084 | 0.8513 | 0.5429 ± 0.0295 | 1.2297 (0.6378–1.0844) |
 | `t15-ref2000` | 2,000 (52) | 3.6514 | 3.2390 | 0.8871 | 0.4124 ± 0.0289 | 1.3231 (0.6731–1.1212) |
-| `t7-ref98` — below D-014's floor of 30 (Miller et al.'s reading of Wang et al.) | 98 (3) | 3.4754 | 2.9640 | 0.8529 | 0.5114 ± 0.0278 | 0.8850 (0.6374–1.1021) |
-| `t7-ref2000` | 2,000 (121) | 3.4754 | 3.1383 | 0.9030 | 0.3371 ± 0.0271 | 0.9623 (0.6841–1.1589) |
+| `t7-ref98` — below D-014's floor of 30 (Miller et al.'s reading of Wang et al.) | 98 (3) | 3.4754 | 2.9640 | 0.8528 | 0.5114 ± 0.0278 | 0.8849 (0.6374–1.1020) |
+| `t7-ref2000` | 2,000 (121) | 3.4754 | 3.1383 | 0.9030 | 0.3370 ± 0.0271 | 0.9623 (0.6841–1.1589) |
 
 Bracket [0.8513, 0.9030], width 0.0517; the contrast 1.0 is outside it, and
 the published 0.87 is inside. **Verdict: matched.** Beside, ungated:
@@ -513,7 +513,7 @@ published value is 0.87 [wang-2022 §4].
 The match depends on the corners below the floor. The two corners at ref n
 2,000 give 0.8871 and 0.9030; that range, [0.8871, 0.9030], does not contain
 0.87. The two ≈ 7-per-template corners — below D-014's floor of 30 (Miller et
-al.'s reading of Wang et al.) — give 0.8513 and 0.8529, and those set the
+al.'s reading of Wang et al.) — give 0.8513 and 0.8528, and those set the
 bracket's lower end. The verdict follows the pre-registered four-corner rule
 and stands as `matched`; this paragraph records what it rests on.
 
