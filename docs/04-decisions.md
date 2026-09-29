@@ -1066,7 +1066,7 @@ per-template minimum 71; fraction removed 1.000):
 | 5.5 | −1.763 | −0.411 | −0.432 |
 | 6.9 | −1.163 | −0.934 | −0.928 |
 | 4.11 | −3.456 | −3.554 | −5.169 |
-| 2.2 | −0.369 | −0.297 | −0.312 |
+| 2.2 | −0.369 | −0.297 | −0.311 |
 | {5.5, 6.9} | −3.230 | −1.834 | −1.852 |
 
 For example: under zero, node, ablate-clean on induction/`fresh_prefix`,
