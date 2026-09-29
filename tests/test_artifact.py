@@ -164,3 +164,33 @@ def test_write_puts_off_default_scheme_in_the_stem(tiny_model, tiny_battery, tmp
     ja, _ = artifact.write(rec_a, res_a, tmp_path)
     jb, _ = artifact.write(rec_b, res_b, tmp_path)
     assert ja != jb and jb.name.endswith("_scheme-swap-2b.json") and not ja.name.count("scheme-")
+
+
+from src.lesion.knockout import KnockoutSetSpec, Member, run_set  # noqa: E402
+
+
+@torch.no_grad()
+def test_build_record_phase_default_and_override(tiny_model, tiny_battery):
+    s = spec(component=Head(0, 0))
+    res = run(tiny_model, s, tiny_battery, 4, 0, False, 4)
+    assert artifact.build_record(res, s, tiny_battery, "cmd", {}, {})["phase"] == "E1a"
+    assert artifact.build_record(res, s, tiny_battery, "cmd", {}, {}, phase="E2")["phase"] == "E2"
+
+
+@torch.no_grad()
+def test_set_record_stem_and_write(tmp_path, tiny_model, tiny_battery):
+    ks = KnockoutSetSpec(members=(Member(Head(1, 0), Labels(("X",))),), complement=False, value="zero",
+                         reference=None, direction="ablate-clean", freeze_patterns=False, granularity="heads")
+    res = run_set(tiny_model, ks, tiny_battery, 4, 0, False, 4)
+    rec = artifact.build_record(res, ks, tiny_battery, "cmd", {}, {}, phase="E2")
+    assert rec["spec"]["set"]["members"][0]["head"] == {"layer": 1, "head": 0}
+    assert rec["direct_effect_definition"] is None and rec["effect_sign"].startswith("positive = ablating")
+    base = artifact.set_stem(ks, "tiny", "demo", 4, 0, False)
+    assert base == "tiny_set-demo_zero_node_ablate-clean_n4_seed0"
+    j, p = artifact.write(rec, res, tmp_path, base=base)
+    assert j.name == base + ".json" and p.name == base + ".parquet"
+    assert pq.read_table(p).num_rows == 4
+    comp = KnockoutSetSpec(members=(), complement=True, value="mean", reference=REF, direction="ablate-clean",
+                           freeze_patterns=True, granularity="heads")
+    assert artifact.set_stem(comp, "ioi", "circuit", 2000, 0, True) == \
+        "ioi_set-circuit-complement_mean-corrupt-n1000-s0-template_node_ablate-clean_frozen_n2000_seed0_bos"

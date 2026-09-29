@@ -54,6 +54,25 @@ def stem(spec: AblationSpec, battery_name: str, n: int, seed: int, prepend_bos: 
     return "_".join(parts)
 
 
+def set_stem(spec, battery_name: str, name: str, n: int, seed: int, prepend_bos: bool) -> str:
+    """Stem for a set run (``knockout.KnockoutSetSpec``). The members live in
+    the JSON's ``spec.set`` block; the caller's ``name`` (e.g. ``name_mover``)
+    stands for them in the file name. The caller keeps names distinct per
+    directory."""
+    if spec.value == "mean":
+        r = spec.reference
+        value = f"mean-{r.battery_side}-n{r.n}-s{r.seed}-{r.match}"
+    else:
+        value = spec.value
+    parts = [battery_name, f"set-{name}" + ("-complement" if spec.complement else ""), value, "node", spec.direction]
+    if spec.freeze_patterns:
+        parts.append("frozen")
+    parts += [f"n{n}", f"seed{seed}"]
+    if prepend_bos:
+        parts.append("bos")
+    return "_".join(parts)
+
+
 def git_rev() -> str:
     try:
         return subprocess.check_output(["git", "rev-parse", "HEAD"], text=True).strip()
@@ -96,9 +115,10 @@ def effect_sign(spec: AblationSpec) -> str:
     return "positive = ablating the component hurt (clean minus intervened, on the clean prompt)"
 
 
-def build_record(result: RunResult, spec: AblationSpec, battery, command: str, environment: dict, cli_args: dict) -> dict:
+def build_record(result: RunResult, spec: AblationSpec, battery, command: str, environment: dict, cli_args: dict,
+                 phase: str = "E1a") -> dict:
     return {
-        "phase": "E1a",
+        "phase": phase,
         "command": command,
         "cli": cli_args,
         "spec": spec.to_json(),
@@ -118,12 +138,13 @@ def build_record(result: RunResult, spec: AblationSpec, battery, command: str, e
     }
 
 
-def write(record: dict, result: RunResult, out_dir: Path) -> tuple[Path, Path]:
+def write(record: dict, result: RunResult, out_dir: Path, base: str | None = None) -> tuple[Path, Path]:
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
-    b = record["battery"]
-    scheme = None if b["corruption"]["name"] == b["schemes"][0] else b["corruption"]["name"]
-    base = stem(result.spec, b["name"], result.n, result.seed, result.prepend_bos, scheme)
+    if base is None:
+        b = record["battery"]
+        scheme = None if b["corruption"]["name"] == b["schemes"][0] else b["corruption"]["name"]
+        base = stem(result.spec, b["name"], result.n, result.seed, result.prepend_bos, scheme)
     json_path = out_dir / f"{base}.json"
     parquet_path = out_dir / f"{base}.parquet"
     json_path.write_text(json.dumps(record, indent=2))
