@@ -1,0 +1,125 @@
+{
+  "phase": "E2",
+  "command": "uv run python -m src.lesion.e2_reproduce --target I2",
+  "pre_registered": true,
+  "definition": "evaluators.composition_scores (elhage-2021; row-vector convention; exact norms)",
+  "weights": {
+    "normalization_type": "LNPre",
+    "loaded_by": "src/lesion/model.py::load_model (TransformerLens from_pretrained defaults: LayerNorm folded, writing weights and unembedding centred)"
+  },
+  "baseline": {
+    "Q": {
+      "mean": 0.03606873258228219,
+      "sd": 0.0004387263351086104,
+      "draws": 200,
+      "seed": 0
+    },
+    "K": {
+      "mean": 0.036068101654159794,
+      "sd": 0.0004281481988233231,
+      "draws": 200,
+      "seed": 0
+    },
+    "V": {
+      "mean": 0.03608865033638576,
+      "sd": 0.0004245037809450152,
+      "draws": 200,
+      "seed": 0
+    }
+  },
+  "question": {
+    "L4H11->L5H5": {
+      "K": {
+        "score": 0.0971889873393126,
+        "minus_baseline": 0.0611208856851528,
+        "above_baseline": true,
+        "rank_among_earlier": 1,
+        "n_earlier": 60
+      },
+      "Q": {
+        "score": 0.04284663882873283,
+        "minus_baseline": 0.006777906246450645,
+        "above_baseline": true,
+        "rank_among_earlier": 15,
+        "n_earlier": 60
+      },
+      "V": {
+        "score": 0.05867119891318562,
+        "minus_baseline": 0.02258254857679986,
+        "above_baseline": true,
+        "rank_among_earlier": 4,
+        "n_earlier": 60
+      }
+    },
+    "L2H2->L5H5": {
+      "K": {
+        "score": 0.06998332803649937,
+        "minus_baseline": 0.033915226382339576,
+        "above_baseline": true,
+        "rank_among_earlier": 6,
+        "n_earlier": 60
+      },
+      "Q": {
+        "score": 0.05133131640962198,
+        "minus_baseline": 0.01526258382733979,
+        "above_baseline": true,
+        "rank_among_earlier": 5,
+        "n_earlier": 60
+      },
+      "V": {
+        "score": 0.04009687726925566,
+        "minus_baseline": 0.004008226932869903,
+        "above_baseline": true,
+        "rank_among_earlier": 34,
+        "n_earlier": 60
+      }
+    },
+    "L4H11->L6H9": {
+      "K": {
+        "score": 0.10349378013810336,
+        "minus_baseline": 0.06742567848394357,
+        "above_baseline": true,
+        "rank_among_earlier": 1,
+        "n_earlier": 72
+      },
+      "Q": {
+        "score": 0.050554440202107385,
+        "minus_baseline": 0.014485707619825199,
+        "above_baseline": true,
+        "rank_among_earlier": 4,
+        "n_earlier": 72
+      },
+      "V": {
+        "score": 0.04041692226879817,
+        "minus_baseline": 0.004328271932412413,
+        "above_baseline": true,
+        "rank_among_earlier": 18,
+        "n_earlier": 72
+      }
+    },
+    "L2H2->L6H9": {
+      "K": {
+        "score": 0.07099622958217018,
+        "minus_baseline": 0.03492812792801039,
+        "above_baseline": true,
+        "rank_among_earlier": 6,
+        "n_earlier": 72
+      },
+      "Q": {
+        "score": 0.04976397846420742,
+        "minus_baseline": 0.013695245881925236,
+        "above_baseline": true,
+        "rank_among_earlier": 7,
+        "n_earlier": 72
+      },
+      "V": {
+        "score": 0.029890223861153475,
+        "minus_baseline": -0.006198426475232284,
+        "above_baseline": false,
+        "rank_among_earlier": 63,
+        "n_earlier": 72
+      }
+    }
+  },
+  "parquet": "composition.parquet: every (l1, h1, l2, h2) with l2 > l1, raw scores"
+}

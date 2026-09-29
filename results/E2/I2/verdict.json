@@ -1,0 +1,573 @@
+{
+  "target": "I2",
+  "pre_registered": true,
+  "entries": [
+    {
+      "id": "I2/composition",
+      "source": "elhage-2021 (scores); O-012 (question)",
+      "published": null,
+      "ours": {
+        "L4H11->L5H5": {
+          "K": 0.0611,
+          "Q": 0.0068
+        },
+        "L2H2->L5H5": {
+          "K": 0.0339,
+          "Q": 0.0153
+        },
+        "L4H11->L6H9": {
+          "K": 0.0674,
+          "Q": 0.0145
+        },
+        "L2H2->L6H9": {
+          "K": 0.0349,
+          "Q": 0.0137
+        }
+      },
+      "tolerance": "measured; score minus the random baseline",
+      "verdict": "measured",
+      "result": {
+        "rule": "measured",
+        "verdict": "measured",
+        "question": {
+          "L4H11->L5H5": {
+            "K": {
+              "score": 0.0971889873393126,
+              "minus_baseline": 0.0611208856851528,
+              "above_baseline": true,
+              "rank_among_earlier": 1,
+              "n_earlier": 60
+            },
+            "Q": {
+              "score": 0.04284663882873283,
+              "minus_baseline": 0.006777906246450645,
+              "above_baseline": true,
+              "rank_among_earlier": 15,
+              "n_earlier": 60
+            },
+            "V": {
+              "score": 0.05867119891318562,
+              "minus_baseline": 0.02258254857679986,
+              "above_baseline": true,
+              "rank_among_earlier": 4,
+              "n_earlier": 60
+            }
+          },
+          "L2H2->L5H5": {
+            "K": {
+              "score": 0.06998332803649937,
+              "minus_baseline": 0.033915226382339576,
+              "above_baseline": true,
+              "rank_among_earlier": 6,
+              "n_earlier": 60
+            },
+            "Q": {
+              "score": 0.05133131640962198,
+              "minus_baseline": 0.01526258382733979,
+              "above_baseline": true,
+              "rank_among_earlier": 5,
+              "n_earlier": 60
+            },
+            "V": {
+              "score": 0.04009687726925566,
+              "minus_baseline": 0.004008226932869903,
+              "above_baseline": true,
+              "rank_among_earlier": 34,
+              "n_earlier": 60
+            }
+          },
+          "L4H11->L6H9": {
+            "K": {
+              "score": 0.10349378013810336,
+              "minus_baseline": 0.06742567848394357,
+              "above_baseline": true,
+              "rank_among_earlier": 1,
+              "n_earlier": 72
+            },
+            "Q": {
+              "score": 0.050554440202107385,
+              "minus_baseline": 0.014485707619825199,
+              "above_baseline": true,
+              "rank_among_earlier": 4,
+              "n_earlier": 72
+            },
+            "V": {
+              "score": 0.04041692226879817,
+              "minus_baseline": 0.004328271932412413,
+              "above_baseline": true,
+              "rank_among_earlier": 18,
+              "n_earlier": 72
+            }
+          },
+          "L2H2->L6H9": {
+            "K": {
+              "score": 0.07099622958217018,
+              "minus_baseline": 0.03492812792801039,
+              "above_baseline": true,
+              "rank_among_earlier": 6,
+              "n_earlier": 72
+            },
+            "Q": {
+              "score": 0.04976397846420742,
+              "minus_baseline": 0.013695245881925236,
+              "above_baseline": true,
+              "rank_among_earlier": 7,
+              "n_earlier": 72
+            },
+            "V": {
+              "score": 0.029890223861153475,
+              "minus_baseline": -0.006198426475232284,
+              "above_baseline": false,
+              "rank_among_earlier": 63,
+              "n_earlier": 72
+            }
+          }
+        },
+        "baseline": {
+          "Q": {
+            "mean": 0.03606873258228219,
+            "sd": 0.0004387263351086104,
+            "draws": 200,
+            "seed": 0
+          },
+          "K": {
+            "mean": 0.036068101654159794,
+            "sd": 0.0004281481988233231,
+            "draws": 200,
+            "seed": 0
+          },
+          "V": {
+            "mean": 0.03608865033638576,
+            "sd": 0.0004245037809450152,
+            "draws": 200,
+            "seed": 0
+          }
+        }
+      }
+    },
+    {
+      "id": "I2/k_route/L4H11",
+      "source": "wang-2022 App. D, Fig. 13: 4.11 and 2.2 cause a decrease in logit difference through the keys at S1+1",
+      "published": "lowers ld (significant)",
+      "ours": 0.47943127155303955,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "positive",
+        "effect": 0.47943127155303955,
+        "sem": 0.008547445759177208,
+        "floor": 0.040434543043375015,
+        "bound": 0.040434543043375015,
+        "bound_source": "floor",
+        "verdict": "matched",
+        "gated_run": {
+          "effect_mean": 0.47943127155303955,
+          "sem": 0.008547445759177208,
+          "clean_mean_ld": 3.651366949081421,
+          "ablated_mean_ld": 3.171935558319092,
+          "ratio_of_means": 0.8686981201171875,
+          "mean_of_ratios": 0.7069578766822815,
+          "ratio_iqr": [
+            0.8027923107147217,
+            0.9438215494155884
+          ],
+          "value": "resample",
+          "n": 2000,
+          "ref_n": null,
+          "ref_per_template_counts": null
+        },
+        "ungated_beside": {
+          "zero": {
+            "effect_mean": 0.1615251898765564,
+            "sem": 0.0035626001190394163,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.4898414611816406,
+            "ratio_of_means": 0.9557629823684692,
+            "mean_of_ratios": 0.9181502461433411,
+            "ratio_iqr": [
+              0.9267866611480713,
+              0.9829044342041016
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null
+          },
+          "mean": {
+            "effect_mean": 0.276724249124527,
+            "sem": 0.004794691223651171,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.3746426105499268,
+            "ratio_of_means": 0.9242134690284729,
+            "mean_of_ratios": 0.8395243287086487,
+            "ratio_iqr": [
+              0.8878644704818726,
+              0.966340184211731
+            ],
+            "value": "mean",
+            "n": 2000,
+            "ref_n": 2000,
+            "ref_per_template_counts": {
+              "ABBA/0": 63,
+              "ABBA/1": 65,
+              "ABBA/10": 68,
+              "ABBA/11": 68,
+              "ABBA/12": 70,
+              "ABBA/13": 82,
+              "ABBA/14": 67,
+              "ABBA/2": 69,
+              "ABBA/3": 66,
+              "ABBA/4": 58,
+              "ABBA/5": 72,
+              "ABBA/6": 73,
+              "ABBA/7": 58,
+              "ABBA/8": 52,
+              "ABBA/9": 65,
+              "BABA/0": 67,
+              "BABA/1": 58,
+              "BABA/10": 69,
+              "BABA/11": 52,
+              "BABA/12": 61,
+              "BABA/13": 71,
+              "BABA/14": 54,
+              "BABA/2": 77,
+              "BABA/3": 63,
+              "BABA/4": 73,
+              "BABA/5": 66,
+              "BABA/6": 73,
+              "BABA/7": 69,
+              "BABA/8": 79,
+              "BABA/9": 72
+            }
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        }
+      }
+    },
+    {
+      "id": "I2/k_route/L2H2",
+      "source": "wang-2022 App. D, Fig. 13: 4.11 and 2.2 cause a decrease in logit difference through the keys at S1+1",
+      "published": "lowers ld (significant)",
+      "ours": 0.1263291984796524,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "positive",
+        "effect": 0.1263291984796524,
+        "sem": 0.0034144525416195393,
+        "floor": 0.040434543043375015,
+        "bound": 0.040434543043375015,
+        "bound_source": "floor",
+        "verdict": "matched",
+        "gated_run": {
+          "effect_mean": 0.1263291984796524,
+          "sem": 0.0034144525416195393,
+          "clean_mean_ld": 3.651366949081421,
+          "ablated_mean_ld": 3.525038003921509,
+          "ratio_of_means": 0.9654023051261902,
+          "mean_of_ratios": 0.8908246755599976,
+          "ratio_iqr": [
+            0.9441131353378296,
+            0.9945678114891052
+          ],
+          "value": "resample",
+          "n": 2000,
+          "ref_n": null,
+          "ref_per_template_counts": null
+        },
+        "ungated_beside": {
+          "zero": {
+            "effect_mean": 0.04041014984250069,
+            "sem": 0.0014093535719439387,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.610957145690918,
+            "ratio_of_means": 0.9889329671859741,
+            "mean_of_ratios": 0.96138995885849,
+            "ratio_iqr": [
+              0.9817611575126648,
+              0.9981698989868164
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null
+          },
+          "mean": {
+            "effect_mean": 0.08394063264131546,
+            "sem": 0.0020287767983973026,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.5674264430999756,
+            "ratio_of_means": 0.9770112037658691,
+            "mean_of_ratios": 0.9319856762886047,
+            "ratio_iqr": [
+              0.9629985094070435,
+              0.9952215552330017
+            ],
+            "value": "mean",
+            "n": 2000,
+            "ref_n": 2000,
+            "ref_per_template_counts": {
+              "ABBA/0": 63,
+              "ABBA/1": 65,
+              "ABBA/10": 68,
+              "ABBA/11": 68,
+              "ABBA/12": 70,
+              "ABBA/13": 82,
+              "ABBA/14": 67,
+              "ABBA/2": 69,
+              "ABBA/3": 66,
+              "ABBA/4": 58,
+              "ABBA/5": 72,
+              "ABBA/6": 73,
+              "ABBA/7": 58,
+              "ABBA/8": 52,
+              "ABBA/9": 65,
+              "BABA/0": 67,
+              "BABA/1": 58,
+              "BABA/10": 69,
+              "BABA/11": 52,
+              "BABA/12": 61,
+              "BABA/13": 71,
+              "BABA/14": 54,
+              "BABA/2": 77,
+              "BABA/3": 63,
+              "BABA/4": 73,
+              "BABA/5": 66,
+              "BABA/6": 73,
+              "BABA/7": 69,
+              "BABA/8": 79,
+              "BABA/9": 72
+            }
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        }
+      }
+    },
+    {
+      "id": "I2/q_route/L4H11",
+      "source": "wang-2022 App. D: queries at S2, 'did not find any significant effect'",
+      "published": "no significant effect",
+      "ours": 0.00039525842294096947,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "null",
+        "effect": 0.00039525842294096947,
+        "sem": 0.00010526119149290025,
+        "floor": 0.040434543043375015,
+        "bound": 0.040434543043375015,
+        "bound_source": "floor",
+        "verdict": "matched",
+        "gated_run": {
+          "effect_mean": 0.00039525842294096947,
+          "sem": 0.00010526119149290025,
+          "clean_mean_ld": 3.651366949081421,
+          "ablated_mean_ld": 3.6509716510772705,
+          "ratio_of_means": 0.9998917579650879,
+          "mean_of_ratios": 1.0002326965332031,
+          "ratio_iqr": [
+            0.9995068311691284,
+            1.000274419784546
+          ],
+          "value": "resample",
+          "n": 2000,
+          "ref_n": null,
+          "ref_per_template_counts": null
+        },
+        "ungated_beside": {
+          "zero": {
+            "effect_mean": 0.0017740230541676283,
+            "sem": 0.0006079385639168322,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.649592876434326,
+            "ratio_of_means": 0.9995141625404358,
+            "mean_of_ratios": 0.9937138557434082,
+            "ratio_iqr": [
+              0.9972823858261108,
+              1.0022327899932861
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null
+          },
+          "mean": {
+            "effect_mean": 0.00028019858291372657,
+            "sem": 0.00017346764798276126,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.6510865688323975,
+            "ratio_of_means": 0.9999232292175293,
+            "mean_of_ratios": 0.9993675351142883,
+            "ratio_iqr": [
+              0.9992424845695496,
+              1.0004792213439941
+            ],
+            "value": "mean",
+            "n": 2000,
+            "ref_n": 2000,
+            "ref_per_template_counts": {
+              "ABBA/0": 63,
+              "ABBA/1": 65,
+              "ABBA/10": 68,
+              "ABBA/11": 68,
+              "ABBA/12": 70,
+              "ABBA/13": 82,
+              "ABBA/14": 67,
+              "ABBA/2": 69,
+              "ABBA/3": 66,
+              "ABBA/4": 58,
+              "ABBA/5": 72,
+              "ABBA/6": 73,
+              "ABBA/7": 58,
+              "ABBA/8": 52,
+              "ABBA/9": 65,
+              "BABA/0": 67,
+              "BABA/1": 58,
+              "BABA/10": 69,
+              "BABA/11": 52,
+              "BABA/12": 61,
+              "BABA/13": 71,
+              "BABA/14": 54,
+              "BABA/2": 77,
+              "BABA/3": 63,
+              "BABA/4": 73,
+              "BABA/5": 66,
+              "BABA/6": 73,
+              "BABA/7": 69,
+              "BABA/8": 79,
+              "BABA/9": 72
+            }
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        }
+      }
+    },
+    {
+      "id": "I2/q_route/L2H2",
+      "source": "wang-2022 App. D: queries at S2, 'did not find any significant effect'",
+      "published": "no significant effect",
+      "ours": 0.011455168016254902,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "result": {
+        "rule": "sign",
+        "expected": "null",
+        "effect": 0.011455168016254902,
+        "sem": 0.0004070324939675629,
+        "floor": 0.040434543043375015,
+        "bound": 0.040434543043375015,
+        "bound_source": "floor",
+        "verdict": "matched",
+        "gated_run": {
+          "effect_mean": 0.011455168016254902,
+          "sem": 0.0004070324939675629,
+          "clean_mean_ld": 3.651366949081421,
+          "ablated_mean_ld": 3.639911413192749,
+          "ratio_of_means": 0.9968626499176025,
+          "mean_of_ratios": 0.9926354289054871,
+          "ratio_iqr": [
+            0.9947568774223328,
+            0.9995687007904053
+          ],
+          "value": "resample",
+          "n": 2000,
+          "ref_n": null,
+          "ref_per_template_counts": null
+        },
+        "ungated_beside": {
+          "zero": {
+            "effect_mean": 0.019841838628053665,
+            "sem": 0.0006266501732170582,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.6315250396728516,
+            "ratio_of_means": 0.9945659041404724,
+            "mean_of_ratios": 0.9938640594482422,
+            "ratio_iqr": [
+              0.9898729920387268,
+              0.9997997283935547
+            ],
+            "value": "zero",
+            "n": 2000,
+            "ref_n": null,
+            "ref_per_template_counts": null
+          },
+          "mean": {
+            "effect_mean": 0.011165610514581203,
+            "sem": 0.0003544270293787122,
+            "clean_mean_ld": 3.651366949081421,
+            "ablated_mean_ld": 3.6402010917663574,
+            "ratio_of_means": 0.9969419836997986,
+            "mean_of_ratios": 0.9942449927330017,
+            "ratio_iqr": [
+              0.9950042963027954,
+              0.9994975328445435
+            ],
+            "value": "mean",
+            "n": 2000,
+            "ref_n": 2000,
+            "ref_per_template_counts": {
+              "ABBA/0": 63,
+              "ABBA/1": 65,
+              "ABBA/10": 68,
+              "ABBA/11": 68,
+              "ABBA/12": 70,
+              "ABBA/13": 82,
+              "ABBA/14": 67,
+              "ABBA/2": 69,
+              "ABBA/3": 66,
+              "ABBA/4": 58,
+              "ABBA/5": 72,
+              "ABBA/6": 73,
+              "ABBA/7": 58,
+              "ABBA/8": 52,
+              "ABBA/9": 65,
+              "BABA/0": 67,
+              "BABA/1": 58,
+              "BABA/10": 69,
+              "BABA/11": 52,
+              "BABA/12": 61,
+              "BABA/13": 71,
+              "BABA/14": 54,
+              "BABA/2": 77,
+              "BABA/3": 63,
+              "BABA/4": 73,
+              "BABA/5": 66,
+              "BABA/6": 73,
+              "BABA/7": 69,
+              "BABA/8": 79,
+              "BABA/9": 72
+            }
+          }
+        },
+        "context": {
+          "n": 2000,
+          "mean_ld_clean": 3.651366949081421,
+          "mean_ld_corrupt": 0.06185034289956093,
+          "gap": 3.5895166397094727,
+          "fraction_removed": 0.9830610535083284
+        }
+      }
+    }
+  ]
+}
