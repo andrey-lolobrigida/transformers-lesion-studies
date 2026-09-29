@@ -80,3 +80,70 @@ def test_copy_scores_match_a_brute_force_loop(tiny_model):
                     exp[l, h] += float(out @ tiny_model.W_U[:, toks[b, j + 1]])
     exp /= 3 * (S - 1)
     assert torch.allclose(got.double(), exp, atol=1e-5)
+
+
+from src.lesion.evaluators import composition_scores, random_baseline  # noqa: E402
+
+
+def rand_weights(L=3, H=2, d=6, r=2, seed=0):
+    g = torch.Generator().manual_seed(seed)
+    W_Q, W_K, W_V = (torch.randn(L, H, d, r, generator=g, dtype=torch.float64) for _ in range(3))
+    return W_Q, W_K, W_V, torch.randn(L, H, r, d, generator=g, dtype=torch.float64)
+
+
+def test_composition_equals_dense_products():
+    W_Q, W_K, W_V, W_O = rand_weights()
+    got = composition_scores(W_Q, W_K, W_V, W_O)
+    fro = torch.linalg.matrix_norm
+    for l1 in range(3):
+        for h1 in range(2):
+            ov1 = W_V[l1, h1] @ W_O[l1, h1]
+            for l2 in range(3):
+                for h2 in range(2):
+                    if l2 <= l1:
+                        assert all(torch.isnan(got[m][l1, h1, l2, h2]) for m in "QKV")
+                        continue
+                    qk2 = W_Q[l2, h2] @ W_K[l2, h2].T
+                    ov2 = W_V[l2, h2] @ W_O[l2, h2]
+                    exp = {"K": fro(ov1 @ qk2.T) / (fro(ov1) * fro(qk2)),
+                           "Q": fro(ov1 @ qk2) / (fro(ov1) * fro(qk2)),
+                           "V": fro(ov1 @ ov2) / (fro(ov1) * fro(ov2))}
+                    for m in "QKV":
+                        assert got[m][l1, h1, l2, h2].item() == pytest.approx(exp[m].item(), rel=1e-10)
+
+
+def test_composition_on_constructed_overlap():
+    """h1 reads e0 and writes e1. h2's key reads e1 (full K-composition); its
+    query and value read e3 and e2, orthogonal to what h1 writes."""
+    e = torch.eye(4, dtype=torch.float64)
+    W_Q, W_K, W_V = (torch.zeros(2, 1, 4, 1, dtype=torch.float64) for _ in range(3))
+    W_O = torch.zeros(2, 1, 1, 4, dtype=torch.float64)
+    W_V[0, 0, :, 0], W_O[0, 0, 0, :] = e[0], e[1]
+    W_K[1, 0, :, 0], W_Q[1, 0, :, 0], W_V[1, 0, :, 0], W_O[1, 0, 0, :] = e[1], e[3], e[2], e[0]
+    got = composition_scores(W_Q, W_K, W_V, W_O)
+    assert got["K"][0, 0, 1, 0].item() == pytest.approx(1.0)
+    assert got["Q"][0, 0, 1, 0].item() == 0.0 and got["V"][0, 0, 1, 0].item() == 0.0
+
+
+@torch.no_grad()
+def test_composition_matches_transformer_lens(tiny_model):
+    m = tiny_model
+    got = composition_scores(m.W_Q, m.W_K, m.W_V, m.W_O)
+    for mode in "QKV":
+        tl = m.all_composition_scores(mode).double().cpu()
+        assert torch.allclose(got[mode][0, :, 1, :], tl[0, :, 1, :], rtol=1e-4, atol=1e-7), mode
+
+
+def test_composition_is_scale_invariant():
+    W_Q, W_K, W_V, W_O = rand_weights(seed=3)
+    a = composition_scores(W_Q, W_K, W_V, W_O)
+    b = composition_scores(2 * W_Q, 0.5 * W_K, 3 * W_V, 7 * W_O)
+    for m in "QKV":
+        assert torch.allclose(a[m], b[m], equal_nan=True)
+
+
+def test_random_baseline_is_seeded():
+    a = random_baseline(16, 4, draws=20, seed=0)
+    assert a == random_baseline(16, 4, draws=20, seed=0) and a != random_baseline(16, 4, draws=20, seed=1)
+    for m in "QKV":
+        assert set(a[m]) == {"mean", "sd", "draws", "seed"} and 0 < a[m]["mean"] < 1 and a[m]["draws"] == 20

@@ -89,3 +89,66 @@ def copy_scores(model, toks: Tensor, half_len: int, start: int, batch_size: int)
             total[l] += torch.einsum("bqhm,bqm->h", out, w_u).double().cpu()
         del cache
     return (total / (toks.shape[0] * len(qs))).float()
+
+
+# --- composition scores -------------------------------------------------------------
+
+
+def _gram(A: Tensor) -> Tensor:
+    """``A^T A`` over the last two dimensions."""
+    return A.transpose(-2, -1) @ A
+
+
+@torch.no_grad()
+def composition_scores(W_Q: Tensor, W_K: Tensor, W_V: Tensor, W_O: Tensor) -> dict[str, Tensor]:
+    """Q-, K-, V-composition of every (earlier head h1, later head h2), as
+    float64 ``[L, H, L, H]`` indexed (l1, h1, l2, h2); NaN where l2 <= l1.
+
+    Row-vector convention (TransformerLens: ``W_Q`` is ``[L, H, d_model,
+    d_head]``, ``W_O`` is ``[L, H, d_head, d_model]``); OV = W_V W_O, QK = W_Q W_K^T:
+      K: ||OV1 QK2^T||_F / (||OV1||_F ||QK2||_F)   h2's key reads h1's output
+      Q: ||OV1 QK2||_F   / (||OV1||_F ||QK2||_F)   h2's query reads h1's output
+      V: ||OV1 OV2||_F   / (||OV1||_F ||OV2||_F)
+    elhage-2021's definitions in its column convention (TransformerLens's
+    ``all_composition_scores`` computes the same). Each norm is exact, via
+    d_head x d_head Gram matrices: ||A M B||_F^2 = tr(M^T (A^T A) M (B B^T)).
+    No transposition identity is applied to the product itself: that was the
+    bug in elhage-2021's Correction (a cyclic rotation of a matrix product
+    does not keep its Frobenius norm)."""
+    W_Q, W_K, W_V, W_O = (w.detach().double().cpu() for w in (W_Q, W_K, W_V, W_O))
+    L, H = W_Q.shape[:2]
+    GQ, GK, GV = _gram(W_Q), _gram(W_K), _gram(W_V)  # [L, H, r, r]
+    GO = W_O @ W_O.transpose(-2, -1)  # B B^T for B = W_O
+    norm_ov = (GV * GO).sum((-2, -1)).sqrt()  # ||W_V W_O||_F       [L, H]
+    norm_qk = (GQ * GK).sum((-2, -1)).sqrt()  # ||W_Q W_K^T||_F
+    # mode -> (h2's matrix after W_O1, h2's right-hand Gram, h2's norm)
+    plan = {"K": (W_K, GQ, norm_qk), "Q": (W_Q, GK, norm_qk), "V": (W_V, GO, norm_ov)}
+    out = {}
+    for mode, (W_in, G_right, norm2) in plan.items():
+        s = torch.full((L, H, L, H), float("nan"), dtype=torch.float64)
+        for l1 in range(L - 1):
+            M = torch.einsum("ird,ljds->iljrs", W_O[l1], W_in[l1 + 1:])  # W_O1 W_in2   [H, L', H, r, r]
+            T = torch.einsum("irt,iljts->iljrs", GV[l1], M)  # (W_V1^T W_V1) M
+            sq = torch.einsum("iljrs,iljru,ljsu->ilj", M, T, G_right[l1 + 1:])  # tr(M^T GA M GB)
+            s[l1, :, l1 + 1:, :] = sq.clamp_min(0).sqrt() / (norm_ov[l1][:, None, None] * norm2[l1 + 1:][None])
+        out[mode] = s
+    return out
+
+
+@torch.no_grad()
+def random_baseline(d_model: int, d_head: int, draws: int, seed: int) -> dict[str, dict]:
+    """The empirical expected score of two random heads of these shapes
+    (elhage-2021: "we subtract off the empirical expected amount for random
+    matrices of the same shapes"). Factors i.i.d. standard normal; every score
+    is invariant to each factor's scale. The distribution, draw count and seed
+    are ours: the source gives none."""
+    g = torch.Generator().manual_seed(seed)
+    vals: dict[str, list[float]] = {m: [] for m in ("Q", "K", "V")}
+    for _ in range(draws):
+        W_Q, W_K, W_V = (torch.randn(2, 1, d_model, d_head, generator=g, dtype=torch.float64) for _ in range(3))
+        W_O = torch.randn(2, 1, d_head, d_model, generator=g, dtype=torch.float64)
+        s = composition_scores(W_Q, W_K, W_V, W_O)
+        for m in vals:
+            vals[m].append(s[m][0, 0, 1, 0].item())
+    return {m: {"mean": statistics.fmean(v), "sd": statistics.stdev(v), "draws": draws, "seed": seed}
+            for m, v in vals.items()}
