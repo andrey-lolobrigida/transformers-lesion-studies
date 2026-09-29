@@ -274,6 +274,7 @@ def target_i2(ctx: Ctx) -> list[dict]:
     out = ctx.out_dir / "I2"
     out.mkdir(parents=True, exist_ok=True)
     m = ctx.model
+    t0 = time.time()
     comp = composition_scores(m.W_Q, m.W_K, m.W_V, m.W_O)
     base = random_baseline(m.cfg.d_model, m.cfg.d_head, I2_BASELINE_DRAWS, I2_BASELINE_SEED)
     L, H = m.cfg.n_layers, m.cfg.n_heads
@@ -302,7 +303,8 @@ def target_i2(ctx: Ctx) -> list[dict]:
         "phase": "E2", "command": ctx.command, "pre_registered": ctx.pre_registered,
         "definition": "evaluators.composition_scores (elhage-2021; row-vector convention; exact norms)",
         "weights": weights_record(m), "baseline": base, "question": question,
-        "parquet": "composition.parquet: every (l1, h1, l2, h2) with l2 > l1, raw scores"}, indent=2))
+        "parquet": "composition.parquet: every (l1, h1, l2, h2) with l2 > l1, raw scores",
+        "environment": artifact.environment_record(m, 0, time.time() - t0)}, indent=2))
     entries = [entry("I2/composition", "elhage-2021 (scores); O-012 (question)", None,
                      {k: {mode: round(v[mode]["minus_baseline"], 4) for mode in "KQ"} for k, v in question.items()},
                      "measured; score minus the random baseline",

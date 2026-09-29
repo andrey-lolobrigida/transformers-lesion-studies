@@ -194,3 +194,14 @@ def test_set_record_stem_and_write(tmp_path, tiny_model, tiny_battery):
                            freeze_patterns=True, granularity="heads")
     assert artifact.set_stem(comp, "ioi", "circuit", 2000, 0, True) == \
         "ioi_set-circuit-complement_mean-corrupt-n1000-s0-template_node_ablate-clean_frozen_n2000_seed0_bos"
+
+
+@torch.no_grad()
+def test_write_refuses_a_set_run_without_base(tmp_path, tiny_model, tiny_battery):
+    ks = KnockoutSetSpec(members=(Member(Head(1, 0), Labels(("X",))),), complement=False, value="zero",
+                         reference=None, direction="ablate-clean", freeze_patterns=False, granularity="heads")
+    res = run_set(tiny_model, ks, tiny_battery, 4, 0, False, 4)
+    rec = artifact.build_record(res, ks, tiny_battery, "cmd", {}, {}, phase="E2")
+    with pytest.raises(TypeError, match="set runs need base"):
+        artifact.write(rec, res, tmp_path)
+    assert not list(tmp_path.iterdir())

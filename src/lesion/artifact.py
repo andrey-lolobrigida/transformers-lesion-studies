@@ -142,6 +142,8 @@ def write(record: dict, result: RunResult, out_dir: Path, base: str | None = Non
     out_dir = Path(out_dir)
     out_dir.mkdir(parents=True, exist_ok=True)
     if base is None:
+        if not isinstance(result.spec, AblationSpec):
+            raise TypeError("set runs need base=artifact.set_stem(...)")
         b = record["battery"]
         scheme = None if b["corruption"]["name"] == b["schemes"][0] else b["corruption"]["name"]
         base = stem(result.spec, b["name"], result.n, result.seed, result.prepend_bos, scheme)
