@@ -1,0 +1,260 @@
+{
+  "rows": [
+    {
+      "id": "I1/previous_token",
+      "published": "4.11, 2.2 in the top 2",
+      "ours": {
+        "L4H11": 1,
+        "L2H2": 4
+      },
+      "tolerance": "top k = 4 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I1/induction",
+      "published": "5.5, 6.9 in the top 5",
+      "ours": {
+        "L5H5": 2,
+        "L6H9": 3
+      },
+      "tolerance": "top k = 5 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I1/duplicate",
+      "published": "3.0, 0.1 in the top 3",
+      "ours": {
+        "L3H0": 2,
+        "L0H1": 3
+      },
+      "tolerance": "top k = 4 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I1/copy",
+      "published": "5.5, 6.9 in the top 20",
+      "ours": {
+        "L5H5": 16,
+        "L6H9": 5
+      },
+      "tolerance": "top k = 20 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I2/composition",
+      "published": null,
+      "ours": {
+        "L4H11->L5H5": {
+          "K": 0.0611,
+          "Q": 0.0068
+        },
+        "L2H2->L5H5": {
+          "K": 0.0339,
+          "Q": 0.0153
+        },
+        "L4H11->L6H9": {
+          "K": 0.0674,
+          "Q": 0.0145
+        },
+        "L2H2->L6H9": {
+          "K": 0.0349,
+          "Q": 0.0137
+        }
+      },
+      "tolerance": "measured; score minus the random baseline",
+      "verdict": "measured",
+      "pre_registered": true
+    },
+    {
+      "id": "I2/k_route/L4H11",
+      "published": "lowers ld (significant)",
+      "ours": 0.47943127155303955,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I2/k_route/L2H2",
+      "published": "lowers ld (significant)",
+      "ours": 0.1263291984796524,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I2/q_route/L4H11",
+      "published": "no significant effect",
+      "ours": 0.00039525842294096947,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I2/q_route/L2H2",
+      "published": "no significant effect",
+      "ours": 0.011455168016254902,
+      "tolerance": "|effect| vs max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "I3/pattern_frozen_ablation",
+      "published": null,
+      "ours": {
+        "L5H5/zero": -0.2005,
+        "L6H9/zero": -0.7099,
+        "L4H11/zero": -0.2897,
+        "L2H2/zero": -0.2233,
+        "L5H5+L6H9/zero": -0.6485
+      },
+      "tolerance": "measured; frozen with the unfrozen twin beside (O-011)",
+      "verdict": "measured",
+      "pre_registered": true
+    },
+    {
+      "id": "I4/restore_clean",
+      "published": null,
+      "ours": {
+        "L5H5@END": 0.0235,
+        "L6H9@END": 0.0721,
+        "L4H11@B1": -0.0003,
+        "L2H2@B1": -0.0,
+        "set of four": 0.1086
+      },
+      "tolerance": "measured; fraction of the gap restored",
+      "verdict": "measured",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/name_mover",
+      "published": "9.6, 9.9, 10.0",
+      "ours": {
+        "L9H6": 2,
+        "L9H9": 1,
+        "L10H0": 3
+      },
+      "tolerance": "top k = 5 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/negative_name_mover",
+      "published": "10.7, 11.10",
+      "ours": {
+        "L10H7": 1,
+        "L11H10": 2
+      },
+      "tolerance": "bottom k = 4 of 144",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/s_inhibition",
+      "published": "7.3, 7.9, 8.6, 8.10",
+      "ours": {
+        "L7H3": 4,
+        "L7H9": 3,
+        "L8H6": 1,
+        "L8H10": 2
+      },
+      "tolerance": "top k = 6 of 108",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/induction_duplicate",
+      "published": "5.5, 6.9, 3.0, 0.1",
+      "ours": {
+        "L5H5": 1,
+        "L6H9": 3,
+        "L3H0": 2,
+        "L0H1": 4
+      },
+      "tolerance": "top k = 6 of 84",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/previous_token",
+      "published": "4.11, 2.2",
+      "ours": {
+        "L4H11": 1,
+        "L2H2": 2
+      },
+      "tolerance": "top k = 4 of 60",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/name_mover/sign",
+      "published": "positive direct effect for each member",
+      "ours": {
+        "L9H6": 0.9558812379837036,
+        "L9H9": 2.5217792987823486,
+        "L10H0": 0.735691249370575
+      },
+      "tolerance": "each member: sign and |effect| > max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P1/negative_name_mover/sign",
+      "published": "negative direct effect for each member",
+      "ours": {
+        "L10H7": -1.4962255954742432,
+        "L11H10": -0.8194202780723572
+      },
+      "tolerance": "each member: sign and |effect| > max(2 sem, F_ioi = 0.0404)",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P2/nm_knockout_drop",
+      "published": 0.05,
+      "ours": [
+        0.0037601006130091375,
+        0.013015960131226084
+      ],
+      "tolerance": "bracket over four corners; uninformative if it overlaps the contrast's range",
+      "verdict": "not matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P3/faithfulness",
+      "published": 0.87,
+      "ours": [
+        0.8513090014457703,
+        0.9030184745788574
+      ],
+      "tolerance": "bracket over four corners; contrast 1.0",
+      "verdict": "matched",
+      "pre_registered": true
+    },
+    {
+      "id": "P4/restore_clean",
+      "published": null,
+      "ours": {
+        "name_mover@END": 1.2293,
+        "negative_name_mover@END": -0.6689,
+        "s_inhibition@END": 0.16,
+        "induction@S2": 0.0011,
+        "duplicate_token@S2": -0.0274,
+        "previous_token@S1+1": -0.0054,
+        "backup_name_mover@END": 0.295
+      },
+      "tolerance": "measured; fraction of the gap restored",
+      "verdict": "measured",
+      "pre_registered": true
+    }
+  ],
+  "counts": {
+    "matched": 16,
+    "measured": 4,
+    "not matched": 1
+  },
+  "missing": []
+}
