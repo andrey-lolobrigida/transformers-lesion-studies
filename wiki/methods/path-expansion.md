@@ -81,8 +81,7 @@ and OV circuits on [[qk-ov-circuits]] [elhage-2021 §The Path Expansion Trick,
 §Splitting Attention Head terms…].
 
 *Two layers.* Expanding two brackets gives the direct path, the layer-1 head
-terms, the layer-2 head terms, and cross terms $(A^{h_2} A^{h_1}) \otimes (W_U
-W_{OV}^{h_2} W_{OV}^{h_1} W_E)$ — the **virtual attention heads** (V-composition)
+terms, the layer-2 head terms, and cross terms $(A^{h_2} A^{h_1}) \otimes (W_U W_{OV}^{h_2} W_{OV}^{h_1} W_E)$ — the **virtual attention heads** (V-composition)
 [elhage-2021 §Path Expansion of Logits]. Depth $n$ gives terms of every order
 up to $n$.
 
@@ -168,8 +167,7 @@ order. Same freezing trick, different question. Recorded on
   the head's write and let everything downstream, including patterns, respond
   — no expansion involved. Pattern-preserving: freeze patterns, remove the
   head's write — every term through the head is cut, Q/K-composition routes are
-  held fixed. Direct effect: keep only the head's own term $A^h \otimes W_U W_{OV}^h
-  (\ldots)$. The E1 design note should define the three this way, with this page as
+  held fixed. Direct effect: keep only the head's own term $A^h \otimes W_U W_{OV}^h (\ldots)$. The E1 design note should define the three this way, with this page as
   the reference. *Caveat added 2026-09-19:* that is **not** what Wang et al.
   measure as "direct effect". Their [[path-patching]] to the residual end
   state keeps every path from the head that avoids other *heads*, and MLPs

@@ -79,3 +79,6 @@ tmp/
 # pointer is the URL recorded in the source card (wiki/sources/).
 papers/*
 !papers/README.md
+
+# Obsidian vault settings (local reading setup)
+.obsidian/

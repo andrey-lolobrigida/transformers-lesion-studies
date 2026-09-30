@@ -194,8 +194,7 @@ careful about what that buys:
 ## What this project does with it
 
 - **The E3 direct-effect setting is the OV circuit's direct path.** O-011's
-  resolution defines three path-restriction values; "direct effect" is $W_U
-  W_{OV}^h$ applied to what the head actually attended, which is this page's OV
+  resolution defines three path-restriction values; "direct effect" is $W_U W_{OV}^h$ applied to what the head actually attended, which is this page's OV
   circuit evaluated on the run [elhage-2021 §Splitting…]. Olsson's copying
   evaluator measures the same object empirically [olsson-2022 §Data Collection
   (3)].

@@ -73,8 +73,7 @@ contested*.
   forward pass. Read the logits.
 
 The metric (logit difference in every experiment of the paper) is compared
-between pass D and the clean model, averaged over more than 200 $(x_{\text{orig}},
-x_{\text{new}})$ pairs [wang-2022 §App. B].
+between pass D and the clean model, averaged over more than 200 $(x_{\text{orig}}, x_{\text{new}})$ pairs [wang-2022 §App. B].
 
 "Freezing" is defined in the paper as the special case of patching where a
 forward pass on $x$ has some earlier activations edited and an activation is

@@ -64,8 +64,7 @@ earlier head's write; Q/K change the pattern, V makes a virtual head.
 ## Precisely
 
 **Virtual attention heads** [elhage-2021 §Virtual Attention Heads]. The
-V-composition of $h_1$ then $h_2$ is the term $(A^{h_2} A^{h_1}) \otimes (W_{OV}^{h_2}
-W_{OV}^{h_1})$ in the logit path expansion: an object with its own pattern
+V-composition of $h_1$ then $h_2$ is the term $(A^{h_2} A^{h_1}) \otimes (W_{OV}^{h_2} W_{OV}^{h_1})$ in the logit path expansion: an object with its own pattern
 $A^{h_2 \circ h_1} = A^{h_2} A^{h_1}$ and its own OV matrix. Two remarks from the paper:
 
 - The number of ordinary heads grows linearly with depth; two-head virtual

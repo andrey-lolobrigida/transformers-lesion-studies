@@ -63,8 +63,7 @@ h(x) = (A \otimes W_O W_V) \cdot x = (A \otimes W_{OV}) \cdot x
 $$
 
 "$A$ mixes across tokens while $W_{OV}$ acts on each vector independently."
-The pattern itself is $A = \operatorname{softmax}(x^\top W_Q^\top W_K x)$, i.e. $\text{score}(i, j) =
-x_i^\top W_{QK}\, x_j$ with $W_{QK} = W_Q^\top W_K$, and can be computed "without
+The pattern itself is $A = \operatorname{softmax}(x^\top W_Q^\top W_K x)$, i.e. $\text{score}(i, j) = x_i^\top W_{QK}\, x_j$ with $W_{QK} = W_Q^\top W_K$, and can be computed "without
 referring to keys and queries" at all [elhage-2021 §Attention Heads as
 Information Movement].
 
@@ -113,8 +112,7 @@ about Attention Heads]:
 - **Reading $W_{OV}$ by SVD.** With $W_{OV} = U S V$, the right singular vectors
   $V$ give the subspace of the *source* stream that is read; the left singular
   vectors $U$ give the subspace of the *destination* stream that is written.
-- **Products of heads are heads.** $(A^2 \otimes W_{OV}^2)(A^1 \otimes W_{OV}^1) = (A^2 A^1) \otimes
-  (W_{OV}^2 W_{OV}^1)$ — a *virtual attention head* with a composed pattern and a
+- **Products of heads are heads.** $(A^2 \otimes W_{OV}^2)(A^1 \otimes W_{OV}^1) = (A^2 A^1) \otimes (W_{OV}^2 W_{OV}^1)$ — a *virtual attention head* with a composed pattern and a
   composed OV matrix. See [[attention-head-composition]].
 - Implementing attention this way would be "horribly inefficient"; it is a
   description, not an algorithm.
