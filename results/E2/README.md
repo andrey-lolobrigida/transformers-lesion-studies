@@ -611,22 +611,33 @@ which P1–P3 measure.
 
 ## O-012
 
-- **5.5.** At weight level, 5.5's K-composition with 4.11 and 2.2 is above the
-  random baseline (by 0.0611 and 0.0339; ranks 1 and 6 of 60 earlier heads),
-  and so is its Q-composition (by 0.0068 and 0.0153; ranks 15 and 5); at path
-  level on IOI, patching 4.11 or 2.2 into the keys of 5.5 and 6.9 at S1+1
-  lowers mean `ld` beyond the bound (0.4794 and 0.1263; sign verdicts
-  `matched`), while patching them into the queries at S2 does not (0.0004 and
-  0.0115; null verdicts `matched`), so the two levels agree on the K-route and
-  disagree on the Q-route, where the weights show above-baseline composition
-  that the IOI path patch does not register.
-- **6.9.** At weight level, 6.9's K-composition with 4.11 and 2.2 is above the
-  random baseline (by 0.0674 and 0.0349; ranks 1 and 6 of 72 earlier heads),
-  and so is its Q-composition (by 0.0145 and 0.0137; ranks 4 and 7); at path
-  level, the same joint runs show the K-route effect and no Q-route effect
-  above the bound, so the levels agree on the K-route and disagree on the
-  Q-route in the same way as for 5.5 — with the limit that the path runs
-  patch 5.5 and 6.9 together as receivers and cannot separate the two heads.
+**Reading (revised at review, 2026-10-02).** The K-route is supported at
+weight and path level. The Q-route from 4.11 and 2.2 shows no path effect
+above the bound on IOI. Mechanism 2's natural senders, heads that attend to a
+prior copy of the current token, were not tested. Being above the random
+baseline says little on its own: of all 9,504 (earlier, later) head pairs,
+0.669 are above the baseline mean for Q-composition and 0.607 for
+K-composition. The rank among earlier heads is the statistic that
+discriminates, and the bullets read by rank. The two fractions, from the
+committed artifact:
+
+```
+uv run python -c "import json,pandas as pd; d=pd.read_parquet('results/E2/I2/composition.parquet'); b=json.load(open('results/E2/I2/composition.json'))['baseline']; print({c: round(float((d[c] > b[c]['mean']).mean()), 3) for c in 'QK'})"
+```
+
+- **5.5.** At weight level, 5.5's K-composition with 4.11 ranks 1 of 60
+  earlier heads (0.0611 over baseline) and with 2.2 ranks 6 (0.0339); its
+  Q-composition with them ranks 15 and 5 (0.0068 and 0.0153). At path level
+  on IOI, patching 4.11 or 2.2 into the keys of 5.5 and 6.9 at S1+1 lowers
+  mean `ld` beyond the bound (0.4794 and 0.1263; sign verdicts `matched`),
+  while patching them into the queries at S2 does not (0.0004 and 0.0115;
+  null verdicts `matched`).
+- **6.9.** At weight level, 6.9's K-composition with 4.11 ranks 1 of 72
+  earlier heads (0.0674 over baseline) and with 2.2 ranks 6 (0.0349); its
+  Q-composition with them ranks 4 and 7 (0.0145 and 0.0137). At path level,
+  the same joint runs show the K-route effect and no Q-route effect above the
+  bound, with the limit that they patch 5.5 and 6.9 together as receivers and
+  cannot separate the two heads.
 
 ## What this does and does not show
 
@@ -669,8 +680,9 @@ which P1–P3 measure.
   one prompt construction, so rule 7's template and scheme checks are not
   done (proposals in §I3).
 - **Composition scores are weight statistics.** Above-baseline composition
-  says the matrices overlap more than random ones of the same shape; it does
-  not show that the model uses the route on any task. The path-level check
+  says the matrices overlap more than random ones of the same shape, which
+  most pairs in GPT-2 small do (§O-012); it does not show that the model uses
+  the route on any task. The path-level check
   is on IOI only, with 5.5 and 6.9 as joint receivers. The pre-named
   question tests Q-composition with 4.11 and 2.2 only, not with any other
   head that could supply a positional signal (O-012 mechanism 2).

@@ -1182,6 +1182,18 @@ later weight-based claim about these heads states the mechanism it assumes.
 Artifacts: `results/E2/I2/` (`composition.json`, `path/`, `verdict.json`);
 `results/E2/README.md` §I2 and §O-012.
 
+*Revised at review — 2026-10-02 (author's ruling).* O-012 stays resolved,
+with the reading narrowed: the K-route is supported at weight and path
+level; the Q-route from 4.11 and 2.2 shows no path effect above the bound
+on IOI; mechanism 2's natural senders (heads attending to a prior copy of
+the current token) were not tested. The phrase above, "the weights show
+above-baseline composition that the IOI path patch does not register", is
+withdrawn: of all 9,504 head pairs, 0.669 are above the baseline mean for
+Q-composition and 0.607 for K-composition, so being above baseline carries
+little information, and the weight level is read by rank (K with 4.11: rank
+1 for both heads; Q with 4.11 and 2.2: ranks 15 and 5 for 5.5, 4 and 7 for
+6.9). Rerun command for the fractions in `results/E2/README.md` §O-012.
+
 ### O-013 — Does the harness ablate whole heads or (head, position) nodes?
 *Proposed 2026-09-19, during the R1 extraction of Wang et al. Confirmed and
 resolved by the author the same day — see below.*
