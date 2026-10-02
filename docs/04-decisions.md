@@ -552,6 +552,13 @@ template mix (`07af13b`). I3 stands as `measured`; the rule-7 checks proposed
 in `results/E2/README.md` §I3 (a second induction corruption scheme, END-only
 against all-position ablation) are not run in E2 and are left to E3, where
 O-011 is decided.
+O-012 stays resolved with its reading narrowed (see O-012, "Revised at
+review"). The plan's 17 choices (`.superpowers/plans/2026-09-29-e2-reproduction.md`)
+and the execution calls (two code changes below the pre-registration block,
+`6c464c4` and `869a833`; one after the runs, `84e9af6`, with I2 rerun bitwise
+in `4f591fe`; the Task 15 transcription incident, corrected in `040305f` and
+`c665aa3`, needing no ERRATA entry) are accepted as built. `v-E2` tagged
+2026-10-02.
 
 ## Open questions
 
