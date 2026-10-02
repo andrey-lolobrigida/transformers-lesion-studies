@@ -493,11 +493,11 @@ entry records what outlives the phase.*
    GPU run.
 3. **Identity rule.** Rank every candidate sender by the class's own score,
    receiver included. The class matches iff every published member is in
-   the top `k = max(class size + 2, the rank the source itself states)`, so
+   the top $k = \max(\text{class size} + 2,\ \text{the rank the source itself states})$, so
    the rule is never stricter than the source. Negative classes rank from the
    bottom. A tie straddling the cut counts as inside and is reported.
-4. **Sign rule.** Published sign **and** `|effect| > max(2 × sem, the item's
-   largest E1b noise floor)`. A published null matches iff the effect stays
+4. **Sign rule.** Published sign **and**
+   $\lvert \text{effect} \rvert > \max(2 \times \text{sem},\ \text{the item's largest E1b noise floor})$. A published null matches iff the effect stays
    inside that bound; the results doc says that matching a null shows only
    that we also found nothing.
 5. **Magnitude rule.** A bracket over the settings the source leaves open.
@@ -535,7 +535,7 @@ n = 2,000 and seed 0 (I1 on its own stimulus, 100 sequences at stimulus seed
 0; the I2 composition scores on the weights, with the random baseline at
 seed 0). Of 21 entries (`results/E2/verdicts.json`): **matched
 16, measured 4, not matched 1** (P2, the Name Mover knockout: bracket
-[0.0038, 0.0130] of F(M) over the four corners, published 0.05), bracketed,
+[0.0038, 0.0130] of $F(M)$ over the four corners, published 0.05), bracketed,
 uninformative 0. P3 (faithfulness) matched, with a bracket whose lower end
 comes from the ≈ 7-per-template corners below D-014's floor of 30. The
 validation gates passed (14 of 14). Two code changes landed after the
@@ -1144,7 +1144,7 @@ minus a random baseline of 200 Gaussian-factor draws of the same shapes,
 seed 0 (K mean 0.03607, sd 0.00043; Q mean 0.03607, sd 0.00044). Path level:
 on ioi/`p_ABC`, n = 2,000, seed 0, no BOS, resample path patching (edge,
 Wang convention, ablate-clean), senders 4.11 and 2.2, receivers 5.5 and 6.9
-jointly, sign rule with F_ioi = 0.0404.
+jointly, sign rule with $F_{\text{ioi}}$ = 0.0404.
 
 - **5.5.** At weight level, 5.5's K-composition with 4.11 and 2.2 is above
   the random baseline (by 0.0611 and 0.0339; ranks 1 and 6 of 60 earlier
@@ -1311,4 +1311,4 @@ destroys the most useful information the project produces.*
 | 2026-09-20 | E0 | Wang et al.'s clean mean logit difference on `p_IOI`, 3.56 over 100,000 samples, reproduced exactly from the released templates and word lists. | 3.648 ± 0.005 (no BOS, 15 templates per order), 3.485 (no BOS, 7 per order), 3.922 ± 0.006 (BOS). Not matched at 2 dp; bracketed by the two no-BOS readings. Released word lists differ from the paper's text; paper-era lists unrecoverable. IO-over-S 99.4% vs 99.3% and IO probability 52.7% vs 49% are close. See D-011, O-014. | `results/E0/e0_smoke_seed0_n100000.json` |
 | 2026-09-20 | E1a | Wang et al. App. J: mean-ablating MLP0 alone on `p_ABC` reverses the sign of the mean logit difference; no other single MLP layer does much. | Under node mean ablation (reference `p_ABC`, n=1,000, template-matched), n=2,000, seed 0, no BOS: MLP0 -0.401 (sign reversed); largest other layer L5 +0.406. Zero: MLP0 -1.405 (sign reversed); four other layers past 0.5 (L4 +0.730, L10 +0.711, L5 +0.652, L6 +0.512). Resample: MLP0 -0.816 (sign reversed); one other layer past 0.5 (L5 +0.531). Bracket, not match: reference and sample sizes are ours. | `results/E1a/README.md` |
 | 2026-09-23 | E1b | Factual recall (`subject_swap`): pre-registered gate holds on all three thresholds — pairwise accuracy mean 1[ld_clean > 0] >= 0.90, gap mean ld_clean - mean ld_corrupt >= 1.0 logit, and (factual recall only) >= 300 admitted survivors. | n=64, seed 0, no BOS. Pairwise accuracy 1.000 >= 0.90, pass. Gap +4.104 ± 0.374 >= 1.0, pass. Survivors 64 < 300, fail. Verdict: FAIL, on the survivors condition alone. 64 is the full admitted pool from the CounterFact survivor filter, not a subsample. | `results/E1b/gate/factual/subject_swap.json` |
-| 2026-09-29 | E2 | Wang et al. §3.4, App. F: mean-ablating the three Name Movers (9.6, 9.9, 10.0) together at END lowers the logit difference by about 5% of F(M) (published 0.05), far less than their summed direct effects (pre-registered contrast). Magnitude rule, bracket over four corners (D-015 item 5). | Not matched. Under mean, node, ablate-clean, unfrozen, on ioi/`p_ABC`, n = 2,000, seed 0, no BOS, (F(M) − F(K)) / F(M) = 0.0130 (15 templates per order, ref n 210, per-template min 2 — below D-014's floor of 30), 0.0038 (15, ref n 2,000, min 52), 0.0110 (7, ref n 98, min 3 — below the floor), 0.0101 (7, ref n 2,000, min 121); knockout effects 0.0137–0.0475 logits, sem 0.017–0.018. Bracket [0.0038, 0.0130], width 0.0093; published 0.05 above it. Contrast range [1.1244, 1.1430], not overlapped, so not uninformative. Fraction removed 0.983 (15) / 0.961 (7). Ungated siblings: zero −0.0245 / −0.0199, resample 0.0544 / 0.0552 — under the resample sibling the quantity is above the published 0.05, while the gated verdict is at mean, Wang's stated value; the disagreement between ablation values is reported, not resolved. | `results/E2/P2/verdict.json`; `results/E2/README.md` §P2 |
+| 2026-09-29 | E2 | Wang et al. §3.4, App. F: mean-ablating the three Name Movers (9.6, 9.9, 10.0) together at END lowers the logit difference by about 5% of $F(M)$ (published 0.05), far less than their summed direct effects (pre-registered contrast). Magnitude rule, bracket over four corners (D-015 item 5). | Not matched. Under mean, node, ablate-clean, unfrozen, on ioi/`p_ABC`, n = 2,000, seed 0, no BOS, $(F(M) - F(K)) / F(M)$ = 0.0130 (15 templates per order, ref n 210, per-template min 2 — below D-014's floor of 30), 0.0038 (15, ref n 2,000, min 52), 0.0110 (7, ref n 98, min 3 — below the floor), 0.0101 (7, ref n 2,000, min 121); knockout effects 0.0137–0.0475 logits, sem 0.017–0.018. Bracket [0.0038, 0.0130], width 0.0093; published 0.05 above it. Contrast range [1.1244, 1.1430], not overlapped, so not uninformative. Fraction removed 0.983 (15) / 0.961 (7). Ungated siblings: zero −0.0245 / −0.0199, resample 0.0544 / 0.0552 — under the resample sibling the quantity is above the published 0.05, while the gated verdict is at mean, Wang's stated value; the disagreement between ablation values is reported, not resolved. | `results/E2/P2/verdict.json`; `results/E2/README.md` §P2 |

@@ -192,7 +192,7 @@ strength and probably changes the roadmap.
 *Built 2026-09-29 on `phase-E2-reproduction`, awaiting the author's review;
 `v-E2` not tagged. Rules: D-015; pre-registration commit `4675ba6`. Of 21
 entries: matched 16, measured 4, not matched 1 (P2, the Name Mover knockout:
-[0.0038, 0.0130] of F(M) against a published 0.05). See
+[0.0038, 0.0130] of $F(M)$ against a published 0.05). See
 `results/E2/README.md`.*
 
 ---

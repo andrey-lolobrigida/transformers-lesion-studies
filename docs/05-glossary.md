@@ -207,7 +207,7 @@ attention-only model makes the ablation exactly equivalent to subtracting that
 head's terms from the logits — an equivalence that does **not** survive MLPs.
 
 **QK circuit** — the part of a head that computes *where it attends*:
-`A = softmax*(tᵀ · C_QK · t)`. Expands into one term per path from tokens to
+$A = \operatorname{softmax}^*(t^\top \cdot C_{QK} \cdot t)$. Expands into one term per path from tokens to
 attention scores.
 
 **OV circuit** — the part of a head that computes *what it writes* to the
@@ -232,9 +232,9 @@ fixed sampled set of tokens, treated as a point in "function space" so that
 different models and checkpoints can be compared regardless of their weights.
 PCA over these is how Olsson et al. plot training trajectories.
 
-**Smeared key** — an architectural variant with a trainable per-head `α` that
+**Smeared key** — an architectural variant with a trainable per-head $\alpha$ that
 interpolates each key with the previous position's key,
-`k_j = σ(α)k_j + (1−σ(α))k_{j−1}`, making induction expressible in one layer.
+$k_j = \sigma(\alpha)\, k_j + (1 - \sigma(\alpha))\, k_{j-1}$, making induction expressible in one layer.
 Used as an interventional test, not a proposal.
 
 ---
@@ -251,7 +251,7 @@ Preferred over "embedding" because subspaces of it hold information about
 *other* tokens. Wiki: `concepts/residual-stream.md`.
 
 **Virtual weight** — the implicit connection between two components at any
-distance, `W_in^{later} W_out^{earlier}`, obtained by multiplying their weights
+distance, $W_{\text{in}}^{\text{later}} W_{\text{out}}^{\text{earlier}}$, obtained by multiplying their weights
 through the residual stream. The transformer analogue of an edge in a circuit.
 
 **Privileged basis** — an activation has one when the architecture pushes
@@ -266,25 +266,25 @@ directly.
 
 **Memory management (head or neuron)** — speculated role of components that
 delete information from the stream: MLP neurons with strongly negative
-input/output cosine similarity, or heads with large negative `W_OV` eigenvalues
+input/output cosine similarity, or heads with large negative $W_{OV}$ eigenvalues
 attending to the present token. Stated as a hint, not a finding.
 
 **Half-linear** — the paper's description of an attention head: given the
 attention pattern, the head is linear; only the softmax producing the pattern
 is not.
 
-**`W_QK`** — `W_Q^T W_K`, a `d_model × d_model` bilinear form of rank ≤
-`d_head`; `x_dest^T W_QK x_src` is the attention score. The matrix form of the
+**$W_{QK}$** — $W_Q^\top W_K$, a $d_{\text{model}} \times d_{\text{model}}$ bilinear form of
+rank $\le d_{\text{head}}$; $x_{\text{dest}}^\top W_{QK}\, x_{\text{src}}$ is the attention score. The matrix form of the
 QK circuit. (TransformerLens writes the same object with transposed factors;
 check at E0.)
 
-**`W_OV`** — `W_O W_V`, a `d_model × d_model` linear map of rank ≤ `d_head`;
+**$W_{OV}$** — $W_O W_V$, a $d_{\text{model}} \times d_{\text{model}}$ linear map of rank $\le d_{\text{head}}$;
 what a head adds to the destination per unit of attention to a source. The
 matrix form of the OV circuit. Its right singular vectors are the subspace
 read, its left singular vectors the subspace written.
 
-**`A ⊗ W_OV`** — a head's action as a tensor product: `A` mixes across
-positions, `W_OV` acts on each token's vector; `h(x) = (A ⊗ W_OV) x`.
+**$A \otimes W_{OV}$** — a head's action as a tensor product: $A$ mixes across
+positions, $W_{OV}$ acts on each token's vector; $h(x) = (A \otimes W_{OV})\, x$.
 
 **Freezing attention patterns (trick)** — run once to record every pattern,
 run again with patterns forced to the recorded values; the model is then a
@@ -294,7 +294,7 @@ linear function of the tokens. Origin of pattern-preserving ablation.
 frozen, into a sum of end-to-end paths from tokens to logits. Wiki:
 `methods/path-expansion.md`.
 
-**Direct path (refined)** — the `W_U W_E` term of the path expansion: the
+**Direct path (refined)** — the $W_U W_E$ term of the path expansion: the
 route from embedding to unembedding through no layer. Can only encode bigram
 statistics; in a zero-layer model it is the whole model. (Extends the
 2026-09-08 entry, which used "direct path" for a component's route straight to
@@ -314,12 +314,12 @@ boosting the cross-combinations, e.g. `keep … in → bay`.
 attending to a token raises that token's logit. Summarised by positive
 eigenvalues; not a settled formalisation.
 
-**Same-matching matrix** — the QK analogue: a matrix `W` in a composed QK term
+**Same-matching matrix** — the QK analogue: a matrix $W$ in a composed QK term
 that scores highest when query-side and key-side tokens agree. Also
 summarised by positive eigenvalues.
 
 **Eigenvalue copying statistic** — positivity of the eigenvalues of
-`W_U W_OV W_E` (or of a QK `W`) as a data-free summary of copying / matching.
+$W_U W_{OV} W_E$ (or of a QK $W$) as a data-free summary of copying / matching.
 Evidence, not proof. Wiki: `methods/weight-statistics.md`.
 
 **V-composition** — a head's value matrix reading a subspace written by an
@@ -328,11 +328,11 @@ and instead creates a virtual attention head. (Completes the Q- and
 K-composition entries of 2026-09-08.)
 
 **Virtual attention head** — the V-composition of two heads, behaving as one
-head with pattern `A² A¹` and OV matrix `W_OV² W_OV¹`. Their number grows
+head with pattern $A^2 A^1$ and OV matrix $W_{OV}^2 W_{OV}^1$. Their number grows
 quadratically with depth. Small effect in the paper's two-layer model.
 
 **Composition score** — normalised Frobenius norm of the virtual weight between
-two heads (`‖W_QK² W_OV¹‖_F / (‖W_QK²‖_F ‖W_OV¹‖_F)` for K), minus the
+two heads ($\lVert W_{QK}^2 W_{OV}^1 \rVert_F / (\lVert W_{QK}^2 \rVert_F\, \lVert W_{OV}^1 \rVert_F)$ for K), minus the
 random-matrix baseline. The paper's own figure of these was affected by a bug
 and later corrected.
 
@@ -342,7 +342,7 @@ difference the losses to get the marginal contribution of nth-order paths.
 Targets V-composition only.
 
 **Value-weighted attention pattern** — the attention weight scaled by the norm
-of the value vector at the source, `A_{ij} ‖v_j‖`; corrects for heads that park
+of the value vector at the source, $A_{ij} \lVert v_j \rVert$; corrects for heads that park
 on a default token with a near-zero value vector.
 
 **Pointer arithmetic (positional)** — an induction mechanism available only
@@ -389,9 +389,9 @@ sample averaged.
 one token position, not a head at all positions. GPT-2 small's IOI circuit is
 26 such nodes, "1.1% of the total number of (head, token position) pairs".
 
-**Behavioural circuit** — Wang et al.'s definition: a subgraph `C` of the
-model's computational graph whose function `C(x)` is the model's output with
-everything outside `C` knocked out. The knockout method is part of the
+**Behavioural circuit** — Wang et al.'s definition: a subgraph $C$ of the
+model's computational graph whose function $C(x)$ is the model's output with
+everything outside $C$ knocked out. The knockout method is part of the
 definition. Contrast the structural definition of Olah et al. (2020 entry);
 reconciliation proposed on `wiki/concepts/circuit.md`.
 
@@ -445,27 +445,27 @@ more (≈ 2.31 vs 0.99 in logit-difference units) and appears to be relative
 **Pointer (communication by)** — heads "sharing the location of a piece of
 information instead of copying it": the position signal is a pointer to S1.
 
-**Faithfulness (Wang et al.'s definition)** — `|F(M) − F(C)|`, the gap
-between the model's and the circuit's mean logit difference, with `F`
-computed under the knockout that defines `C`. IOI circuit: 0.46 (13%), i.e.
+**Faithfulness (Wang et al.'s definition)** — $\lvert F(M) - F(C) \rvert$, the gap
+between the model's and the circuit's mean logit difference, with $F$
+computed under the knockout that defines $C$. IOI circuit: 0.46 (13%), i.e.
 87% retained. Extends the 2026-08 entry with its source.
 
-**Completeness / incompleteness score** — for a subset `K ⊆ C`,
-`|F(C \ K) − F(M \ K)|`; a circuit is complete if this is small for every
-`K`. Only ever searched (random, class-wise, greedy), never proven. Greedy
+**Completeness / incompleteness score** — for a subset $K \subseteq C$,
+$\lvert F(C \setminus K) - F(M \setminus K) \rvert$; a circuit is complete if this is small for every
+$K$. Only ever searched (random, class-wise, greedy), never proven. Greedy
 search found 3.09 (87% of baseline) on the IOI circuit.
 
-**Minimality / minimality score** — for a node `v`, the largest
-`|F(C \ (K ∪ {v})) − F(C \ K)|` over some `K ⊆ C \ {v}`; every node should
-have one that is non-trivial. A conditional necessity claim: `K` is part of
+**Minimality / minimality score** — for a node $v$, the largest
+$\lvert F(C \setminus (K \cup \{v\})) - F(C \setminus K) \rvert$ over some $K \subseteq C \setminus \{v\}$; every node should
+have one that is non-trivial. A conditional necessity claim: $K$ is part of
 the statement.
 
 **Naïve circuit** — Wang et al.'s baseline: the main head classes without
 Backup or Negative Name Movers. As faithful as the full circuit; more easily
 shown incomplete.
 
-**Greedy completeness search** — Algorithm 3: repeatedly sample `k` nodes
-from `C \ K`, add the one that moves the incompleteness score most.
+**Greedy completeness search** — Algorithm 3: repeatedly sample $k$ nodes
+from $C \setminus K$, add the one that moves the incompleteness score most.
 
 **Name Mover** — a head active at END that attends to a name and copies it
 to the logits (9.6, 9.9, 10.0). **Negative Name Mover** — same, writing
@@ -488,13 +488,13 @@ diffusely (fuzzy Duplicate Token 0.10; fuzzy Induction 5.8, 5.9).
 
 **Copy score** — proportion of samples in which a name is among the top five
 logits after pushing the residual stream at that name (after MLP0) through
-the head's `W_OV`, then `W_U` and the final LayerNorm. **Negative copy score**
-uses `−W_OV`. Name Movers > 95%; average head < 20%.
+the head's $W_{OV}$, then $W_U$ and the final LayerNorm. **Negative copy score**
+uses $-W_{OV}$. Name Movers > 95%; average head < 20%.
 
 **Induction score / duplicate score / previous token score (Wang et al.'s
 variants)** — attention-pattern averages on 100-token random sequences
-duplicated once: attention from `T_i` to `T_{i−99}`, to `T_{i−100}`, and to
-`i−1` respectively. Rankings published, not values.
+duplicated once: attention from $T_i$ to $T_{i-99}$, to $T_{i-100}$, and to
+$i-1$ respectively. Rankings published, not values.
 
 **IO probability** — the model's probability on the IO token; the paper's
 second headline metric (49% on `p_IOI`), alongside logit difference.
@@ -562,7 +562,7 @@ et al. name it: the ablated model's logit difference over the full
 model's, ×100. Over 100% is possible. The ratio of means and the mean of
 ratios differ substantially.
 
-**Averaging order** — `E[F]/E[M]` (Wang et al.) versus `E[F/M]`; the second
+**Averaging order** — $\mathbb{E}[F]/\mathbb{E}[M]$ (Wang et al.) versus $\mathbb{E}[F/M]$; the second
 is higher on IOI and has heavy per-prompt outliers.
 
 **Worst-case faithfulness** — Miller et al.'s recommendation to report the
@@ -709,13 +709,13 @@ D-013 addendum item 5.
 ## Added 2026-09-29 — E2 reproduction
 
 **Identity rule** — a published class matches iff every member ranks in the
-top `k = max(class size + 2, the rank the source states)` of all candidates
-under the class's own score and receiver (bottom `k` for negative classes); a
+top $k = \max(\text{class size} + 2,\ \text{the rank the source states})$ of all candidates
+under the class's own score and receiver (bottom $k$ for negative classes); a
 tie straddling the cut counts as inside. Our ranking, not the source's
 selection procedure. D-015 item 3; `src/lesion/e2_reproduce.py`.
 
 **Sign rule** — matches iff the effect has the published sign and
-`|effect| > max(2 × sem, the item's largest E1b noise floor)`; a published
+$\lvert \text{effect} \rvert > \max(2 \times \text{sem},\ \text{the item's largest E1b noise floor})$; a published
 null matches iff the effect stays inside that bound, which shows only that
 nothing was found. D-015 item 4; `src/lesion/e2_reproduce.py`.
 
@@ -725,7 +725,7 @@ total} mean-reference prompts. The ≈ 7 corners break D-014's floor of 30 and
 are labelled so. D-015 item 5; `results/E2/README.md` Pre-registration.
 
 **Contrast value** — for a bracketed magnitude, a named alternative value
-that would change the claim (P2: the summed direct effects over F(M); P3:
+that would change the claim (P2: the summed direct effects over $F(M)$; P3:
 1.0). A bracket containing it is `bracketed, uninformative`. D-015 item 5.
 
 **Set knockout** — one intervention over several (head, positions) members
@@ -733,7 +733,7 @@ at once, with one value, reference, direction and freeze setting, recorded in
 the artifact's `spec.set` block. D-015 item 8; `src/lesion/knockout.py`.
 
 **Complement knockout** — a set knockout applied to every head node *outside*
-the named members (heads only, MLPs untouched), used for Wang et al.'s F(C).
+the named members (heads only, MLPs untouched), used for Wang et al.'s $F(C)$.
 D-015 item 8; `src/lesion/knockout.py`.
 
 **Fraction restored** — for a restore-clean run, (mean `ld` with clean
