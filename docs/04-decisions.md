@@ -544,6 +544,15 @@ the verdict rules (`6c464c4`), mean reference size on P1 entries
 (`869a833`). Results and caveats: `results/E2/README.md`. Awaiting the
 author's review; `v-E2` not tagged.
 
+**Review rulings — *2026-10-02*.** P2 is reported as not matched, with no
+hypothesis for the cause and no open question opened. P3 keeps its
+pre-registered `matched`; the README adds one sentence recording that
+F(C)/F(M) moves by 0.036–0.050 with reference size and by at most 0.016 with
+template mix (`07af13b`). I3 stands as `measured`; the rule-7 checks proposed
+in `results/E2/README.md` §I3 (a second induction corruption scheme, END-only
+against all-position ablation) are not run in E2 and are left to E3, where
+O-011 is decided.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
