@@ -560,6 +560,81 @@ in `4f591fe`; the Task 15 transcription incident, corrected in `040305f` and
 `c665aa3`, needing no ERRATA entry) are accepted as built. `v-E2` tagged
 2026-10-02.
 
+### D-016 — E3 rules: what the map measures, what may be named
+*2026-10-02, E3 design. Proposed by Claude, each point confirmed by the
+author the same session; the spec was approved 2026-10-02. Cell-level detail
+lives in the E3 spec
+(`.superpowers/specs/2026-10-02-e3-functional-map-design.md`, untracked); this
+entry records what outlives the phase.*
+
+1. **Shape (A′).** One phase, one branch (`phase-E3-functional-map`), one tag
+   (`v-E3`). The mechanics, the noise rule, the selection rule and the
+   verification protocol are committed before the first GPU run. Components
+   selected by the rule are confirmatory; anything else the author wants to
+   name goes on an exploratory list, committed before its verification, and
+   is labelled exploratory everywhere. Rejected: an E3a/E3b split with the
+   selection rule written after seeing the maps; no pre-registration. The
+   sources give no selection rule to copy (Wang's 2% backup threshold
+   [wang-2022 App. F], Olsson's continuum [olsson-2022]); the split itself is
+   general pre-registration practice, not from the reading list.
+2. **Six total-effect maps per item:** {zero, mean, resample} × {patterns
+   unfrozen, frozen}, over 144 heads and 12 MLP layers (O-007), whole
+   components at all positions (O-013), on IOI (`p_ABC`), induction
+   (`fresh_prefix`) and agreement (`number_flip`). This departs from O-011
+   decision 4 (four maps, escalate on a large delta); the measured reason is
+   E2 I3, where every frozen-minus-unfrozen delta on induction exceeded the
+   item's floor under all three values, with the limit that I3 measured four
+   heads chosen because they are the induction circuit. The frozen delta is
+   reported per cell with a paired standard error. Direct effect (edge to
+   `Logits`, `wang` convention, unfrozen, three values) is recorded in the
+   same run as E4's baseline and not interpreted in E3.
+3. **Noise rule: Holm–Bonferroni at family-wise α = 0.05** over one family of
+   5,616 tests (2,808 total-effect cells, 1,404 direct, 1,404 frozen deltas),
+   $z = \lvert \text{effect} \rvert / s$, two-sided normal. $s$ is the sem of
+   per-prompt differences for zero and resample, and
+   $\max(\text{sem}, \text{sd over reference seeds 0–4})$ for every mean
+   cell, with the reference spread measured for all 156 components (E1b's
+   construction, extended). Rejected: Benjamini–Hochberg; D-015's
+   $\max(2\,\text{sem}, \text{floor})$ uncorrected at map scale.
+4. **Selection: rule A, $k = 10$.** Within each cell set (one item × one map,
+   156 cells; 27 sets, total and direct), a component is selected iff it
+   clears Holm and ranks in the top 10 by $\lvert \text{effect} \rvert$ among
+   the set's cells that clear Holm; sign kept, a tie straddling rank 10
+   counts as inside. $k$ is ours. Frozen deltas do not select. The list is
+   produced by a script and committed before any verification run. Rejected:
+   a magnitude cut as a fraction of the item's gap; both together.
+5. **Verification reading of the roadmap's exit criterion.** Necessity
+   replicated on a held-out draw (prompt seed 1; reference seeds 5–9) gates
+   naming: same sign and clears Holm over its own verification family.
+   Restore-clean patching (per selected component, and per item for the set
+   of replicated components) always runs and is reported in sufficiency
+   language, but never gates. "Verified with activation patching" is read as
+   "patching run and reported beside the necessity claim": making
+   single-component sufficiency the gate would turn "named" into
+   "individually sufficient", a different claim (rule 2). The author's
+   reading. Rejected: both gate; replication only (drops patching, against
+   D-004).
+6. **Induction adversarial checks, `measured`, never gating:** a second
+   corruption scheme, `shuffle_prefix` (ours, unsourced; permutes the first
+   repeat so no $x_i$ is followed by $x_{i+1}$), gated under D-014's
+   thresholds before use and dropped as a null at full strength if it fails;
+   and END-only against all-position ablation. Both run on E2 I3's units and
+   on every induction selection. A disagreement is stated in the same
+   paragraph as the claim (rule 3). `induction.py` gains the scheme
+   additively, logged as a forced generalisation under D-014 item 6. The
+   harness modules (`runner.py`, `interventions.py`, `reference.py`,
+   `spec.py`, `knockout.py`) stay untouched.
+7. **Artifacts: one record per cell set** (a JSON plus, where per-prompt data
+   is used, one long-format parquet), under `results/E3/`. Per-prompt data
+   only for seed-0 and held-out cell sets; reference seeds 1–4 and 5–9 store
+   aggregates. Meta text columns are dropped; prompts are regenerated from
+   generator and seed. Rejected: one parquet and JSON per run (≈ 20,000
+   files).
+8. **Out of E3:** MLP windows (closes O-007 item 3: its motivating case,
+   factual recall, failed its gate), head-to-head edge maps, neurons,
+   factual recall, a second scheme for IOI or agreement, interpreting the
+   total-minus-direct gap (E4), deciding the E4 spine.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
