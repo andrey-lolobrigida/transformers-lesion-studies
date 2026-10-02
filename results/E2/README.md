@@ -556,7 +556,10 @@ The match depends on the corners below the floor. The two corners at ref n
 0.87. The two ≈ 7-per-template corners — below D-014's floor of 30 (Miller et
 al.'s reading of Wang et al.) — give 0.8513 and 0.8528, and those set the
 bracket's lower end. The verdict follows the pre-registered four-corner rule
-and stands as `matched`; this paragraph records what it rests on.
+and stands as `matched`; this paragraph records what it rests on. Across the
+corners, F(C)/F(M) moves by 0.036–0.050 with reference size (0.8513 → 0.8871
+at 15 per order, 0.8528 → 0.9030 at 7 per order) and by at most 0.016 with
+template mix (0.0015 at the ≈ 7-per-template reference, 0.0159 at 2,000).
 
 Siblings, ungated, once per template mix: zero F(C)/F(M) −0.0155 (15 per
 order) and −0.0140 (7 per order), F(C) −0.057 and −0.049; resample 0.5855 and
