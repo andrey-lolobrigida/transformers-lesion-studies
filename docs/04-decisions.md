@@ -596,6 +596,14 @@ entry records what outlives the phase.*
    cell, with the reference spread measured for all 156 components (E1b's
    construction, extended). Rejected: Benjamini–Hochberg; D-015's
    $\max(2\,\text{sem}, \text{floor})$ uncorrected at map scale.
+   *Exact zeros (2026-10-02, at plan review):* a frozen delta whose
+   per-prompt differences are all exactly zero (and, for mean, zero at every
+   reference seed) is exact by construction — expected for the 13 layer-11
+   components, which have no attention layer downstream for freezing to act
+   on (117 deltas). It is recorded as `exact_zero`, not tested, and keeps its
+   place in the family with p = 1, so m stays 5,616; this can only make Holm
+   stricter. Any other s = 0 is a hard stop. Proposed by Claude, accepted by
+   the author.
 4. **Selection: rule A, $k = 10$.** Within each cell set (one item × one map,
    156 cells; 27 sets, total and direct), a component is selected iff it
    clears Holm and ranks in the top 10 by $\lvert \text{effect} \rvert$ among
