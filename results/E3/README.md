@@ -107,4 +107,4 @@ and is not a refutation.
 
 ## Changes after pre-registration
 
-- <short sha of your commit is unknown before committing, so write> e3_maps.py (figures only): the Holm dot no longer overlaps a printed (clipped) MLP value, that value's font is larger, and the colorbar states the sign. No pre-registered value, test, or selection changes.
+- `9154af6`, e3_maps.py (figures only): the Holm dot no longer overlaps a printed (clipped) MLP value, that value's font is larger, and the colorbar states the sign. No pre-registered value, test, or selection changes.
