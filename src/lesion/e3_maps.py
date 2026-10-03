@@ -68,6 +68,13 @@ def clipped(p: dict, vmax: float, div: float) -> list[int]:
     return [l for l in range(12) if abs(p["mlp"][l] / div) > vmax]
 
 
+def colorbar_label(group: str, scale: str, gap: float) -> str:
+    """Colorbar label: what is plotted, its unit or divisor, and which colour is which sign."""
+    what = "frozen effect minus unfrozen effect" if group == "delta" else "effect on the mean logit difference"
+    head = f"{what} (logits)" if scale == "raw" else f"{what}\n/ clean-minus-corrupt gap ({gap:.3f})"
+    return head + "\nred: ld lowered, blue: ld raised"
+
+
 def _draw(item: str, group: str, panels: dict, div: float, scale_label: str, out_path: Path) -> None:
     import matplotlib
 
@@ -90,14 +97,16 @@ def _draw(item: str, group: str, panels: dict, div: float, scale_label: str, out
             exact[:, :12], exact[:, 13] = p["exact_heads"], p["exact_mlp"]
             ax.set_facecolor(SURFACE)
             im = ax.imshow(grid, cmap=cmap, vmin=-vmax, vmax=vmax, interpolation="nearest")
+            clip = clipped(p, vmax, div)
             ys, xs = np.nonzero(rej)
-            ax.scatter(xs, ys, s=6, c=INK, marker="o", linewidths=0)
+            ys_c = ys + np.where((xs == 13) & np.isin(ys, clip), 0.3, 0.0)  # dot below the printed value
+            ax.scatter(xs, ys_c, s=6, c=INK, marker="o", linewidths=0)
             ys, xs = np.nonzero(exact)
             ax.scatter(xs, ys, s=10, c=INK, marker="x", linewidths=0.6)
-            for l in clipped(p, vmax, div):
+            for l in clip:
                 v = p["mlp"][l] / div
-                ax.text(13, l, f"{v:+.0f}" if abs(v) >= 10 else f"{v:+.1f}", ha="center", va="center", fontsize=4.5,
-                        color="white")
+                ax.text(13, l - 0.17, f"{v:+.0f}" if abs(v) >= 10 else f"{v:+.1f}", ha="center", va="center",
+                        fontsize=6, color="white")
             ax.set_xticks([0, 2, 4, 6, 8, 10, 13], ["0", "2", "4", "6", "8", "10", "MLP"])
             ax.set_yticks(range(12))
             ax.tick_params(labelsize=7, colors=INK, length=0)
@@ -125,8 +134,7 @@ def render(tests: list[dict], gaps: dict[str, float], out_dir, items=None) -> li
             panels = {map_id: panel(by_key, item, map_id) for row in rows for map_id in row}
             for scale in ("raw", "scaled"):
                 div = 1.0 if scale == "raw" else gaps[item]
-                scale_label = ("effect on the mean logit difference (logits)" if scale == "raw"
-                               else f"effect / clean-minus-corrupt gap ({gaps[item]:.3f})")
+                scale_label = colorbar_label(group, scale, gaps[item])
                 path = out_dir / f"{item}_{group}_{scale}.png"
                 _draw(item, group, panels, div, scale_label, path)
                 paths.append(path)

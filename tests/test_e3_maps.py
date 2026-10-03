@@ -46,3 +46,13 @@ def test_render_writes_every_group_in_both_scales(tmp_path):
                                                    for s in ("raw", "scaled"))
     for p in paths:
         assert p.read_bytes()[:8] == b"\x89PNG\r\n\x1a\n"
+
+
+def test_colorbar_label_states_sign_and_scale():
+    sign = "red: ld lowered, blue: ld raised"
+    assert M.colorbar_label("total", "raw", 3.59) == f"effect on the mean logit difference (logits)\n{sign}"
+    assert M.colorbar_label("direct", "raw", 3.59) == M.colorbar_label("total", "raw", 3.59)
+    assert M.colorbar_label("delta", "raw", 3.59) == f"frozen effect minus unfrozen effect (logits)\n{sign}"
+    assert M.colorbar_label("total", "scaled", 3.59) == (
+        f"effect on the mean logit difference\n/ clean-minus-corrupt gap (3.590)\n{sign}")
+    assert "gap (3.590)" in M.colorbar_label("delta", "scaled", 3.59)
