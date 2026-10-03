@@ -54,3 +54,13 @@ def test_sweep_and_floor_are_complete_and_consistent():
             assert (stage_dir(E3, stage, cs.item) / f"{cs.stem}.parquet").exists() == (stage == "selection")
     for item in ITEM:
         assert (E3 / "sweep" / item / "clean_s0.parquet").exists()
+
+
+def test_selection_is_reproducible_from_the_family():
+    from src.lesion.e3_select import select
+
+    tests = load(E3 / "selection" / "tests.json")
+    conf = load(E3 / "selection" / "confirmatory.json")
+    assert tests["n_tests"] == len(tests["tests"]) == 5616
+    again = select(tests["tests"])
+    assert again["selections"] == conf["selections"] and again["sets"] == conf["sets"]
