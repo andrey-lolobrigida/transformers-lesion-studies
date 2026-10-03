@@ -15,7 +15,10 @@ pytestmark = pytest.mark.slow
 E0 = Path("results/E0/e0_smoke_seed0_n100000.json")
 E1B = Path("results/E1b")
 IDENTITY = E1B / "identity" / "ioi_L0H0_zero_node_all_ablate-clean_n100000_seed0.json"
-PAIRS = [(item, scheme) for item in ("ioi", "induction", "factual", "agreement") for scheme in BATTERIES[item].schemes]
+# The schemes E1b gated. shuffle_prefix (E3, D-016 item 6) is gated by e3_verify into results/E3/gates/.
+E1B_SCHEMES = {"ioi": BATTERIES["ioi"].schemes, "induction": ("fresh_prefix",),
+               "factual": BATTERIES["factual"].schemes, "agreement": BATTERIES["agreement"].schemes}
+PAIRS = [(item, scheme) for item in ("ioi", "induction", "factual", "agreement") for scheme in E1B_SCHEMES[item]]
 
 
 def load(path: Path) -> dict:
