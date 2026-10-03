@@ -36,3 +36,21 @@ def test_shuffle_prefix_gate_artifact():
     assert d["battery"]["corruption"]["name"] == "shuffle_prefix"
     assert d["statistics"]["pairwise_accuracy"] == fresh["statistics"]["pairwise_accuracy"]  # shared clean stream
     assert d["statistics"]["clean"]["mean_ld"] == fresh["statistics"]["clean"]["mean_ld"]
+
+
+def test_sweep_and_floor_are_complete_and_consistent():
+    from src.lesion.e3_prereg import COMPONENTS, ITEM, MAP, label
+    from src.lesion.e3_sweep import cell_sets, cell_spec, stage_dir
+
+    for stage, expected in (("selection", 27), ("floor", 36)):
+        sets = cell_sets(tuple(ITEM), stage)
+        assert len(sets) == expected
+        for cs in sets:
+            rec = load(stage_dir(E3, stage, cs.item) / f"{cs.stem}.json")
+            assert rec["complete"] and rec["pre_registered"], cs
+            assert rec["components"] == [label(c) for c in COMPONENTS]
+            for c in COMPONENTS:
+                assert rec["cells"][label(c)]["spec"] == cell_spec(c, MAP[cs.map_id], cs.ref_seed).to_json()
+            assert (stage_dir(E3, stage, cs.item) / f"{cs.stem}.parquet").exists() == (stage == "selection")
+    for item in ITEM:
+        assert (E3 / "sweep" / item / "clean_s0.parquet").exists()
