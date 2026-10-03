@@ -1,0 +1,50 @@
+{
+  "gate": "e1b_identity",
+  "pass": true,
+  "compared": 432,
+  "per_item": {
+    "ioi": {
+      "floor_file": "results/E1b/noise/ioi/floor.json",
+      "compared": 144,
+      "mismatches": 0
+    },
+    "induction": {
+      "floor_file": "results/E1b/noise/induction/floor.json",
+      "compared": 144,
+      "mismatches": 0
+    },
+    "agreement": {
+      "floor_file": "results/E1b/noise/agreement/floor.json",
+      "compared": 144,
+      "mismatches": 0
+    }
+  },
+  "mismatches": [],
+  "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_gates --gate all",
+  "code_rev": "138204602ae3e75a48064031751930da3f91828f",
+  "environment": {
+    "repo_commit": "96591d2504b06776828c00ec52bf467fa5c28fe6",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 1813.4453592300415
+  }
+}
