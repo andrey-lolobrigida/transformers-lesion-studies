@@ -141,7 +141,8 @@ def adversarial_rows(arms: list[dict]) -> list[dict]:
             b = base[(a["unit"], a["map"])]
             row.update(z_test(a["effect"], row["s"]))
             row["baseline_effect"] = b["effect"]
-            row["sign_vs_baseline"] = "same" if (a["effect"] > 0) == (b["effect"] > 0) else "flipped"
+            row["sign_vs_baseline"] = ("zero" if a["effect"] == 0 or b["effect"] == 0 else
+                                       "same" if (a["effect"] > 0) == (b["effect"] > 0) else "flipped")
         rows.append(row)
     tested = [r for r in rows if r["arm"] != "baseline"]
     _holm_into(tested, lambda r: f"{r['unit']}|{r['map']}|{r['arm']}", lambda r: r["p"],
@@ -253,6 +254,7 @@ def prompt_overlap(ctx: Ctx, items) -> dict:
 
 
 def run_replicate(ctx: Ctx, name: str) -> dict:
+    t0 = time.time()
     sels = load_list(ctx.root, name)
     groups: dict[tuple[str, str], list] = {}
     for s in sels:
@@ -273,9 +275,10 @@ def run_replicate(ctx: Ctx, name: str) -> dict:
                 "ref_effects": [recs[rs]["cells"][label(c)]["effect_mean"] for rs in seeds] if m.value == "mean" else None}
     rows = replication_rows(sels, held, f"verify_{name}")
     record = {"phase": "E3", "command": ctx.command, "pre_registered": ctx.pre_registered, "list": name,
-              "family": f"verify_{name}", "alpha": ALPHA, "prompt_seed": HELD_OUT_SEED,
+              "code_rev": ctx.rev, "family": f"verify_{name}", "alpha": ALPHA, "prompt_seed": HELD_OUT_SEED,
               "ref_seeds": list(HELD_OUT_REF_SEEDS), "overlap": prompt_overlap(ctx, sorted({s["item"] for s in sels})),
-              "n_replicated": sum(r["verdict"] == "replicated" for r in rows), "rows": rows}
+              "n_replicated": sum(r["verdict"] == "replicated" for r in rows),
+              "environment": artifact.environment_record(ctx.model, ctx.batch_size, time.time() - t0), "rows": rows}
     path = ctx.root / "verify" / name / "replication.json"
     path.parent.mkdir(parents=True, exist_ok=True)
     path.write_text(json.dumps(record, indent=2))
@@ -291,6 +294,7 @@ def _write_run(ctx: Ctx, result, spec, battery, out: Path, base: str | None = No
 
 
 def run_restore(ctx: Ctx, name: str) -> dict:
+    t0 = time.time()
     sels = load_list(ctx.root, name)
     repl = json.loads((ctx.root / "verify" / name / "replication.json").read_text())["rows"]
     out = ctx.root / "verify" / name / "restore"
@@ -337,9 +341,10 @@ def run_restore(ctx: Ctx, name: str) -> dict:
                      "corrupt_mean_ld": result.aggregates["clean"]["mean_ld"]})
     rows = sufficiency_rows(runs, f"sufficiency_{name}")
     record = {"phase": "E3", "command": ctx.command, "pre_registered": ctx.pre_registered, "list": name,
-              "family": f"sufficiency_{name}", "alpha": ALPHA, "prompt_seed": HELD_OUT_SEED,
+              "code_rev": ctx.rev, "family": f"sufficiency_{name}", "alpha": ALPHA, "prompt_seed": HELD_OUT_SEED,
               "definition": "restore-clean: resample from the clean prompt onto the corrupt prompt, node, all "
                             "positions, unfrozen; fraction restored = -effect / gap, gap measured on the same draw",
+              "environment": artifact.environment_record(ctx.model, ctx.batch_size, time.time() - t0),
               "gaps": gaps, "rows": rows}
     path = ctx.root / "verify" / name / "restore.json"
     path.write_text(json.dumps(record, indent=2))
@@ -347,7 +352,20 @@ def run_restore(ctx: Ctx, name: str) -> dict:
     return record
 
 
+def load_persisted_arms(path: Path, rev: str) -> dict[tuple, dict]:
+    """Arms already finished under this code revision, keyed (unit, map, arm); stale-revision lines are ignored."""
+    out: dict[tuple, dict] = {}
+    if Path(path).exists():
+        for line in Path(path).read_text().splitlines():
+            if line.strip():
+                r = json.loads(line)
+                if r.get("code_rev") == rev:
+                    out[(r["unit"], r["map"], r["arm"])] = {k: v for k, v in r.items() if k != "code_rev"}
+    return out
+
+
 def run_adversarial(ctx: Ctx) -> dict:
+    t0 = time.time()
     gate = json.loads((ctx.root / "gates" / "induction" / f"{SHUFFLE_SCHEME}.json").read_text())
     shuffle_ok = gate["verdict"] is not None and gate["verdict"]["pass"]
     conf = load_list(ctx.root, "confirmatory")
@@ -358,15 +376,25 @@ def run_adversarial(ctx: Ctx) -> dict:
     if shuffle_ok:
         batteries[SHUFFLE_SCHEME] = _battery(ctx, "induction", SHUFFLE_SCHEME)
         arms.insert(1, SHUFFLE_SCHEME)
+    arms_path = ctx.root / "adversarial" / "arms.jsonl"
+    arms_path.parent.mkdir(parents=True, exist_ok=True)
+    done = load_persisted_arms(arms_path, ctx.rev)
     runs = []
     for u in units:
         for arm in arms:
-            r = run_arm(ctx, u, arm, batteries)
+            r = done.get((u["unit"], u["map"], arm))
+            if r is None:
+                r = run_arm(ctx, u, arm, batteries)
+                with arms_path.open("a") as f:
+                    f.write(json.dumps({**r, "code_rev": ctx.rev}) + "\n")
+            else:
+                print(f"  reused {u['unit']:14} {u['map']:24} {arm}", flush=True)
             if arm == "baseline":
                 check_baseline(ctx.root, r)
             runs.append(r)
     record = {"phase": "E3", "command": ctx.command, "pre_registered": ctx.pre_registered, "family": "adversarial",
-              "alpha": ALPHA, "prompt_seed": SEED,
+              "code_rev": ctx.rev, "alpha": ALPHA, "prompt_seed": SEED,
+              "environment": artifact.environment_record(ctx.model, ctx.batch_size, time.time() - t0),
               "shuffle_gate": {"pass": shuffle_ok,
                                "note": None if shuffle_ok else "shuffle_prefix failed its gate or has no verdict; "
                                                                "its arm was not run (logged as a null)"},

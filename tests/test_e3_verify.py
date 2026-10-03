@@ -132,3 +132,22 @@ def test_cli_refuses_before_the_model_loads(monkeypatch, tmp_path, argv):
     with pytest.raises(SystemExit) as e:
         V.main(argv + ["--out-root", str(tmp_path)])  # no committed lists under tmp_path
     assert e.value.code == 2
+
+
+def test_adversarial_sign_is_zero_when_an_effect_is_exactly_zero():
+    arms = [{"unit": "L5H5", "map": "total_zero_unfrozen", "arm": "baseline", "effect": 3.0, "sem": 0.1,
+             "ref_effects": None},
+            {"unit": "L5H5", "map": "total_zero_unfrozen", "arm": "end_only", "effect": 0.0, "sem": 0.1,
+             "ref_effects": None}]
+    rows = {r["arm"]: r for r in V.adversarial_rows(arms)}
+    assert rows["end_only"]["sign_vs_baseline"] == "zero"
+
+
+def test_persisted_arms_are_reused_only_for_the_same_code_rev(tmp_path):
+    p = tmp_path / "arms.jsonl"
+    good = {"unit": "L5H5", "map": "m", "arm": "baseline", "effect": 1.0, "code_rev": "abc"}
+    stale = {"unit": "L5H5", "map": "m", "arm": "end_only", "effect": 2.0, "code_rev": "old"}
+    p.write_text(json.dumps(good) + "\n" + json.dumps(stale) + "\n")
+    got = V.load_persisted_arms(p, "abc")
+    assert list(got) == [("L5H5", "m", "baseline")] and "code_rev" not in got[("L5H5", "m", "baseline")]
+    assert V.load_persisted_arms(tmp_path / "missing.jsonl", "abc") == {}
