@@ -78,3 +78,18 @@ def test_labels_round_trip_and_match_the_spec_labels():
     for bad in ("L1mlp", "H3", "L1H", ""):
         with pytest.raises(ValueError):
             P.parse_label(bad)
+
+
+def test_readme_mirrors_the_pre_registration():
+    text = Path("results/E3/README.md").read_text()
+    assert "## Pre-registration" in text
+    for m in P.MAPS:
+        assert f"`{m.id}`" in text, m.id
+    for item in P.ITEMS:
+        assert f"`{item.scheme}`" in text
+    for s in ("n = 2,000", "prompt seed 0", "prompt seed 1", "reference seeds 0–4", "reference seeds 5–9",
+              "α = 0.05", "k = 10", "5,616", "2,808", "1,404", "batch size 128", "`shuffle_prefix`", "`exact_zero`",
+              "5.5, 6.9, 4.11, 2.2", "{5.5, 6.9}", "L9H6", "L5H5", "L0.mlp", "0.90", "1.0 logit", "≥ 30"):
+        assert s in text, s
+    for fam in P.FAMILIES:
+        assert f"`{fam}`" in text, fam
