@@ -147,8 +147,12 @@ implements **pattern freezing** (all attention patterns pinned to their
 clean-run values, per Olsson et al.), which E2's induction reproduction
 requires and which is this project's own axis, not a literature-standard
 one. Direct effect is recorded per head alongside the node-level total effect
-in the same run; the gap between them is the self-repair number E4 starts
-from. Decided in the O-011 resolutions (2026-09-08 and 2026-09-19); the
+in the same run; the gap between them is the baseline E4 starts from. It is
+a net figure, not a measure of self-repair: it contains the component's own
+indirect effect through later heads as well as any compensation, and under
+the `wang` MLP convention any compensation by later MLPs or the final
+LayerNorm sits inside the direct effect, not in the gap
+(`docs/01-methods.md`, "Direct effect"). Decided in the O-011 resolutions (2026-09-08 and 2026-09-19); the
 reasoning is there.
 
 **E1a — harness. Exit criterion:** the harness ablates an arbitrary head
