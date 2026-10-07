@@ -193,16 +193,27 @@ every time.
   Positive means the ablation hurt. Necessity only. Everything downstream
   responds, backup heads included, so the number *contains* compensation.
 - **Direct effect, this project's sense** (O-011 resolution). Same
-  substitution, but every other path from $a$ to the logits is frozen at
-  its clean value, so only $a$'s own contribution to the final residual
-  state changes. Wang et al. implement it as path patching with the
+  substitution, but every other attention head's output is held at its
+  clean value, so the change reaches the final residual state through $a$'s
+  own write and not through any later head. Under the `wang` convention,
+  the harness default and the one E2 and E3 use, MLPs are part of the
+  direct path and recompute [miller-2024 App. F], and the final LayerNorm
+  recomputes as well. So the number also contains what later MLPs and the
+  final LayerNorm do in response to $a$. Under `term`, MLPs are held too.
+  Wang et al. implement it as path patching with the
   receiver set to the residual end state [wang-2022 App. B fn. 3]; Miller
   et al. call it edge ablation to the logits.
 
   $$\Delta_{\mathrm{direct}}(a) = F(M) - \mathbb{E}_x\big[\, f\big(M(x \mid \tilde a \text{ on the edge } a \to \mathrm{logits} \text{ only})\big) \big]$$
 
-  $\Delta_{\mathrm{total}} - \Delta_{\mathrm{direct}}$ is the downstream
-  compensation, and is the E4 baseline E3 records for free. **Name
+  $\Delta_{\mathrm{total}} - \Delta_{\mathrm{direct}}$ is the net effect
+  of every route through later heads. It contains downstream compensation
+  but is not equal to it: $a$'s own indirect effect through later heads
+  (an earlier head that acts by changing what a later head attends to) is
+  in the same difference, often with the opposite sign. Under `wang`,
+  compensation by later MLPs or by the final LayerNorm sits inside
+  $\Delta_{\mathrm{direct}}$ and is not in the difference at all. It is the
+  E4 baseline E3 records for free, read as a net figure. **Name
   collision:** Meng et al.'s "direct effect" (fn. 3) is Pearl's mediation
   quantity — the corruption's effect that bypasses a restored state — and
   is not this.
