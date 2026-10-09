@@ -643,6 +643,21 @@ entry records what outlives the phase.*
    factual recall, a second scheme for IOI or agreement, interpreting the
    total-minus-direct gap (E4), deciding the E4 spine.
 
+**Adversarial arms equal to baseline by construction — *2026-10-09*.** Of
+the 250 tested adversarial arms (125 units × `shuffle_prefix` and END-only,
+commit `133a8fe`), 73 equal their baseline cell exactly, for reasons fixed by
+the design rather than measured: `shuffle_prefix` under zero ablation (39 arms;
+zero ablation never reads the corrupt prompt, and the clean stream and answer
+tokens are shared with `fresh_prefix`); END-only on direct-effect maps (32;
+the direct effect is read at END only); END-only on L11.mlp (2; a last-layer
+MLP reaches the logits only at its own position). The spec did not anticipate
+this. Ruling: the README reports these 73 as *uninformative by construction*
+and leaves them out of every count of arms that held up; the Holm family stays
+as run and pre-registered (keeping them only makes the other tests stricter,
+and all 73 reject either way). Rejected: re-running Holm without them (a
+post-hoc change to a pre-registered family, with nothing gained). Proposed by
+Claude, the author's call.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
