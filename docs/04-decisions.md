@@ -669,9 +669,16 @@ it. Main family: 5,616 tests, 4,302 rejected, 117 exact zeros (the 13
 layer-11 components' deltas, as predicted). Confirmatory list (`109cc90`):
 270 selections, 10 in each of the 27 cell sets with no tie at a cut; 270
 replicated. Exploratory list (the author's, `7738b51`): 18 entries; 18
-replicated. Restore-clean, reported and never gating: 50 of 66 confirmatory
-and 12 of 14 exploratory single components clear Holm in their sufficiency
-families, and all six set restores do. Adversarial (`133a8fe`): 250 tested
+replicated. The replication gate could hardly have failed for these cells:
+the weakest seed-0 z was 8.4 (confirmatory) and 12.0 (exploratory), against
+first Holm steps of about 3.74 and 2.99, so these counts show stability on a
+fresh draw, not a hard test. Restore-clean, reported and never gating, is a
+two-sided test: of 66 confirmatory single components, 40 restore a positive
+fraction that clears Holm, 10 a negative fraction that clears it and 16 do
+not clear; of 14 exploratory, 7, 5 and 2. Of the six set restores, five are
+positive and clear; the sixth (agreement, exploratory, the single head 6.5)
+restores a negative fraction, −0.035, that clears. A negative fraction is not
+a sufficiency result. Adversarial (`133a8fe`): 250 tested
 arms, 249 reject; 73 are uninformative by construction (the ruling above);
 of the other 177, 158 held up, 18 flip sign against the baseline, and 1
 (4.11 END-only under frozen resample) does not clear, a case the

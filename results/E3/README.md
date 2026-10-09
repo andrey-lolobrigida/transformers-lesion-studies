@@ -149,8 +149,17 @@ directory; where an artifact records no command, the table says so.
 | `exit_confirmatory.json`, `exit_exploratory.json` | `uv run python -m src.lesion.e3_verify --stage table` | not recorded (the exit tables carry no `command`, `code_rev` or `environment`); the command is the module docstring's |
 | Slow-tier checks on all of the above | `uv run pytest -q -m slow tests/test_e3_validation.py tests/test_e3_prereg.py` | — |
 
-The sweep and the verification stages resume: rerunning the same command
-skips finished cells (adversarial arms are reused from `arms.jsonl`).
+**Rerunning into `results/E3` overwrites committed records.** A stage skips
+a finished cell only when the cell's `code_rev` equals the current one
+(`e3_sweep.py`). The sweep, floor and gate cells are stamped `1382046`, and
+at the branch head `code_rev` is `9154af6` (the figure fix touched
+`src/lesion/e3_maps.py`). So rerunning the gate, sweep or floor commands
+above as written recomputes every cell (about 15 GPU-hours for sweep and
+floor) and rewrites the committed records in place. To reproduce, add
+`--out-root scratch/E3` (every E3 CLI takes it) and compare `effect_mean` and
+`sem` with the committed records. The held-out, restore and adversarial
+records are stamped `9154af6`, so those stages do skip finished work at the
+branch head (adversarial arms are reused from `arms.jsonl`).
 
 **Provenance.**
 
@@ -242,8 +251,9 @@ reported; no verdict on the prediction was pre-registered.
   large. The expected reading of these single-layer maps was therefore a
   blank MLP row, with MLP0 the expected exception on IOI (O-007 resolution,
   item 2). The measured rows are in §4.
-- **IOI and induction overlap.** The IOI circuit contains the induction heads
-  5.5 and 6.9 (`L5H5`, `L6H9`) (D-013). A component on both items' maps is
+- **IOI and induction overlap.** The heads that Wang et al. and E2 label
+  induction heads, 5.5 and 6.9 (`L5H5`, `L6H9`), are also in Wang et al.'s
+  IOI circuit (D-013). A component on both items' maps is
   not, by that fact, evidence of anything shared beyond this overlap; any
   cross-item reading starts from it.
 - **Direct effect** is Wang et al.'s edge-to-logits effect, with the `wang`
@@ -442,16 +452,20 @@ its baseline cell exactly for a reason fixed by the design (D-016, ruling of
 2026-10-09): `shuffle_prefix` under zero ablation (zero ablation never reads
 the corrupt prompt, and the clean stream and answer tokens are shared with
 `fresh_prefix`), END-only on a direct-effect map (the direct effect is read
-at END only), END-only on `L11.mlp` (a last-layer MLP reaches the logits only
-at its own position). Such an arm is uninformative and is left out of every
+at END only), END-only on a layer-11 component under a total-effect map (a
+layer-11 component reaches the logits only at its own position; the two
+such arms measured here are both `L11.mlp`'s). Such an arm is uninformative and is left out of every
 count of arms that held up; it stays in the Holm family as run.
 
 ### Confirmatory
 
 270 selections (10 in each of the 27 cell sets), **270 replicated**, 0 not
 replicated. Held-out / seed-0 effect ratio: 0.899 to 1.135 across the 270.
-Restore: 50 of the 66 (item, component) singles clear Holm in
-`sufficiency_confirmatory`; 16 do not (§6).
+Restore (two-sided test, so a fraction can clear Holm in either direction):
+of the 66 (item, component) singles, 40 restore a positive fraction that
+clears Holm in `sufficiency_confirmatory`, 10 a negative fraction that clears
+it (writing the clean activation in moves the mean `ld` further from clean),
+and 16 do not clear (§6).
 
 #### IOI (confirmatory)
 
@@ -947,7 +961,8 @@ unsourced; its mean reference mixes subject numbers, §3):
 
 Per item, the list's replicated heads together, restore-clean on the held-out
 draw (sufficiency, `sufficiency_confirmatory`). MLPs are left out of the set
-(the set machinery is heads only), and the ones left out are named:
+(the set machinery is heads only), and the ones left out are named. All
+three confirmatory set fractions are positive and clear Holm:
 
 - ioi: L0H8, L1H3, L3H0, L5H5, L5H9, L7H3, L7H9, L8H6, L8H10, L9H6, L9H9, L10H0, L10H6, L10H7, L10H10, L11H0, L11H2, L11H10 together restore 0.868 ± 0.011 of the gap (clears Holm); MLPs left out: L0.mlp, L4.mlp, L5.mlp, L10.mlp.
 - induction: L0H1, L0H3, L0H11, L1H10, L4H11, L5H1, L5H9, L6H7, L6H9, L7H6, L8H5, L9H6, L10H7, L11H0, L11H8, L11H10 together restore 0.2847 ± 0.0058 of the gap (clears Holm); MLPs left out: L0.mlp, L4.mlp, L6.mlp, L7.mlp, L8.mlp, L9.mlp, L10.mlp, L11.mlp.
@@ -958,8 +973,9 @@ draw (sufficiency, `sufficiency_confirmatory`). MLPs are left out of the set
 18 entries, chosen by the author after seeing the maps and committed before
 their verification (`7738b51`); verified exactly as the confirmatory list.
 **18 replicated**, 0 not replicated. Held-out / seed-0 effect ratio: 0.833 to
-1.152. Restore: 12 of the 14 (item, component) singles clear Holm in
-`sufficiency_exploratory`; 2 do not (§6). The author's reasons, verbatim from
+1.152. Restore (two-sided): of the 14 (item, component) singles, 7 restore a
+positive fraction that clears Holm in `sufficiency_exploratory`, 5 a negative
+fraction that clears it, and 2 do not clear (§6). The author's reasons, verbatim from
 `selection/exploratory.json` (`why`):
 
 1. ioi / `total_mean_unfrozen` / L9H9: Frozen +2.580 (selected, rank 1) against unfrozen +0.260 under mean; zero +2.582 against +0.199, resample +2.596 against +0.306; direct +2.505. Delta (frozen − unfrozen) +2.320, the largest on IOI under mean. The unfrozen end is not selected in any set; listed so that the low end of the contrast is verified.
@@ -1044,6 +1060,10 @@ their verification (`7738b51`); verified exactly as the confirmatory list.
 
 #### Set restores (exploratory)
 
+Two of the three set fractions are positive and clear Holm; the agreement
+"set" (the single head `L6H5`) restores a negative fraction that clears Holm,
+which moves the mean `ld` further from clean and is not a sufficiency result.
+
 - ioi: L4H11, L9H9, L10H0, L10H10 together restore 1.061 ± 0.011 of the gap (clears Holm); MLPs left out: L3.mlp, L8.mlp.
 - induction: L6H6, L6H9, L6H10, L7H3, L9H6 together restore 0.1514 ± 0.0017 of the gap (clears Holm); MLPs left out: L1.mlp.
 - agreement: L6H5 restores −0.03538 ± 0.00055 of the gap (clears Holm); MLPs left out: L5.mlp.
@@ -1112,6 +1132,18 @@ their verification (`7738b51`); verified exactly as the confirmatory list.
 - **Clearing Holm is not importance.** At n = 2,000 most cells clear: 4,302 of
   the 5,616 tests in `main`. Clearing says a cell is distinguishable from no
   effect at this n, not that it is large.
+- **Replication was a weak test here.** The weakest confirmatory selection
+  had a seed-0 z of 8.4 (median 55.4); the first Holm step of
+  `verify_confirmatory` (m = 270) needs a two-sided z of about 3.74. For the
+  exploratory list the weakest seed-0 z is 12.0 against about 2.99 (m = 18).
+  A selection would have had to lose more than half its z on the fresh draw,
+  or change sign, to fail. So 270 of 270 and 18 of 18 replicated show that
+  these cells are stable on a fresh draw at n = 2,000. They do not show that
+  the effects are large or that they mean anything.
+- **The sufficiency test is two-sided.** "Clears Holm" in `sufficiency_*`
+  means a fraction restored is distinguishable from zero in either direction.
+  A negative fraction (15 singles and one set across the two lists) is never
+  a sufficiency result.
 - **k = 10 is ours.** The cut has no source; every exit row reports the rank
   so a reader can apply another cut. No set had a tie at the cut.
 - **The five-seed sd is rough.** The reference spread for mean cells comes
