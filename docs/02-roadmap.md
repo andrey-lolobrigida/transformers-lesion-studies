@@ -208,21 +208,30 @@ Zero-, mean-, and resample-ablate every head in GPT-2 small, one at a time,
 scored on the full E1 battery. Produce the heatmaps — one per ablation method,
 shown together, never one alone.
 
-*Four maps, not three, per the O-011 resolution:* the three above at total
-effect, plus the pattern-preserving variant of whichever substitution method R1
-settles as the in-distribution default, with the delta against its unfrozen twin
-reported. A large delta escalates to the full cross; a small one is a logged
-negative result. Detail lives in the decision log, not here.
+*Six total-effect maps per item, per D-016:* {zero, mean, resample} ×
+{patterns unfrozen, frozen}, plus three direct-effect maps (edge to logits,
+unfrozen, one per value) and three frozen-delta maps (frozen effect minus
+unfrozen effect, one per value). Detail lives in the decision log, not here.
 
 The comparison across ablation methods is the actual content here. If the three
 maps agree, that's a finding about robustness. If they disagree, the pattern of
 disagreement is more interesting than either map.
 
-**Exit criterion:** three heatmaps plus a written interpretation that states,
-for every claim, which ablation method supports it and whether it is a
-necessity or sufficiency claim. Any head singled out as important gets verified
-with activation patching before it is named.
+**Exit criterion:** per item, the six total-effect maps, the three
+direct-effect maps and the three frozen-delta maps, plus a written
+interpretation that states, for every claim, which ablation method supports it
+and whether it is a necessity or sufficiency claim. Any head singled out as
+important gets verified with activation patching before it is named. Under
+D-016 item 5, "verified with activation patching" is read as: replication on a
+held-out draw gates naming, and restore-clean patching is run and reported
+beside the necessity claim, in sufficiency language, without gating.
 **Tag:** `v-E3`
+*Built 2026-10-02 to 2026-10-09 on `phase-E3-functional-map`; not yet
+reviewed or tagged. Rules: D-016; pre-registration commit `96591d2`. Of 270
+confirmatory selections (`109cc90`), 270 replicated on the held-out draw; of
+the author's 18 exploratory entries (`7738b51`), 18 replicated. Induction
+adversarial checks: 250 tested arms, 73 uninformative by construction, 158 of
+the other 177 held up, 18 flipped sign. See `results/E3/README.md`.*
 
 **Decision point:** after E3, confirm or replace the E4 spine based on what the
 maps actually showed.

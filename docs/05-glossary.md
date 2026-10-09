@@ -740,3 +740,29 @@ D-015 item 8; `src/lesion/knockout.py`.
 activations written in − mean corrupt `ld`) / (mean clean `ld` − mean corrupt
 `ld`): a sufficiency reading, never a necessity one. Can exceed 1 or be
 negative. `src/lesion/e2_targets.py`; `results/E2/README.md` I4, P4.
+
+## Added 2026-10-09 — E3 functional map
+
+**Cell set** — one item × one map: 156 cells (144 heads and 12 MLP layers)
+under one value, one freeze setting and one total/direct choice, at one
+prompt seed (and, for mean, one reference seed). The unit of selection (rule
+A ranks within it) and of storage (one JSON, plus one parquet where
+per-prompt data is kept). D-016 items 4 and 7; `src/lesion/e3_sweep.py`.
+
+**Confirmatory / exploratory selection** — a confirmatory selection is chosen
+by the pre-registered rule (rule A, $k = 10$) and listed by script before any
+verification; an exploratory one is chosen by the author after seeing the
+maps, with a written reason, and committed before its own verification. Both
+are verified the same way; the exploratory label stays on every result that
+comes from one. D-016 items 1 and 4; `results/E3/selection/`.
+
+**Held-out replication** — re-running a selection under its own cell set's
+settings on a fresh draw (prompt seed 1; mean at reference seeds 5–9):
+replicated iff same sign and clears Holm over the list's verification family.
+A fresh draw, not disjoint prompts; the overlap is counted. In E3 it gates
+naming; restore-clean patching does not. D-016 item 5.
+
+**Exact zero** — a frozen delta that is zero on every prompt (and, for mean,
+at every reference seed) by construction, as for the 13 layer-11 components,
+which have no attention layer downstream for freezing to act on. Recorded as
+`exact_zero`, not tested, kept in the family with $p = 1$. D-016 item 3.

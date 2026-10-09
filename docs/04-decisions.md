@@ -658,6 +658,29 @@ and all 73 reject either way). Rejected: re-running Holm without them (a
 post-hoc change to a pre-registered family, with nothing gained). Proposed by
 Claude, the author's call.
 
+**Outcome — *2026-10-09*.** E3 ran under these rules on
+`phase-E3-functional-map`, pre-registration commit `96591d2`, every map at
+n = 2,000 on prompt seed 0, with the held-out draw on prompt seed 1. The
+validation gates passed on the first run (432, 96 and 3 bitwise comparisons).
+The `shuffle_prefix` gate passed (pairwise accuracy 0.999, gap
++17.288 ± 0.159); its corrupt mean `ld` was −0.283 ± 0.087 against the
+prediction of ≈ 0 written before the run, with no verdict pre-registered on
+it. Main family: 5,616 tests, 4,302 rejected, 117 exact zeros (the 13
+layer-11 components' deltas, as predicted). Confirmatory list (`109cc90`):
+270 selections, 10 in each of the 27 cell sets with no tie at a cut; 270
+replicated. Exploratory list (the author's, `7738b51`): 18 entries; 18
+replicated. Restore-clean, reported and never gating: 50 of 66 confirmatory
+and 12 of 14 exploratory single components clear Holm in their sufficiency
+families, and all six set restores do. Adversarial (`133a8fe`): 250 tested
+arms, 249 reject; 73 are uninformative by construction (the ruling above);
+of the other 177, 158 held up, 18 flip sign against the baseline, and 1
+(4.11 END-only under frozen resample) does not clear, a case the
+pre-registration expected for the previous-token heads. One code change
+landed below the pre-registration block, figures only (`9154af6`, with the
+README line `7cb228e`). No row is added to the null table: no selection
+failed to replicate and no gate failed. Results and caveats:
+`results/E3/README.md`. Awaiting the author's review; `v-E3` not tagged.
+
 ## Open questions
 
 ### O-001 — Has recent work closed the E4 gap?
@@ -849,6 +872,11 @@ an MLP result at the level of ten-layer windows). Decided:
 Consequence for the roadmap: E1's harness sentence "over any component"
 now means heads and MLP layers explicitly. Recorded in `docs/02-roadmap.md`
 in this commit. O-007 is closed; nothing about it remains pinned to R1.
+
+*Note, 2026-10-09 — item 3 closed.* E3 did not sweep windows of MLP layers.
+Their motivating case, factual recall, failed its gate (D-013), so the case
+item 3 named is not in the battery; D-016 item 8 lists MLP windows as out of
+E3.
 
 ### O-008 — How much of E4 is reproduction rather than extension?
 *Raised 2026-09-02.*
@@ -1200,6 +1228,17 @@ The frozen sign is not zero-specific: 6.9 and 2.2 raise mean `ld` under
 frozen zero, mean and resample, 4.11 under frozen zero and mean; per-unit
 signs and the rule-7 checks not yet possible (one induction scheme and prompt
 construction) are in `results/E2/README.md` §I3.
+
+*Note, 2026-10-09 — E3 ran the full freeze cross.* E3 swept six
+total-effect maps per item ({zero, mean, resample} × {unfrozen, frozen}),
+not the four of decision 4 (2026-09-08), per D-016 item 2. The measured
+reason is the E2 I3 addendum above: every induction delta exceeded the
+item's floor under all three values, on units chosen because they are the
+induction circuit. Every frozen delta is in E3's main Holm family with a
+paired standard error; 993 of the 1,404 clear Holm and 117 are exact zeros
+(layer 11). Delta maps:
+`results/E3/figures/{item}_delta_{raw,scaled}.png`; values:
+`results/E3/selection/tests.json`; measured sizes: `results/E3/README.md` §8.
 
 ### O-012 — Which induction mechanism does GPT-2 small use?
 *Raised 2026-09-14, during the R0 extraction of Elhage et al. 2021. Confirmed
