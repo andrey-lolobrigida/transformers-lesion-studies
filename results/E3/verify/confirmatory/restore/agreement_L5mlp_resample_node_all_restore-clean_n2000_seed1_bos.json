@@ -1,0 +1,223 @@
+{
+  "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_verify --stage restore --list confirmatory",
+  "cli": {
+    "stage": "restore"
+  },
+  "spec": {
+    "granularity": "mlp-layer",
+    "component": {
+      "kind": "mlp",
+      "layer": 5
+    },
+    "component_type": "node",
+    "value": "resample",
+    "reference": null,
+    "receiver": null,
+    "mlp_convention": null,
+    "positions": {
+      "kind": "all"
+    },
+    "direction": "restore-clean",
+    "set": "single-component",
+    "freeze_patterns": false
+  },
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 1.345782995223999
+  },
+  "battery": {
+    "name": "agreement",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; template key prep/congruency",
+    "labels": [
+      "N1",
+      "PREP",
+      "N2",
+      "END"
+    ],
+    "schemes": [
+      "number_flip",
+      "number_flip_all"
+    ],
+    "corruption": {
+      "name": "number_flip",
+      "removes": "the subject's grammatical number: N1 replaced by its own other-number form (dog <-> dogs)",
+      "inserts": "the opposite number on the same noun; preposition, attractor and length kept, so congruent prompts become incongruent and back. c and s stay the clean labels, so the corrupt prompt favours s: expected corrupt ld near minus the clean ld, fraction removed near 2 (D-014 item 2)",
+      "source": "ours (D-013 fallback; unsourced)"
+    }
+  },
+  "destination_prompt": "corrupt",
+  "effect_sign": "positive = restoring the clean value hurt; negative = restoration helped (unintervened minus intervened, on the corrupt prompt)",
+  "expected_direction": "positive",
+  "reference": null,
+  "results": {
+    "clean": {
+      "n": 2000,
+      "mean_ld": -2.589991807937622,
+      "std_ld": 1.2052421569824219,
+      "sem_ld": 0.026950033381581306,
+      "mean_p_c": 0.0022528860718011856,
+      "c_over_s": 0.017500000074505806
+    },
+    "ablated": {
+      "n": 2000,
+      "mean_ld": -2.4069676399230957,
+      "std_ld": 1.177409052848816,
+      "sem_ld": 0.026327667757868767,
+      "mean_p_c": 0.0027192796114832163,
+      "c_over_s": 0.01549999974668026
+    },
+    "effect": {
+      "ld": {
+        "effect_mean": -0.183024063706398,
+        "sem": 0.005974560044705868,
+        "ratio_of_means": 0.9293341040611267,
+        "mean_of_ratios": 0.9277912378311157,
+        "ratio_iqr": [
+          0.8648169040679932,
+          0.9910380840301514
+        ],
+        "n_abs_clean_below_0.1": 13
+      },
+      "p_c": {
+        "effect_mean": -0.0004663932486437261,
+        "sem": 2.8268001187825575e-05
+      },
+      "c_over_s": {
+        "effect_mean": 0.0020000000949949026,
+        "sem": 0.0014138597762212157
+      }
+    },
+    "by_template": {
+      "behind/congruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -1.6125401258468628,
+          "mean_p_c": 0.0026521426625549793,
+          "c_over_s": 0.06400000303983688
+        },
+        "ablated": {
+          "mean_ld": -1.4364476203918457,
+          "mean_p_c": 0.003012174041941762,
+          "c_over_s": 0.05999999865889549
+        }
+      },
+      "behind/incongruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -2.7167439460754395,
+          "mean_p_c": 0.0020384707022458315,
+          "c_over_s": 0.0
+        },
+        "ablated": {
+          "mean_ld": -2.491147756576538,
+          "mean_p_c": 0.0029087516013532877,
+          "c_over_s": 0.0
+        }
+      },
+      "beside/congruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -2.860462188720703,
+          "mean_p_c": 0.003621162846684456,
+          "c_over_s": 0.0
+        },
+        "ablated": {
+          "mean_ld": -2.7231640815734863,
+          "mean_p_c": 0.003945489879697561,
+          "c_over_s": 0.0
+        }
+      },
+      "beside/incongruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -4.078976631164551,
+          "mean_p_c": 0.0013346642954275012,
+          "c_over_s": 0.0
+        },
+        "ablated": {
+          "mean_ld": -3.7376694679260254,
+          "mean_p_c": 0.0019335419638082385,
+          "c_over_s": 0.0
+        }
+      },
+      "near/congruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -1.522308588027954,
+          "mean_p_c": 0.002669231267645955,
+          "c_over_s": 0.052000001072883606
+        },
+        "ablated": {
+          "mean_ld": -1.467252492904663,
+          "mean_p_c": 0.0026318803429603577,
+          "c_over_s": 0.04399999976158142
+        }
+      },
+      "near/incongruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -2.7549617290496826,
+          "mean_p_c": 0.0014727335656061769,
+          "c_over_s": 0.0
+        },
+        "ablated": {
+          "mean_ld": -2.647568702697754,
+          "mean_p_c": 0.00193120539188385,
+          "c_over_s": 0.0
+        }
+      },
+      "with/congruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -2.074110984802246,
+          "mean_p_c": 0.0022705907467752695,
+          "c_over_s": 0.024000000208616257
+        },
+        "ablated": {
+          "mean_ld": -1.8607138395309448,
+          "mean_p_c": 0.00259797228500247,
+          "c_over_s": 0.019999999552965164
+        }
+      },
+      "with/incongruent": {
+        "n": 250,
+        "clean": {
+          "mean_ld": -3.099829912185669,
+          "mean_p_c": 0.00196409341879189,
+          "c_over_s": 0.0
+        },
+        "ablated": {
+          "mean_ld": -2.8917770385742188,
+          "mean_p_c": 0.0027932203374803066,
+          "c_over_s": 0.0
+        }
+      }
+    }
+  },
+  "direct_effect_definition": null,
+  "pre_registered": true
+}

@@ -1,0 +1,778 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "induction",
+    "scheme": "fresh_prefix",
+    "map": "total_mean_frozen",
+    "kind": "total",
+    "value": "mean",
+    "frozen": true,
+    "prompt_seed": 1,
+    "ref_seed": 5,
+    "ref_n": 2000,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix",
+      "shuffle_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/induction/fresh_prefix.json",
+    "gap": 17.0118350982666,
+    "gap_sem": 0.1383601576089859,
+    "fraction_removed": 1.0004171442121044
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/induction/clean_s1.parquet",
+  "components": [
+    "L0H1",
+    "L5H1",
+    "L7H6",
+    "L8H5",
+    "L10H7",
+    "L0.mlp",
+    "L6.mlp",
+    "L7.mlp",
+    "L9.mlp",
+    "L10.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L5H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 1
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 4.449957847595215,
+      "sem": 0.07227878272533417,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 12.437820434570312,
+      "ratio_of_means": 0.7364983558654785,
+      "p_c": {
+        "effect_mean": 0.32097259163856506,
+        "sem": 0.004737065639346838
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.5.attn.hook_z"
+      },
+      "seconds": 9.00123906135559
+    },
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.181997776031494,
+      "sem": 0.03687048703432083,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.705779075622559,
+      "ratio_of_means": 0.8707942366600037,
+      "p_c": {
+        "effect_mean": 0.11227445304393768,
+        "sem": 0.0023489929735660553
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.10.hook_mlp_out"
+      },
+      "seconds": 8.991284370422363
+    },
+    "L9.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 9
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.8821887969970703,
+      "sem": 0.03329933434724808,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.005589485168457,
+      "ratio_of_means": 0.8885473608970642,
+      "p_c": {
+        "effect_mean": 0.08792971819639206,
+        "sem": 0.001918126828968525
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.9.hook_mlp_out"
+      },
+      "seconds": 9.00190281867981
+    },
+    "L7H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 6
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.6693031787872314,
+      "sem": 0.032379548996686935,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.218474388122559,
+      "ratio_of_means": 0.9011532068252563,
+      "p_c": {
+        "effect_mean": 0.12042570859193802,
+        "sem": 0.0026141260750591755
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.7.attn.hook_z"
+      },
+      "seconds": 8.9901602268219
+    },
+    "L7.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 7
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.624963641166687,
+      "sem": 0.03731650114059448,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.262813568115234,
+      "ratio_of_means": 0.9037787318229675,
+      "p_c": {
+        "effect_mean": 0.05635394901037216,
+        "sem": 0.0017314645228907466
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.7.hook_mlp_out"
+      },
+      "seconds": 8.99437665939331
+    },
+    "L0H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 1
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.553216814994812,
+      "sem": 0.035075437277555466,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.33456039428711,
+      "ratio_of_means": 0.908027172088623,
+      "p_c": {
+        "effect_mean": 0.07172279804944992,
+        "sem": 0.0018654343439266086
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.0.attn.hook_z"
+      },
+      "seconds": 8.995497226715088
+    },
+    "L8H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 5
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.5243947505950928,
+      "sem": 0.031336233019828796,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.363382339477539,
+      "ratio_of_means": 0.9097338318824768,
+      "p_c": {
+        "effect_mean": 0.07466476410627365,
+        "sem": 0.0015568197704851627
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.8.attn.hook_z"
+      },
+      "seconds": 8.992566108703613
+    },
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.2274789810180664,
+      "sem": 0.10993547737598419,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.660299301147461,
+      "ratio_of_means": 0.9273155927658081,
+      "p_c": {
+        "effect_mean": 0.34140855073928833,
+        "sem": 0.00764775974676013
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.0.hook_mlp_out"
+      },
+      "seconds": 9.000328540802002
+    },
+    "L10H7": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 7
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.2748726606369019,
+      "sem": 0.0177617110311985,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 18.16265106201172,
+      "ratio_of_means": 1.075490951538086,
+      "p_c": {
+        "effect_mean": -0.08566301316022873,
+        "sem": 0.0024276848416775465
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 8.990912675857544
+    },
+    "L6.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 6
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 5,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.0884897708892822,
+      "sem": 0.027736056596040726,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.799287796020508,
+      "ratio_of_means": 0.9355457425117493,
+      "p_c": {
+        "effect_mean": 0.043441303074359894,
+        "sem": 0.001659054309129715
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 5,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 88,
+          "i10": 91,
+          "i11": 99,
+          "i12": 86,
+          "i13": 94,
+          "i14": 69,
+          "i15": 94,
+          "i16": 97,
+          "i17": 84,
+          "i18": 102,
+          "i19": 81,
+          "i2": 88,
+          "i20": 94,
+          "i21": 91,
+          "i22": 94,
+          "i3": 88,
+          "i4": 87,
+          "i5": 99,
+          "i6": 80,
+          "i7": 98,
+          "i8": 86,
+          "i9": 110
+        },
+        "hook": "blocks.6.hook_mlp_out"
+      },
+      "seconds": 9.000211715698242
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 90.03115677833557
+  }
+}

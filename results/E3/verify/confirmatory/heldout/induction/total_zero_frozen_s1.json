@@ -1,0 +1,418 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "induction",
+    "scheme": "fresh_prefix",
+    "map": "total_zero_frozen",
+    "kind": "total",
+    "value": "zero",
+    "frozen": true,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix",
+      "shuffle_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/induction/fresh_prefix.json",
+    "gap": 17.0118350982666,
+    "gap_sem": 0.1383601576089859,
+    "fraction_removed": 1.0004171442121044
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/induction/clean_s1.parquet",
+  "components": [
+    "L0H3",
+    "L0H11",
+    "L5H1",
+    "L5H9",
+    "L7H6",
+    "L0.mlp",
+    "L6.mlp",
+    "L7.mlp",
+    "L10.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 3.3581957817077637,
+      "sem": 0.1062869280576706,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 13.529581069946289,
+      "ratio_of_means": 0.8011463284492493,
+      "p_c": {
+        "effect_mean": 0.48619160056114197,
+        "sem": 0.007256512530148029
+      },
+      "reference": null,
+      "seconds": 5.864922761917114
+    },
+    "L5H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 1
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.8531813621520996,
+      "sem": 0.0586664192378521,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.034597396850586,
+      "ratio_of_means": 0.8310505747795105,
+      "p_c": {
+        "effect_mean": 0.14799246191978455,
+        "sem": 0.003276111325249076
+      },
+      "reference": null,
+      "seconds": 5.8583173751831055
+    },
+    "L7H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 6
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.462859869003296,
+      "sem": 0.038684554398059845,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.424918174743652,
+      "ratio_of_means": 0.8541632294654846,
+      "p_c": {
+        "effect_mean": 0.1916603296995163,
+        "sem": 0.0035712511744350195
+      },
+      "reference": null,
+      "seconds": 5.869585752487183
+    },
+    "L0H11": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -2.1700503826141357,
+      "sem": 0.03001205250620842,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 19.057828903198242,
+      "ratio_of_means": 1.1284983158111572,
+      "p_c": {
+        "effect_mean": -0.0698159784078598,
+        "sem": 0.001807507942430675
+      },
+      "reference": null,
+      "seconds": 5.8602681159973145
+    },
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.9915457963943481,
+      "sem": 0.0339062362909317,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.896231651306152,
+      "ratio_of_means": 0.8820717930793762,
+      "p_c": {
+        "effect_mean": 0.10182534158229828,
+        "sem": 0.002386068692430854
+      },
+      "reference": null,
+      "seconds": 5.860870122909546
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.7234030961990356,
+      "sem": 0.04546009376645088,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 18.61117935180664,
+      "ratio_of_means": 1.1020503044128418,
+      "p_c": {
+        "effect_mean": -0.05638223886489868,
+        "sem": 0.002994812559336424
+      },
+      "reference": null,
+      "seconds": 5.864973068237305
+    },
+    "L0H3": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 3
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.6925652027130127,
+      "sem": 0.040336187928915024,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.195213317871094,
+      "ratio_of_means": 0.8997758030891418,
+      "p_c": {
+        "effect_mean": 0.07726742327213287,
+        "sem": 0.0022153391037136316
+      },
+      "reference": null,
+      "seconds": 5.959715366363525
+    },
+    "L6.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 6
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.480139970779419,
+      "sem": 0.03171918913722038,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.407637596130371,
+      "ratio_of_means": 0.9123543500900269,
+      "p_c": {
+        "effect_mean": 0.06710740923881531,
+        "sem": 0.0018930410733446479
+      },
+      "reference": null,
+      "seconds": 5.864303112030029
+    },
+    "L5H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.438845157623291,
+      "sem": 0.030780678614974022,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.448931694030762,
+      "ratio_of_means": 0.9147995710372925,
+      "p_c": {
+        "effect_mean": 0.09619693458080292,
+        "sem": 0.0026253957767039537
+      },
+      "reference": null,
+      "seconds": 5.862930059432983
+    },
+    "L7.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 7
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.3037155866622925,
+      "sem": 0.03337569907307625,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.584062576293945,
+      "ratio_of_means": 0.9228012561798096,
+      "p_c": {
+        "effect_mean": 0.03899223357439041,
+        "sem": 0.001555172842927277
+      },
+      "reference": null,
+      "seconds": 5.861919403076172
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 58.800275802612305
+  }
+}

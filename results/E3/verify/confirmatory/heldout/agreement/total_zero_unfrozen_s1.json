@@ -1,0 +1,419 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "agreement",
+    "scheme": "number_flip",
+    "map": "total_zero_unfrozen",
+    "kind": "total",
+    "value": "zero",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "agreement",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; template key prep/congruency",
+    "labels": [
+      "N1",
+      "PREP",
+      "N2",
+      "END"
+    ],
+    "schemes": [
+      "number_flip",
+      "number_flip_all"
+    ],
+    "corruption": {
+      "name": "number_flip",
+      "removes": "the subject's grammatical number: N1 replaced by its own other-number form (dog <-> dogs)",
+      "inserts": "the opposite number on the same noun; preposition, attractor and length kept, so congruent prompts become incongruent and back. c and s stay the clean labels, so the corrupt prompt favours s: expected corrupt ld near minus the clean ld, fraction removed near 2 (D-014 item 2)",
+      "source": "ours (D-013 fallback; unsourced)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/agreement/number_flip.json",
+    "gap": 5.141272068023682,
+    "gap_sem": 0.04035920649766922,
+    "fraction_removed": 2.0024039182530364
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/agreement/clean_s1.parquet",
+  "components": [
+    "L0H8",
+    "L0H9",
+    "L5H9",
+    "L6H0",
+    "L7H4",
+    "L8H5",
+    "L0.mlp",
+    "L6.mlp",
+    "L10.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.9120413064956665,
+      "sem": 0.032458044588565826,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 0.6608836650848389,
+      "ratio_of_means": 0.2568608224391937,
+      "p_c": {
+        "effect_mean": 0.015293464995920658,
+        "sem": 0.0005902023985981941
+      },
+      "reference": null,
+      "seconds": 0.9481661319732666
+    },
+    "L0H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.8156654238700867,
+      "sem": 0.031737834215164185,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.757259726524353,
+      "ratio_of_means": 0.6829813122749329,
+      "p_c": {
+        "effect_mean": -0.004147673491388559,
+        "sem": 0.0005802048835903406
+      },
+      "reference": null,
+      "seconds": 0.9458985328674316
+    },
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.7684779763221741,
+      "sem": 0.012308791279792786,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.804447054862976,
+      "ratio_of_means": 0.7013212442398071,
+      "p_c": {
+        "effect_mean": 0.004951856564730406,
+        "sem": 0.00021990526875015348
+      },
+      "reference": null,
+      "seconds": 0.947930097579956
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.6468881368637085,
+      "sem": 0.009816303849220276,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.9260367155075073,
+      "ratio_of_means": 0.7485786080360413,
+      "p_c": {
+        "effect_mean": 0.009799287654459476,
+        "sem": 0.00026046569109894335
+      },
+      "reference": null,
+      "seconds": 0.9449787139892578
+    },
+    "L8H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 5
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.575514554977417,
+      "sem": 0.011864012107253075,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.997410535812378,
+      "ratio_of_means": 0.7763189673423767,
+      "p_c": {
+        "effect_mean": 0.0036894772201776505,
+        "sem": 0.00011995792738161981
+      },
+      "reference": null,
+      "seconds": 0.9456787109375
+    },
+    "L7H4": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 4
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.5334417819976807,
+      "sem": 0.009864399209618568,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.0394833087921143,
+      "ratio_of_means": 0.7926710844039917,
+      "p_c": {
+        "effect_mean": 0.002591229509562254,
+        "sem": 0.0001362909679301083
+      },
+      "reference": null,
+      "seconds": 0.9441289901733398
+    },
+    "L5H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.532368540763855,
+      "sem": 0.008231855928897858,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.0405564308166504,
+      "ratio_of_means": 0.7930881381034851,
+      "p_c": {
+        "effect_mean": 0.01095953956246376,
+        "sem": 0.00021560343157034367
+      },
+      "reference": null,
+      "seconds": 0.9468348026275635
+    },
+    "L6H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 6,
+          "head": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.382499098777771,
+      "sem": 0.005284411367028952,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.1904261112213135,
+      "ratio_of_means": 0.8513368964195251,
+      "p_c": {
+        "effect_mean": 0.0032339824829250574,
+        "sem": 0.00010277364344801754
+      },
+      "reference": null,
+      "seconds": 0.9478607177734375
+    },
+    "L0H8": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 8
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.39662787318229675,
+      "sem": 0.01165731344372034,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.969552755355835,
+      "ratio_of_means": 1.1541544198989868,
+      "p_c": {
+        "effect_mean": -0.008292722515761852,
+        "sem": 0.0004415538569446653
+      },
+      "reference": null,
+      "seconds": 0.9452950954437256
+    },
+    "L6.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 6
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.37320613861083984,
+      "sem": 0.009430606849491596,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.9461309909820557,
+      "ratio_of_means": 1.1450512409210205,
+      "p_c": {
+        "effect_mean": -0.0177832692861557,
+        "sem": 0.0003883389290422201
+      },
+      "reference": null,
+      "seconds": 0.94942307472229
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 9.531399250030518
+  }
+}

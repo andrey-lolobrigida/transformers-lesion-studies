@@ -1,0 +1,227 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "induction",
+    "scheme": "fresh_prefix",
+    "map": "direct_mean",
+    "kind": "direct",
+    "value": "mean",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": 7,
+    "ref_n": 2000,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": false
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix",
+      "shuffle_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": "wang",
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/induction/fresh_prefix.json",
+    "gap": 17.0118350982666,
+    "gap_sem": 0.1383601576089859,
+    "fraction_removed": 1.0004171442121044
+  },
+  "clean_file": "results/E3/verify/exploratory/heldout/induction/clean_s1.parquet",
+  "components": [
+    "L6H9",
+    "L9H6"
+  ],
+  "complete": false,
+  "cells": {
+    "L9H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 9,
+          "head": 6
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.8046900629997253,
+      "sem": 0.016274383291602135,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 16.083087921142578,
+      "ratio_of_means": 0.9523507952690125,
+      "p_c": {
+        "effect_mean": 0.08412976562976837,
+        "sem": 0.0024656676687300205
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 68,
+          "i10": 118,
+          "i11": 83,
+          "i12": 101,
+          "i13": 88,
+          "i14": 86,
+          "i15": 96,
+          "i16": 98,
+          "i17": 105,
+          "i18": 76,
+          "i19": 78,
+          "i2": 99,
+          "i20": 107,
+          "i21": 83,
+          "i22": 95,
+          "i3": 93,
+          "i4": 89,
+          "i5": 103,
+          "i6": 79,
+          "i7": 81,
+          "i8": 86,
+          "i9": 88
+        },
+        "hook": "blocks.9.attn.hook_z"
+      },
+      "seconds": 14.65979528427124
+    },
+    "L6H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 6,
+          "head": 9
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.45429736375808716,
+      "sem": 0.018664298579096794,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 17.34207534790039,
+      "ratio_of_means": 1.0269010066986084,
+      "p_c": {
+        "effect_mean": -0.027292000129818916,
+        "sem": 0.0012905187904834747
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "i1": 68,
+          "i10": 118,
+          "i11": 83,
+          "i12": 101,
+          "i13": 88,
+          "i14": 86,
+          "i15": 96,
+          "i16": 98,
+          "i17": 105,
+          "i18": 76,
+          "i19": 78,
+          "i2": 99,
+          "i20": 107,
+          "i21": 83,
+          "i22": 95,
+          "i3": 93,
+          "i4": 89,
+          "i5": 103,
+          "i6": 79,
+          "i7": 81,
+          "i8": 86,
+          "i9": 88
+        },
+        "hook": "blocks.6.attn.hook_z"
+      },
+      "seconds": 14.663471221923828
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list exploratory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 29.328598499298096
+  }
+}

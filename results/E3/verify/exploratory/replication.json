@@ -1,0 +1,472 @@
+{
+  "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list exploratory",
+  "pre_registered": true,
+  "list": "exploratory",
+  "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+  "family": "verify_exploratory",
+  "alpha": 0.05,
+  "prompt_seed": 1,
+  "ref_seeds": [
+    5,
+    6,
+    7,
+    8,
+    9
+  ],
+  "overlap": {
+    "agreement": {
+      "n": 2000,
+      "held_out_prompts_also_in_selecting_draw": 114
+    },
+    "induction": {
+      "n": 2000,
+      "held_out_prompts_also_in_selecting_draw": 0
+    },
+    "ioi": {
+      "n": 2000,
+      "held_out_prompts_also_in_selecting_draw": 3
+    }
+  },
+  "n_replicated": 18,
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 572.02974152565
+  },
+  "rows": [
+    {
+      "id": "ioi/total_mean_unfrozen/L9H9",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L9H9",
+      "effect": 0.25993144512176514,
+      "s": 0.012943016365170479,
+      "selection_rank": 19,
+      "held_out": {
+        "effect": 0.2354946881532669,
+        "s": 0.012867989018559456,
+        "sem": 0.012867989018559456,
+        "ref_sd": 0.002793241160761402,
+        "source": "sem",
+        "z": 18.300815132311175,
+        "p": 8.152005279405082e-75,
+        "reject": true,
+        "holm_step": 17,
+        "holm_threshold": 0.025
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L10H0",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L10H0",
+      "effect": 0.3945528268814087,
+      "s": 0.011859768070280552,
+      "selection_rank": 12,
+      "held_out": {
+        "effect": 0.38301995396614075,
+        "s": 0.011914057657122612,
+        "sem": 0.011914057657122612,
+        "ref_sd": 0.0016043288643418922,
+        "source": "sem",
+        "z": 32.1485731384856,
+        "p": 9.247137467444305e-227,
+        "reject": true,
+        "holm_step": 10,
+        "holm_threshold": 0.005555555555555556
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L8.mlp",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L8.mlp",
+      "effect": -0.3848980963230133,
+      "s": 0.011481020599603653,
+      "selection_rank": 14,
+      "held_out": {
+        "effect": -0.3879057765007019,
+        "s": 0.011437774635851383,
+        "sem": 0.011437774635851383,
+        "ref_sd": 0.008904259550476457,
+        "source": "sem",
+        "z": 33.91444479810104,
+        "p": 4.080259282552197e-252,
+        "reject": true,
+        "holm_step": 8,
+        "holm_threshold": 0.004545454545454546
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_resample_unfrozen/L4H11",
+      "item": "ioi",
+      "map": "total_resample_unfrozen",
+      "component": "L4H11",
+      "effect": 0.4618966281414032,
+      "s": 0.00828856136649847,
+      "selection_rank": 11,
+      "held_out": {
+        "effect": 0.4478924870491028,
+        "s": 0.008011258207261562,
+        "sem": 0.008011258207261562,
+        "ref_sd": null,
+        "source": "sem",
+        "z": 55.90788306425128,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 6,
+        "holm_threshold": 0.0038461538461538464
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L10H10",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L10H10",
+      "effect": 0.13449609279632568,
+      "s": 0.006048223003745079,
+      "selection_rank": 27,
+      "held_out": {
+        "effect": 0.12230239063501358,
+        "s": 0.006097613833844662,
+        "sem": 0.006097613833844662,
+        "ref_sd": 0.0010835287979860696,
+        "source": "sem",
+        "z": 20.05741819138776,
+        "p": 1.7388085815932075e-89,
+        "reject": true,
+        "holm_step": 15,
+        "holm_threshold": 0.0125
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L3.mlp",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L3.mlp",
+      "effect": -0.22013375163078308,
+      "s": 0.009741566143929958,
+      "selection_rank": 20,
+      "held_out": {
+        "effect": -0.21239709854125977,
+        "s": 0.009967714548110962,
+        "sem": 0.009967714548110962,
+        "ref_sd": 0.00873570958560912,
+        "source": "sem",
+        "z": 21.308505326480518,
+        "p": 9.466949368385109e-101,
+        "reject": true,
+        "holm_step": 14,
+        "holm_threshold": 0.01
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "ioi/total_mean_frozen/L3.mlp",
+      "item": "ioi",
+      "map": "total_mean_frozen",
+      "component": "L3.mlp",
+      "effect": 0.16410879790782928,
+      "s": 0.004879627842456102,
+      "selection_rank": 18,
+      "held_out": {
+        "effect": 0.15869548916816711,
+        "s": 0.004911074414849281,
+        "sem": 0.004911074414849281,
+        "ref_sd": 0.002416211708722909,
+        "source": "sem",
+        "z": 32.313802594464946,
+        "p": 4.476430729252373e-229,
+        "reject": true,
+        "holm_step": 9,
+        "holm_threshold": 0.005
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H6",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H6",
+      "effect": -1.3428049087524414,
+      "s": 0.03988198563456535,
+      "selection_rank": 14,
+      "held_out": {
+        "effect": -1.3993717432022095,
+        "s": 0.04061677306890488,
+        "sem": 0.04061677306890488,
+        "ref_sd": 0.009319884284455907,
+        "source": "sem",
+        "z": 34.45305073419364,
+        "p": 4.053343703928597e-260,
+        "reject": true,
+        "holm_step": 7,
+        "holm_threshold": 0.004166666666666667
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L1.mlp",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L1.mlp",
+      "effect": -0.9130551218986511,
+      "s": 0.041861046105623245,
+      "selection_rank": 19,
+      "held_out": {
+        "effect": -1.052042007446289,
+        "s": 0.04552067816257477,
+        "sem": 0.04552067816257477,
+        "ref_sd": 0.011094917044901467,
+        "source": "sem",
+        "z": 23.111299082341766,
+        "p": 3.564386093577745e-118,
+        "reject": true,
+        "holm_step": 13,
+        "holm_threshold": 0.008333333333333333
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_resample_unfrozen/L1.mlp",
+      "item": "induction",
+      "map": "total_resample_unfrozen",
+      "component": "L1.mlp",
+      "effect": 0.6494742631912231,
+      "s": 0.053901854902505875,
+      "selection_rank": 27,
+      "held_out": {
+        "effect": 0.5411792397499084,
+        "s": 0.051316771656274796,
+        "sem": 0.051316771656274796,
+        "ref_sd": null,
+        "source": "sem",
+        "z": 10.545855132407484,
+        "p": 5.308769230931966e-26,
+        "reject": true,
+        "holm_step": 18,
+        "holm_threshold": 0.05
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L7H3",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L7H3",
+      "effect": -1.2296183109283447,
+      "s": 0.02989957481622696,
+      "selection_rank": 15,
+      "held_out": {
+        "effect": -1.2593321800231934,
+        "s": 0.03136826679110527,
+        "sem": 0.03136826679110527,
+        "ref_sd": 0.0022570924775580153,
+        "source": "sem",
+        "z": 40.14669310260672,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 5,
+        "holm_threshold": 0.0035714285714285718
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/direct_mean/L9H6",
+      "item": "induction",
+      "map": "direct_mean",
+      "component": "L9H6",
+      "effect": 0.8047243356704712,
+      "s": 0.015901098027825356,
+      "selection_rank": 11,
+      "held_out": {
+        "effect": 0.806400716304779,
+        "s": 0.016285806894302368,
+        "sem": 0.016285806894302368,
+        "ref_sd": 0.0007798740116665421,
+        "source": "sem",
+        "z": 49.5155518875089,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 3,
+        "holm_threshold": 0.003125
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/direct_mean/L6H9",
+      "item": "induction",
+      "map": "direct_mean",
+      "component": "L6H9",
+      "effect": -0.47684410214424133,
+      "s": 0.020047910511493683,
+      "selection_rank": 20,
+      "held_out": {
+        "effect": -0.45667704939842224,
+        "s": 0.018631497398018837,
+        "sem": 0.018631497398018837,
+        "ref_sd": 0.0018924683318856344,
+        "source": "sem",
+        "z": 24.51102236404158,
+        "p": 1.126991557590525e-132,
+        "reject": true,
+        "holm_step": 12,
+        "holm_threshold": 0.0071428571428571435
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H9",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H9",
+      "effect": 0.8040236830711365,
+      "s": 0.02922431379556656,
+      "selection_rank": 24,
+      "held_out": {
+        "effect": 0.792070209980011,
+        "s": 0.02962653525173664,
+        "sem": 0.02962653525173664,
+        "ref_sd": 0.002772935845620773,
+        "source": "sem",
+        "z": 26.735161680223193,
+        "p": 1.8372307375362156e-157,
+        "reject": true,
+        "holm_step": 11,
+        "holm_threshold": 0.00625
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_frozen/L6H10",
+      "item": "induction",
+      "map": "total_mean_frozen",
+      "component": "L6H10",
+      "effect": 1.0366058349609375,
+      "s": 0.025654058903455734,
+      "selection_rank": 12,
+      "held_out": {
+        "effect": 1.032346487045288,
+        "s": 0.02453826181590557,
+        "sem": 0.02453826181590557,
+        "ref_sd": 0.005192128044123091,
+        "source": "sem",
+        "z": 42.07088891586145,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 4,
+        "holm_threshold": 0.0033333333333333335
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H10",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H10",
+      "effect": -0.4964737296104431,
+      "s": 0.02566979080438614,
+      "selection_rank": 32,
+      "held_out": {
+        "effect": -0.5318045020103455,
+        "s": 0.027053987607359886,
+        "sem": 0.027053987607359886,
+        "ref_sd": 0.004691627788357333,
+        "source": "sem",
+        "z": 19.657157744304985,
+        "p": 5.020795498049647e-86,
+        "reject": true,
+        "holm_step": 16,
+        "holm_threshold": 0.016666666666666666
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "agreement/total_mean_unfrozen/L6H5",
+      "item": "agreement",
+      "map": "total_mean_unfrozen",
+      "component": "L6H5",
+      "effect": -0.09400831907987595,
+      "s": 0.0025153819005936384,
+      "selection_rank": 13,
+      "held_out": {
+        "effect": -0.09514015167951584,
+        "s": 0.002447370206937194,
+        "sem": 0.002447370206937194,
+        "ref_sd": 0.0020163889820019524,
+        "source": "sem",
+        "z": 38.87444221141383,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 2,
+        "holm_threshold": 0.0029411764705882353
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    },
+    {
+      "id": "agreement/direct_resample/L5.mlp",
+      "item": "agreement",
+      "map": "direct_resample",
+      "component": "L5.mlp",
+      "effect": -0.14961610734462738,
+      "s": 0.002595088677480817,
+      "selection_rank": 12,
+      "held_out": {
+        "effect": -0.15369351208209991,
+        "s": 0.002689906395971775,
+        "sem": 0.002689906395971775,
+        "ref_sd": null,
+        "source": "sem",
+        "z": 57.13712280555974,
+        "p": 0.0,
+        "reject": true,
+        "holm_step": 1,
+        "holm_threshold": 0.002777777777777778
+      },
+      "family": "verify_exploratory",
+      "verdict": "replicated"
+    }
+  ]
+}

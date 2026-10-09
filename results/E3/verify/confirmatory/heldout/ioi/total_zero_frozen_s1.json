@@ -1,0 +1,426 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "ioi",
+    "scheme": "p_ABC",
+    "map": "total_zero_frozen",
+    "kind": "total",
+    "value": "zero",
+    "frozen": true,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": false,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "p_ABC",
+      "removes": "the repetition of the subject name: no name occurs twice, so nothing in the prompt singles out an indirect object",
+      "inserts": "three distinct fresh names in the three name slots, none equal to the clean IO or S; same template, place and object",
+      "source": "wang-2022 \u00a72.1"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/ioi/p_ABC.json",
+    "gap": 3.5895166397094727,
+    "gap_sem": 0.05267675593495369,
+    "fraction_removed": 0.9830610535083284
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/ioi/clean_s1.parquet",
+  "components": [
+    "L0H8",
+    "L9H6",
+    "L9H9",
+    "L10H0",
+    "L10H7",
+    "L10H10",
+    "L11H0",
+    "L11H10",
+    "L0.mlp",
+    "L10.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L9H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 9,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.5870251655578613,
+      "sem": 0.02705179527401924,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 1.0538935661315918,
+      "ratio_of_means": 0.28945815563201904,
+      "p_c": {
+        "effect_mean": 0.41909050941467285,
+        "sem": 0.00372501858510077
+      },
+      "reference": null,
+      "seconds": 2.865619421005249
+    },
+    "L10H7": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 7
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.5044236183166504,
+      "sem": 0.02145734801888466,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 5.145342826843262,
+      "ratio_of_means": 1.4131990671157837,
+      "p_c": {
+        "effect_mean": -0.25855594873428345,
+        "sem": 0.002612242940813303
+      },
+      "reference": null,
+      "seconds": 2.858825445175171
+    },
+    "L9H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 9,
+          "head": 6
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.9651771187782288,
+      "sem": 0.018512975424528122,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.67574143409729,
+      "ratio_of_means": 0.7349083423614502,
+      "p_c": {
+        "effect_mean": 0.23534250259399414,
+        "sem": 0.0025789954233914614
+      },
+      "reference": null,
+      "seconds": 2.862335443496704
+    },
+    "L11H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 11,
+          "head": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.8500221967697144,
+      "sem": 0.013316620141267776,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 4.490941047668457,
+      "ratio_of_means": 1.2334637641906738,
+      "p_c": {
+        "effect_mean": -0.22338226437568665,
+        "sem": 0.002092441776767373
+      },
+      "reference": null,
+      "seconds": 2.857390880584717
+    },
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.6837530732154846,
+      "sem": 0.03993688523769379,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.957165479660034,
+      "ratio_of_means": 0.8122031688690186,
+      "p_c": {
+        "effect_mean": 0.38895556330680847,
+        "sem": 0.0049098641611635685
+      },
+      "reference": null,
+      "seconds": 2.86163067817688
+    },
+    "L10H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.7340097427368164,
+      "sem": 0.019811149686574936,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.9069089889526367,
+      "ratio_of_means": 0.7983999252319336,
+      "p_c": {
+        "effect_mean": 0.2445053905248642,
+        "sem": 0.002775956643745303
+      },
+      "reference": null,
+      "seconds": 2.8644893169403076
+    },
+    "L0H8": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 8
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.7370381951332092,
+      "sem": 0.024194447323679924,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.9038803577423096,
+      "ratio_of_means": 0.7975680828094482,
+      "p_c": {
+        "effect_mean": 0.5086823105812073,
+        "sem": 0.0046322462148964405
+      },
+      "reference": null,
+      "seconds": 2.856252908706665
+    },
+    "L11H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 11,
+          "head": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.6036525368690491,
+      "sem": 0.010129222646355629,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.0372660160064697,
+      "ratio_of_means": 0.8342032432556152,
+      "p_c": {
+        "effect_mean": 0.30026328563690186,
+        "sem": 0.0025406908243894577
+      },
+      "reference": null,
+      "seconds": 2.856940746307373
+    },
+    "L10H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.4698680639266968,
+      "sem": 0.009889114648103714,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.171050548553467,
+      "ratio_of_means": 0.8709479570388794,
+      "p_c": {
+        "effect_mean": 0.1493358165025711,
+        "sem": 0.0016677163075655699
+      },
+      "reference": null,
+      "seconds": 2.8566958904266357
+    },
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": true
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.4718455374240875,
+      "sem": 0.011857098899781704,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.1690733432769775,
+      "ratio_of_means": 0.8704048991203308,
+      "p_c": {
+        "effect_mean": 0.009793850593268871,
+        "sem": 0.0018612579442560673
+      },
+      "reference": null,
+      "seconds": 2.858867645263672
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 28.669222831726074
+  }
+}

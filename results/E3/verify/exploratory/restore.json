@@ -1,0 +1,434 @@
+{
+  "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_verify --stage restore --list exploratory",
+  "pre_registered": true,
+  "list": "exploratory",
+  "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+  "family": "sufficiency_exploratory",
+  "alpha": 0.05,
+  "prompt_seed": 1,
+  "definition": "restore-clean: resample from the clean prompt onto the corrupt prompt, node, all positions, unfrozen; fraction restored = -effect / gap, gap measured on the same draw",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 103.62416768074036
+  },
+  "gaps": {
+    "ioi": {
+      "gap": 3.6447970867156982,
+      "gap_sem": 0.05098939687013626,
+      "fraction_removed": 1.0010652788443335,
+      "mean_ld_clean": 3.640918493270874,
+      "mean_ld_corrupt": -0.003878569696098566
+    },
+    "induction": {
+      "gap": 16.8162784576416,
+      "gap_sem": 0.1326604187488556,
+      "fraction_removed": 0.9957662355762481,
+      "mean_ld_clean": 16.88777732849121,
+      "mean_ld_corrupt": 0.07149825990200043
+    },
+    "agreement": {
+      "gap": 5.162916660308838,
+      "gap_sem": 0.04043566808104515,
+      "fraction_removed": 2.006633103618267,
+      "mean_ld_clean": 2.572925090789795,
+      "mean_ld_corrupt": -2.589991807937622
+    }
+  },
+  "rows": [
+    {
+      "id": "ioi/L4H11",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L4H11"
+      ],
+      "effect": -6.922316242707893e-05,
+      "sem": 0.001086595468223095,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": -0.003809336107224226,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 0.0637064707625546,
+      "p": 0.9492039522923096,
+      "fraction_restored": 1.899232269455512e-05,
+      "fraction_sem": 0.0002981223487539107,
+      "family": "sufficiency_exploratory",
+      "reject": false,
+      "holm_step": 17,
+      "holm_threshold": 0.05
+    },
+    {
+      "id": "ioi/L9H9",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L9H9"
+      ],
+      "effect": -2.517637014389038,
+      "sem": 0.025842778384685516,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": 2.5137581825256348,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 97.42129800876964,
+      "p": 0.0,
+      "fraction_restored": 0.690748196536138,
+      "fraction_sem": 0.0070903201933724845,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 7,
+      "holm_threshold": 0.004545454545454546
+    },
+    {
+      "id": "ioi/L10H0",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L10H0"
+      ],
+      "effect": -0.8595311045646667,
+      "sem": 0.023114250972867012,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": 0.8556525707244873,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 37.18619762213534,
+      "p": 1.1406524393143815e-302,
+      "fraction_restored": 0.23582413070330463,
+      "fraction_sem": 0.006341711327939824,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 9,
+      "holm_threshold": 0.005555555555555556
+    },
+    {
+      "id": "ioi/L10H10",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L10H10"
+      ],
+      "effect": -0.4923667311668396,
+      "sem": 0.01146957091987133,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": 0.48848822712898254,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 42.92808637800054,
+      "p": 0.0,
+      "fraction_restored": 0.13508755616640045,
+      "fraction_sem": 0.0031468338694833854,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 6,
+      "holm_threshold": 0.004166666666666667
+    },
+    {
+      "id": "ioi/L3.mlp",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L3.mlp"
+      ],
+      "effect": 0.10813453048467636,
+      "sem": 0.005599386524409056,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": -0.112013079226017,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 19.311853184860922,
+      "p": 4.269735947639519e-83,
+      "fraction_restored": -0.029668189452520564,
+      "fraction_sem": 0.0015362683823517387,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 11,
+      "holm_threshold": 0.0071428571428571435
+    },
+    {
+      "id": "ioi/L8.mlp",
+      "kind": "single",
+      "item": "ioi",
+      "components": [
+        "L8.mlp"
+      ],
+      "effect": 0.022453173995018005,
+      "sem": 0.007055388763546944,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": -0.026331741362810135,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 3.1824148530307435,
+      "p": 0.001460524530518235,
+      "fraction_restored": -0.0061603358049351405,
+      "fraction_sem": 0.0019357425381132825,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 15,
+      "holm_threshold": 0.016666666666666666
+    },
+    {
+      "id": "induction/L6H6",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L6H6"
+      ],
+      "effect": 0.11060690134763718,
+      "sem": 0.007032706402242184,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": -0.03910863772034645,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 15.7275016219038,
+      "p": 9.800237598588421e-56,
+      "fraction_restored": -0.00657737094602971,
+      "fraction_sem": 0.00041820825100849843,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 12,
+      "holm_threshold": 0.008333333333333333
+    },
+    {
+      "id": "induction/L6H9",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L6H9"
+      ],
+      "effect": -1.2918490171432495,
+      "sem": 0.015791133046150208,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 1.3633472919464111,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 81.80850692396612,
+      "p": 0.0,
+      "fraction_restored": 0.07682133834767772,
+      "fraction_sem": 0.0009390385087834015,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 3,
+      "holm_threshold": 0.0033333333333333335
+    },
+    {
+      "id": "induction/L6H10",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L6H10"
+      ],
+      "effect": -0.056838344782590866,
+      "sem": 0.0074072727002203465,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 0.1283365935087204,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 7.673316088511238,
+      "p": 1.6760578130094286e-14,
+      "fraction_restored": 0.0033799597768174776,
+      "fraction_sem": 0.0004404822814321534,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 14,
+      "holm_threshold": 0.0125
+    },
+    {
+      "id": "induction/L7H3",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L7H3"
+      ],
+      "effect": 0.031085630878806114,
+      "sem": 0.0034272095654159784,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 0.040412627160549164,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 9.070245132510037,
+      "p": 1.1874955435317126e-19,
+      "fraction_restored": -0.0018485440138915087,
+      "fraction_sem": 0.00020380309317835995,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 13,
+      "holm_threshold": 0.01
+    },
+    {
+      "id": "induction/L9H6",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L9H6"
+      ],
+      "effect": -1.3073087930679321,
+      "sem": 0.021135224029421806,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 1.3788071870803833,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 61.85450370661134,
+      "p": 0.0,
+      "fraction_restored": 0.07774067231111227,
+      "fraction_sem": 0.0012568312354400628,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 4,
+      "holm_threshold": 0.0035714285714285718
+    },
+    {
+      "id": "induction/L1.mlp",
+      "kind": "single",
+      "item": "induction",
+      "components": [
+        "L1.mlp"
+      ],
+      "effect": 0.019047532230615616,
+      "sem": 0.01128548476845026,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 0.052450720220804214,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 1.6877903449805685,
+      "p": 0.09145148163818938,
+      "fraction_restored": -0.0011326841594942842,
+      "fraction_sem": 0.0006711047748690166,
+      "family": "sufficiency_exploratory",
+      "reject": false,
+      "holm_step": 16,
+      "holm_threshold": 0.025
+    },
+    {
+      "id": "agreement/L6H5",
+      "kind": "single",
+      "item": "agreement",
+      "components": [
+        "L6H5"
+      ],
+      "effect": 0.18267494440078735,
+      "sem": 0.0028370858635753393,
+      "gap": 5.162916660308838,
+      "restored_mean_ld": -2.7726666927337646,
+      "corrupt_mean_ld": -2.589991807937622,
+      "z": 64.3882325685334,
+      "p": 0.0,
+      "fraction_restored": -0.03538212146733742,
+      "fraction_sem": 0.0005495122331503273,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 1,
+      "holm_threshold": 0.0029411764705882353
+    },
+    {
+      "id": "agreement/L5.mlp",
+      "kind": "single",
+      "item": "agreement",
+      "components": [
+        "L5.mlp"
+      ],
+      "effect": -0.183024063706398,
+      "sem": 0.005974560044705868,
+      "gap": 5.162916660308838,
+      "restored_mean_ld": -2.4069676399230957,
+      "corrupt_mean_ld": -2.589991807937622,
+      "z": 30.633898117498696,
+      "p": 4.3306208318445567e-206,
+      "fraction_restored": 0.0354497420253632,
+      "fraction_sem": 0.001157206369538508,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 10,
+      "holm_threshold": 0.00625
+    },
+    {
+      "id": "ioi/set",
+      "kind": "set",
+      "item": "ioi",
+      "components": [
+        "L4H11",
+        "L9H9",
+        "L10H0",
+        "L10H10"
+      ],
+      "mlps_left_out": [
+        "L3.mlp",
+        "L8.mlp"
+      ],
+      "effect": -3.8654186725616455,
+      "sem": 0.0408603735268116,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": 3.861539840698242,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 94.60066903268151,
+      "p": 0.0,
+      "fraction_restored": 1.0605305537172571,
+      "fraction_sem": 0.011210603102086707,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 8,
+      "holm_threshold": 0.005
+    },
+    {
+      "id": "induction/set",
+      "kind": "set",
+      "item": "induction",
+      "components": [
+        "L6H6",
+        "L6H9",
+        "L6H10",
+        "L7H3",
+        "L9H6"
+      ],
+      "mlps_left_out": [
+        "L1.mlp"
+      ],
+      "effect": -2.5464868545532227,
+      "sem": 0.028365084901452065,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 2.6179847717285156,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 89.77540040512493,
+      "p": 0.0,
+      "fraction_restored": 0.15142986963301955,
+      "fraction_sem": 0.0016867635114927876,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 5,
+      "holm_threshold": 0.0038461538461538464
+    },
+    {
+      "id": "agreement/set",
+      "kind": "set",
+      "item": "agreement",
+      "components": [
+        "L6H5"
+      ],
+      "mlps_left_out": [
+        "L5.mlp"
+      ],
+      "effect": 0.18267494440078735,
+      "sem": 0.0028370858635753393,
+      "gap": 5.162916660308838,
+      "restored_mean_ld": -2.7726666927337646,
+      "corrupt_mean_ld": -2.589991807937622,
+      "z": 64.3882325685334,
+      "p": 0.0,
+      "fraction_restored": -0.03538212146733742,
+      "fraction_sem": 0.0005495122331503273,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 2,
+      "holm_threshold": 0.003125
+    }
+  ]
+}

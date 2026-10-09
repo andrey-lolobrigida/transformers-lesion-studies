@@ -1,0 +1,638 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "agreement",
+    "scheme": "number_flip",
+    "map": "total_mean_unfrozen",
+    "kind": "total",
+    "value": "mean",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": 7,
+    "ref_n": 2000,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": false
+  },
+  "battery": {
+    "name": "agreement",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; template key prep/congruency",
+    "labels": [
+      "N1",
+      "PREP",
+      "N2",
+      "END"
+    ],
+    "schemes": [
+      "number_flip",
+      "number_flip_all"
+    ],
+    "corruption": {
+      "name": "number_flip",
+      "removes": "the subject's grammatical number: N1 replaced by its own other-number form (dog <-> dogs)",
+      "inserts": "the opposite number on the same noun; preposition, attractor and length kept, so congruent prompts become incongruent and back. c and s stay the clean labels, so the corrupt prompt favours s: expected corrupt ld near minus the clean ld, fraction removed near 2 (D-014 item 2)",
+      "source": "ours (D-013 fallback; unsourced)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/agreement/number_flip.json",
+    "gap": 5.141272068023682,
+    "gap_sem": 0.04035920649766922,
+    "fraction_removed": 2.0024039182530364
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/agreement/clean_s1.parquet",
+  "components": [
+    "L6H0",
+    "L7H4",
+    "L8H5",
+    "L10H5",
+    "L10H9",
+    "L0.mlp",
+    "L8.mlp",
+    "L9.mlp",
+    "L10.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.117599368095398,
+      "sem": 0.053954921662807465,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.4553256034851074,
+      "ratio_of_means": 0.5656307935714722,
+      "p_c": {
+        "effect_mean": 0.0028797686100006104,
+        "sem": 0.0005464233108796179
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.0.hook_mlp_out"
+      },
+      "seconds": 1.4361283779144287
+    },
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.7476141452789307,
+      "sem": 0.014460070058703423,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.8253108263015747,
+      "ratio_of_means": 0.7094302177429199,
+      "p_c": {
+        "effect_mean": 8.742581121623516e-05,
+        "sem": 0.00018217206525150687
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.10.hook_mlp_out"
+      },
+      "seconds": 1.4218060970306396
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.727874219417572,
+      "sem": 0.008666113018989563,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.8450508117675781,
+      "ratio_of_means": 0.7171024084091187,
+      "p_c": {
+        "effect_mean": 0.004842374008148909,
+        "sem": 0.0002989209024235606
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.11.hook_mlp_out"
+      },
+      "seconds": 1.4292123317718506
+    },
+    "L8H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 5
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.6621254682540894,
+      "sem": 0.006376972887665033,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.910799503326416,
+      "ratio_of_means": 0.7426564693450928,
+      "p_c": {
+        "effect_mean": 0.002551700221374631,
+        "sem": 8.34209713502787e-05
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.8.attn.hook_z"
+      },
+      "seconds": 1.425302267074585
+    },
+    "L7H4": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 4
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.5922423005104065,
+      "sem": 0.008074495010077953,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.980682611465454,
+      "ratio_of_means": 0.7698174715042114,
+      "p_c": {
+        "effect_mean": 0.002653884468600154,
+        "sem": 0.00010062651563202962
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.7.attn.hook_z"
+      },
+      "seconds": 1.434675693511963
+    },
+    "L10H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.36044251918792725,
+      "sem": 0.005123469978570938,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.2124826908111572,
+      "ratio_of_means": 0.8599094748497009,
+      "p_c": {
+        "effect_mean": 0.0012357748346403241,
+        "sem": 5.498521568370052e-05
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 1.438277244567871
+    },
+    "L9.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 9
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.3261851668357849,
+      "sem": 0.010204261168837547,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.2467398643493652,
+      "ratio_of_means": 0.8732239603996277,
+      "p_c": {
+        "effect_mean": -0.0023525443393737078,
+        "sem": 0.00016490987036377192
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.9.hook_mlp_out"
+      },
+      "seconds": 1.438234806060791
+    },
+    "L6H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 6,
+          "head": 0
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.2900770902633667,
+      "sem": 0.004005683120340109,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.2828481197357178,
+      "ratio_of_means": 0.8872578740119934,
+      "p_c": {
+        "effect_mean": 0.0005974676460027695,
+        "sem": 5.95796482230071e-05
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.6.attn.hook_z"
+      },
+      "seconds": 1.4308462142944336
+    },
+    "L8.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 8
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.2790512442588806,
+      "sem": 0.0249679833650589,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.2938737869262695,
+      "ratio_of_means": 0.8915431499481201,
+      "p_c": {
+        "effect_mean": 0.0006607012473978102,
+        "sem": 0.00022652534244116396
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.8.hook_mlp_out"
+      },
+      "seconds": 1.4321022033691406
+    },
+    "L10H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 5
+        },
+        "component_type": "node",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 7,
+          "match": "template"
+        },
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.16921626031398773,
+      "sem": 0.0029193812515586615,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.4037089347839355,
+      "ratio_of_means": 0.9342319965362549,
+      "p_c": {
+        "effect_mean": 0.0007807359797880054,
+        "sem": 8.251840336015448e-05
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 7,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "behind/congruent": 250,
+          "behind/incongruent": 250,
+          "beside/congruent": 250,
+          "beside/incongruent": 250,
+          "near/congruent": 250,
+          "near/incongruent": 250,
+          "with/congruent": 250,
+          "with/incongruent": 250
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 1.4271066188812256
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 14.344732761383057
+  }
+}

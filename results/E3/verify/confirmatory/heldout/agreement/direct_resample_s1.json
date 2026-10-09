@@ -1,0 +1,439 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "agreement",
+    "scheme": "number_flip",
+    "map": "direct_resample",
+    "kind": "direct",
+    "value": "resample",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "agreement",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "ours (D-013 fallback, unsourced; no published number is checked against it): 'The {N1} {prep} the {N2}' -> verb; 46 of 50 candidate nouns kept (regular -s plurals, both forms one token); prep in ('near', 'behind', 'beside', 'with'); verb pair in (('is', 'are'), ('has', 'have')), drawn per prompt; N2 a different noun; (prep, congruency, subject number) balanced exactly in blocks of 16; template key prep/congruency",
+    "labels": [
+      "N1",
+      "PREP",
+      "N2",
+      "END"
+    ],
+    "schemes": [
+      "number_flip",
+      "number_flip_all"
+    ],
+    "corruption": {
+      "name": "number_flip",
+      "removes": "the subject's grammatical number: N1 replaced by its own other-number form (dog <-> dogs)",
+      "inserts": "the opposite number on the same noun; preposition, attractor and length kept, so congruent prompts become incongruent and back. c and s stay the clean labels, so the corrupt prompt favours s: expected corrupt ld near minus the clean ld, fraction removed near 2 (D-014 item 2)",
+      "source": "ours (D-013 fallback; unsourced)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": "wang",
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/agreement/number_flip.json",
+    "gap": 5.141272068023682,
+    "gap_sem": 0.04035920649766922,
+    "fraction_removed": 2.0024039182530364
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/agreement/clean_s1.parquet",
+  "components": [
+    "L6H0",
+    "L7H4",
+    "L8H5",
+    "L10H5",
+    "L10H9",
+    "L11H10",
+    "L8.mlp",
+    "L9.mlp",
+    "L10.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.5785332918167114,
+      "sem": 0.019838469102978706,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 0.9943917393684387,
+      "ratio_of_means": 0.38648298382759094,
+      "p_c": {
+        "effect_mean": 0.008844399824738503,
+        "sem": 0.00023137651442084461
+      },
+      "reference": null,
+      "seconds": 2.2730350494384766
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.4862987995147705,
+      "sem": 0.012318786233663559,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.0866261720657349,
+      "ratio_of_means": 0.4223310649394989,
+      "p_c": {
+        "effect_mean": 0.013444353826344013,
+        "sem": 0.0003715473576448858
+      },
+      "reference": null,
+      "seconds": 2.2497029304504395
+    },
+    "L8H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 5
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.2597155570983887,
+      "sem": 0.010012991726398468,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.3132094144821167,
+      "ratio_of_means": 0.5103955268859863,
+      "p_c": {
+        "effect_mean": 0.005743330344557762,
+        "sem": 0.00013362178287934512
+      },
+      "reference": null,
+      "seconds": 2.257594347000122
+    },
+    "L7H4": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 4
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.1683149337768555,
+      "sem": 0.013853909447789192,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.40461003780365,
+      "ratio_of_means": 0.5459195375442505,
+      "p_c": {
+        "effect_mean": 0.00656275125220418,
+        "sem": 0.0001709177013253793
+      },
+      "reference": null,
+      "seconds": 2.2476749420166016
+    },
+    "L10H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 9
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.8080289959907532,
+      "sem": 0.010626180097460747,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.764896035194397,
+      "ratio_of_means": 0.6859492659568787,
+      "p_c": {
+        "effect_mean": 0.004113773349672556,
+        "sem": 0.00011438815272413194
+      },
+      "reference": null,
+      "seconds": 2.2556710243225098
+    },
+    "L9.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 9
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.5984404683113098,
+      "sem": 0.008366594091057777,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 1.9744845628738403,
+      "ratio_of_means": 0.7674084901809692,
+      "p_c": {
+        "effect_mean": 0.0025294136721640825,
+        "sem": 0.00010000952170230448
+      },
+      "reference": null,
+      "seconds": 2.246121406555176
+    },
+    "L6H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 6,
+          "head": 0
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.3755781352519989,
+      "sem": 0.00474530691280961,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.1973469257354736,
+      "ratio_of_means": 0.8540267944335938,
+      "p_c": {
+        "effect_mean": 0.0010891685960814357,
+        "sem": 4.8662201152183115e-05
+      },
+      "reference": null,
+      "seconds": 2.25834321975708
+    },
+    "L10H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 5
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.3607112467288971,
+      "sem": 0.004492744337767363,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.2122137546539307,
+      "ratio_of_means": 0.8598049879074097,
+      "p_c": {
+        "effect_mean": 0.0013702221913263202,
+        "sem": 7.054170418996364e-05
+      },
+      "reference": null,
+      "seconds": 2.246920347213745
+    },
+    "L8.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 8
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.27890196442604065,
+      "sem": 0.0065127476118505,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.294023036956787,
+      "ratio_of_means": 0.8916012048721313,
+      "p_c": {
+        "effect_mean": 0.0010754873510450125,
+        "sem": 9.051476081367582e-05
+      },
+      "reference": null,
+      "seconds": 2.2589175701141357
+    },
+    "L11H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 11,
+          "head": 10
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.2708449363708496,
+      "sem": 0.004320116713643074,
+      "clean_mean_ld": 2.572925090789795,
+      "ablated_mean_ld": 2.3020801544189453,
+      "ratio_of_means": 0.894732654094696,
+      "p_c": {
+        "effect_mean": 0.0013331241207197309,
+        "sem": 4.20618562202435e-05
+      },
+      "reference": null,
+      "seconds": 2.2467291355133057
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 22.604665756225586
+  }
+}

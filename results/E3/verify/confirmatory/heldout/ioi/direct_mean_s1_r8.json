@@ -1,0 +1,888 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "ioi",
+    "scheme": "p_ABC",
+    "map": "direct_mean",
+    "kind": "direct",
+    "value": "mean",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": 8,
+    "ref_n": 2000,
+    "n": 2000,
+    "prepend_bos": false,
+    "batch_size": 128,
+    "keep_prompts": false
+  },
+  "battery": {
+    "name": "ioi",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": false,
+    "template_set": "wang-2022 App. E Fig. 14: 15 BABA + 15 ABBA templates, released word lists (99 names, 8 places, 8 objects)",
+    "labels": [
+      "IO",
+      "S1",
+      "S1+1",
+      "S2",
+      "END"
+    ],
+    "schemes": [
+      "p_ABC",
+      "rand_names",
+      "flip",
+      "flip_rand",
+      "repl_flip",
+      "repl"
+    ],
+    "corruption": {
+      "name": "p_ABC",
+      "removes": "the repetition of the subject name: no name occurs twice, so nothing in the prompt singles out an indirect object",
+      "inserts": "three distinct fresh names in the three name slots, none equal to the clean IO or S; same template, place and object",
+      "source": "wang-2022 \u00a72.1"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": "wang",
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/ioi/p_ABC.json",
+    "gap": 3.5895166397094727,
+    "gap_sem": 0.05267675593495369,
+    "fraction_removed": 0.9830610535083284
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/ioi/clean_s1.parquet",
+  "components": [
+    "L7H9",
+    "L8H10",
+    "L9H6",
+    "L9H9",
+    "L10H0",
+    "L10H6",
+    "L10H7",
+    "L10H10",
+    "L11H2",
+    "L11H10"
+  ],
+  "complete": false,
+  "cells": {
+    "L9H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 9,
+          "head": 9
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.504643440246582,
+      "sem": 0.025224845856428146,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 1.1362754106521606,
+      "ratio_of_means": 0.312084823846817,
+      "p_c": {
+        "effect_mean": 0.39496320486068726,
+        "sem": 0.003482314758002758
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.9.attn.hook_z"
+      },
+      "seconds": 7.068342208862305
+    },
+    "L10H7": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 7
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.4990116357803345,
+      "sem": 0.020368870347738266,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 5.139930248260498,
+      "ratio_of_means": 1.4117125272750854,
+      "p_c": {
+        "effect_mean": -0.26105108857154846,
+        "sem": 0.002563725458458066
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 7.059183835983276
+    },
+    "L9H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 9,
+          "head": 6
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.9380342960357666,
+      "sem": 0.016752542927861214,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.7028846740722656,
+      "ratio_of_means": 0.7423633933067322,
+      "p_c": {
+        "effect_mean": 0.20611345767974854,
+        "sem": 0.002403081161901355
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.9.attn.hook_z"
+      },
+      "seconds": 7.062213182449341
+    },
+    "L11H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 11,
+          "head": 10
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.8410587310791016,
+      "sem": 0.01291850209236145,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 4.4819769859313965,
+      "ratio_of_means": 1.2310017347335815,
+      "p_c": {
+        "effect_mean": -0.1826862096786499,
+        "sem": 0.0018553523113951087
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.11.attn.hook_z"
+      },
+      "seconds": 7.064958333969116
+    },
+    "L10H0": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 0
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.7237006425857544,
+      "sem": 0.015485318377614021,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 2.9172182083129883,
+      "ratio_of_means": 0.8012313842773438,
+      "p_c": {
+        "effect_mean": 0.20058993995189667,
+        "sem": 0.002271985402330756
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 7.065747022628784
+    },
+    "L10H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 10
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.4530780017375946,
+      "sem": 0.009125923737883568,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.187840461730957,
+      "ratio_of_means": 0.875559389591217,
+      "p_c": {
+        "effect_mean": 0.11642608046531677,
+        "sem": 0.0014728717505931854
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 7.069413661956787
+    },
+    "L11H2": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 11,
+          "head": 2
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -0.3626032769680023,
+      "sem": 0.01050479244440794,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 4.003521919250488,
+      "ratio_of_means": 1.0995912551879883,
+      "p_c": {
+        "effect_mean": 0.07288563251495361,
+        "sem": 0.0012948629446327686
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.11.attn.hook_z"
+      },
+      "seconds": 7.062537431716919
+    },
+    "L10H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 6
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.2777361571788788,
+      "sem": 0.01116673182696104,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.363182544708252,
+      "ratio_of_means": 0.9237181544303894,
+      "p_c": {
+        "effect_mean": 0.08592461794614792,
+        "sem": 0.0017204610630869865
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.10.attn.hook_z"
+      },
+      "seconds": 7.06235671043396
+    },
+    "L7H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 9
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.26398345828056335,
+      "sem": 0.0030781393870711327,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.3769350051879883,
+      "ratio_of_means": 0.9274953603744507,
+      "p_c": {
+        "effect_mean": 0.014483677223324776,
+        "sem": 0.0004634838260244578
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.7.attn.hook_z"
+      },
+      "seconds": 7.059180021286011
+    },
+    "L8H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 10
+        },
+        "component_type": "edge",
+        "value": "mean",
+        "reference": {
+          "battery_side": "corrupt",
+          "n": 2000,
+          "seed": 8,
+          "match": "template"
+        },
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.2464802861213684,
+      "sem": 0.0035497986245900393,
+      "clean_mean_ld": 3.640918493270874,
+      "ablated_mean_ld": 3.3944385051727295,
+      "ratio_of_means": 0.9323027729988098,
+      "p_c": {
+        "effect_mean": -0.001951756188645959,
+        "sem": 0.0005744525697082281
+      },
+      "reference": {
+        "battery_side": "corrupt",
+        "n": 2000,
+        "seed": 8,
+        "match": "template",
+        "n_prompts_used": 2000,
+        "per_template_counts": {
+          "ABBA/0": 73,
+          "ABBA/1": 67,
+          "ABBA/10": 80,
+          "ABBA/11": 80,
+          "ABBA/12": 63,
+          "ABBA/13": 59,
+          "ABBA/14": 63,
+          "ABBA/2": 65,
+          "ABBA/3": 81,
+          "ABBA/4": 63,
+          "ABBA/5": 64,
+          "ABBA/6": 64,
+          "ABBA/7": 66,
+          "ABBA/8": 56,
+          "ABBA/9": 64,
+          "BABA/0": 52,
+          "BABA/1": 72,
+          "BABA/10": 60,
+          "BABA/11": 72,
+          "BABA/12": 66,
+          "BABA/13": 55,
+          "BABA/14": 58,
+          "BABA/2": 72,
+          "BABA/3": 61,
+          "BABA/4": 77,
+          "BABA/5": 70,
+          "BABA/6": 68,
+          "BABA/7": 64,
+          "BABA/8": 70,
+          "BABA/9": 75
+        },
+        "hook": "blocks.8.attn.hook_z"
+      },
+      "seconds": 7.155074119567871
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 70.76496410369873
+  }
+}

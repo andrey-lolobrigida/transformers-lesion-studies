@@ -1,0 +1,437 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "induction",
+    "scheme": "fresh_prefix",
+    "map": "direct_resample",
+    "kind": "direct",
+    "value": "resample",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix",
+      "shuffle_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": "wang",
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/induction/fresh_prefix.json",
+    "gap": 17.0118350982666,
+    "gap_sem": 0.1383601576089859,
+    "fraction_removed": 1.0004171442121044
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/induction/clean_s1.parquet",
+  "components": [
+    "L0H1",
+    "L7H6",
+    "L8H5",
+    "L10H7",
+    "L0.mlp",
+    "L7.mlp",
+    "L8.mlp",
+    "L9.mlp",
+    "L10.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L10.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 10
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.1580071449279785,
+      "sem": 0.035932790488004684,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.729769706726074,
+      "ratio_of_means": 0.8722147941589355,
+      "p_c": {
+        "effect_mean": 0.12473682314157486,
+        "sem": 0.0026181074790656567
+      },
+      "reference": null,
+      "seconds": 14.710217714309692
+    },
+    "L9.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 9
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.7959492206573486,
+      "sem": 0.032208628952503204,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.091828346252441,
+      "ratio_of_means": 0.893653929233551,
+      "p_c": {
+        "effect_mean": 0.09916047006845474,
+        "sem": 0.002288967138156295
+      },
+      "reference": null,
+      "seconds": 15.271547317504883
+    },
+    "L7H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 6
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.2652781009674072,
+      "sem": 0.025968922302126884,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.6225004196167,
+      "ratio_of_means": 0.9250773787498474,
+      "p_c": {
+        "effect_mean": 0.09889432787895203,
+        "sem": 0.002371774520725012
+      },
+      "reference": null,
+      "seconds": 15.605939626693726
+    },
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.2494580745697021,
+      "sem": 0.03175288438796997,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.638319969177246,
+      "ratio_of_means": 0.9260141253471375,
+      "p_c": {
+        "effect_mean": 0.04890811815857887,
+        "sem": 0.0016466162633150816
+      },
+      "reference": null,
+      "seconds": 14.987531185150146
+    },
+    "L10H7": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 10,
+          "head": 7
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.256381630897522,
+      "sem": 0.017517684027552605,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 18.1441593170166,
+      "ratio_of_means": 1.0743958950042725,
+      "p_c": {
+        "effect_mean": -0.08458016812801361,
+        "sem": 0.0023932468611747026
+      },
+      "reference": null,
+      "seconds": 14.95959758758545
+    },
+    "L8H5": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 8,
+          "head": 5
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.204715371131897,
+      "sem": 0.025425001978874207,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.683061599731445,
+      "ratio_of_means": 0.928663432598114,
+      "p_c": {
+        "effect_mean": 0.05997803434729576,
+        "sem": 0.0013233234640210867
+      },
+      "reference": null,
+      "seconds": 15.123607158660889
+    },
+    "L7.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 7
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.021878719329834,
+      "sem": 0.028520243242383003,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.865899085998535,
+      "ratio_of_means": 0.9394900798797607,
+      "p_c": {
+        "effect_mean": 0.03622858226299286,
+        "sem": 0.001597842201590538
+      },
+      "reference": null,
+      "seconds": 14.935518980026245
+    },
+    "L8.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 8
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.996380627155304,
+      "sem": 0.027518780902028084,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.891397476196289,
+      "ratio_of_means": 0.9409999251365662,
+      "p_c": {
+        "effect_mean": 0.04320080578327179,
+        "sem": 0.0015987762017175555
+      },
+      "reference": null,
+      "seconds": 15.479897499084473
+    },
+    "L0H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 1
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.0001674890518188,
+      "sem": 0.02762998268008232,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.887609481811523,
+      "ratio_of_means": 0.9407756328582764,
+      "p_c": {
+        "effect_mean": 0.03766706585884094,
+        "sem": 0.0013949540443718433
+      },
+      "reference": null,
+      "seconds": 15.2667396068573
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "edge",
+        "value": "resample",
+        "reference": null,
+        "receiver": {
+          "kind": "logits"
+        },
+        "mlp_convention": "wang",
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 0.9356856346130371,
+      "sem": 0.05678711459040642,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.952092170715332,
+      "ratio_of_means": 0.9445939660072327,
+      "p_c": {
+        "effect_mean": 0.08073438704013824,
+        "sem": 0.004051050636917353
+      },
+      "reference": null,
+      "seconds": 15.264727592468262
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 151.67875504493713
+  }
+}

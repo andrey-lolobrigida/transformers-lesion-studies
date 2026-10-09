@@ -64,3 +64,27 @@ def test_selection_is_reproducible_from_the_family():
     assert tests["n_tests"] == len(tests["tests"]) == 5616
     again = select(tests["tests"])
     assert again["selections"] == conf["selections"] and again["sets"] == conf["sets"]
+
+
+@pytest.mark.parametrize("name", ["confirmatory", "exploratory"])
+def test_verification_covers_every_selection(name):
+    from src.lesion.e3_select import load_list
+
+    sels = load_list(E3, name)
+    if not sels:
+        pytest.skip(f"{name} list is empty")
+    repl = load(E3 / "verify" / name / "replication.json")
+    assert [r["id"] for r in repl["rows"]] == [s["id"] for s in sels]
+    assert all(r["family"] == f"verify_{name}" and r["verdict"] in ("replicated", "not replicated") for r in repl["rows"])
+    restore = load(E3 / "verify" / name / "restore.json")
+    singles = {r["id"] for r in restore["rows"] if r["kind"] == "single"}
+    assert singles == {f"{s['item']}/{s['component']}" for s in sels}
+    exit_ = load(E3 / f"exit_{name}.json")
+    assert len(exit_["rows"]) == len(sels)
+
+
+def test_adversarial_baselines_and_family():
+    d = load(E3 / "adversarial" / "adversarial.json")
+    arms = {r["arm"] for r in d["rows"]}
+    assert arms == ({"baseline", "shuffle_prefix", "end_only"} if d["shuffle_gate"]["pass"] else {"baseline", "end_only"})
+    assert all(r.get("family") == "adversarial" for r in d["rows"] if r["arm"] != "baseline")

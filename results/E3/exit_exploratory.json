@@ -1,0 +1,646 @@
+{
+  "phase": "E3",
+  "list": "exploratory",
+  "rows": [
+    {
+      "id": "ioi/total_mean_unfrozen/L9H9",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L9H9",
+      "selection": {
+        "effect": 0.25993144512176514,
+        "s": 0.012943016365170479,
+        "rank": 19
+      },
+      "held_out": {
+        "effect": 0.2354946881532669,
+        "s": 0.012867989018559456,
+        "z": 18.300815132311175,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.690748196536138,
+        "fraction_sem": 0.0070903201933724845,
+        "z": 97.42129800876964,
+        "reject": true
+      }
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L10H0",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L10H0",
+      "selection": {
+        "effect": 0.3945528268814087,
+        "s": 0.011859768070280552,
+        "rank": 12
+      },
+      "held_out": {
+        "effect": 0.38301995396614075,
+        "s": 0.011914057657122612,
+        "z": 32.1485731384856,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.23582413070330463,
+        "fraction_sem": 0.006341711327939824,
+        "z": 37.18619762213534,
+        "reject": true
+      }
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L8.mlp",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L8.mlp",
+      "selection": {
+        "effect": -0.3848980963230133,
+        "s": 0.011481020599603653,
+        "rank": 14
+      },
+      "held_out": {
+        "effect": -0.3879057765007019,
+        "s": 0.011437774635851383,
+        "z": 33.91444479810104,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.0061603358049351405,
+        "fraction_sem": 0.0019357425381132825,
+        "z": 3.1824148530307435,
+        "reject": true
+      }
+    },
+    {
+      "id": "ioi/total_resample_unfrozen/L4H11",
+      "item": "ioi",
+      "map": "total_resample_unfrozen",
+      "component": "L4H11",
+      "selection": {
+        "effect": 0.4618966281414032,
+        "s": 0.00828856136649847,
+        "rank": 11
+      },
+      "held_out": {
+        "effect": 0.4478924870491028,
+        "s": 0.008011258207261562,
+        "z": 55.90788306425128,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 1.899232269455512e-05,
+        "fraction_sem": 0.0002981223487539107,
+        "z": 0.0637064707625546,
+        "reject": false
+      }
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L10H10",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L10H10",
+      "selection": {
+        "effect": 0.13449609279632568,
+        "s": 0.006048223003745079,
+        "rank": 27
+      },
+      "held_out": {
+        "effect": 0.12230239063501358,
+        "s": 0.006097613833844662,
+        "z": 20.05741819138776,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.13508755616640045,
+        "fraction_sem": 0.0031468338694833854,
+        "z": 42.92808637800054,
+        "reject": true
+      }
+    },
+    {
+      "id": "ioi/total_mean_unfrozen/L3.mlp",
+      "item": "ioi",
+      "map": "total_mean_unfrozen",
+      "component": "L3.mlp",
+      "selection": {
+        "effect": -0.22013375163078308,
+        "s": 0.009741566143929958,
+        "rank": 20
+      },
+      "held_out": {
+        "effect": -0.21239709854125977,
+        "s": 0.009967714548110962,
+        "z": 21.308505326480518,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.029668189452520564,
+        "fraction_sem": 0.0015362683823517387,
+        "z": 19.311853184860922,
+        "reject": true
+      }
+    },
+    {
+      "id": "ioi/total_mean_frozen/L3.mlp",
+      "item": "ioi",
+      "map": "total_mean_frozen",
+      "component": "L3.mlp",
+      "selection": {
+        "effect": 0.16410879790782928,
+        "s": 0.004879627842456102,
+        "rank": 18
+      },
+      "held_out": {
+        "effect": 0.15869548916816711,
+        "s": 0.004911074414849281,
+        "z": 32.313802594464946,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.029668189452520564,
+        "fraction_sem": 0.0015362683823517387,
+        "z": 19.311853184860922,
+        "reject": true
+      }
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H6",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H6",
+      "selection": {
+        "effect": -1.3428049087524414,
+        "s": 0.03988198563456535,
+        "rank": 14
+      },
+      "held_out": {
+        "effect": -1.3993717432022095,
+        "s": 0.04061677306890488,
+        "z": 34.45305073419364,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.00657737094602971,
+        "fraction_sem": 0.00041820825100849843,
+        "z": 15.7275016219038,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": -0.9481629729270935,
+          "s": 0.026584463194012642,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": -0.37003326416015625,
+          "s": 0.018084879964590073,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L1.mlp",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L1.mlp",
+      "selection": {
+        "effect": -0.9130551218986511,
+        "s": 0.041861046105623245,
+        "rank": 19
+      },
+      "held_out": {
+        "effect": -1.052042007446289,
+        "s": 0.04552067816257477,
+        "z": 23.111299082341766,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.0011326841594942842,
+        "fraction_sem": 0.0006711047748690166,
+        "z": 1.6877903449805685,
+        "reject": false
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": -0.9581391215324402,
+          "s": 0.040106773376464844,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": -0.07014616578817368,
+          "s": 0.01323642022907734,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_resample_unfrozen/L1.mlp",
+      "item": "induction",
+      "map": "total_resample_unfrozen",
+      "component": "L1.mlp",
+      "selection": {
+        "effect": 0.6494742631912231,
+        "s": 0.053901854902505875,
+        "rank": 27
+      },
+      "held_out": {
+        "effect": 0.5411792397499084,
+        "s": 0.051316771656274796,
+        "z": 10.545855132407484,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.0011326841594942842,
+        "fraction_sem": 0.0006711047748690166,
+        "z": 1.6877903449805685,
+        "reject": false
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 0.6201156973838806,
+          "s": 0.04923957586288452,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": 0.06039411947131157,
+          "s": 0.00956195592880249,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L7H3",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L7H3",
+      "selection": {
+        "effect": -1.2296183109283447,
+        "s": 0.02989957481622696,
+        "rank": 15
+      },
+      "held_out": {
+        "effect": -1.2593321800231934,
+        "s": 0.03136826679110527,
+        "z": 40.14669310260672,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.0018485440138915087,
+        "fraction_sem": 0.00020380309317835995,
+        "z": 9.070245132510037,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": -0.5786706209182739,
+          "s": 0.018052030354738235,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": -0.8512223362922668,
+          "s": 0.021540267392992973,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/direct_mean/L9H6",
+      "item": "induction",
+      "map": "direct_mean",
+      "component": "L9H6",
+      "selection": {
+        "effect": 0.8047243356704712,
+        "s": 0.015901098027825356,
+        "rank": 11
+      },
+      "held_out": {
+        "effect": 0.806400716304779,
+        "s": 0.016285806894302368,
+        "z": 49.5155518875089,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.07774067231111227,
+        "fraction_sem": 0.0012568312354400628,
+        "z": 61.85450370661134,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 0.7852568626403809,
+          "s": 0.015693385154008865,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": 0.8047243356704712,
+          "s": 0.015901098027825356,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/direct_mean/L6H9",
+      "item": "induction",
+      "map": "direct_mean",
+      "component": "L6H9",
+      "selection": {
+        "effect": -0.47684410214424133,
+        "s": 0.020047910511493683,
+        "rank": 20
+      },
+      "held_out": {
+        "effect": -0.45667704939842224,
+        "s": 0.018631497398018837,
+        "z": 24.51102236404158,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.07682133834767772,
+        "fraction_sem": 0.0009390385087834015,
+        "z": 81.80850692396612,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 0.4558478891849518,
+          "s": 0.019244179129600525,
+          "reject": true,
+          "sign_vs_baseline": "flipped"
+        },
+        "end_only": {
+          "effect": -0.47684410214424133,
+          "s": 0.020047910511493683,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H9",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H9",
+      "selection": {
+        "effect": 0.8040236830711365,
+        "s": 0.02922431379556656,
+        "rank": 24
+      },
+      "held_out": {
+        "effect": 0.792070209980011,
+        "s": 0.02962653525173664,
+        "z": 26.735161680223193,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.07682133834767772,
+        "fraction_sem": 0.0009390385087834015,
+        "z": 81.80850692396612,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 1.1594728231430054,
+          "s": 0.029324335977435112,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": 0.6095271706581116,
+          "s": 0.02555141970515251,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_mean_frozen/L6H10",
+      "item": "induction",
+      "map": "total_mean_frozen",
+      "component": "L6H10",
+      "selection": {
+        "effect": 1.0366058349609375,
+        "s": 0.025654058903455734,
+        "rank": 12
+      },
+      "held_out": {
+        "effect": 1.032346487045288,
+        "s": 0.02453826181590557,
+        "z": 42.07088891586145,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.0033799597768174776,
+        "fraction_sem": 0.0004404822814321534,
+        "z": 7.673316088511238,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 0.8573215007781982,
+          "s": 0.021975118666887283,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        },
+        "end_only": {
+          "effect": 0.5604422688484192,
+          "s": 0.015211809426546097,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "induction/total_mean_unfrozen/L6H10",
+      "item": "induction",
+      "map": "total_mean_unfrozen",
+      "component": "L6H10",
+      "selection": {
+        "effect": -0.4964737296104431,
+        "s": 0.02566979080438614,
+        "rank": 32
+      },
+      "held_out": {
+        "effect": -0.5318045020103455,
+        "s": 0.027053987607359886,
+        "z": 19.657157744304985,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.0033799597768174776,
+        "fraction_sem": 0.0004404822814321534,
+        "z": 7.673316088511238,
+        "reject": true
+      },
+      "adversarial": {
+        "shuffle_prefix": {
+          "effect": 0.5816377401351929,
+          "s": 0.02031874656677246,
+          "reject": true,
+          "sign_vs_baseline": "flipped"
+        },
+        "end_only": {
+          "effect": -0.5280226469039917,
+          "s": 0.020152147859334946,
+          "reject": true,
+          "sign_vs_baseline": "same"
+        }
+      }
+    },
+    {
+      "id": "agreement/total_mean_unfrozen/L6H5",
+      "item": "agreement",
+      "map": "total_mean_unfrozen",
+      "component": "L6H5",
+      "selection": {
+        "effect": -0.09400831907987595,
+        "s": 0.0025153819005936384,
+        "rank": 13
+      },
+      "held_out": {
+        "effect": -0.09514015167951584,
+        "s": 0.002447370206937194,
+        "z": 38.87444221141383,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": -0.03538212146733742,
+        "fraction_sem": 0.0005495122331503273,
+        "z": 64.3882325685334,
+        "reject": true
+      }
+    },
+    {
+      "id": "agreement/direct_resample/L5.mlp",
+      "item": "agreement",
+      "map": "direct_resample",
+      "component": "L5.mlp",
+      "selection": {
+        "effect": -0.14961610734462738,
+        "s": 0.002595088677480817,
+        "rank": 12
+      },
+      "held_out": {
+        "effect": -0.15369351208209991,
+        "s": 0.002689906395971775,
+        "z": 57.13712280555974,
+        "reject": true
+      },
+      "verdict": "replicated",
+      "restore": {
+        "fraction_restored": 0.0354497420253632,
+        "fraction_sem": 0.001157206369538508,
+        "z": 30.633898117498696,
+        "reject": true
+      }
+    }
+  ],
+  "set_restores": [
+    {
+      "id": "ioi/set",
+      "kind": "set",
+      "item": "ioi",
+      "components": [
+        "L4H11",
+        "L9H9",
+        "L10H0",
+        "L10H10"
+      ],
+      "mlps_left_out": [
+        "L3.mlp",
+        "L8.mlp"
+      ],
+      "effect": -3.8654186725616455,
+      "sem": 0.0408603735268116,
+      "gap": 3.6447970867156982,
+      "restored_mean_ld": 3.861539840698242,
+      "corrupt_mean_ld": -0.003878569696098566,
+      "z": 94.60066903268151,
+      "p": 0.0,
+      "fraction_restored": 1.0605305537172571,
+      "fraction_sem": 0.011210603102086707,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 8,
+      "holm_threshold": 0.005
+    },
+    {
+      "id": "induction/set",
+      "kind": "set",
+      "item": "induction",
+      "components": [
+        "L6H6",
+        "L6H9",
+        "L6H10",
+        "L7H3",
+        "L9H6"
+      ],
+      "mlps_left_out": [
+        "L1.mlp"
+      ],
+      "effect": -2.5464868545532227,
+      "sem": 0.028365084901452065,
+      "gap": 16.8162784576416,
+      "restored_mean_ld": 2.6179847717285156,
+      "corrupt_mean_ld": 0.07149825990200043,
+      "z": 89.77540040512493,
+      "p": 0.0,
+      "fraction_restored": 0.15142986963301955,
+      "fraction_sem": 0.0016867635114927876,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 5,
+      "holm_threshold": 0.0038461538461538464
+    },
+    {
+      "id": "agreement/set",
+      "kind": "set",
+      "item": "agreement",
+      "components": [
+        "L6H5"
+      ],
+      "mlps_left_out": [
+        "L5.mlp"
+      ],
+      "effect": 0.18267494440078735,
+      "sem": 0.0028370858635753393,
+      "gap": 5.162916660308838,
+      "restored_mean_ld": -2.7726666927337646,
+      "corrupt_mean_ld": -2.589991807937622,
+      "z": 64.3882325685334,
+      "p": 0.0,
+      "fraction_restored": -0.03538212146733742,
+      "fraction_sem": 0.0005495122331503273,
+      "family": "sufficiency_exploratory",
+      "reject": true,
+      "holm_step": 2,
+      "holm_threshold": 0.003125
+    }
+  ]
+}

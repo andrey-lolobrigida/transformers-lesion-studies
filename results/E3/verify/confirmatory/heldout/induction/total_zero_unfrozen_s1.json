@@ -1,0 +1,421 @@
+{
+  "phase": "E3",
+  "pre_registered": true,
+  "config": {
+    "item": "induction",
+    "scheme": "fresh_prefix",
+    "map": "total_zero_unfrozen",
+    "kind": "total",
+    "value": "zero",
+    "frozen": false,
+    "prompt_seed": 1,
+    "ref_seed": null,
+    "ref_n": null,
+    "n": 2000,
+    "prepend_bos": true,
+    "batch_size": 128,
+    "keep_prompts": true
+  },
+  "battery": {
+    "name": "induction",
+    "n": 2000,
+    "seed": 1,
+    "prepend_bos": true,
+    "template_set": "olsson-2022 \u00a7Data Collection (3) with departures: 25 distinct token ids uniform in [1000, 45000) as a frequency proxy (ours); 2 repeats, the second cut after x_i, i uniform in 1..22; competitor x_j, j uniform in i+3..25",
+    "labels": [
+      "A1",
+      "B1",
+      "S_POS",
+      "END"
+    ],
+    "schemes": [
+      "fresh_prefix",
+      "shuffle_prefix"
+    ],
+    "corruption": {
+      "name": "fresh_prefix",
+      "removes": "the earlier occurrence of x_i and its successor (what induction copies), and the in-context occurrence of both c and s",
+      "inserts": "an equally long unrepeated random prefix: 25 fresh token ids under the same sampling rule, distinct from each other and from every clean token; length, positions, the second half and the sampling distribution kept. Expected corrupt ld near 0 by symmetry",
+      "source": "olsson-2022 \u00a7Data Collection (3) (stimulus); corruption ours (E1b spec)"
+    },
+    "expected_direction": "positive"
+  },
+  "effect_sign": "positive = ablating the component hurt (clean minus intervened, on the clean prompt)",
+  "direct_effect_definition": null,
+  "positions": "all",
+  "context": {
+    "gate_file": "results/E1b/gate/induction/fresh_prefix.json",
+    "gap": 17.0118350982666,
+    "gap_sem": 0.1383601576089859,
+    "fraction_removed": 1.0004171442121044
+  },
+  "clean_file": "results/E3/verify/confirmatory/heldout/induction/clean_s1.parquet",
+  "components": [
+    "L0H1",
+    "L0H3",
+    "L0H11",
+    "L1H10",
+    "L4H11",
+    "L5H1",
+    "L5H9",
+    "L7H6",
+    "L0.mlp",
+    "L11.mlp"
+  ],
+  "complete": false,
+  "cells": {
+    "L0.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 0
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 15.524353981018066,
+      "sem": 0.16416725516319275,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 1.3634237051010132,
+      "ratio_of_means": 0.08073434978723526,
+      "p_c": {
+        "effect_mean": 0.7693668603897095,
+        "sem": 0.00616016611456871
+      },
+      "reference": null,
+      "seconds": 5.89801549911499
+    },
+    "L5H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 1
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 4.186794281005859,
+      "sem": 0.07206712663173676,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 12.700984001159668,
+      "ratio_of_means": 0.7520814538002014,
+      "p_c": {
+        "effect_mean": 0.2585189640522003,
+        "sem": 0.004746096674352884
+      },
+      "reference": null,
+      "seconds": 5.8519322872161865
+    },
+    "L7H6": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 7,
+          "head": 6
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 3.134046792984009,
+      "sem": 0.04757224768400192,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 13.753730773925781,
+      "ratio_of_means": 0.8144192695617676,
+      "p_c": {
+        "effect_mean": 0.23678769171237946,
+        "sem": 0.004177509341388941
+      },
+      "reference": null,
+      "seconds": 5.855112552642822
+    },
+    "L4H11": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 4,
+          "head": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 3.088839530944824,
+      "sem": 0.05778885632753372,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 13.798937797546387,
+      "ratio_of_means": 0.8170961737632751,
+      "p_c": {
+        "effect_mean": 0.14490151405334473,
+        "sem": 0.003401123685762286
+      },
+      "reference": null,
+      "seconds": 5.849636077880859
+    },
+    "L0H1": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 1
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.8857975006103516,
+      "sem": 0.07599520683288574,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.00197982788086,
+      "ratio_of_means": 0.8291191458702087,
+      "p_c": {
+        "effect_mean": 0.1615976244211197,
+        "sem": 0.004906375892460346
+      },
+      "reference": null,
+      "seconds": 5.942284345626831
+    },
+    "L5H9": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 5,
+          "head": 9
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.7373852729797363,
+      "sem": 0.04913480207324028,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.150391578674316,
+      "ratio_of_means": 0.8379072546958923,
+      "p_c": {
+        "effect_mean": 0.162242591381073,
+        "sem": 0.003803786588832736
+      },
+      "reference": null,
+      "seconds": 5.855212211608887
+    },
+    "L0H3": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 3
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 2.212611675262451,
+      "sem": 0.053106099367141724,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 14.675166130065918,
+      "ratio_of_means": 0.8689814805984497,
+      "p_c": {
+        "effect_mean": 0.1052018254995346,
+        "sem": 0.002978954231366515
+      },
+      "reference": null,
+      "seconds": 5.856003761291504
+    },
+    "L0H11": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 0,
+          "head": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -2.0375142097473145,
+      "sem": 0.040472954511642456,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 18.92529296875,
+      "ratio_of_means": 1.120650291442871,
+      "p_c": {
+        "effect_mean": -0.06959434598684311,
+        "sem": 0.0021972276736050844
+      },
+      "reference": null,
+      "seconds": 5.84965968132019
+    },
+    "L1H10": {
+      "spec": {
+        "granularity": "head",
+        "component": {
+          "kind": "head",
+          "layer": 1,
+          "head": 10
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": 1.8709185123443604,
+      "sem": 0.05175148323178291,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 15.016860008239746,
+      "ratio_of_means": 0.8892146944999695,
+      "p_c": {
+        "effect_mean": 0.07724981755018234,
+        "sem": 0.0031236798968166113
+      },
+      "reference": null,
+      "seconds": 5.857353210449219
+    },
+    "L11.mlp": {
+      "spec": {
+        "granularity": "mlp-layer",
+        "component": {
+          "kind": "mlp",
+          "layer": 11
+        },
+        "component_type": "node",
+        "value": "zero",
+        "reference": null,
+        "receiver": null,
+        "mlp_convention": null,
+        "positions": {
+          "kind": "all"
+        },
+        "direction": "ablate-clean",
+        "set": "single-component",
+        "freeze_patterns": false
+      },
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17",
+      "effect_mean": -1.7234030961990356,
+      "sem": 0.04546009376645088,
+      "clean_mean_ld": 16.88777732849121,
+      "ablated_mean_ld": 18.61117935180664,
+      "ratio_of_means": 1.1020503044128418,
+      "p_c": {
+        "effect_mean": -0.05638223886489868,
+        "sem": 0.002994812559336424
+      },
+      "reference": null,
+      "seconds": 5.866765975952148
+    }
+  },
+  "command": "uv run python -m src.lesion.e3_verify --stage replicate --list confirmatory",
+  "environment": {
+    "repo_commit": "7738b51282a899290633d2a059277e8bc8411825",
+    "model": {
+      "name": "gpt2",
+      "revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e"
+    },
+    "versions": {
+      "python": "3.12.12",
+      "torch": "2.14.0+cu130",
+      "cuda": "13.0",
+      "transformer_lens": "3.9.0",
+      "transformers": "5.17.0",
+      "pyarrow": "25.0.1"
+    },
+    "gpu": "NVIDIA GeForce RTX 5060",
+    "determinism": {
+      "use_deterministic_algorithms": true,
+      "cudnn_deterministic": false,
+      "cudnn_benchmark": false,
+      "cublas_workspace_config": ":4096:8"
+    },
+    "batch_size": 128,
+    "seconds": 58.75532364845276
+  }
+}
