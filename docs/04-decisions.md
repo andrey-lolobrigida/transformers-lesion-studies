@@ -687,6 +687,16 @@ landed below the pre-registration block, figures only (`9154af6`, with the
 README line `7cb228e`). No row is added to the null table: no selection
 failed to replicate and no gate failed. Results and caveats:
 `results/E3/README.md`. Awaiting the author's review; `v-E3` not tagged.
+`v-E3` tagged 2026-10-09 at the author's request, on the records as built
+(`2fdb6f4`, `6dc8150`, `768b933`; final whole-branch review: no number,
+selection or verdict changed). Not ruled on at tagging, and still open: the
+plan's choices 2–17 (`.superpowers/plans/2026-10-02-e3-functional-map.md`;
+choice 1 accepted under item 3); whether the two unmet written expectations in
+`results/E3/README.md` §6 (MLP rows not blank on induction and agreement; the
+`shuffle_prefix` corrupt mean ld against "≈ 0") get null-table rows; the
+missing `code_rev`/command on the exit tables, figures, `tests.json` and
+`confirmatory.json` (rule 6; every one reproduces exactly from the committed
+records).
 
 ## Open questions
 

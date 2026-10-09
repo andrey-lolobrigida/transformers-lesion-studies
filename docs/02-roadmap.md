@@ -226,8 +226,8 @@ D-016 item 5, "verified with activation patching" is read as: replication on a
 held-out draw gates naming, and restore-clean patching is run and reported
 beside the necessity claim, in sufficiency language, without gating.
 **Tag:** `v-E3`
-*Built 2026-10-02 to 2026-10-09 on `phase-E3-functional-map`; not yet
-reviewed or tagged. Rules: D-016; pre-registration commit `96591d2`. Of 270
+*Built 2026-10-02 to 2026-10-09 on `phase-E3-functional-map`; tagged
+`v-E3` on 2026-10-09. Rules: D-016; pre-registration commit `96591d2`. Of 270
 confirmatory selections (`109cc90`), 270 replicated on the held-out draw; of
 the author's 18 exploratory entries (`7738b51`), 18 replicated. Induction
 adversarial checks: 250 tested arms, 73 uninformative by construction, 158 of
