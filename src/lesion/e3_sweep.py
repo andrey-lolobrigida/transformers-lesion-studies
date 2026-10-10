@@ -113,6 +113,14 @@ def check_writable(out_root, allow_dirty: bool) -> str:
     return rev
 
 
+def one_model_revision(records, what: str) -> str:
+    """The model revision every input of a derived record was computed at (rule 6). More than one is a hard stop."""
+    revs = {r["environment"]["model"]["revision"] for r in records}
+    if len(revs) != 1:
+        raise ValueError(f"{what}: inputs carry model revisions {sorted(revs)}, expected exactly one")
+    return revs.pop()
+
+
 def item_context(item: str) -> dict:
     """The item's gap and the fraction of the clean ld its scheme removes (D-014 item 2), from the E1b gate."""
     path = ITEM[item].gate_file

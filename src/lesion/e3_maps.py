@@ -2,6 +2,7 @@
 gate artifacts only.
 
     uv run python -m src.lesion.e3_maps     # -> results/E3/figures/{item}_{group}_{raw|scaled}.png (18 files)
+                                            #    and figures/figures.json, their provenance
 
 Per item, three groups, each drawn together and never one alone: the six
 total-effect maps (row 1 unfrozen, row 2 frozen; columns zero, mean,
@@ -13,18 +14,25 @@ intervention raised the mean ld, red where it lowered it, neutral gray at 0.
 One symmetric scale per figure, set by the largest |head cell| in it, so its
 panels compare; an MLP cell beyond that scale is drawn at the end colour and
 printed with its value. A dot marks a cell that clears Holm over the main
-family; an x marks an exact-zero delta (untested)."""
+family; an x marks an exact-zero delta (untested).
+
+A PNG carries no record, so figures.json does (rule 6): the command, the code
+revision that drew the figures (src/lesion/ must be committed), the seed and
+model revision of the inputs, the inputs themselves, and each file's SHA-256."""
 
 from __future__ import annotations
 
 import argparse
+import hashlib
 import json
+import shlex
 import sys
 from pathlib import Path
 
 import numpy as np
 
 from src.lesion.e3_prereg import ALPHA, COMPONENTS, DIRECT_MAPS, ITEM, N, N_FAMILY, SEED, TOTAL_MAPS, VALUES, label
+from src.lesion.e3_sweep import check_writable, one_model_revision
 from src.lesion.spec import Head
 
 NEG, MID, POS = "#2a78d6", "#f0efec", "#e34948"  # diverging pair with a neutral midpoint
@@ -141,6 +149,17 @@ def render(tests: list[dict], gaps: dict[str, float], out_dir, items=None) -> li
     return paths
 
 
+def figures_record(paths, tests_rec: dict, gate_recs: dict[str, dict], command: str, rev: str) -> dict:
+    """The figures' provenance: ``tests_rec`` is tests.json, ``gate_recs`` the E1b gate records the gaps come from."""
+    model_revision = one_model_revision(
+        [{"environment": {"model": {"revision": tests_rec["model_revision"]}}}, *gate_recs.values()], "figures")
+    inputs = {"selection/tests.json": {"code_rev": tests_rec["code_rev"]},
+              **{g: {"repo_commit": r["environment"].get("repo_commit")} for g, r in gate_recs.items()}}
+    return {"phase": "E3", "command": command, "code_rev": rev, "prompt_seed": tests_rec["prompt_seed"],
+            "model_revision": model_revision, "inputs": inputs,
+            "files": {Path(p).name: hashlib.sha256(Path(p).read_bytes()).hexdigest() for p in paths}}
+
+
 def main(argv: list[str] | None = None) -> int:
     argv = sys.argv[1:] if argv is None else list(argv)
     ap = argparse.ArgumentParser(prog="python -m src.lesion.e3_maps", description=__doc__,
@@ -148,10 +167,20 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out-root", default="results/E3")
     args = ap.parse_args(argv)
     root = Path(args.out_root)
-    tests = json.loads((root / "selection" / "tests.json").read_text())["tests"]
-    gaps = {i: json.loads(Path(ITEM[i].gate_file).read_text())["statistics"]["gap"] for i in ITEM}
-    for p in render(tests, gaps, root / "figures"):
+    command = " ".join(["uv run python -m src.lesion.e3_maps", *(shlex.quote(a) for a in argv)])
+    try:
+        rev = check_writable(root, allow_dirty=False)
+    except ValueError as e:
+        ap.error(str(e))
+    tests_rec = json.loads((root / "selection" / "tests.json").read_text())
+    gate_recs = {ITEM[i].gate_file: json.loads(Path(ITEM[i].gate_file).read_text()) for i in ITEM}
+    gaps = {i: gate_recs[ITEM[i].gate_file]["statistics"]["gap"] for i in ITEM}
+    paths = render(tests_rec["tests"], gaps, root / "figures")
+    for p in paths:
         print(p)
+    record = figures_record(paths, tests_rec, gate_recs, command, rev)
+    (root / "figures" / "figures.json").write_text(json.dumps(record, indent=2))
+    print(root / "figures" / "figures.json")
     return 0
 
 

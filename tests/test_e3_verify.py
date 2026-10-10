@@ -121,6 +121,49 @@ def test_exit_rows():
     assert row["adversarial"]["shuffle_prefix"]["reject"] is False and row["adversarial"]["end_only"] is None
 
 
+def fake_verify_root(root, adv_revision="m0"):
+    env = {"model": {"name": "gpt2", "revision": "m0"}}
+    repl = [{"id": "induction/total_zero_frozen/L5H5", "item": "induction", "map": "total_zero_frozen",
+             "component": "L5H5", "effect": 3.0, "s": 0.1, "selection_rank": 1,
+             "held_out": {"effect": 2.9, "s": 0.1, "z": 29.0, "reject": True}, "verdict": "replicated"}]
+    restore = [{"id": "induction/L5H5", "kind": "single", "fraction_restored": 0.02, "fraction_sem": 0.001,
+                "z": 3.0, "reject": False}]
+    d = root / "verify" / "confirmatory"
+    d.mkdir(parents=True)
+    (d / "replication.json").write_text(json.dumps({"code_rev": "r1", "environment": env, "rows": repl}))
+    (d / "restore.json").write_text(json.dumps({"code_rev": "r2", "environment": env, "rows": restore}))
+    (root / "adversarial").mkdir()
+    (root / "adversarial" / "adversarial.json").write_text(json.dumps(
+        {"code_rev": "r3", "environment": {"model": {"name": "gpt2", "revision": adv_revision}}, "rows": []}))
+    return root
+
+
+def test_exit_tables_carry_command_code_rev_seeds_and_model_revision(tmp_path):
+    [path] = V.write_tables(fake_verify_root(tmp_path), "cmd", "abc")
+    rec = json.loads(path.read_text())
+    assert list(rec)[:8] == ["phase", "command", "code_rev", "prompt_seed", "held_out_seed", "model_revision",
+                             "inputs", "list"]
+    assert (rec["command"], rec["code_rev"], rec["prompt_seed"], rec["held_out_seed"], rec["model_revision"]) == (
+        "cmd", "abc", 0, 1, "m0")
+    assert rec["inputs"] == {"verify/confirmatory/replication.json": {"code_rev": "r1"},
+                             "verify/confirmatory/restore.json": {"code_rev": "r2"},
+                             "adversarial/adversarial.json": {"code_rev": "r3"}}
+    assert len(rec["rows"]) == 1 and rec["rows"][0]["restore"]["fraction_restored"] == 0.02
+
+
+def test_exit_tables_refuse_mixed_model_revisions(tmp_path):
+    with pytest.raises(ValueError, match="model revisions"):
+        V.write_tables(fake_verify_root(tmp_path, adv_revision="m1"), "cmd", "abc")
+
+
+def test_table_stage_refuses_a_dirty_tree(monkeypatch, tmp_path):
+    fake_verify_root(tmp_path)
+    monkeypatch.setattr("src.lesion.e3_sweep.code_rev", lambda: ("abc", True))
+    with pytest.raises(SystemExit) as e:
+        V.main(["--stage", "table", "--out-root", str(tmp_path)])
+    assert e.value.code == 2 and not (tmp_path / "exit_confirmatory.json").exists()
+
+
 @pytest.mark.parametrize("argv", [["--stage", "replicate"], ["--stage", "restore"], ["--stage", "nope"],
                                   ["--stage", "replicate", "--n", "0"]])
 def test_cli_refuses_before_the_model_loads(monkeypatch, tmp_path, argv):

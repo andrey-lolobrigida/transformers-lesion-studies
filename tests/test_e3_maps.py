@@ -56,3 +56,23 @@ def test_colorbar_label_states_sign_and_scale():
     assert M.colorbar_label("total", "scaled", 3.59) == (
         f"effect on the mean logit difference\n/ clean-minus-corrupt gap (3.590)\n{sign}")
     assert "gap (3.590)" in M.colorbar_label("delta", "scaled", 3.59)
+
+
+def test_figures_record_hashes_every_file_and_names_its_inputs(tmp_path):
+    import hashlib
+
+    paths = M.render(synthetic_tests(), {"ioi": 3.59}, tmp_path, items=("ioi",))
+    env = {"model": {"revision": "m0"}}
+    rec = M.figures_record(paths, {"code_rev": "t0", "prompt_seed": 0, "model_revision": "m0"},
+                           {"results/E1b/gate/ioi/p_ABC.json": {"environment": env}}, "cmd", "abc")
+    assert rec["command"] == "cmd" and rec["code_rev"] == "abc" and rec["model_revision"] == "m0"
+    assert rec["prompt_seed"] == 0 and rec["inputs"]["selection/tests.json"] == {"code_rev": "t0"}
+    assert rec["files"] == {p.name: hashlib.sha256(p.read_bytes()).hexdigest() for p in paths}
+
+
+def test_figures_record_refuses_mixed_model_revisions(tmp_path):
+    import pytest
+
+    with pytest.raises(ValueError, match="model revisions"):
+        M.figures_record([], {"code_rev": "t0", "prompt_seed": 0, "model_revision": "m0"},
+                         {"g.json": {"environment": {"model": {"revision": "m1"}}}}, "cmd", "abc")

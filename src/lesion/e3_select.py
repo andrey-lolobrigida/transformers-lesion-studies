@@ -16,7 +16,11 @@ attention layer downstream for freezing to act on. It is recorded as
 5,616; this can only make Holm stricter. Any other s = 0 is a hard stop.
 
 confirmatory.json is committed before any verification run, exploratory.json
-before its own; e3_verify refuses an uncommitted list (``load_list``)."""
+before its own; e3_verify refuses an uncommitted list (``load_list``).
+
+Both files carry, beside the command, the code revision that wrote them
+(src/lesion/ must be committed), the prompt and reference seeds, the model
+revision of the input records, and the code revisions of the input cells."""
 
 from __future__ import annotations
 
@@ -31,7 +35,7 @@ from src.lesion.e3_prereg import (
     ALPHA, COMPONENTS, ITEM, K, MAP, MAPS, N_FAMILY, REF_SEEDS, SEED, VALUES, label, parse_label,
 )
 from src.lesion.e3_stats import cell_s, holm, paired_sem, select_rule_a, z_test
-from src.lesion.e3_sweep import CellSet, load_prompts, load_record, stage_dir
+from src.lesion.e3_sweep import CellSet, check_writable, load_prompts, load_record, one_model_revision, stage_dir
 
 LISTS = ("confirmatory", "exploratory")
 
@@ -74,8 +78,8 @@ def _test(item: str, map_id: str, kind: str, lab: str, value: str, effect: float
             "value": value, "effect": effect, **s, **z_test(effect, s["s"]), "tested": True}
 
 
-def build_tests(root) -> list[dict]:
-    recs = _Records(Path(root))
+def build_tests(root, recs: _Records | None = None) -> list[dict]:
+    recs = recs or _Records(Path(root))
     tests: list[dict] = []
     for item in ITEM:
         for m in MAPS:
@@ -111,6 +115,16 @@ def build_tests(root) -> list[dict]:
     for t in tests:
         t.update(holm_step=h[t["id"]]["step"], holm_threshold=h[t["id"]]["threshold"], reject=h[t["id"]]["reject"])
     return tests
+
+
+def provenance(recs: _Records) -> dict:
+    """Rule 6 for a record derived from the cell sets ``recs`` has read: seeds, model revision, input code revisions."""
+    try:
+        model_revision = one_model_revision(recs.cache.values(), "selection")
+    except ValueError as e:
+        raise SelectionError(str(e)) from e
+    return {"prompt_seed": SEED, "ref_seeds": list(REF_SEEDS), "model_revision": model_revision,
+            "input_code_revs": sorted({c["code_rev"] for r in recs.cache.values() for c in r["cells"].values()})}
 
 
 def select(tests: list[dict]) -> dict:
@@ -195,14 +209,17 @@ def main(argv: list[str] | None = None) -> int:
     command = "uv run python -m src.lesion.e3_select " + " ".join(shlex.quote(a) for a in argv)
     try:
         if args.stage == "confirmatory":
-            tests = build_tests(args.out_root)
+            stamp = {"phase": "E3", "command": command, "code_rev": check_writable(args.out_root, allow_dirty=False)}
+            recs = _Records(Path(args.out_root))
+            tests = build_tests(args.out_root, recs)
+            stamp.update(provenance(recs))
             conf = select(tests)
             sel.mkdir(parents=True, exist_ok=True)
             (sel / "tests.json").write_text(json.dumps(
-                {"phase": "E3", "command": command, "family": "main", "alpha": ALPHA, "n_tests": len(tests),
+                {**stamp, "family": "main", "alpha": ALPHA, "n_tests": len(tests),
                  "n_rejected": sum(t["reject"] for t in tests), "n_exact_zero": sum(not t["tested"] for t in tests),
                  "tests": tests}, indent=2))
-            (sel / "confirmatory.json").write_text(json.dumps({"phase": "E3", "command": command, **conf}, indent=2))
+            (sel / "confirmatory.json").write_text(json.dumps({**stamp, **conf}, indent=2))
             for key, res in conf["sets"].items():
                 print(f"{key:36} cleared {res['n_cleared']:3}  selected {len(res['selected']):2}"
                       f"{'  (tie at cut)' if res['tie_at_cut'] else ''}")
@@ -215,7 +232,7 @@ def main(argv: list[str] | None = None) -> int:
             tests = {t["id"]: t for t in json.loads((sel / "tests.json").read_text())["tests"]}
             out = check_exploratory(json.loads(path.read_text())["entries"], confirmatory, tests)
             print(f"{len(out)} exploratory entries, well-formed")
-    except SelectionError as e:
+    except ValueError as e:  # SelectionError, or check_writable's refusal
         ap.error(str(e))
     return 0
 

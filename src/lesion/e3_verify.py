@@ -17,7 +17,12 @@ component and per item for the set of replicated heads; reported as the
 fraction of the gap restored, with its own Holm test (sufficiency family).
 Adversarial (induction, measured, never gating): shuffle_prefix and END-only
 arms against the fresh_prefix all-position baseline, on the selecting draw,
-for E2 I3's units and every induction selection."""
+for E2 I3's units and every induction selection.
+
+The exit tables are built from the replication, restore and adversarial
+records, without the model. Each carries the command, the code revision that
+wrote it (src/lesion/ must be committed), both seeds, the model revision of
+its inputs, and each input's code revision (rule 6)."""
 
 from __future__ import annotations
 
@@ -36,7 +41,9 @@ from src.lesion.e3_prereg import (
 )
 from src.lesion.e3_select import LISTS, SelectionError, load_list
 from src.lesion.e3_stats import cell_s, fraction_restored, holm, z_test
-from src.lesion.e3_sweep import CellSet, cell_spec, check_writable, item_context, load_record, run_cell_set, stage_dir
+from src.lesion.e3_sweep import (
+    CellSet, cell_spec, check_writable, item_context, load_record, one_model_revision, run_cell_set, stage_dir,
+)
 from src.lesion.knockout import KnockoutSetSpec, Member, run_set
 from src.lesion.spec import AblationSpec, All, Head, Labels, MeanReference
 
@@ -406,20 +413,28 @@ def run_adversarial(ctx: Ctx) -> dict:
     return record
 
 
-def write_tables(root) -> list[Path]:
+def write_tables(root, command: str, rev: str) -> list[Path]:
     root = Path(root)
     adv_path = root / "adversarial" / "adversarial.json"
-    adv = json.loads(adv_path.read_text())["rows"] if adv_path.exists() else []
+    adv_rec = json.loads(adv_path.read_text()) if adv_path.exists() else None
+    adv = adv_rec["rows"] if adv_rec else []
     written = []
     for name in LISTS:
         rp, sp = root / "verify" / name / "replication.json", root / "verify" / name / "restore.json"
         if not rp.exists():
             continue
-        restore = json.loads(sp.read_text())["rows"] if sp.exists() else []
+        inputs = {p: json.loads(p.read_text()) for p in (rp, sp) if p.exists()}
+        if adv_rec:
+            inputs[adv_path] = adv_rec
+        restore = inputs[sp]["rows"] if sp in inputs else []
         sets = [r for r in restore if r["kind"] == "set"]
-        rows = exit_rows(json.loads(rp.read_text())["rows"], restore, adv)
+        rows = exit_rows(inputs[rp]["rows"], restore, adv)
         path = root / f"exit_{name}.json"
-        path.write_text(json.dumps({"phase": "E3", "list": name, "rows": rows, "set_restores": sets}, indent=2))
+        record = {"phase": "E3", "command": command, "code_rev": rev, "prompt_seed": SEED,
+                  "held_out_seed": HELD_OUT_SEED, "model_revision": one_model_revision(inputs.values(), path.name),
+                  "inputs": {p.relative_to(root).as_posix(): {"code_rev": r["code_rev"]} for p, r in inputs.items()},
+                  "list": name, "rows": rows, "set_restores": sets}
+        path.write_text(json.dumps(record, indent=2))
         written.append(path)
         print(f"{name}: {len(rows)} rows -> {path}")
     return written
@@ -437,13 +452,14 @@ def main(argv: list[str] | None = None) -> int:
     ap.add_argument("--out-root", default="results/E3")
     args = ap.parse_args(argv)
     root = Path(args.out_root)
+    command = "uv run python -m src.lesion.e3_verify " + " ".join(shlex.quote(a) for a in argv)
     try:
         if args.n <= 0:
             raise ValueError("--n must be positive")
-        if args.stage == "table":
-            write_tables(root)
-            return 0
         rev = check_writable(root, allow_dirty=False)
+        if args.stage == "table":
+            write_tables(root, command, rev)
+            return 0
         if args.stage in ("replicate", "restore"):
             load_list(root, args.list)
         if args.stage == "restore" and not (root / "verify" / args.list / "replication.json").exists():
@@ -461,7 +477,7 @@ def main(argv: list[str] | None = None) -> int:
 
     set_determinism(SEED)
     ctx = Ctx(model=load_model(args.device), tok=plain_tokenizer(), n=args.n, batch_size=args.batch_size, root=root,
-              rev=rev, command="uv run python -m src.lesion.e3_verify " + " ".join(shlex.quote(a) for a in argv),
+              rev=rev, command=command,
               pre_registered=args.n == N and args.batch_size == BATCH_SIZE)
     if args.stage == "gate-shuffle":
         run_gate_shuffle(ctx)

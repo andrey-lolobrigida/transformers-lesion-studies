@@ -24,14 +24,16 @@ def zero_effect(item, map_id, lab, rs):
 def fake_root(root, effect=zero_effect, sem=0.01):
     """Complete fake records for every selection and floor cell set. Frozen maps
     get per-prompt ld offset by 0.5 on odd prompts, except layer-11 components,
-    which (as in the model) get identical frozen and unfrozen columns."""
+    which (as in the model) get identical frozen and unfrozen columns. Every
+    cell is stamped code_rev "c0", every record model revision "m0"."""
     for stage in ("selection", "floor"):
         for cs in cell_sets(tuple(ITEM), stage):
             d = stage_dir(root, stage, cs.item)
             d.mkdir(parents=True, exist_ok=True)
-            cells = {label(c): {"effect_mean": effect(cs.item, cs.map_id, label(c), cs.ref_seed), "sem": sem}
-                     for c in COMPONENTS}
-            rec = {"pre_registered": True, "complete": True, "components": list(cells), "cells": cells}
+            cells = {label(c): {"effect_mean": effect(cs.item, cs.map_id, label(c), cs.ref_seed), "sem": sem,
+                                "code_rev": "c0"} for c in COMPONENTS}
+            rec = {"pre_registered": True, "complete": True, "components": list(cells), "cells": cells,
+                   "environment": {"model": {"name": "gpt2", "revision": "m0"}}}
             (d / f"{cs.stem}.json").write_text(json.dumps(rec))
             if stage == "selection":
                 frozen = MAP[cs.map_id].frozen
@@ -105,6 +107,44 @@ def test_missing_or_incomplete_records_refuse(tmp_path):
     p.write_text(json.dumps(rec))
     with pytest.raises(E.SelectionError, match="incomplete"):
         E.build_tests(root2)
+
+
+def test_provenance_names_seeds_model_revision_and_input_code_revs(tmp_path):
+    recs = E._Records(fake_root(tmp_path))
+    E.build_tests(tmp_path, recs)
+    assert E.provenance(recs) == {"prompt_seed": 0, "ref_seeds": [0, 1, 2, 3, 4], "model_revision": "m0",
+                                  "input_code_revs": ["c0"]}
+
+
+def test_provenance_refuses_mixed_model_revisions(tmp_path):
+    root = fake_root(tmp_path)
+    p = stage_dir(root, "floor", "ioi") / "direct_mean_s0_r2.json"
+    rec = json.loads(p.read_text())
+    rec["environment"]["model"]["revision"] = "m1"
+    p.write_text(json.dumps(rec))
+    recs = E._Records(root)
+    E.build_tests(root, recs)
+    with pytest.raises(E.SelectionError, match="model revisions"):
+        E.provenance(recs)
+
+
+def test_cli_refuses_a_dirty_tree_before_writing(monkeypatch, tmp_path):
+    fake_root(tmp_path)
+    monkeypatch.setattr("src.lesion.e3_sweep.code_rev", lambda: ("abc", True))
+    with pytest.raises(SystemExit) as e:
+        E.main(["--stage", "confirmatory", "--out-root", str(tmp_path)])
+    assert e.value.code == 2 and not (tmp_path / "selection").exists()
+
+
+def test_cli_stamps_both_files(monkeypatch, tmp_path):
+    fake_root(tmp_path)
+    monkeypatch.setattr("src.lesion.e3_sweep.code_rev", lambda: ("abc", False))
+    E.main(["--stage", "confirmatory", "--out-root", str(tmp_path)])
+    for name in ("tests.json", "confirmatory.json"):
+        rec = json.loads((tmp_path / "selection" / name).read_text())
+        assert list(rec)[:7] == ["phase", "command", "code_rev", "prompt_seed", "ref_seeds", "model_revision",
+                                 "input_code_revs"]
+        assert rec["code_rev"] == "abc" and rec["model_revision"] == "m0" and rec["input_code_revs"] == ["c0"]
 
 
 def exploratory_fixture(tmp_path):
