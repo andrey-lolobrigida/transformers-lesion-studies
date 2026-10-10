@@ -108,6 +108,7 @@ and is not a refutation.
 ## Changes after pre-registration
 
 - `9154af6`, e3_maps.py (figures only): the Holm dot no longer overlaps a printed (clipped) MLP value, that value's font is larger, and the colorbar states the sign. No pre-registered value, test, or selection changes.
+- `a48bd12` (2026-10-10, after tagging), e3_select.py, e3_maps.py, e3_verify.py, e3_sweep.py: the derived records gain rule-6 provenance fields (`code_rev`, seeds, model revision, input code revisions; `command` on the exit tables; a `figures/figures.json` sidecar), and their writers refuse an uncommitted `src/lesion/`. Records regenerated in `4f88352`: additions only, every earlier key identical, PNGs byte-identical. No pre-registered value, test, or selection changes. `ERRATA.md`, 2026-10-10.
 
 *Everything below this line was written on 2026-10-09, after the runs, from
 the committed artifacts. The Pre-registration section above is unchanged
@@ -140,26 +141,29 @@ directory; where an artifact records no command, the table says so.
 | `gates/induction/shuffle_prefix.{json,parquet}` | `uv run python -m src.lesion.e3_verify --stage gate-shuffle` | `command` |
 | `sweep/{item}/` (27 cell sets, 3 clean files) | `uv run python -m src.lesion.e3_sweep --item all --stage selection` | `command` |
 | `floor/{item}/` (36 cell sets) | `uv run python -m src.lesion.e3_sweep --item all --stage floor` | `command` |
-| `selection/tests.json`, `selection/confirmatory.json` | `uv run python -m src.lesion.e3_select --stage confirmatory` | `command` |
+| `selection/tests.json`, `selection/confirmatory.json` | `uv run python -m src.lesion.e3_select --stage confirmatory` | `command`, `code_rev` |
 | `selection/exploratory.json` | written by the author (no command) | — |
-| `figures/` (18 PNGs) | `uv run python -m src.lesion.e3_maps` | not recorded (PNG files carry no record); the command is the module docstring's |
+| `figures/` (18 PNGs), `figures/figures.json` | `uv run python -m src.lesion.e3_maps` | `figures/figures.json`: `command`, `code_rev`, SHA-256 per PNG |
 | `verify/{confirmatory,exploratory}/replication.json`, `heldout/` | `uv run python -m src.lesion.e3_verify --stage replicate --list {confirmatory,exploratory}` | `command` |
 | `verify/{confirmatory,exploratory}/restore.json`, `restore/` | `uv run python -m src.lesion.e3_verify --stage restore --list {confirmatory,exploratory}` | `command` |
 | `adversarial/adversarial.json`, `adversarial/arms.jsonl` | `uv run python -m src.lesion.e3_verify --stage adversarial` | `command` |
-| `exit_confirmatory.json`, `exit_exploratory.json` | `uv run python -m src.lesion.e3_verify --stage table` | not recorded (the exit tables carry no `command`, `code_rev` or `environment`); the command is the module docstring's |
+| `exit_confirmatory.json`, `exit_exploratory.json` | `uv run python -m src.lesion.e3_verify --stage table` | `command`, `code_rev` |
 | Slow-tier checks on all of the above | `uv run pytest -q -m slow tests/test_e3_validation.py tests/test_e3_prereg.py` | — |
 
 **Rerunning into `results/E3` overwrites committed records.** A stage skips
 a finished cell only when the cell's `code_rev` equals the current one
-(`e3_sweep.py`). The sweep, floor and gate cells are stamped `1382046`, and
-at the branch head `code_rev` is `9154af6` (the figure fix touched
-`src/lesion/e3_maps.py`). So rerunning the gate, sweep or floor commands
-above as written recomputes every cell (about 15 GPU-hours for sweep and
-floor) and rewrites the committed records in place. To reproduce, add
-`--out-root scratch/E3` (every E3 CLI takes it) and compare `effect_mean` and
-`sem` with the committed records. The held-out, restore and adversarial
-records are stamped `9154af6`, so those stages do skip finished work at the
-branch head (adversarial arms are reused from `arms.jsonl`).
+(`e3_sweep.py`). The sweep, floor and gate cells are stamped `1382046`; the
+held-out, restore and adversarial records `9154af6`. Since `a48bd12`
+(2026-10-10, provenance fields on the derived records) the current
+`code_rev` matches neither, so rerunning any GPU command above as written
+recomputes every cell (about 15 GPU-hours for sweep and floor) and rewrites
+the committed records in place; adversarial arms in `arms.jsonl` are no
+longer reused either. To reproduce, add `--out-root scratch/E3` (every E3
+CLI takes it) and compare `effect_mean` and `sem` with the committed
+records. The three CPU commands (`e3_select`, `e3_maps`, `e3_verify --stage
+table`) rewrite their records in place from the committed inputs; run into
+`results/E3`, they reproduce the committed files exactly apart from
+`code_rev`, which is the current one.
 
 **Provenance.**
 
@@ -186,6 +190,12 @@ branch head (adversarial arms are reused from `arms.jsonl`).
   computed every number is the same. Each record's `environment.repo_commit`
   is the branch head when it was written: `96591d2` (gates), `7bd064c`
   (sweep and floor), `7738b51` (verification and adversarial).
+- Derived records (2026-10-10): `tests.json`, `confirmatory.json`, both exit
+  tables and `figures/figures.json` are stamped `a48bd12`, the revision that
+  regenerated them (`4f88352`). Each names the code revisions of its inputs
+  (`input_code_revs` or `inputs`) and the model revision.
+  `git diff 9154af6..a48bd12 -- src/lesion` adds provenance fields and the
+  uncommitted-tree refusal to the four E3 writers and computes nothing new.
 - `git diff 96591d2..133a8fe -- src/` touches `e3_maps.py` only. The tests
   added after the pre-registration commit are the slow-tier exit checks in
   `tests/test_e3_validation.py` (Tasks 10–14) and the figure-layout test in

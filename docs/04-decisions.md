@@ -697,6 +697,18 @@ choice 1 accepted under item 3); whether the two unmet written expectations in
 missing `code_rev`/command on the exit tables, figures, `tests.json` and
 `confirmatory.json` (rule 6; every one reproduces exactly from the committed
 records).
+**Rule-6 gaps closed, 2026-10-10.** The four writers now stamp `code_rev`,
+seeds, model revision and input code revisions (exit tables also `command`;
+the figures get a `figures/figures.json` sidecar with a SHA-256 per PNG) and
+refuse an uncommitted `src/lesion/` (`a48bd12`). The records were regenerated
+on CPU from the committed inputs (`4f88352`): additions only, every earlier
+key identical in value and order, the 18 PNGs byte-identical.
+`confirmatory.json` was rewritten after verification; its pre-verification
+version stays in `109cc90`, and the identity check is the evidence that the
+list did not change. Side effect: the current `code_rev` no longer matches
+`9154af6`, so a rerun of the held-out, restore or adversarial stages into
+`results/E3` recomputes instead of skipping (`results/E3/README.md` §1).
+Errata: `ERRATA.md`, 2026-10-10. The other two items above stay open.
 
 ## Open questions
 

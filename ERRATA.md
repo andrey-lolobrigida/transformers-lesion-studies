@@ -4,6 +4,34 @@ Corrections to documents from earlier phases, fixed forward and recorded here
 (policy: `CLAUDE.md`, "Working conventions"). Newest first. Old phase
 branches are not rewritten.
 
+## 2026-10-10 — E3 derived records lacked rule-6 provenance
+
+**Affected:** E3 (`v-E3`, `e2b363d`): `results/E3/selection/tests.json`,
+`results/E3/selection/confirmatory.json`, `results/E3/exit_confirmatory.json`,
+`results/E3/exit_exploratory.json`, `results/E3/figures/` (18 PNGs), and the
+provenance text in `results/E3/README.md` §1.
+
+**Was:** the selection files recorded `command` but no `code_rev`, seed or
+model revision; the exit tables recorded none of these; the PNGs carried no
+record at all. CLAUDE.md rule 6 asks for a rerun command, a seed and a model
+revision hash beside every number.
+
+**Is:** the writers stamp them (`a48bd12`): `code_rev`, seeds, the model
+revision of the inputs and the inputs' code revisions on all four JSON
+files, `command` on the exit tables, and a `figures/figures.json` sidecar
+with the command, code revision, inputs and a SHA-256 per PNG. The writers
+refuse an uncommitted `src/lesion/`, as the GPU stages already did.
+
+**Numbers affected:** none. Regenerated on CPU from the committed records
+(`4f88352`): the diff is additions only, every earlier key is identical in
+value and order, and the 18 PNGs are byte-identical (SHA-256 before and
+after). `confirmatory.json`'s pre-verification version stays in `109cc90`.
+
+**Found:** listed as open at tagging (D-016, "Not ruled on at tagging").
+
+**Fixed in:** `a48bd12` (code), `4f88352` (records) and the commit that adds
+this entry (README, D-016), on `main`. `v-E3` is not moved.
+
 ## 2026-10-07 — direct effect under `wang`; total − direct is a net figure
 
 **Affected:** `docs/01-methods.md`, "Direct effect, this project's sense"
