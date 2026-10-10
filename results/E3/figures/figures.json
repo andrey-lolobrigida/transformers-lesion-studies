@@ -1,0 +1,41 @@
+{
+  "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_maps",
+  "code_rev": "a48bd12a60d56102c337b1473b53c27a09b0b841",
+  "prompt_seed": 0,
+  "model_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+  "inputs": {
+    "selection/tests.json": {
+      "code_rev": "a48bd12a60d56102c337b1473b53c27a09b0b841"
+    },
+    "results/E1b/gate/ioi/p_ABC.json": {
+      "repo_commit": "20fb4a9cd4d8a228c944d41f9648a4cfcb956825"
+    },
+    "results/E1b/gate/induction/fresh_prefix.json": {
+      "repo_commit": "20fb4a9cd4d8a228c944d41f9648a4cfcb956825"
+    },
+    "results/E1b/gate/agreement/number_flip.json": {
+      "repo_commit": "803ec36192c243d192739713a4ff99fecd15e776"
+    }
+  },
+  "files": {
+    "ioi_total_raw.png": "da9f3a3639cd4463fe86b0471732fb720d5be7fbabdea17fb287dbc2eb731e18",
+    "ioi_total_scaled.png": "bfc59aee4b2b1baa93e2a0010d2237b1f58647a02808f539c50b90679310db51",
+    "ioi_direct_raw.png": "8df86d8ad4e14170db106b3fa4c914ac650fe8172b60287812915b5cd0f589b8",
+    "ioi_direct_scaled.png": "4e601a360e52701eb533c8468d379a6d5a8bc4988822bf61851763b076b718ed",
+    "ioi_delta_raw.png": "404e661318692d1df1f0149201c4802823a1a4c12ef6967a0be5a86047e8b668",
+    "ioi_delta_scaled.png": "6b88dfc57b270b0029303d8e1f7dc233566ff7a80f6f87dd7465f841101c28c5",
+    "induction_total_raw.png": "a09aece6162e8353e2234c54375464aee095479b418a3823a9042850cb3e8124",
+    "induction_total_scaled.png": "01d0a5d92e25485f78ec3ca56a3dbe8d589ab6e59bc8d5076e3ccb3ff5c2a725",
+    "induction_direct_raw.png": "79564c3365bb172194bc69867c9b841e49ccea663902e1020efb2ea612934d7c",
+    "induction_direct_scaled.png": "75053f6cfc92af05f67d05a319001aa2d0c9e746b61403a6ed80b915cfb91331",
+    "induction_delta_raw.png": "b58df813271c42426aa1ea8897eb3aeb17a885458291a38811780ca1f958702d",
+    "induction_delta_scaled.png": "ae6175e22e734a08970baa4fa4e54087cb4fc264810a1efe5bfcf98385bb2845",
+    "agreement_total_raw.png": "d93c9b05bc927972d38bd81abdfd8eec80e2adf9fafce84551c655b248a84534",
+    "agreement_total_scaled.png": "642e23ce187df830360a83819745f496678c97ffc968a90685b6ccf7c69a7b56",
+    "agreement_direct_raw.png": "4e7dccb9f339b6557d149fd5518fd23bad37b428383955bf97fcdd97280fa828",
+    "agreement_direct_scaled.png": "8bd926f4e40863700cece51c8e677ad5665ae1954ca776397ec1c04a4a4e4083",
+    "agreement_delta_raw.png": "af3772e6f007e67ba656d4d6f6649b48bdc632260d57d8c964c51e41b854a025",
+    "agreement_delta_scaled.png": "f0e42381605d1b3e01eb6eb53a01695d3192a14b98cdadb5ca2e0a6906fb4097"
+  }
+}

@@ -1,5 +1,21 @@
 {
   "phase": "E3",
+  "command": "uv run python -m src.lesion.e3_verify --stage table",
+  "code_rev": "a48bd12a60d56102c337b1473b53c27a09b0b841",
+  "prompt_seed": 0,
+  "held_out_seed": 1,
+  "model_revision": "607a30d783dfa663caf39e06633721c8d4cfcd7e",
+  "inputs": {
+    "verify/confirmatory/replication.json": {
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17"
+    },
+    "verify/confirmatory/restore.json": {
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17"
+    },
+    "adversarial/adversarial.json": {
+      "code_rev": "9154af6cbb45094166e662e14932573234952d17"
+    }
+  },
   "list": "confirmatory",
   "rows": [
     {
