@@ -10,20 +10,22 @@ Decision and reasoning: `D-009` in `docs/04-decisions.md`.
 
 ## What this is for, and what it is not
 
-Two readers, one artifact.
+The wiki is a reading scaffold: what the papers this project depends on say,
+organised so that the experiments can be checked against it. It is not a
+source of results. Nothing here was measured in this repo; measurements live
+under `results/`, and claims about them in the phase READMEs.
 
-- **For Andrey**, it is a place to consolidate and to check against. It is
-  *not* the R-phase deliverable. R0's exit note was written cold, without
-  opening these pages (it was kept out of the published repo, D-017); R1 means reviewing `docs/01-methods.md` against the extracted pages
-  and editing it yourself (D-010, not a cold rewrite). Read the wiki
-  page *after* writing the note, and treat the difference between them as the
-  actual result of the exercise.
-- **For Claude**, it is the implementation reference at E1 and after. When the
-  harness needs to know what resample ablation licenses, the answer is on
-  `methods/resample-ablation.md`, already reconciled across sources.
+It serves two uses.
 
-`notes/` holds your thinking. `wiki/` holds the field's. Keeping them in
-separate directories is what makes the comparison meaningful.
+- **As a check on understanding.** The reading phases were done by the author
+  first and checked against these pages afterwards; R1 meant reviewing
+  `docs/01-methods.md` against the extracted pages and editing it (D-010).
+- **As the implementation reference.** When the harness needs to know what
+  resample ablation licenses, the answer is on `methods/resample-ablation.md`,
+  already reconciled across sources.
+
+`notes/` holds the author's own thinking; `wiki/` holds the field's. Keeping
+them in separate directories keeps the two from blurring.
 
 ## Layout
 
@@ -147,23 +149,24 @@ the E4 spine survives.
 
 ## Voice
 
-`curious-student` register (`~/.claude/output-styles/curious-student.md`):
-jargon introduced rather than assumed, analogy first and rigour immediately
+Explanatory register: jargon introduced rather than assumed, analogy first and rigour immediately
 after, the why before the how, a one-line checkpoint closing a substantial
 explanation.
 
-Two overrides:
+Two constraints on it:
 
-- **Sober register wins.** `CLAUDE.md` forbids overselling. No "eerie", no
+- **Sober register.** `CLAUDE.md` forbids overselling. No "eerie", no
   "the network heals itself".
-- **Glossary redirect.** The style says to append vocabulary to `GLOSSARY.md`
-  at the repo root. **Do not create that file.** New terms go to
+- **One glossary.** New terms go to
   `docs/05-glossary.md`, under a dated heading, appended in the order they came
-  up. Two glossaries would eventually mean two definitions of one term.
+  up. A root `GLOSSARY.md` is deliberately never created: two glossaries would
+  eventually mean two definitions of one term.
 
 ## The extraction loop
 
-1. Andrey finishes a paper and says so.
+Pages were drafted by Claude from the source text and reviewed by the author.
+
+1. The author finishes a paper and says so.
 2. Claude reads the source — URL or local copy, not memory.
 3. The pass produces: new or updated concept/method pages · an updated source
    card · candidate terms for `docs/05-glossary.md` · any project-level open
@@ -171,7 +174,7 @@ Two overrides:
 4. Claude shows the diff, **especially edits to existing pages** — that is
    where a second paper quietly contradicts the first, which is the most
    valuable thing this structure can surface.
-5. Andrey corrects. Commit.
+5. The author corrects. Commit.
 
 ---
 
