@@ -60,6 +60,17 @@ uv run pytest -q -m "not slow"                              # fast tests, no GPU
 The commands for E1a–E3 are listed in each phase's results README. The committed artifacts under `results/` are the record; rerunning
 reproduces them.
 
+## Licence and third-party data
+
+Code and documents are MIT ([`LICENSE`](LICENSE)). One exception:
+`batteries/factual/survivors.json` contains records from CounterFact
+(Meng et al. 2022), downloaded from
+`https://rome.baulab.info/data/dsets/counterfact.json`, with the source
+SHA-256 recorded in the file. No licence for the dataset itself has been
+published (the ROME code repository is MIT; checked 2026-10-11), so those
+records are not covered by this repository's licence. The factual-recall item
+failed its gate in E1b and is not used in E2 or E3.
+
 ## Documents
 
 | File | Contents |
