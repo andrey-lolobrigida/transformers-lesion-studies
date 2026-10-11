@@ -30,6 +30,8 @@ Learning and Induction Heads".
 without looking: what a circuit is, what the QK and OV circuits of a head do,
 what an induction head computes, and why it might relate to in-context
 learning. If any of those can't be written cold, R0 isn't finished.
+*(Met, `v-R0`. The note was a personal benchmark and is not in the published
+tree; it remains in git history at `v-R0`, D-017.)*
 
 ---
 

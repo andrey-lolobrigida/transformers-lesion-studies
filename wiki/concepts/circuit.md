@@ -187,9 +187,9 @@ See `docs/00-motivation.md` on phrenology risk.
 
 ## What this project does with it
 
-- **R0 exit criterion** requires writing what a circuit is, cold and without
-  looking. This page is what that note gets checked against afterwards — not
-  the source for writing it.
+- **R0 exit criterion** required writing what a circuit is, cold and without
+  looking. This page was what that note got checked against afterwards — not
+  the source for writing it. (The note itself is not in the repo, D-017.)
 - **E3 produces heatmaps, not circuits.** Ablating every head and scoring the
   battery yields a functional map. Calling the result a circuit would be exactly
   the necessity/mechanism confusion described above.

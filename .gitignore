@@ -73,6 +73,7 @@ tmp/
 # a full design doc in the repo would bloat the one document that has to stay
 # short enough to reread. The spec is working material, not the record.
 .superpowers/
+.claude/
 
 # --- Local copies of papers ---
 # Source PDFs/HTML for the wiki. Not ours to redistribute, and the canonical

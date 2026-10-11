@@ -92,17 +92,9 @@ you to claim.
   artifact under `results/{phase}/` plus a short `README.md` interpreting it.
 - **One idea per note.** `notes/` holds granular reading notes and scratch
   reasoning, `NN-kebab-case.md`, not one growing file.
-- **Exit notes are filed apart.** Where a reading phase's exit criterion is
-  a cold note (R0; not R1, whose deliverable is the reviewed methods doc,
-  D-010), it lives in `notes/exit_criteria/<PHASE>.md` — one file per phase,
-  covering all of that phase's criteria. Deliberately not mixed in
-  with the numbered reading notes: an exit note is the phase deliverable, is
-  written cold and without looking (D-007, D-009), and gets revised until the
-  gate passes, whereas a reading note is scratch and is never revised. Same
-  reason `notes/` and `wiki/` are separate directories.
 - **`notes/` is yours, `wiki/` is the field's.** The wiki is organised by
-  concept, built by extracting papers, and is a scaffold — never a substitute
-  for an R-phase exit note written cold. Conventions in `wiki/README.md`,
+  concept, built by extracting papers, and is a scaffold, not a substitute
+  for the author's own understanding. Conventions in `wiki/README.md`,
   decision in D-009. New vocabulary goes to `docs/05-glossary.md`; a root
   `GLOSSARY.md` is deliberately never created.
 - **Errata policy:** fix forward on `main`, record the correction in
@@ -118,7 +110,6 @@ lesion-studies/
 ├── ERRATA.md
 ├── docs/                  ← reference documents (see below)
 ├── notes/                 ← reading notes, scratch reasoning (yours)
-│   └── exit_criteria/     ← R-phase exit notes, one per phase, written cold
 ├── wiki/                  ← concept reference built from the papers (D-009)
 ├── src/                   ← the harness and experiment scripts
 ├── batteries/             ← task datasets (clean/corrupted pairs + metrics)

@@ -116,6 +116,8 @@ Operating manual in `wiki/README.md`. Full design record is local-only in
 `.superpowers/specs/2026-08-30-concept-wiki-design.md` (untracked, so this entry
 is the durable record).
 
+*Status 2026-10-10.* The R0 note is no longer in the published tree (D-017).
+
 ---
 
 ### D-010 — R1 exit criterion: review the methods doc, don't rewrite it
@@ -149,6 +151,7 @@ is kept. D-007 stands: no code during R1.
 Consequence for the exit-note convention: `notes/exit_criteria/<PHASE>.md`
 is for phases whose criterion is a cold note. R1's deliverable is the edited
 methods doc itself, so there is no `R1.md`.
+*(Status 2026-10-10: the `notes/exit_criteria/` convention is retired, D-017.)*
 
 Option considered and rejected: removing the gate entirely so E1 could start
 at will. The risk was that the harness would bake in an answer to O-007 or
@@ -709,6 +712,23 @@ list did not change. Side effect: the current `code_rev` no longer matches
 `9154af6`, so a rerun of the held-out, restore or adversarial stages into
 `results/E3` recomputes instead of skipping (`results/E3/README.md` §1).
 Errata: `ERRATA.md`, 2026-10-10. The other two items above stay open.
+
+---
+
+### D-017 — Exit notes are not part of the published repo
+*2026-10-10, before making the repository public. The author's call.*
+
+`notes/exit_criteria/R0.md` is removed from the tree, and the convention that
+put R-phase exit notes in `notes/exit_criteria/<PHASE>.md` (CLAUDE.md, D-010)
+is retired. The note was a personal learning benchmark, written cold and left
+unrevised; it is not a project result and has no reader outside the author.
+R0's exit criterion was met and is not reopened (`v-R0`).
+
+The file is not scrubbed from history: it remains reachable at `v-R0` and on
+`phase-R0-orientation`. Removing it from history would change every commit
+hash from R0 onward, and the results docs cite hashes as pre-registration
+evidence (E2 `4675ba6`, E3 `96591d2`, `109cc90`, `7738b51`). Where R2 and R3's
+deliverables live is decided at the start of those phases.
 
 ## Open questions
 
